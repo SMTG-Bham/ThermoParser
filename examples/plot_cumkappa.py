@@ -9,13 +9,13 @@ direction = 'avg'
 atoms = ['Sb', 2, 'Mg', 3]
 colours = {'Sb': '#00ff00',
            'Mg': '#800080'}
+quantities = 'mode_kappa frequency'
 
 # Axes
 fig, ax = tp.plot.axes.one_small_legend()
 
 # Load
-data = tp.data.load.phono3py(kappafile, quantities=['mode_kappa', 'frequency',
-                                                    'temperature'])
+data = tp.data.load.phono3py(kappafile, quantities=quantities)
 dos = tp.data.load.phonopy_dos(dosfile, atoms)
 
 # Add

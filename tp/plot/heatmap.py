@@ -129,23 +129,23 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     ax.set_yscale(yscale)
 
     if xscale == 'linear':
-        ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        ax.xaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
     elif xscale == 'log':
-        ax.xaxis.set_major_locator(ticker.LogLocator())
-        ax.xaxis.set_minor_locator(ticker.LogLocator())
+        ax.xaxis.set_major_locator(tp.settings.locator()['log'])
+        ax.xaxis.set_minor_locator(tp.settings.locator()['log'])
     if yscale == 'linear':
-        ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
     elif yscale == 'log':
-        ax.yaxis.set_major_locator(ticker.LogLocator())
-        ax.yaxis.set_minor_locator(ticker.LogLocator())
+        ax.yaxis.set_major_locator(tp.settings.locator()['log'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['log'])
     if cscale == 'linear':
-        cbar.ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-        cbar.ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        cbar.ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        cbar.ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
     elif cscale == 'log':
-        cbar.ax.yaxis.set_major_locator(ticker.LogLocator())
-        cbar.ax.yaxis.set_minor_locator(ticker.LogLocator())
+        cbar.ax.yaxis.set_major_locator(tp.settings.locator()['log'])
+        cbar.ax.yaxis.set_minor_locator(tp.settings.locator()['log'])
 
     ax.set_xlim(x[0], x[-1])
     ax.set_ylim(y[0], y[-1])

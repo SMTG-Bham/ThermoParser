@@ -4,8 +4,8 @@ import tp
 from matplotlib import pyplot as plt
 
 f = 'amset_data_85x85x47.json'
-quants = ['temperature', 'doping', 'seebeck', 'conductivity',
-          'electronic_thermal_conductivity']
+quantities = ['temperature', 'doping', 'seebeck', 'conductivity',
+              'electronic_thermal_conductivity']
 colour = tp.plot.colour.elbow('#ff8080')
 colour = tp.plot.colour.highlight(colour, 'grey')
 
@@ -15,7 +15,7 @@ fig, ax = tp.plot.axes.one_colourbar()
 
 # Load
 
-data = tp.data.load.amset(f, quantities=quants)
+data = tp.data.load.amset(f, quantities=quantities)
 
 # Add
 

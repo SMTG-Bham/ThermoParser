@@ -1,0 +1,75 @@
+### ThermoPlotter style
+
+## Lines
+
+lines.linewidth             : 1
+lines.markersize            : 2
+
+## Writing
+
+# Font
+
+font.family                 : sans-serif
+font.size                   : 8.0
+font.sans-serif             : Whitney Book Extended, Whitney Book, Helvetica, Arial, Liberation Sans, Andale Sans
+text.usetex                 : False
+mathtext.fontset            : stixsans
+mathtext.default            : regular
+
+# Relative text size
+
+xtick.labelsize             : medium
+ytick.labelsize             : medium
+axes.labelsize              : medium
+legend.fontsize             : medium
+
+# Ticks
+
+axes.formatter.limits       : -4, 4
+axes.formatter.min_exponent : 0
+
+## Borders
+
+# Spines
+
+axes.linewidth              : 0.4
+axes.grid                   : False
+axes.spines.left            : True
+axes.spines.right           : True
+axes.spines.top             : True
+axes.spines.bottom          : True
+
+# Ticks
+
+xtick.top                   : False
+xtick.bottom                : True
+xtick.labeltop              : False
+xtick.labelbottom           : True
+xtick.major.size            : 4
+xtick.minor.size            : 2
+xtick.major.width           : 0.4
+xtick.minor.width           : 0.4
+xtick.direction             : in
+xtick.minor.visible         : True
+xtick.alignment             : center
+
+ytick.left                  : True
+ytick.right                 : False
+ytick.labelleft             : True
+ytick.labelright            : False
+ytick.major.size            : 4
+ytick.minor.size            : 2
+ytick.major.width           : 0.4
+ytick.minor.width           : 0.4
+ytick.direction             : in
+ytick.minor.visible         : True
+ytick.alignment             : center_baseline
+
+## Legend
+
+legend.frameon              : False
+
+## Figure
+
+figure.dpi                  : 500
+figure.frameon              : False

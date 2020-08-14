@@ -1,4 +1,15 @@
-# ThermoPlotter: a Simple Thermoelectrics Plotting Tool
+```
+ ________
+///// \\\\
+\________/_______________________________________________________________
+|_____                            : ___                                  \
+| |   |                           :|   \ |           |     |             /
+| |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
+| |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
+| |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_
+| |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    : \
+|_________________________________:______________________________________:_/
+```
 
 ThermoPlotter is a toolkit for quickly, easily and prettily plotting the
 outputs of specialised analytical codes.
@@ -7,6 +18,16 @@ thermoelectrics materials.
 It essentially wraps around [Matplotlib](https://matplotlib.org/)
 functions, and is intended to be used as a python package, to build
 easily customisable plotting scripts.
+
+## Installation
+
+ThermoPlotter can easily be installed with git and pip:
+
+```bash
+git clone https://github.com/kbspooner/ThermoPlotter
+cd ThermoPlotter
+python3 -m pip install --user -e .
+```
 
 ## Usage
 
@@ -21,14 +42,11 @@ ThermoPlotter is designed to have four main stages:
   4. *Save*:
      Use `plt.savefig` or equivalent to produce the figure.
 
-As it is simply a scripting code, each option can be substituted with
-bespoke code (i.e. using `plt.subplots` or `ax.scatter`); but these can
-still be supplemented with helper functions, such as default labels in
-`tp.settings` or colourmap generators in `tp.plot.colour`.
-Adding options is inteded to be straightforward, for example adding a
-new axes layout should be as simple as copying another function in
-`tp.plt.axes` and altering the numbers; and adding support for a new
-code should only require adding a function in the `tp.data.load` module.
+As ThermoPlotter is simply a scripting code, each option can be
+substituted with bespoke code (i.e. using `plt.subplots` or 
+`ax.scatter`); but these can still be supplemented with helper
+functions, such as default labels in `tp.settings` or colourmap
+generators in `tp.plot.colour`.
 
 Currently supported codes are:
 
@@ -39,23 +57,33 @@ Phononic properties:
 Electronic properties:
 * [AMSET](https://hackingmaterials.lbl.gov/amset/)
 
-Current plotting modes are split into three areas.
+Current plotting modes are split into four areas.
 
 * `tp.plot.phonons` contains plots along a high-symmetry path, including
 phonon dispersions and plots which project other quantities onto these
 paths in various ways.
-* `tp.plot.frequency` plot frequency on the x-axis, including density of
-states (DoS), cumulative kappa and "waterfall" plots.
+* `tp.plot.frequency` plots frequency on the x-axis, including density
+of states (DoS), cumulative kappa and "waterfall" plots.
 Each function has a `main` argument, which can be useful when plotting
 multiple quantities on the same set of axes; and an `invert` argument,
 which swaps the x and y axes to let you plot DoS-style next to a
 `tp.plot.phonons` plot.
+* `tp.plot.mfp` contains a cumulative kappa against mean free path plot.
 * `tp.plot.heatmap` contains a heatmap plotter, and wrappers which
 format appropriately for ZT against temperature and doping
 concentration; and one which plots the lattice thermal conductivity
-required to reach a target ZT, again against temeperature and doping.
+required to reach a target ZT, again against temperature and doping.
 
 A full set of example scripts is provided in the `tp/examples` folder.
+
+## Contributing
+
+We welcome any contributions, whether they be a feature request or a new
+piece of code (or anything else).
+Adding options is inteded to be straightforward, for example adding a
+new axes layout should be as simple as copying another function in
+`tp.plt.axes` and altering the numbers; and adding support for a new
+code should only require adding a function in the `tp.data.load` module.
 
 ## License
 

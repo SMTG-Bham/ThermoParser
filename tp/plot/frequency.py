@@ -69,9 +69,14 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
     # Scaling
 
     if scale:
-        ymin = 0 if main else ax.get_ylim()[0]
-        ymax = 100 if main else ax.get_ylim()[1]
-        log = ax.get_yaxis().get_scale()
+        if invert:
+            ymin = 0 if main else ax.get_xlim()[0]
+            ymax = 100 if main else ax.get_xlim()[1]
+            log = ax.get_xaxis().get_scale()
+        else:
+            ymin = 0 if main else ax.get_ylim()[0]
+            ymax = 100 if main else ax.get_ylim()[1]
+            log = ax.get_yaxis().get_scale()
         if log == 'log':
             ymin = np.log10(ymin)
             ymax = np.log10(ymax)
@@ -108,8 +113,8 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
         if key not in exempt:
             if invert:
                 ax.fill_between(data[key], data['x'], label=key,
-                                  facecolor=fillcolour[key],
-                                  edgecolor=colour[key], rasterized=rasterise)
+                                facecolor=fillcolour[key],
+                                edgecolor=colour[key], rasterized=rasterise)
             else:
                 ax.fill_between(data['x'], data[key], label=key,
                                 facecolor=fillcolour[key],
@@ -124,8 +129,8 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             ax.set_xlim(left=0, right=dmax)
 
             ax.tick_params(axis='x', which='both', top=False, bottom=False)
-            ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
         else:
             ax.set_xlabel(axlabels['frequency'])
             ax.set_ylabel(axlabels['dos'])
@@ -133,14 +138,14 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             ax.set_ylim(bottom=0, top=dmax)
 
             ax.tick_params(axis='y', which='both', top=False, bottom=False)
-            ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.xaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     return ax
 
-def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
-                  invert=False, scale=False, colour='#000000', fill=False,
-                  fillalpha=20, line=True, rasterise=False):
+def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
+                  main=False, invert=False, scale=False, colour='#000000',
+                  fill=False, fillalpha=20, line=True, rasterise=False):
     """Cumulates and plots kappa against frequency.
 
     Arguments:
@@ -154,6 +159,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c or
             average/ avg. Default: average
+        legend : str, optional
+            legend entry, accepts maths. Default: \kappa_l.
 
         main : bool, optional
             set ticks, labels, limits. Default: False.
@@ -187,13 +194,20 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
     f = np.ravel(data['frequency'])
 
     f, k = cumulate(f, k)
+    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(temperature, direction),
+            np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
     f = np.append(f, 100*f[-1])
     k = np.append(k, k[-1])
 
     if scale:
-        ymin = 0 if main else ax.get_ylim()[0]
-        ymax = 100 if main else ax.get_ylim()[1]
-        log = ax.get_yaxis().get_scale()
+        if invert:
+            ymin = 0 if main else ax.get_xlim()[0]
+            ymax = 100 if main else ax.get_xlim()[1]
+            log = ax.get_xaxis().get_scale()
+        else:
+            ymin = 0 if main else ax.get_ylim()[0]
+            ymax = 100 if main else ax.get_ylim()[1]
+            log = ax.get_yaxis().get_scale()
         if log == 'log':
             ymin = np.log10(ymin)
             ymax = np.log10(ymax)
@@ -206,11 +220,11 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
     fillcolour = colour + str(fillalpha) if fill else colour + '00'
     if not line: colour = fillcolour
     if invert:
-        ax.fill_between(k, f, label='$\mathregular{\kappa_l}$',
+        ax.fill_between(k, f, label='$\mathregular{{{}}}$'.format(legend),
                         facecolor=fillcolour, edgecolor=colour,
                         rasterized=rasterise)
     else:
-        ax.fill_between(f, k, label='$\mathregular{\kappa_l}$',
+        ax.fill_between(f, k, label='$\mathregular{{{}}}$'.format(legend),
                         facecolor=fillcolour, edgecolor=colour,
                         rasterized=rasterise)
 
@@ -230,10 +244,10 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
             ax.set_ylim(0, k[-2])
             ax.set_xlim(0, f[-2])
 
-        ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(2))
-        ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        ax.xaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
+        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     return ax
 
@@ -306,10 +320,10 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
             colours = colour
 
     if invert:
-        ax.scatter(q, f, s=5, marker='.', facecolor=colours, alpha=alpha,
+        ax.scatter(q, f, s=1, marker='.', facecolor=colours, alpha=alpha,
                    linewidth=0, rasterized=rasterise)
     else:
-        ax.scatter(f, q, s=5, marker='.', facecolor=colours, alpha=alpha,
+        ax.scatter(f, q, s=1, marker='.', facecolor=colours, alpha=alpha,
                    linewidth=0, rasterized=rasterise)
 
     if main:
@@ -325,9 +339,9 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
             ax.set_ylim(0, np.amax(f))
 
             ax.set_xscale('log')
-            ax.xaxis.set_major_locator(ticker.LogLocator())
-            ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.xaxis.set_major_locator(tp.settings.locator()['log'])
+            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
 
         else:
             ax.set_ylabel(axlabels[quantity])
@@ -338,9 +352,9 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
             ax.set_xlim(0, np.amax(f))
 
             ax.set_yscale('log')
-            ax.yaxis.set_major_locator(ticker.LogLocator())
-            ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.yaxis.set_major_locator(tp.settings.locator()['log'])
+            ax.xaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     return ax
 
@@ -421,10 +435,10 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
     cnorm = mpl.colors.LogNorm(vmin=cmin, vmax=cmax)
 
     if invert:
-        scat = ax.scatter(q, f, s=5, marker='.', c=p, norm=cnorm, cmap=cmap,
+        scat = ax.scatter(q, f, s=1, marker='.', c=p, norm=cnorm, cmap=cmap,
                           alpha=alpha, linewidth=0, rasterized=rasterise)
     else:
-        scat = ax.scatter(f, q, s=5, marker='.', c=p, norm=cnorm, cmap=cmap,
+        scat = ax.scatter(f, q, s=1, marker='.', c=p, norm=cnorm, cmap=cmap,
                    alpha=alpha, linewidth=0, rasterized=rasterise)
 
     cbar = plt.colorbar(scat, extend='min') if extend else plt.colorbar(scat)
@@ -443,8 +457,8 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
             ax.set_ylim(0, np.amax(f))
 
             ax.set_xscale('log')
-            ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
 
         else:
             ax.set_ylabel(axlabels[quantity])
@@ -454,7 +468,7 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
             ax.set_xlim(0, np.amax(f))
 
             ax.set_yscale('log')
-            ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.xaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     return ax, cbar

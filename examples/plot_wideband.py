@@ -9,11 +9,10 @@ temperature = 300
 colour = tp.plot.colour.linear('#ff0000', '#000000')
 
 # Axes
-fig, ax = tp.plot.axes.one(['pretty2', 'dark_background'])
+fig, ax = tp.plot.axes.one(['tp', 'dark_background'])
 
 # Load
-data = tp.data.load.phono3py(kappafile, quantities=['gamma', 'frequency',
-                                                    'temperature', 'qpoint'])
+data = tp.data.load.phono3py(kappafile, quantities='wideband')
 pdata = tp.data.load.phonopy_dispersion(phile)
 
 # Add

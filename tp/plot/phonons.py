@@ -3,12 +3,14 @@
 Functions:
     add_dispersion:
         phonon dispersion.
+    add_multi:
+        phonon dispersions.
     add_alt_dispersion:
         phono3py quantity against high symmetry path.
     add_projected_dispersion:
         phonon dispersion with phono3py quantity on colour axis.
-    add_alt_projected dispersion:
-        alt_dispersion + projected_dispersion
+    add_alt_projected_dispersion:
+        alt_dispersion + projection
     add_wideband:
         phonon dispersion broadened according to scattering.
 
@@ -34,7 +36,7 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
     Arguments:
         ax : axes
             axes to plot on.
-        data : str
+        data : dict
             dispersion data containing:
                 x : array-like
                     high-symmetry path.
@@ -50,13 +52,17 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
 
         main : bool, optional
             set axis ticks, labels, limits. Default: True.
-        label : list, optional
+        label : str, optional
             legend label. Default: None
 
         colour : str or array-like, optional
-            line colour(s).
+            line colour(s). Note if retrieved from a colourmap or in
+            [r,g,b] notation, the colour should be enclosed in [], e.g.
+            colour = plt.get_cmap('winter_r')(linspace(0, 1, len(files)))
+            tp.plot.phonons.add_dispersion(..., colour=[colour[0]], ...)
+            Default: #800080.
         linestyle : str or array-like, optional
-            linestyle(s) ('-', '--', '.-', ':').
+            linestyle(s) ('-', '--', '.-', ':'). Default: solid.
         axcolour : str
             axis colour. Default: black.
 
@@ -74,14 +80,19 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
     eigs = np.array(data['eigenvalue'])[:,bmin:bmax]
 
     # allows single colours/ linestyles or arrays, which can be filled out
-    if isinstance(colour, str) or len(colour) == 1:
+    if isinstance(colour, str):
         colours = np.repeat(colour, bdiff)
+    elif len(colour) == 1:
+        if isinstance(colour, str):
+            colours = np.repeat(colour, bdiff)
+        else:
+            colours = np.tile(colour, (bdiff, 1))
     elif len(colour) == bdiff:
         colours = colour
     elif len(colour) > bdiff:
         colours = colour[bmin:bmax]
     elif len(colour) < bdiff:
-        colours = colour
+        colours = list(colour)
         while len(colours) < bdiff:
             colours.append(colour[-1])
 
@@ -109,8 +120,9 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
 
     if main:
         axlabels = tp.settings.labels()
+        spinewidth = ax.spines['bottom'].get_linewidth()
         for d in data['tick_position']:
-            ax.axvline(d, color=axcolour)
+            ax.axvline(d, color=axcolour, linewidth=spinewidth)
 
         ax.set_xlabel(axlabels['wavevector'])
         ax.set_ylabel(axlabels['frequency'])
@@ -120,18 +132,112 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
         ax.tick_params(axis='x', which='minor', top=False, bottom=False)
         ax.set_xlim(data['x'][0], data['x'][-1])
 
-        ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
+        if round(np.amin(eigs), 1) == 0:
+            ax.set_ylim(bottom=0)
+
+    return ax
+
+def add_multi(ax, data, bandrange=None, main=True, label=None,
+              colour='winter_r', linestyle='solid', axcolour='black'):
+    """Adds multiple phonon band structures to a set of axes.
+
+    Scales the x-scales to match.
+
+    Arguments:
+        ax : axes
+            axes to plot on.
+        data : array-like
+            dictionaries of dispersion data containing:
+                x : array-like
+                    high-symmetry path.
+                eigenvalue : array-like
+                    phonon frequencies.
+                tick_position : array-like
+                    x-tick positions.
+                tick_label : array-like
+                    x-tick labels.
+
+        bandrange : array-like, optional
+            minumum and maximum band indices to plot. Default: None.
+
+        main : bool, optional
+            set axis ticks, labels, limits. Default: True.
+        label : array-like, optional
+            legend labels. Default: None
+
+        colour : colourmap or str or array-like, optional
+            colourmap or colourmap name or list of colours. Note [r,g,b]
+            format colours should be enclosed in and additional [],
+            i.e. [[[r,g,b]],...]. Default: winter_r.
+        linestyle : str or array-like, optional
+            linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        axcolour : str
+            axis colour. Default: black.
+
+    Returns:
+        axes
+            axes with dispersions.
+    """
+
+    try:
+        colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, len(data)))
+        colours = [[c] for c in colours]
+    except Exception:
+        if isinstance(colour, mpl.colors.ListedColormap):
+            colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isinstance(colour, str) and colour == 'skelton':
+            from tp import plot
+            colour = plot.colour.skelton()
+            colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        else:
+            colours = colour
+
+    if label is None:
+        label = np.full(len(data), None)
+
+    if isinstance(linestyle, str) or len(linestyle) == 1:
+        linestyle = np.repeat(linestyle, len(data))
+    elif len(linestyle) < len(data):
+        while len(linestyle) < len(data):
+            linestyle.append(linestyle[-1])
+
+    for i in range(len(data)):
+        ax = add_dispersion(ax, data[i], bandrange=bandrange, main=False,
+                            label=label[i], colour=colours[i],
+                            linestyle=linestyle[i], axcolour=axcolour)
+
+    if main:
+        axlabels = tp.settings.labels()
+        spinewidth = ax.spines['bottom'].get_linewidth()
+        for d in data[0]['tick_position']:
+            ax.axvline(d, color=axcolour, linewidth=spinewidth)
+
+        ax.set_xlabel(axlabels['wavevector'])
+        ax.set_ylabel(axlabels['frequency'])
+
+        ax.set_xticks(data[0]['tick_position'])
+        ax.set_xticklabels(data[0]['tick_label'])
+        ax.tick_params(axis='x', which='minor', top=False, bottom=False)
+        ax.set_xlim(data[0]['x'][0], data[0]['x'][-1])
+
+        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
+        eigs = [d['eigenvalue'] for d in data]
         if round(np.amin(eigs), 1) == 0:
             ax.set_ylim(bottom=0)
 
     return ax
 
 def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
-                       temperature=300, direction='avg', label=None,
-                       poscar='POSCAR', main=True, log=False, interpolate=5,
-                       colour='#800080', linestyle='-', rasterise=True,
-                       workers=32):
+                       temperature=300, direction='avg',
+                       label=['Longitudinal', 'Transverse_1',
+                       'Transverse_2', 'Optic'], poscar='POSCAR',
+                       main=True, log=False, interpolate=5,
+                       colour=['#44ffff', '#ff8044', '#ff4444',
+                       '#00000010'], linestyle='-', axcolour='black',
+                       rasterise=True, workers=32):
     """Plots a phono3py quantity on a high-symmetry path.
 
     Arguments:
@@ -165,6 +271,12 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c,
             average/ avg or normal/ norm. Default: average.
+        label : array-like, optional
+            labels per line. A single dataset could have a single label,
+            or the default labels the lines by type. You'll want to
+            change this if a minimum band index is set.
+            Default: ['Longitudinal', 'Transverse_1', 'Transverse_2',
+            'Optic'].
 
         poscar : str, optional
             VASP POSCAR filepath. Default: POSCAR.
@@ -176,10 +288,18 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
         interpolate : int, optional
             every n points to sample. Default: 5.
 
-        colour : str, optional
-            line colour.
-        linestyle : str, optional
-            linestyle ('-', '--', '.-', ':').
+        colour : str or array-like, optional
+            line colour(s). If too few colours are selected, the last
+            one is repeated for the rest of the bands. Note if retrieved
+            from a colourmap or in [r,g,b] notation, the colour should
+            be enclosed in [], e.g.
+            colour = plt.get_cmap('winter_r')(linspace(0, 1, len(files)))
+            tp.plot.phonons.add_dispersion(..., colour=[colour[0]], ...)
+            Default: ['#44ffff', '#ff8044', '#ff4444', '#00000010'].
+        linestyle : str or array-like, optional
+            linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        axcolour : str
+            axis colour. Default: black.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
@@ -265,15 +385,18 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
     if bdiff == 1:
         ax.plot(x2, y2, label=label, color=colours[0], linestyle=linestyles[0])
     else:
-        ax.plot(x2, y2[:,0], label=label, color=colours[0],
-                                          linestyle=linestyles[0])
-        for n in range(bdiff):
-            ax.plot(x2, y2[:,n], color=colours[n], linestyle=linestyles[n])
+        for i in range(len(label)):
+            ax.plot(x2, y2[:,i], label='$\mathregular{{{}}}$'.format(label[i]),
+                    color=colours[i], linestyle=linestyles[i])
+        if len(label) < bdiff:
+            for n in range(len(label), bdiff):
+                ax.plot(x2, y2[:,n], color=colours[n], linestyle=linestyles[n])
 
     if main:
         axlabels = tp.settings.labels()
+        spinewidth = ax.spines['bottom'].get_linewidth()
         for d in pdata['tick_position']:
-            ax.axvline(d, color='#000000')
+            ax.axvline(d, color=axcolour, linewidth=spinewidth)
 
         ax.set_xlabel(axlabels['wavevector'])
         ax.set_ylabel(axlabels[quantity])
@@ -286,17 +409,17 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
         ax.set_ylim(ymin, ymax)
         if log:
             ax.set_yscale('log')
-            ax.yaxis.set_major_locator(ticker.LogLocator())
+            ax.yaxis.set_major_locator(tp.settings.locator()['log'])
         else:
-            ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     return ax
 
 def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
                              temperature=300, direction='avg', poscar='POSCAR',
                              main=True, interpolate=5, colour='viridis_r',
-                             rasterise=True, workers=32):
+                             axcolour='black', rasterise=True, workers=32):
     """Plots a phonon dispersion with projected colour.
 
     Plots a phonon dispersion, and projects a quantity onto the colour
@@ -346,6 +469,8 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis_r.
+        axcolour : str
+            axis colour. Default: black.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
@@ -416,12 +541,13 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 
     for n in range(bdiff):
         line = ax.scatter(x2, eigs[:,n], c=c2[:,n], cmap=colour, norm=cnorm,
-                          marker='.', rasterized=rasterise)
+                          marker='.', s=1, rasterized=rasterise)
 
     if main:
         axlabels = tp.settings.labels()
+        spinewidth = ax.spines['bottom'].get_linewidth()
         for d in pdata['tick_position']:
-            ax.axvline(d, color='#000000')
+            ax.axvline(d, color=axcolour, linewidth=spinewidth)
 
         cbar = plt.colorbar(line)
         cbar.set_label(axlabels[quantity])
@@ -434,8 +560,8 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
         ax.tick_params(axis='x', which='minor', top=False, bottom=False)
         ax.set_xlim(x2[0], x2[-1])
 
-        ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
         if round(np.amin(eigs), 1) == 0:
             ax.set_ylim(bottom=0)
 
@@ -445,7 +571,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  temperature=300, direction='avg',
                                  poscar='POSCAR', main=True, log=False,
                                  interpolate=5, colour='viridis',
-                                 rasterise=True, workers=32):
+                                 axcolour='black', rasterise=True, workers=32):
     """Plots a phono3py quantity on a high-symmetry path and projection.
 
     Just because you can, doesn't mean you should. A maxim I may fail to
@@ -496,6 +622,8 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis.
+        axcolour : str
+            axis colour. Default: black.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
@@ -563,12 +691,13 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     for n in range(len(y2[0])):
         line = ax.scatter(x2, y2[:,n], c=c2[:,n], cmap=colour,
-                          norm=cnorm, marker='.', rasterized=rasterise)
+                          norm=cnorm, marker='.', s=1, rasterized=rasterise)
 
     if main:
         axlabels = tp.settings.labels()
+        spinewidth = ax.spines['bottom'].get_linewidth()
         for d in pdata['tick_position']:
-            ax.axvline(d, color='#000000')
+            ax.axvline(d, color=axcolour, linewidth=spinewidth)
 
         cbar = plt.colorbar(line)
         cbar.set_label(axlabels[projected])
@@ -584,10 +713,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
         ax.set_ylim(ymin, ymax)
         if log:
             ax.set_yscale('log')
-            ax.yaxis.set_major_locator(ticker.LogLocator())
+            ax.yaxis.set_major_locator(tp.settings.locator()['log'])
         else:
-            ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-            ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     return ax, cbar
 
@@ -707,8 +836,8 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
         ax.tick_params(axis='x', which='minor', top=False, bottom=False)
         ax.set_xlim(x2[0], x2[-1])
 
-        ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(2))
+        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
+        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
         if round(np.amin(eigs), 1) == 0:
             ax.set_ylim(bottom=0)
 

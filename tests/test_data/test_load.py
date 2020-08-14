@@ -76,7 +76,7 @@ class Phono3pyTest(unittest.TestCase):
 
     def test_mean_free_path(self):
         self.assertEqual(np.shape(self.d['mean_free_path']),
-                         (self.qpts, self.bands))
+                         (self.ts, self.qpts, self.bands, 3))
 
     def test_mode_kappa(self):
         self.assertEqual(np.shape(self.d['mode_kappa']),

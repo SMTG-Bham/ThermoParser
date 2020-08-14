@@ -37,6 +37,40 @@ class DispersionTest(unittest.TestCase):
         labels = self.ax.get_legend_handles_labels()[1]
         self.assertEqual(labels, ['test'])
 
+class MultiTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.d = [{'x':             [0, 1],
+                  'qpoint':        [[0, 1, 2],
+                                    [3, 1, 2]],
+                  'eigenvalue':    [[0, 1, 2],
+                                    [2, 1, 0]],
+                  'tick_position': [0, 1],
+                  'tick_label':    ['A', 'B'],
+                  'meta':          {}},
+                 {'x':             [0, 2],
+                  'qpoint':        [[0, 1, 2],
+                                    [3, 1, 2]],
+                  'eigenvalue':    [[0, 1, 2],
+                                    [2, 1, 0]],
+                  'tick_position': [0, 2],
+                  'tick_label':    ['A', 'B'],
+                  'meta':          {}}]
+        cls.fig, cls.ax = one_small_legend()
+        cls.ax = phonons.add_multi(cls.ax, cls.d, label=['test1', 'test2'],
+                                   colour='viridis', linestyle=['-', ':'])
+
+    @classmethod
+    def tearDownClass(cls):
+        plt.close()
+
+    def test_xlim(self):
+        self.assertEqual(self.ax.get_xlim(), (0, 1))
+
+    def test_legend(self):
+        labels = self.ax.get_legend_handles_labels()[1]
+        self.assertEqual(labels, ['test1', 'test2'])
+
 class AltDispersionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

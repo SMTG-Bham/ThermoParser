@@ -1,8 +1,12 @@
-"""Settings for naming, units, labels.
+"""Settings for appearance, naming, units and labels.
 
 Also adds abbreviations. In future may have to split up conversions.
 
 Functions:
+    style:
+        default style sheet.
+    locator:
+        default tick locators.
     to_tp:
         convert names to tp conventions.
     to_amset:
@@ -27,6 +31,21 @@ def __dir__():
              'labels']
 
     return names
+
+def style():
+    """Get default style sheet."""
+    return 'tp'
+
+def locator():
+    """Get default locators"""
+
+    import matplotlib.ticker as ticker
+
+    locators = {'major': ticker.MaxNLocator(5),
+                'minor': ticker.AutoMinorLocator(2),
+                'log':   ticker.LogLocator()}
+
+    return locators
 
 def to_tp():
     """Get dictionary to convert to tp variable names."""
@@ -101,6 +120,7 @@ def units():
              'mean_free_path':                  'm',
              'mobility':                        'cm^2 V-1 s-1',
              'mode_kappa':                      'W m-1 K-1',
+             'occupation':                      'phonons',
              'power_factor':                    'W m-1 K-2',
              'scattering_rates':                's-1',
              'seebeck':                         'muV K-1',
@@ -115,7 +135,7 @@ def labels():
     labels = {'conductivity':
                   'Conductivity (S m$\mathregular{^{-1}}$)',
               'cumulative_kappa':
-                  'Cum. Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  'Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'doping':
                   'Carrier Concentration (cm$\mathregular{^{-1}}$)',
               'dos':
@@ -125,21 +145,21 @@ def labels():
               'energy':
                   'Energy (eV)',
               'electronic_thermal_conductivity':
-                  'Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  'Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'fermi_level':
                   'Fermi Level (eV)',
               'frequency':
                   'Frequency (THz)',
               'gamma':
-                  'Imag. Self Energy (THz)',
+                  'Imaginary Self Energy (THz)',
               'group_velocity':
                   'Group Velocity (m s$\mathregular{^{-1}}$)',
               'gv_by_gv':
-                  'G. Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)',
+                  'Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)',
               'heat_capacity':
                   'Heat Capacity (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
-                  'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'lifetime':
                   'Lifetime (s)',
               'mean_free_path':
@@ -147,7 +167,7 @@ def labels():
               'mobility':
                   'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
               'mode_kappa':
-                  'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'power_factor':
                   'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':

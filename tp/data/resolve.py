@@ -1,5 +1,7 @@
 """Resolves quantities by temperature and/ or q-point index.
 
+May need to be split by data origin in future.
+
 Functions:
     resolve:
         currently for phono3py and parts of AMSET.
@@ -31,13 +33,15 @@ def resolve(data, quantities, temperature=None, direction=None):
             resolved data.
     """
 
+    data = dict(data)
     hast = ['gamma', 'heat_capacity', 'lattice_thermal_conductivity',
-            'lifetime', 'mode_kappa', 'occupation']
+            'lifetime', 'mean_free_path', 'mode_kappa', 'occupation']
     iso = {'conductivity':                    aniso.matrix_three,
            'electronic_thermal_conductivity': aniso.matrix_three,
            'group_velocity':                  aniso.three,
            'gv_by_gv':                        aniso.three,
            'lattice_thermal_conductivity':    aniso.two,
+           'mean_free_path':                  aniso.four,
            'mesh':                            aniso.one,
            'mode_kappa':                      aniso.four,
            'power_factor':                    aniso.matrix_three,
@@ -45,27 +49,23 @@ def resolve(data, quantities, temperature=None, direction=None):
            'seebeck':                         aniso.matrix_three,
            'zt':                              aniso.matrix_three}
 
-    if temperature is not None:
-        ti = np.abs(np.subtract(data['temperature'], temperature)).argmin()
+    if temperature is not None and 'temperature' in data:
+        ti = np.abs(np.subtract(data['temperature'][:], temperature)).argmin()
         iso['lattice_thermal_conductivity'] = aniso.one
+        iso['mean_free_path'] = aniso.three
         iso['mode_kappa'] = aniso.three
         data['meta']['temperature'] = data['temperature'][ti]
     if direction is not None:
         data['meta']['direction'] = direction
 
-    #q = 'lattice_thermal_conductivity'
-    #if q in data: print('start ', np.shape(data[q]))
-
     tnames = tp.settings.to_tp()
-    if type(quantities) == str:
+    if isinstance(quantities, str):
         quantities = quantities.split()
     for q in quantities:
         if q in tnames: q = tnames[q]
         if temperature is not None and q in hast:
             data[q] = data[q][ti]
-            #if q in data: print('temp ', np.shape(data[q]))
         if direction is not None and q in iso:
             data[q] = iso[q](data[q], direction)
-            #if q in data: print('dir ', np.shape(data[q]))
 
     return data

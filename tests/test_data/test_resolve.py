@@ -180,19 +180,19 @@ class ResolveTest(unittest.TestCase):
 
     def test_mean_free_path_direction(self):
         q = 'mean_free_path'
-        d = {q:             self.two,
+        d = {q:             self.four,
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertEqual(d[q], self.two)
+        self.assertTrue((d[q] == [[[[3.]], [[13.]], [[23.]]]]).all())
 
     def test_mean_free_path_temperature(self):
         q = 'mean_free_path'
-        d = {q      :       self.two,
+        d = {q      :       self.four,
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], self.two)
+        self.assertEqual(d[q], [[[11., 12., 13.]]])
 
     def test_mesh_direction(self):
         q = 'mesh'

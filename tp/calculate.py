@@ -11,11 +11,15 @@ Functions:
         power factor.
     zt:
         ZT.
+    kl:
+        lattice thermal conductivity for target ZT.
 
     power_factor_fromdict:
         adds power factor to dictionary.
     zt_fromdict:
         adds zt to dictionary.
+    kl_fromdict:
+        adds lattice thermal conductivity for target ZT to dictionary.
 """
 
 import numpy as np
@@ -230,4 +234,3 @@ def kl_fromdict(data):
     data['meta']['units'][q] = tp.settings.units()[q]
 
     return data
-

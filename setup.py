@@ -1,4 +1,8 @@
+import matplotlib as mpl
+import os
 import setuptools
+from setuptools.command.install import install
+import shutil
 
 with open('README.md', 'r') as f:
     long_description=f.read()
@@ -8,17 +12,33 @@ def load_test_suite():
     test_suite = test_loader.discover('tests', pattern='test*.py')
     return test_suite
 
+def install_style():
+    style = 'tp.mplstyle'
+
+    styledir = os.path.join(mpl.get_configdir(), 'stylelib')
+    if not os.path.exists(styledir):
+        os.makedirs(styledir)
+
+    print('Installing tp style sheet in ', styledir)
+    shutil.copy(os.path.join(os.path.dirname(__file__), style),
+                os.path.join(styledir, style))
+
+class PostInstallMoveFile(install):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        install_style()
+
 setuptools.setup(
     name='ThermoPlotter',
-    version='0.0.3.post1',
+    version='0.1.0',
     author='Kieran B Spooner',
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://test.pypi.org/project/ThermoPlotter/',
+    url='https://github.com/kbspooner/ThermoPlotter',
     packages=setuptools.find_packages(),
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Natural Language :: English',
@@ -27,8 +47,9 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Chemistry',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Scientific/Engineering :: Visualization'],
-    keywords='chemistry materials thermoelectric dft phonopy phono3py amset',
+    keywords='chemistry materials thermoelectric dft phonopy phono3py amset tp',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'matplotlib',
-                      'numpy', 'pymatgen', 'scipy', 'pyyaml'],
-    python_requires='>=3')
+    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen', 'scipy',
+                      'pyyaml'],
+    python_requires='>=3',
+    cmdclass={'install': PostInstallMoveFile})

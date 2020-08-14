@@ -9,16 +9,16 @@ afile = 'amset_data_85x85x47.json'
 direction = 'avg'
 cmap = plt.get_cmap('winter')(np.linspace(0, 1, 6))
 leg = ['10$\mathrm{{^{{{}}}}}$'.format(i) for i in range(16, 22)]
+quantities = 'conductivity seebeck ke'
 
 # Axes
 
-fig, ax = tp.plot.axes.three_h_bottom_legend()
+fig, ax = tp.plot.axes.three_h_top_legend()
 
 # Load
 
 data = tp.data.load.amset(afile)
-data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck', 'ke'],
-                               direction=direction)
+data = tp.data.resolve.resolve(data, quantities, direction=direction)
 
 # Add
 
@@ -53,6 +53,6 @@ ax[2].yaxis.set_major_locator(ticker.LogLocator())
 
 # Save
 
-legend = ax[1].legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=6,
-                    title=axlabels['doping'])
+legend = ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1), ncol=6,
+                      title=axlabels['doping'])
 plt.savefig('transport.pdf')

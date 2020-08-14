@@ -7,20 +7,21 @@ phile = 'band.yaml'
 kappafile = 'kappa-m505028.hdf5'
 direction = 'norm'
 temperature = 300
-colour = ['#44ffff', '#ff8044', '#ff4444', '#00000010']
+quantities = 'frequency gv dispersion'
 
 # Axes
-fig, ax = tp.plot.axes.one()
+fig, ax = tp.plot.axes.one_wide_large_legend()
 
 # Load
-data = tp.data.load.phono3py(kappafile, temperature=temperature,
-                             quantities=['group_velocity', 'frequency',
-                                         'temperature', 'qpoint'])
+data = tp.data.load.phono3py(kappafile, quantities=quantities)
 pdata = tp.data.load.phonopy_dispersion(phile)
 
 # Add
 ax = tp.plot.phonons.add_alt_dispersion(ax, data, pdata, 'group_velocity',
-                                        direction=direction, colour=colour)
+                                        direction=direction,
+                                        temperature=temperature)
+
+legend = ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
 # Save
 plt.savefig('altphon.pdf')
