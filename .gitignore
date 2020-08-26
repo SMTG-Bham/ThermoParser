@@ -3,6 +3,10 @@
 *.yaml
 *.hdf5
 *.dat
+examples/boltztrap*
+*KPOINTS
+*POTCAR
+*vasprun.xml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

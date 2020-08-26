@@ -28,15 +28,15 @@ class AmsetTest(unittest.TestCase):
 
     def test_conductivity(self):
         self.assertEqual(np.shape(self.d['conductivity']),
-                         (self.ds, self.ts, 3, 3))
+                         (self.ts, self.ds, 3, 3))
 
     def test_electronic_thermal_conductivity(self):
         self.assertEqual(np.shape(self.d['electronic_thermal_conductivity']),
-                         (self.ds, self.ts, 3, 3))
+                         (self.ts, self.ds, 3, 3))
 
     def test_seebeck(self):
         self.assertEqual(np.shape(self.d['seebeck']),
-                         (self.ds, self.ts, 3, 3))
+                         (self.ts, self.ds, 3, 3))
 
 class Phono3pyTest(unittest.TestCase):
     @classmethod
@@ -101,8 +101,8 @@ class PhonopyDispersionTest(unittest.TestCase):
     def test_qpoint(self):
         self.assertEqual(len(self.d['x']), len(self.d['qpoint']))
 
-    def test_eigenvalue(self):
-        self.assertEqual(len(self.d['x']), len(self.d['eigenvalue']))
+    def test_frequency(self):
+        self.assertEqual(len(self.d['x']), len(self.d['frequency']))
 
     def test_ticks(self):
         self.assertEqual(len(self.d['tick_position']), len(self.d['tick_label']))
@@ -127,7 +127,7 @@ class PhonopyDosTest(unittest.TestCase):
     def test_dos(self):
         for d in self.d:
             if d != 'meta':
-                self.assertEqual(len(self.d['x']), len(self.d[d]),
+                self.assertEqual(len(self.d['frequency']), len(self.d[d]),
                                  '{} failed'.format(d))
 
 if __name__ == '__main__':

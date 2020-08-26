@@ -39,7 +39,7 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
 
     import json
 
-    conversions = settings.conversions()
+    conversions = settings.amset_conversions()
     anames = settings.to_amset()
     tnames = settings.to_tp()
     units = settings.units()
@@ -55,7 +55,7 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
     hastemp = ['fermi_levels', 'conductivity', 'seebeck',
                'electronic_thermal_conductivity', 'mobility', 'energies',
                'velocities_product', 'scattering_rates']
-    #hastype = ['mobility', 'scattering_rates', 'scattering_labels']
+    hastype = ['mobility', 'scattering_rates', 'scattering_labels']
     hasspin = ['energies', 'vb_idx', 'velocities_product']#, 'scattering_rates']
 
     if 'doping' not in quantities:
@@ -83,6 +83,83 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
         data2[q2] = data[q]
         if q in hasspin: data2[q2] = data2[q2][spin]
         if q in hasdata: data2[q2] = data2[q2]['data']
+        if q in hasdope and q not in hastype:
+            data2[q2] = np.swapaxes(data2[q2],0,1)
+        if q2 in units:
+            data2['meta']['units'][q2] = units[q2]
+
+    for c in conversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], conversions[c])
+
+    return data2
+
+def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
+              'conductivity', 'electronic_thermal_conductivity'], doping='n'):
+    """Loads BoltzTraP data.
+
+    Includes unit conversion and outputs units (see tp.settings).
+
+    Arguments:
+        filename : str
+            filepath.
+
+        quantites : dict, optional
+            values to extract. Accepts BoltzTraP keys
+            Default: temperature, doping, seebeck, conductivity,
+            electronic_thermal_conductivity.
+
+        doping : str, optional
+            doping.  Default: n.
+
+    Returns:
+        dict
+            extracted values.
+    """
+
+    import h5py
+
+    conversions = settings.boltztrap_conversions()
+    bnames = settings.to_boltztrap()
+    tnames = settings.to_tp()
+    units = settings.units()
+    if isinstance(quantities, str): quantities = quantities.split()
+    quantities = [bnames[q] if q in bnames else q for q in quantities]
+
+    # list of quantities requiring 'data' key, scattering type and spin
+    hasdope = ['average_eff_mass', 'complexity_factor', 'conductivity',
+               'hall_carrier_concentration', 'seebeck', 'seebeck_eff_mass',
+               'power_factor', 'thermal_conductivity']
+    hastemp = ['average_eff_mass', 'complexity_factor', 'conductivity',
+               'mu_bounds', 'seebeck', 'seebeck_eff_mass', 'power_factor',
+               'thermal_conductivity']
+    hastype = ['average_eff_mass', 'complexity_factor', 'conductivity',
+               'seebeck', 'seebeck_eff_mass', 'power_factor',
+               'thermal_conductivity']
+
+    if 'doping' not in quantities:
+        for q in quantities:
+            if q in hasdope:
+                quantities.append('doping')
+                break
+    if 'temperature' not in quantities:
+        for q in quantities:
+            if q in hastemp:
+                quantities.append('temperature')
+                break
+
+    # load data
+
+    data = h5py.File(filename, 'r')
+
+    data2 = {'meta': {'electronic_source': 'boltztrap',
+                      'units':             {}}}
+    for q in quantities:
+        assert q in data, '{} unrecognised. Quantity must be in {} or {}.'.format(
+                q, ', '.join(list(data)[:-1]), list(data)[-1])
+        q2 = tnames[q] if q in tnames else q
+        data2[q2] = data[q]
+        if q in hastype: data2[q2] = data2[q2][doping]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 
@@ -126,7 +203,7 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
 
     import h5py
 
-    conversions = settings.conversions()
+    conversions = settings.phono3py_conversions()
     pnames = settings.to_phono3py()
     tnames = settings.to_tp()
     units = settings.units()
@@ -278,10 +355,14 @@ def phonopy_dispersion(filename, xdata=None):
     else:
         d1 = d2
 
+    conversions = settings.phonopy_conversions()
+    if 'frequency' in conversions:
+        eigs *= conversions['frequency']
+
     units = tp.settings.units()
     data2 = {'x':             x,
              'qpoint':        qp,
-             'eigenvalue':    eigs,
+             'frequency':     eigs,
              'tick_position': d1,
              'tick_label':    ticks,
              'meta':
@@ -305,12 +386,16 @@ def phonopy_dos(filename, atoms):
 
     Returns:
         dict
-            DoS per atom and total.
+            frequency, DoS per atom and total.
     """
 
     data = np.transpose(np.loadtxt(filename))
-    data2 = {'x':    data[0],
-             'meta': {'phonon_dos_source': 'phonopy'}}
+    data2 = {'frequency': data[0],
+             'meta':      {'phonon_dos_source': 'phonopy'}}
+
+    conversions = settings.phonopy_conversions()
+    if 'frequency' in conversions:
+        data2['frequency'] *= conversions['frequency']
 
     if isinstance(atoms, str): atoms = atoms.split()
 

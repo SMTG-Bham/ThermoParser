@@ -40,7 +40,7 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
             dispersion data containing:
                 x : array-like
                     high-symmetry path.
-                eigenvalue : array-like
+                frequency : array-like
                     phonon frequencies.
                 tick_position : array-like
                     x-tick positions.
@@ -72,12 +72,12 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
     """
 
     if bandrange is None:
-        bmin = 0; bmax = len(data['eigenvalue'][0])
+        bmin = 0; bmax = len(data['frequency'][0])
     else:
         bmin = np.amax([0, bandrange[0]])
-        bmax = np.amin([len(data['eigenvalue'][0]), bandrange[1]])
+        bmax = np.amin([len(data['frequency'][0]), bandrange[1]])
     bdiff = bmax - bmin
-    eigs = np.array(data['eigenvalue'])[:,bmin:bmax]
+    f = np.array(data['frequency'])[:,bmin:bmax]
 
     # allows single colours/ linestyles or arrays, which can be filled out
     if isinstance(colour, str):
@@ -109,14 +109,14 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
 
     # ensures only one legend entry
     if bdiff == 1:
-        ax.plot(data['x'], eigs, label=label, color=colours[0],
-                                              linestyle=linestyles[0])
+        ax.plot(data['x'], f, label=label, color=colours[0],
+                              linestyle=linestyles[0])
     else:
-        ax.plot(data['x'], eigs[:,0], label=label, color=colours[0],
-                                                   linestyle=linestyles[0])
+        ax.plot(data['x'], f[:,0], label=label, color=colours[0],
+                                   linestyle=linestyles[0])
         for n in range(bdiff):
-            ax.plot(data['x'], eigs[:,n], color=colours[n],
-                                          linestyle=linestyles[n])
+            ax.plot(data['x'], f[:,n], color=colours[n],
+                                       linestyle=linestyles[n])
 
     if main:
         axlabels = tp.settings.labels()
@@ -134,7 +134,7 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
 
         ax.yaxis.set_major_locator(tp.settings.locator()['major'])
         ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
-        if round(np.amin(eigs), 1) == 0:
+        if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
 
     return ax
@@ -152,7 +152,7 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
             dictionaries of dispersion data containing:
                 x : array-like
                     high-symmetry path.
-                eigenvalue : array-like
+                frequency : array-like
                     phonon frequencies.
                 tick_position : array-like
                     x-tick positions.
@@ -224,8 +224,8 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
 
         ax.yaxis.set_major_locator(tp.settings.locator()['major'])
         ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
-        eigs = [d['eigenvalue'] for d in data]
-        if round(np.amin(eigs), 1) == 0:
+        f = [d['frequency'] for d in data]
+        if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
 
     return ax
@@ -442,7 +442,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
                     qpoint locations.
                 x : array-like
                     high-symmetry path.
-                eigenvalue : array-like
+                frequency : array-like
                     phonon frequencies.
                 tick_position : array-like
                     x-tick positions.
@@ -508,7 +508,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     # Phonopy
     qp = pdata['qpoint']
     x = pdata['x']
-    eigs = np.array(pdata['eigenvalue'])[:, bmin:bmax]
+    f = np.array(pdata['frequency'])[:, bmin:bmax]
 
     qpi = [qp[i] for i in range(len(qp)) if i % interpolate == 0]
     xi = [x[i] for i in range(len(x)) if i % interpolate == 0]
@@ -524,12 +524,12 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     c2 = c[min_id, :]
 
     x, indices = np.unique(x, return_index=True)
-    eigs = np.array(eigs)[indices]
+    f = np.array(f)[indices]
 
     # Interpolate
     x2 = np.linspace(min(x), max(x), 2500)
-    einterp = interp1d(x, eigs, kind='cubic', axis=0)
-    eigs = einterp(x2)
+    finterp = interp1d(x, f, kind='cubic', axis=0)
+    f = finterp(x2)
 
     cinterp = interp1d(xi, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
@@ -540,7 +540,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     cnorm = mpl.colors.LogNorm(vmin=cmin, vmax=cmax)
 
     for n in range(bdiff):
-        line = ax.scatter(x2, eigs[:,n], c=c2[:,n], cmap=colour, norm=cnorm,
+        line = ax.scatter(x2, f[:,n], c=c2[:,n], cmap=colour, norm=cnorm,
                           marker='.', s=1, rasterized=rasterise)
 
     if main:
@@ -562,7 +562,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 
         ax.yaxis.set_major_locator(tp.settings.locator()['major'])
         ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
-        if round(np.amin(eigs), 1) == 0:
+        if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
 
     return ax, cbar
@@ -741,7 +741,7 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
                     qpoint locations.
                 x : array-like
                     high-symmetry path.
-                eigenvalue : array-like
+                frequency : array-like
                     phonon frequencies.
                 tick_position : array-like
                     x-tick positions.
@@ -803,27 +803,27 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
     c2 = c[min_id, :]
 
     x, indices = np.unique(x, return_index=True)
-    eigs = np.array(pdata['eigenvalue'])[indices]
+    f = np.array(pdata['frequency'])[indices]
 
     # Interpolate
     x2 = np.linspace(min(x), max(x), 2500)
-    einterp = interp1d(x, eigs, kind='cubic', axis=0)
-    eigs = einterp(x2)
+    finterp = interp1d(x, f, kind='cubic', axis=0)
+    f = finterp(x2)
 
     cinterp = interp1d(xi, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
-    emax = np.amax(np.add(eigs, c2))
-    emin = np.amin(np.subtract(eigs, c2))
-    f = np.linspace(emin, emax, 2500)
+    fmax = np.amax(np.add(f, c2))
+    fmin = np.amin(np.subtract(f, c2))
+    f2 = np.linspace(fmin, fmax, 2500)
 
     area = np.zeros((len(x2), len(f)))
     for q in range(len(area)):
         for b in range(len(c2[q])):
-            area[q] = np.add(area[q], lorentzian(f, eigs[q][b], c2[q][b]))
+            area[q] = np.add(area[q], lorentzian(f2, f[q][b], c2[q][b]))
 
     cnorm = mpl.colors.LogNorm(vmin=np.amin(area), vmax=np.amax(area))
 
-    ax.pcolormesh(x2, f, np.transpose(area), cmap=colour, norm=cnorm,
+    ax.pcolormesh(x2, f2, np.transpose(area), cmap=colour, norm=cnorm,
                   rasterized=rasterise)
 
     if main:
@@ -838,7 +838,7 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
         ax.yaxis.set_major_locator(tp.settings.locator()['major'])
         ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
-        if round(np.amin(eigs), 1) == 0:
+        if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
 
     return ax
