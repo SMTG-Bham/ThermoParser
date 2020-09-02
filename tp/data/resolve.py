@@ -62,10 +62,10 @@ def resolve(data, quantities, temperature=None, direction=None):
     if isinstance(quantities, str):
         quantities = quantities.split()
     for q in quantities:
-        if q in tnames: q = tnames[q]
-        if temperature is not None and q in hast:
+        q2 = tnames[q] if q in tnames else q
+        if temperature is not None and q2 in hast:
             data[q] = data[q][ti]
-        if direction is not None and q in iso:
-            data[q] = iso[q](data[q], direction)
+        if direction is not None and q2 in iso:
+            data[q] = iso[q2](data[q], direction)
 
     return data

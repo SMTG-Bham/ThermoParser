@@ -53,30 +53,32 @@ def locator():
 def to_tp():
     """Get dictionary to translate to tp."""
 
-    names = {'energies':     'energy',
-             'fermi_levels': 'fermi_level',
-             'gv':           'group_velocity',
-             'kappa':        'lattice_thermal_conductivity', # because p3p
-             'kappae':       'electronic_thermal_conductivity',
-             'kappal':       'lattice_thermal_conductivity',
-             'ke':           'electronic_thermal_conductivity',
-             'kl':           'lattice_thermal_conductivity',
-             'mfp':          'mean_free_path',
-             'mk':           'mode_kappa',
-             'pf':           'power_factor',
-             'temperatures': 'temperature'}
+    names = {'energies':             'energy',
+             'fermi_levels':         'fermi_level',
+             'gv':                   'group_velocity',
+             'kappa':                'lattice_thermal_conductivity', # because p3p
+             'kappae':               'electronic_thermal_conductivity',
+             'kappal':               'lattice_thermal_conductivity',
+             'ke':                   'electronic_thermal_conductivity',
+             'kl':                   'lattice_thermal_conductivity',
+             'mfp':                  'mean_free_path',
+             'mk':                   'mode_kappa',
+             'pf':                   'power_factor',
+             'temperatures':         'temperature',
+             'thermal_conductivity': 'electronic_thermal_conductivity'}
 
     return names
 
 def to_amset():
     """Get dictionary to translate to amset."""
 
-    names = {'energy':      'energies',
-             'fermi_level': 'fermi_levels',
-             'kappa':       'electronic_thermal_conductivity',
-             'kappae':      'electronic_thermal_conductivity',
-             'ke':          'electronic_thermal_conductivity',
-             'temperature': 'temperatures'}
+    names = {'energy':               'energies',
+             'fermi_level':          'fermi_levels',
+             'kappa':                'electronic_thermal_conductivity',
+             'kappae':               'electronic_thermal_conductivity',
+             'ke':                   'electronic_thermal_conductivity',
+             'temperature':          'temperatures',
+             'thermal_conductivity': 'electronic_thermal_conductivity'}
 
     return names
 
