@@ -13,7 +13,7 @@
 
 ThermoPlotter is a toolkit for quickly, easily and prettily plotting the
 outputs of specialised analytical codes.
-It is focussed on computational materials science and particularly
+It is focused on computational materials science and particularly
 thermoelectrics materials.
 It essentially wraps around [Matplotlib](https://matplotlib.org/)
 functions, and is intended to be used as a python package, to build
@@ -56,6 +56,7 @@ Phononic properties:
 
 Electronic properties:
 * [AMSET](https://hackingmaterials.lbl.gov/amset/)
+* [BoltzTraP](https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/)
 
 Current plotting modes are split into four areas.
 

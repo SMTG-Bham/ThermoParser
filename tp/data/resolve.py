@@ -34,9 +34,13 @@ def resolve(data, quantities, temperature=None, direction=None):
     """
 
     data = dict(data)
-    hast = ['gamma', 'heat_capacity', 'lattice_thermal_conductivity',
-            'lifetime', 'mean_free_path', 'mode_kappa', 'occupation']
-    iso = {'conductivity':                    aniso.matrix_three,
+    hast = ['average_eff_mass', 'conductivity',
+            'electronic_thermal_conductivity', 'fermi_level', 'gamma',
+            'heat_capacity', 'lattice_thermal_conductivity', 'lifetime',
+            'mean_free_path', 'mode_kappa', 'occupation', 'power_factor',
+            'seebeck', 'velocities_product', 'zt']
+    iso = {'average_eff_mass':                aniso.matrix_three,
+           'conductivity':                    aniso.matrix_three,
            'electronic_thermal_conductivity': aniso.matrix_three,
            'group_velocity':                  aniso.three,
            'gv_by_gv':                        aniso.three,
@@ -47,14 +51,23 @@ def resolve(data, quantities, temperature=None, direction=None):
            'power_factor':                    aniso.matrix_three,
            'qpoint':                          aniso.two,
            'seebeck':                         aniso.matrix_three,
+           'velocities_product':              aniso.matrix_two,
            'zt':                              aniso.matrix_three}
 
     if temperature is not None and 'temperature' in data:
         ti = np.abs(np.subtract(data['temperature'][:], temperature)).argmin()
+        data['meta']['temperature'] = data['temperature'][ti]
+
+        iso['average_eff_mass'] = aniso.matrix_two
+        iso['conductivity'] = aniso.matrix_two
+        iso['electronic_thermal_conductivity'] = aniso.matrix_two
         iso['lattice_thermal_conductivity'] = aniso.one
         iso['mean_free_path'] = aniso.three
         iso['mode_kappa'] = aniso.three
-        data['meta']['temperature'] = data['temperature'][ti]
+        iso['power_factor'] = aniso.matrix_two
+        iso['seebeck'] = aniso.matrix_two
+        iso['velocities_product'] = aniso.matrix_one
+        iso['zt'] = aniso.matrix_two
     if direction is not None:
         data['meta']['direction'] = direction
 

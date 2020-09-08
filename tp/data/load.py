@@ -96,7 +96,7 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
 
 def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
               'conductivity', 'electronic_thermal_conductivity'], doping='n'):
-    """Loads BoltzTraP data.
+    """Loads BoltzTraP data from the tp boltztrap.hdf5 file.
 
     Includes unit conversion and outputs units (see tp.settings).
 
@@ -105,7 +105,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
             filepath.
 
         quantites : dict, optional
-            values to extract. Accepts BoltzTraP keys
+            values to extract. Accepts boltztrap.hdf5 keys.
             Default: temperature, doping, seebeck, conductivity,
             electronic_thermal_conductivity.
 
@@ -127,15 +127,10 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     quantities = [bnames[q] if q in bnames else q for q in quantities]
 
     # list of quantities requiring 'data' key, scattering type and spin
-    hasdope = ['average_eff_mass', 'complexity_factor', 'conductivity',
-               'hall_carrier_concentration', 'seebeck', 'seebeck_eff_mass',
+    hasdope = ['average_eff_mass', 'conductivity', 'fermi_level', 'seebeck',
                'power_factor', 'thermal_conductivity']
-    hastemp = ['average_eff_mass', 'complexity_factor', 'conductivity',
-               'mu_bounds', 'seebeck', 'seebeck_eff_mass', 'power_factor',
-               'thermal_conductivity']
-    hastype = ['average_eff_mass', 'complexity_factor', 'conductivity',
-               'seebeck', 'seebeck_eff_mass', 'power_factor',
-               'thermal_conductivity']
+    hastemp = ['average_eff_mass', 'conductivity', 'fermi_level', 'seebeck',
+               'power_factor', 'thermal_conductivity']
 
     if 'doping' not in quantities:
         for q in quantities:
@@ -159,7 +154,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
                 q, ', '.join(list(data)[:-1]), list(data)[-1])
         q2 = tnames[q] if q in tnames else q
         data2[q2] = data[q]
-        if q in hastype: data2[q2] = data2[q2][doping]
+        if q in hasdope: data2[q2] = data2[q2][doping]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 

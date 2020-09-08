@@ -3,7 +3,8 @@
 *.yaml
 *.hdf5
 *.dat
-examples/boltztrap*
+examples/data
+examples/amset-boltztrap/boltztrap*
 *KPOINTS
 *POTCAR
 *vasprun.xml
