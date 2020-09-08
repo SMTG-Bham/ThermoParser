@@ -56,7 +56,7 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             axes with DoS.
     """
 
-    exempt = ['x', 'meta', 'total']
+    exempt = ['frequency', 'meta', 'total']
     if total:
         dmax = max(data['total'])
     else:
@@ -101,22 +101,22 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
 
     if total:
         if invert:
-            ax.fill_between(data['total'], data['x'], label='Total',
+            ax.fill_between(data['total'], data['frequency'], label='Total',
                             facecolor=fillcolour['total'],
                             edgecolor=colour['total'], rasterized=rasterise)
         else:
-            ax.fill_between(data['x'], data['total'], label='Total',
+            ax.fill_between(data['frequency'], data['total'], label='Total',
                             facecolor=fillcolour['total'],
                             edgecolor=colour['total'], rasterized=rasterise)
 
     for key in data:
         if key not in exempt:
             if invert:
-                ax.fill_between(data[key], data['x'], label=key,
+                ax.fill_between(data[key], data['frequency'], label=key,
                                 facecolor=fillcolour[key],
                                 edgecolor=colour[key], rasterized=rasterise)
             else:
-                ax.fill_between(data['x'], data[key], label=key,
+                ax.fill_between(data['frequency'], data[key], label=key,
                                 facecolor=fillcolour[key],
                                 edgecolor=colour[key], rasterized=rasterise)
 

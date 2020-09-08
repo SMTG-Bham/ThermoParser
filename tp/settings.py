@@ -11,6 +11,8 @@ Functions:
         convert names to tp conventions.
     to_amset:
         convert names to amset conventions.
+    to_amset:
+        convert names to boltztrap conventions.
     to_phono3py:
         convert names to phono3py conventions.
     conversions:
@@ -24,6 +26,7 @@ Functions:
 def __dir__():
     names = ['to_tp',
              'to_amset',
+             'to_boltztrap',
              'to_phono3py',
 
              'conversions',
@@ -48,32 +51,44 @@ def locator():
     return locators
 
 def to_tp():
-    """Get dictionary to convert to tp variable names."""
+    """Get dictionary to translate to tp."""
 
-    names = {'energies':     'energy',
-             'fermi_levels': 'fermi_level',
-             'gv':           'group_velocity',
-             'kappa':        'lattice_thermal_conductivity', # because p3p
-             'kappae':       'electronic_thermal_conductivity',
-             'kappal':       'lattice_thermal_conductivity',
-             'ke':           'electronic_thermal_conductivity',
-             'kl':           'lattice_thermal_conductivity',
-             'mfp':          'mean_free_path',
-             'mk':           'mode_kappa',
-             'pf':           'power_factor',
-             'temperatures': 'temperature'}
+    names = {'energies':             'energy',
+             'fermi_levels':         'fermi_level',
+             'gv':                   'group_velocity',
+             'kappa':                'lattice_thermal_conductivity', # because p3p
+             'kappae':               'electronic_thermal_conductivity',
+             'kappal':               'lattice_thermal_conductivity',
+             'ke':                   'electronic_thermal_conductivity',
+             'kl':                   'lattice_thermal_conductivity',
+             'mfp':                  'mean_free_path',
+             'mk':                   'mode_kappa',
+             'pf':                   'power_factor',
+             'temperatures':         'temperature',
+             'thermal_conductivity': 'electronic_thermal_conductivity'}
 
     return names
 
 def to_amset():
-    """Get dictionary to convert to amset variable names."""
+    """Get dictionary to translate to amset."""
 
-    names = {'energy':      'energies',
-             'fermi_level': 'fermi_levels',
-             'kappa':       'electronic_thermal_conductivity',
-             'kappae':      'electronic_thermal_conductivity',
-             'ke':          'electronic_thermal_conductivity',
-             'temperature': 'temperatures'}
+    names = {'energy':               'energies',
+             'fermi_level':          'fermi_levels',
+             'kappa':                'electronic_thermal_conductivity',
+             'kappae':               'electronic_thermal_conductivity',
+             'ke':                   'electronic_thermal_conductivity',
+             'temperature':          'temperatures',
+             'thermal_conductivity': 'electronic_thermal_conductivity'}
+
+    return names
+
+def to_boltztrap():
+    """Get dictionary to translate to boltztrap."""
+
+    names = {'electronic_thermal_conductivity': 'thermal_conductivity',
+             'kappa':                           'thermal_conductivity',
+             'kappae':                          'thermal_conductivity',
+             'ke':                              'thermal_conductivity'}
 
     return names
 
@@ -90,8 +105,29 @@ def to_phono3py():
 
     return names
 
-def conversions():
-    """Get dictionary of unit conversions used in tp."""
+def amset_conversions():
+    """Get dictionary of unit conversions for phonopy."""
+
+    conversions = {}
+
+    return conversions
+
+def boltztrap_conversions():
+    """Get dictionary of unit conversions for phonopy."""
+
+    conversions = {}
+
+    return conversions
+
+def phonopy_conversions():
+    """Get dictionary of unit conversions for phonopy."""
+
+    conversions = {'power_factor': 1e-6} # muW m-1 K-2 to W m-1 K-2
+
+    return conversions
+
+def phono3py_conversions():
+    """Get dictionary of unit conversions for phono3py."""
 
     conversions = {'group_velocity': 1e2,         # THz AA to m s-1
                    'gv_by_gv':       1e4,         # THz2 AA2 to m2 s-2
@@ -104,9 +140,12 @@ def conversions():
 def units():
     """Get dictionary of units of quantities used in tp"""
 
-    units = {'conductivity':                    'S m-1',
-             'doping':                          'cm-1',
+    units = {'average_eff_mass':                'm_e',
+             'chemical_potential':              'eV',
+             'conductivity':                    'S m-1',
+             'doping':                          'cm-3',
              'efermi':                          'eV',
+             'effective_mass':                  'm_e',
              'electronic_thermal_conductivity': 'W m-1 K-1',
              'energy':                          'eV',
              'fermi_level':                     'eV',
@@ -114,16 +153,19 @@ def units():
              'gamma':                           'THz',
              'group_velocity':                  'm s-1',
              'gv_by_gv':                        'm2 s-2',
+             'hall_carrier_concentration':      'cm-3',
              'heat_capacity':                   'J K-1',
              'lattice_thermal_conductivity':    'W m-1 K-1',
              'lifetime':                        's',
              'mean_free_path':                  'm',
              'mobility':                        'cm^2 V-1 s-1',
              'mode_kappa':                      'W m-1 K-1',
+             'mu_bounds':                       'eV',
              'occupation':                      'phonons',
              'power_factor':                    'W m-1 K-2',
              'scattering_rates':                's-1',
              'seebeck':                         'muV K-1',
+             'seebeck_effective_mass':          'm_e',
              'temperature':                     'K',
              'zt':                              ''}
 
@@ -132,7 +174,11 @@ def units():
 def labels():
     """Get dictionary of axis labels used in tp"""
 
-    labels = {'conductivity':
+    labels = {'chemical_potential':
+                  'Chemical Potential (eV)',
+              'complexity_factor':
+                  'Complexity Factor',
+              'conductivity':
                   'Conductivity (S m$\mathregular{^{-1}}$)',
               'cumulative_kappa':
                   'Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
@@ -142,6 +188,8 @@ def labels():
                   '',#'Arbitrary Units',#
               'efermi':
                   'Fermi Energy (eV)',
+              'effective_mass':
+                  'Effective Mass (m$\mathregular{_e}$)',
               'energy':
                   'Energy (eV)',
               'electronic_thermal_conductivity':

@@ -214,7 +214,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None, yinterp=None,
         data = tp.calculate.zt_fromdict(data)
 
     ax, cbar = add_heatmap(ax, data['temperature'],
-                           list(np.abs(data['doping'])), data['zt'],
+                           list(np.abs(data['doping'])), 
+                           np.transpose(data['zt']),
                            xinterp=xinterp, yinterp=yinterp, kind=kind,
                            yscale='log', colour=colour, rasterise=rasterise)
 
@@ -274,7 +275,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None, yinterp=None
 
     ax, cbar = add_heatmap(ax, data['temperature'],
                            list(np.abs(data['doping'])),
-                           data['lattice_thermal_conductivity'],
+                           np.transpose(data['lattice_thermal_conductivity']),
                            xinterp=xinterp, yinterp=yinterp, kind=kind,
                            yscale='log', cmin=0, colour=colour,
                            rasterise=rasterise)

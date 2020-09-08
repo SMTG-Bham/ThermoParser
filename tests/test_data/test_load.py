@@ -15,28 +15,47 @@ class AmsetTest(unittest.TestCase):
         f = 'data/amset_data_85x85x47.json'
         cls.qs = ['doping', 'conductivity', 'electronic_thermal_conductivity',
                   'seebeck', 'temperature']
-        #cls.qs = ['doping', 'dos', 'conductivity',
-        #          'electronic_thermal_conductivity', 'efermi', 'energy',
-        #          'fd_cutoffs', 'fermi_level', 'ir_kpoints',
-        #          'ir_to_full_kpoint_mapping', 'is_metal', 'kpoints',
-        #          'mobility', 'scattering_rates', 'scattering_labels',
-        #          'seebeck', 'soc', 'structure', 'temperature', 'vb_idx',
-        #          'velocities_product']
         cls.d = load.amset(f, cls.qs)
         cls.ts = len(cls.d['temperature'])
         cls.ds = len(cls.d['doping'])
 
     def test_conductivity(self):
         self.assertEqual(np.shape(self.d['conductivity']),
-                         (self.ds, self.ts, 3, 3))
+                         (self.ts, self.ds, 3, 3))
 
     def test_electronic_thermal_conductivity(self):
         self.assertEqual(np.shape(self.d['electronic_thermal_conductivity']),
-                         (self.ds, self.ts, 3, 3))
+                         (self.ts, self.ds, 3, 3))
 
     def test_seebeck(self):
         self.assertEqual(np.shape(self.d['seebeck']),
-                         (self.ds, self.ts, 3, 3))
+                         (self.ts, self.ds, 3, 3))
+
+class BoltztrapTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        f = 'data/boltztrap.hdf5'
+        cls.qs = ['doping', 'conductivity', 'electronic_thermal_conductivity',
+                  'seebeck', 'temperature', 'power_factor']
+        cls.d = load.boltztrap(f, cls.qs)
+        cls.ts = len(cls.d['temperature'])
+        cls.ds = len(cls.d['doping'])
+
+    def test_conductivity(self):
+        self.assertEqual(np.shape(self.d['conductivity']),
+                         (self.ts, self.ds, 3, 3))
+
+    def test_electronic_thermal_conductivity(self):
+        self.assertEqual(np.shape(self.d['electronic_thermal_conductivity']),
+                         (self.ts, self.ds, 3, 3))
+
+    def test_seebeck(self):
+        self.assertEqual(np.shape(self.d['seebeck']),
+                         (self.ts, self.ds, 3, 3))
+
+    def test_power_factor(self):
+        self.assertEqual(np.shape(self.d['power_factor']),
+                         (self.ts, self.ds, 3, 3))
 
 class Phono3pyTest(unittest.TestCase):
     @classmethod
@@ -45,10 +64,6 @@ class Phono3pyTest(unittest.TestCase):
         cls.qs = ['frequency', 'gamma', 'group_velocity',
                   'lattice_thermal_conductivity', 'lifetime', 'mean_free_path',
                   'mode_kappa', 'occupation', 'qpoint', 'temperature', 'weight']
-        #cls.qs = ['frequency', 'gamma', 'group_velocity', 'gv_by_gv',
-        #          'heat_cpacity', 'kappa', 'kappa_unit_conversion',
-        #          'lifetime', 'mean_free_path', 'mesh', 'mode_kappa',
-        #          'occupation', 'qpoint', 'temperature', 'weight']
         cls.d = load.phono3py(f, cls.qs)
         cls.ts = len(cls.d['temperature'])
         cls.qpts = len(cls.d['qpoint'])
@@ -101,8 +116,8 @@ class PhonopyDispersionTest(unittest.TestCase):
     def test_qpoint(self):
         self.assertEqual(len(self.d['x']), len(self.d['qpoint']))
 
-    def test_eigenvalue(self):
-        self.assertEqual(len(self.d['x']), len(self.d['eigenvalue']))
+    def test_frequency(self):
+        self.assertEqual(len(self.d['x']), len(self.d['frequency']))
 
     def test_ticks(self):
         self.assertEqual(len(self.d['tick_position']), len(self.d['tick_label']))
@@ -127,7 +142,7 @@ class PhonopyDosTest(unittest.TestCase):
     def test_dos(self):
         for d in self.d:
             if d != 'meta':
-                self.assertEqual(len(self.d['x']), len(self.d[d]),
+                self.assertEqual(len(self.d['frequency']), len(self.d[d]),
                                  '{} failed'.format(d))
 
 if __name__ == '__main__':

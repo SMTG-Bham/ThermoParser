@@ -11,13 +11,13 @@ import matplotlib.pyplot as plt
 class NoTotalTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.d = {'x':     [0, 1],
-                 'A':     [0, 3],
-                 'B':     [4, 0],
-                 'total': [4, 3]}
-        cls.c = {'A':     '#ff0000',
-                 'B':     '#00ff0080',
-                 'total': '#000000'}
+        cls.d = {'frequency': [0, 1],
+                 'A':         [0, 3],
+                 'B':         [4, 0],
+                 'total':     [4, 3]}
+        cls.c = {'A':         '#ff0000',
+                 'B':         '#00ff0080',
+                 'total':     '#000000'}
         cls.fig, cls.ax = one_small_legend()
         cls.ax = frequency.add_dos(cls.ax, cls.d, cls.c,
                                    main=True, scale=False)
@@ -36,13 +36,13 @@ class NoTotalTest(unittest.TestCase):
 class TotalTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.d = {'x':     [0, 1],
-                 'A':     [0, 3],
-                 'B':     [4, 0],
-                 'total': [4, 3]}
-        cls.c = {'A':     '#ff0000',
-                 'B':     '#00ff0080',
-                 'total': '#000000'}
+        cls.d = {'frequency': [0, 1],
+                 'A':         [0, 3],
+                 'B':         [4, 0],
+                 'total':     [4, 3]}
+        cls.c = {'A':         '#ff0000',
+                 'B':         '#00ff0080',
+                 'total':     '#000000'}
         cls.fig, cls.ax = one_small_legend()
         cls.ax = frequency.add_dos(cls.ax, cls.d, cls.c,
                                    main=True, scale=False, total=True)
@@ -61,13 +61,13 @@ class TotalTest(unittest.TestCase):
 class InvertTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.d = {'x':     [0, 1],
-                 'A':     [0, 3],
-                 'B':     [4, 0],
-                 'total': [4, 3]}
-        cls.c = {'A':     '#ff0000',
-                 'B':     '#00ff0080',
-                 'total': '#000000'}
+        cls.d = {'frequency': [0, 1],
+                 'A':         [0, 3],
+                 'B':         [4, 0],
+                 'total':     [4, 3]}
+        cls.c = {'A':         '#ff0000',
+                 'B':         '#00ff0080',
+                 'total':     '#000000'}
         cls.fig, cls.ax = one_small_legend()
         cls.ax = frequency.add_dos(cls.ax, cls.d, cls.c,
                                    main=True, scale=False, invert=True)
@@ -86,13 +86,13 @@ class InvertTest(unittest.TestCase):
 class LinearScaleTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.d = {'x':     [0, 1],
-                 'A':     [0, 3],
-                 'B':     [4, 0],
-                 'total': [4, 3]}
-        cls.c = {'A':     '#ff0000',
-                 'B':     '#00ff0080',
-                 'total': '#000000'}
+        cls.d = {'frequency': [0, 1],
+                 'A':         [0, 3],
+                 'B':         [4, 0],
+                 'total':     [4, 3]}
+        cls.c = {'A':         '#ff0000',
+                 'B':         '#00ff0080',
+                 'total':     '#000000'}
         cls.fig, cls.ax = one_small_legend()
         cls.ylim = [1, 2]
         cls.ax.set_ylim(cls.ylim)
@@ -116,13 +116,13 @@ class LinearScaleTest(unittest.TestCase):
 class LogScaleTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.d = {'x':     [0, 1],
-                 'A':     [0, 3],
-                 'B':     [4, 0],
-                 'total': [4, 3]}
-        cls.c = {'A':     '#ff0000',
-                 'B':     '#00ff0080',
-                 'total': '#000000'}
+        cls.d = {'frequency': [0, 1],
+                 'A':         [0, 3],
+                 'B':         [4, 0],
+                 'total':     [4, 3]}
+        cls.c = {'A':         '#ff0000',
+                 'B':         '#00ff0080',
+                 'total':     '#000000'}
         cls.fig, cls.ax = one_small_legend()
         cls.ylim = cls.ax.get_ylim()
         cls.ax.set_yscale('log')
