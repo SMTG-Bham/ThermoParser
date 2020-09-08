@@ -122,7 +122,7 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
     pf = power_factor(conductivity, seebeck)
     zt = np.multiply(pf, np.array(temperature)[:, None]) / \
                      np.add(electronic_thermal_conductivity,
-                            lattice_thermal_conductivity[:, None])
+                            np.array(lattice_thermal_conductivity)[:, None])
 
     return zt
 

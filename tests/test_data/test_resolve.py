@@ -23,10 +23,42 @@ class ResolveTest(unittest.TestCase):
         cls.four = [[[[ 1.,  2.,  3.]]],
                     [[[11., 12., 13.]]],
                     [[[21., 22., 23.]]]]
-        cls.three_m = [[[[ 1.,  2.,  3.], [ 4.,  5.,  6.], [ 7.,  8.,  9.]],
-                        [[11., 12., 13.], [14., 15., 16.], [17., 18., 19.]],
-                        [[21., 22., 23.], [24., 25., 26.], [27., 28., 29.]]]]
+        cls.one_m = [[ 1.,  2.,  3.], [ 4.,  5.,  6.], [ 7.,  8.,  9.],
+                     [11., 12., 13.], [14., 15., 16.], [17., 18., 19.],
+                     [21., 22., 23.], [24., 25., 26.], [27., 28., 29.]]
+        cls.two_m = [[[ 1.,  2.,  3.], [ 4.,  5.,  6.], [ 7.,  8.,  9.]],
+                     [[11., 12., 13.], [14., 15., 16.], [17., 18., 19.]],
+                     [[21., 22., 23.], [24., 25., 26.], [27., 28., 29.]]]
+        cls.three_m = [[[[ 1.,  2.,  3.], [ 4.,  5.,  6.], [ 7.,  8.,  9.]]],
+                       [[[11., 12., 13.], [14., 15., 16.], [17., 18., 19.]]],
+                       [[[21., 22., 23.], [24., 25., 26.], [27., 28., 29.]]]]
         cls.t = [10., 20., 30.]
+
+    def test_average_eff_mass_direction(self):
+        q = 'average_eff_mass'
+        d = {q:              self.three_m,
+             'temperature':  self.t,
+             'meta':         {}}
+        d = resolve.resolve(d, q, direction='z')
+        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+
+    def test_average_eff_mass_temperature(self):
+        q = 'average_eff_mass'
+        d = {q:              self.three_m,
+             'temperature':  self.t,
+             'meta':         {}}
+        d = resolve.resolve(d, q, temperature=23.)
+        self.assertEqual(d[q], [[[11., 12., 13.],
+                                 [14., 15., 16.],
+                                 [17., 18., 19.]]])
+
+    def test_average_eff_mass_both(self):
+        q = 'average_eff_mass'
+        d = {q:             self.three_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [[19.]]).all())
 
     def test_conductivity_direction(self):
         q = 'conductivity'
@@ -34,7 +66,7 @@ class ResolveTest(unittest.TestCase):
              'temperature':  self.t,
              'meta':         {}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9., 19., 29.]]]).all())
+        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
 
     def test_conductivity_temperature(self):
         q = 'conductivity'
@@ -42,14 +74,17 @@ class ResolveTest(unittest.TestCase):
              'temperature':  self.t,
              'meta':         {}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], self.three_m,
-                        'If temperature resolution is now implemented, '
-                        'this test will fail, edit it!')
-        # Once temperature resolution in amset is implemented, use the
-        # following block
-        #self.assertEqual(d[q], [[11., 12., 13.],
-        #                        [14., 15., 16.],
-        #                        [17., 18., 19.]])
+        self.assertEqual(d[q], [[[11., 12., 13.],
+                                 [14., 15., 16.],
+                                 [17., 18., 19.]]])
+
+    def test_conductivity_both(self):
+        q = 'conductivity'
+        d = {q:             self.three_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [[19.]]).all())
 
     def test_electronic_thermal_conductivity_direction(self):
         q = 'electronic_thermal_conductivity'
@@ -57,7 +92,7 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9., 19., 29.]]]).all())
+        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
 
     def test_electronic_thermal_conductivity_temperature(self):
         q = 'electronic_thermal_conductivity'
@@ -65,14 +100,33 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], self.three_m,
-                        'If temperature resolution is now implemented, '
-                        'this test will fail, edit it!')
-        # Once temperature resolution in amset is implemented, use the
-        # following block
-        #self.assertEqual(d[q], [[11., 12., 13.],
-        #                        [14., 15., 16.],
-        #                        [17., 18., 19.]])
+        self.assertEqual(d[q], [[[11., 12., 13.],
+                                 [14., 15., 16.],
+                                 [17., 18., 19.]]])
+
+    def test_electronic_thermal_conductivity_both(self):
+        q = 'electronic_thermal_conductivity'
+        d = {q:             self.three_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [[19.]]).all())
+
+    def test_fermi_level_direction(self):
+        q = 'fermi_level'
+        d = {q:             self.two,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z')
+        self.assertEqual(d[q], self.two)
+
+    def test_fermi_level_temperature(self):
+        q = 'fermi_level'
+        d = {q      :       self.two,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, temperature=23.)
+        self.assertEqual(d[q], [11., 12., 13.])
 
     def test_gamma_direction(self):
         q = 'gamma'
@@ -256,7 +310,7 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9., 19., 29.]]]).all())
+        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
 
     def test_power_factor_temperature(self):
         q = 'power_factor'
@@ -264,14 +318,17 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], self.three_m,
-                        'If temperature resolution is now implemented, '
-                        'this test will fail, edit it!')
-        # Once temperature resolution in amset is implemented, use the
-        # following block
-        #self.assertEqual(d[q], [[11., 12., 13.],
-        #                        [14., 15., 16.],
-        #                        [17., 18., 19.]])
+        self.assertEqual(d[q], [[[11., 12., 13.],
+                                 [14., 15., 16.],
+                                 [17., 18., 19.]]])
+
+    def test_power_factor_both(self):
+        q = 'power_factor'
+        d = {q:             self.three_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [[19.]]).all())
 
     def test_qpoint_direction(self):
         q = 'qpoint'
@@ -295,7 +352,7 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9., 19., 29.]]]).all())
+        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
 
     def test_seebeck_temperature(self):
         q = 'seebeck'
@@ -303,14 +360,43 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], self.three_m,
-                        'If temperature resolution is now implemented, '
-                        'this test will fail, edit it!')
-        # Once temperature resolution in amset is implemented, use the
-        # following block
-        #self.assertEqual(d[q], [[11., 12., 13.],
-        #                        [14., 15., 16.],
-        #                        [17., 18., 19.]])
+        self.assertEqual(d[q], [[[11., 12., 13.],
+                                 [14., 15., 16.],
+                                 [17., 18., 19.]]])
+
+    def test_seebeck_both(self):
+        q = 'seebeck'
+        d = {q:             self.three_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [[19.]]).all())
+
+    def test_velocities_product_direction(self):
+        q = 'velocities_product'
+        d = {q:              self.two_m,
+             'temperature':  self.t,
+             'meta':         {}}
+        d = resolve.resolve(d, q, direction='z')
+        self.assertTrue((d[q] == [9., 19., 29.]).all())
+
+    def test_velocities_product_temperature(self):
+        q = 'velocities_product'
+        d = {q:              self.two_m,
+             'temperature':  self.t,
+             'meta':         {}}
+        d = resolve.resolve(d, q, temperature=23.)
+        self.assertEqual(d[q], [[11., 12., 13.],
+                                [14., 15., 16.],
+                                [17., 18., 19.]])
+
+    def test_velocities_product_both(self):
+        q = 'velocities_product'
+        d = {q:             self.two_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [19.]).all())
 
     def test_zt_direction(self):
         q = 'zt'
@@ -318,7 +404,7 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9., 19., 29.]]]).all())
+        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
 
     def test_zt_temperature(self):
         q = 'zt'
@@ -326,14 +412,17 @@ class ResolveTest(unittest.TestCase):
              'temperature': self.t,
              'meta':        {}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], self.three_m,
-                        'If temperature resolution is now implemented, '
-                        'this test will fail, edit it!')
-        # Once temperature resolution in amset is implemented, use the
-        # following block
-        #self.assertEqual(d[q], [[11., 12., 13.],
-        #                        [14., 15., 16.],
-        #                        [17., 18., 19.]])
+        self.assertEqual(d[q], [[[11., 12., 13.],
+                                 [14., 15., 16.],
+                                 [17., 18., 19.]]])
+
+    def test_zt_both(self):
+        q = 'zt'
+        d = {q:             self.three_m,
+             'temperature': self.t,
+             'meta':        {}}
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
+        self.assertTrue((d[q] == [[19.]]).all())
 
 if __name__ == '__main__':
     unittest.main()

@@ -15,13 +15,6 @@ class AmsetTest(unittest.TestCase):
         f = 'data/amset_data_85x85x47.json'
         cls.qs = ['doping', 'conductivity', 'electronic_thermal_conductivity',
                   'seebeck', 'temperature']
-        #cls.qs = ['doping', 'dos', 'conductivity',
-        #          'electronic_thermal_conductivity', 'efermi', 'energy',
-        #          'fd_cutoffs', 'fermi_level', 'ir_kpoints',
-        #          'ir_to_full_kpoint_mapping', 'is_metal', 'kpoints',
-        #          'mobility', 'scattering_rates', 'scattering_labels',
-        #          'seebeck', 'soc', 'structure', 'temperature', 'vb_idx',
-        #          'velocities_product']
         cls.d = load.amset(f, cls.qs)
         cls.ts = len(cls.d['temperature'])
         cls.ds = len(cls.d['doping'])
@@ -38,6 +31,32 @@ class AmsetTest(unittest.TestCase):
         self.assertEqual(np.shape(self.d['seebeck']),
                          (self.ts, self.ds, 3, 3))
 
+class BoltztrapTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        f = 'data/boltztrap.hdf5'
+        cls.qs = ['doping', 'conductivity', 'electronic_thermal_conductivity',
+                  'seebeck', 'temperature', 'power_factor']
+        cls.d = load.boltztrap(f, cls.qs)
+        cls.ts = len(cls.d['temperature'])
+        cls.ds = len(cls.d['doping'])
+
+    def test_conductivity(self):
+        self.assertEqual(np.shape(self.d['conductivity']),
+                         (self.ts, self.ds, 3, 3))
+
+    def test_electronic_thermal_conductivity(self):
+        self.assertEqual(np.shape(self.d['electronic_thermal_conductivity']),
+                         (self.ts, self.ds, 3, 3))
+
+    def test_seebeck(self):
+        self.assertEqual(np.shape(self.d['seebeck']),
+                         (self.ts, self.ds, 3, 3))
+
+    def test_power_factor(self):
+        self.assertEqual(np.shape(self.d['power_factor']),
+                         (self.ts, self.ds, 3, 3))
+
 class Phono3pyTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -45,10 +64,6 @@ class Phono3pyTest(unittest.TestCase):
         cls.qs = ['frequency', 'gamma', 'group_velocity',
                   'lattice_thermal_conductivity', 'lifetime', 'mean_free_path',
                   'mode_kappa', 'occupation', 'qpoint', 'temperature', 'weight']
-        #cls.qs = ['frequency', 'gamma', 'group_velocity', 'gv_by_gv',
-        #          'heat_cpacity', 'kappa', 'kappa_unit_conversion',
-        #          'lifetime', 'mean_free_path', 'mesh', 'mode_kappa',
-        #          'occupation', 'qpoint', 'temperature', 'weight']
         cls.d = load.phono3py(f, cls.qs)
         cls.ts = len(cls.d['temperature'])
         cls.qpts = len(cls.d['qpoint'])
