@@ -18,7 +18,8 @@ from tp.data import resolve
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   xmarkers=None, ymarkers=None, legend='\kappa_l', main=True,
                   scale=False, colour='#000000', fill=False, fillalpha=20,
-                  line=True, rasterise=False):
+                  line=True, markercolour='black', markerkwargs={},
+                  rasterise=False, **kwargs):
     """Cumulates and plots kappa against mean free path.
 
     Arguments:
@@ -63,8 +64,16 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             fill alpha in %. Default: 20.
         line : bool, optional
             plot lines. Default: True.
+        markercolour : str, optional
+            marker line colours. Default: black.
+        markerkwargs : dict, optional
+          keyword arguments for the markers, passed to
+          matplotlib.pyplot.plot. Default: {}.
         rasterise : bool, optional
             rasterise plot. Default: False.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.fill_between.
 
     Returns:
         axes
@@ -94,7 +103,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     if not line: colour = fillcolour
     ax.fill_between(mfp, k, label='$\mathregular{{{}}}$'.format(legend),
                     facecolor=fillcolour, edgecolor=colour,
-                    rasterized=rasterise)
+                    rasterized=rasterise, **kwargs)
 
 
     if main:
@@ -111,11 +120,13 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
 
     if xmarkers is not None or ymarkers is not None:
-        add_markers(ax, mfp, k, xmarkers, ymarkers)
+        add_markers(ax, mfp, k, xmarkers, ymarkers, colour=markercolour,
+                    **markerkwargs)
 
     return ax
 
-def add_markers(ax, x, y, xmarkers=None, ymarkers=None):
+def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
+                **kwargs):
     """Adds marker lines linking a linear plot to the axes.
 
     Args:
@@ -129,6 +140,9 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None):
             where on the x axis to mark.
         ymarkers : array-like, optional
             where on the y axis to mark.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.plot.
 
     Returns:
         axes
@@ -147,7 +161,7 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None):
         xmarky = yinter(xmarkers)
         for m in range(len(xmarkers)):
             ax.plot([xmarkers[m], xmarkers[m], -1e100],
-                    [-1e100,      xmarky[m],   xmarky[m]], c='black')
+                    [-1e100,      xmarky[m],   xmarky[m]], c=colour)
         #xticks = np.append(xticks, xmarkers)
         #yticks = np.append(yticks, xmarky)
 

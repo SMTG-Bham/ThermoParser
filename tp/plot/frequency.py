@@ -19,7 +19,8 @@ import tp.settings
 from tp.data import resolve
 
 def add_dos(ax, data, colour, total=False, main=False, invert=False,
-            scale=True, fill=True, fillalpha=20, line=False, rasterise=False):
+            scale=True, fill=True, fillalpha=20, line=False, rasterise=False,
+            **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments:
@@ -50,6 +51,9 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             plot lines. Default: False.
         rasterise : bool, optional
             rasterise plot. Default: False.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.fill_between.
 
     Returns:
         axes
@@ -103,22 +107,26 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
         if invert:
             ax.fill_between(data['total'], data['frequency'], label='Total',
                             facecolor=fillcolour['total'],
-                            edgecolor=colour['total'], rasterized=rasterise)
+                            edgecolor=colour['total'], rasterized=rasterise,
+                            **kwargs)
         else:
             ax.fill_between(data['frequency'], data['total'], label='Total',
                             facecolor=fillcolour['total'],
-                            edgecolor=colour['total'], rasterized=rasterise)
+                            edgecolor=colour['total'], rasterized=rasterise,
+                            **kwargs)
 
     for key in data:
         if key not in exempt:
             if invert:
                 ax.fill_between(data[key], data['frequency'], label=key,
                                 facecolor=fillcolour[key],
-                                edgecolor=colour[key], rasterized=rasterise)
+                                edgecolor=colour[key], rasterized=rasterise,
+                                **kwargs)
             else:
                 ax.fill_between(data['frequency'], data[key], label=key,
                                 facecolor=fillcolour[key],
-                                edgecolor=colour[key], rasterized=rasterise)
+                                edgecolor=colour[key], rasterized=rasterise,
+                                **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
@@ -145,7 +153,8 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
 
 def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
                   main=False, invert=False, scale=False, colour='#000000',
-                  fill=False, fillalpha=20, line=True, rasterise=False):
+                  fill=False, fillalpha=20, line=True, rasterise=False,
+                  **kwargs):
     """Cumulates and plots kappa against frequency.
 
     Arguments:
@@ -180,6 +189,9 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
             plot lines. Default: True.
         rasterise : bool, optional
             rasterise plot. Default: False.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.fill_between.
 
     Returns:
         axes
@@ -222,11 +234,11 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
     if invert:
         ax.fill_between(k, f, label='$\mathregular{{{}}}$'.format(legend),
                         facecolor=fillcolour, edgecolor=colour,
-                        rasterized=rasterise)
+                        rasterized=rasterise, **kwargs)
     else:
         ax.fill_between(f, k, label='$\mathregular{{{}}}$'.format(legend),
                         facecolor=fillcolour, edgecolor=colour,
-                        rasterized=rasterise)
+                        rasterized=rasterise, **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
@@ -253,7 +265,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
 
 def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
                   main=True, invert=False, colour='viridis', alpha=0.3,
-                  rasterise=True):
+                  markersize=1, marker='.', linewidth=0, rasterise=True,
+                  **kwargs):
     """Adds a waterfall plot of quantities against frequency.
 
     Arguments:
@@ -280,10 +293,19 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
             colourmap or colourmap name or list of colours (one for
             each band or one for each point) or a single colour.
             Default: viridis.
-        alpha : float
+        alpha : float, optional
             colour alpha from 0-1. Default: 0.3.
+        markersize : float, optional
+            marker size in points. Default: 1.
+        marker : str, optional
+            marker type. Default: '.'.
+        linewidth : float, optional
+            marker edge linewidth. Default: 0.
         rasterise : bool, optional
             rasterise plot. Default: True.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.scatter.
 
     Returns:
         axes
@@ -320,11 +342,13 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
             colours = colour
 
     if invert:
-        ax.scatter(q, f, s=1, marker='.', facecolor=colours, alpha=alpha,
-                   linewidth=0, rasterized=rasterise)
+        ax.scatter(q, f, s=markersize, marker=marker, facecolor=colours,
+                   alpha=alpha, linewidth=linewidth, rasterized=rasterise,
+                   **kwargs)
     else:
-        ax.scatter(f, q, s=1, marker='.', facecolor=colours, alpha=alpha,
-                   linewidth=0, rasterized=rasterise)
+        ax.scatter(f, q, s=markersize, marker=marker, facecolor=colours,
+                   alpha=alpha, linewidth=linewidth, rasterized=rasterise,
+                   **kwargs)
 
     if main:
         qsort = np.ma.masked_invalid(q)
@@ -360,7 +384,8 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
 
 def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
                             direction='avg', main=True, invert=False,
-                            colour='viridis', alpha=0.3, rasterise=True):
+                            colour='viridis', alpha=0.3, markersize=1,
+                            marker='.', linewidth=0, rasterise=True, **kwargs):
     """Adds a waterfall plot against frequency with a colour axis.
 
     Arguments:
@@ -391,8 +416,17 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
             colourmap or colourmap name. Default: viridis.
         alpha : float
             colour alpha from 0-1. Default: 0.3.
+        markersize : float, optional
+            marker size in points. Default: 1.
+        marker : str, optional
+            marker type. Default: '.'.
+        linewidth : float, optional
+            marker edge linewidth. Default: 0.
         rasterise : bool, optional
             rasterise plot. Default: True.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.scatter.
 
     Returns:
         axes
@@ -435,11 +469,13 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
     cnorm = mpl.colors.LogNorm(vmin=cmin, vmax=cmax)
 
     if invert:
-        scat = ax.scatter(q, f, s=1, marker='.', c=p, norm=cnorm, cmap=cmap,
-                          alpha=alpha, linewidth=0, rasterized=rasterise)
+        scat = ax.scatter(q, f, s=markersize, marker=marker, c=p, norm=cnorm,
+                          cmap=cmap, alpha=alpha, linewidth=linewidth,
+                          rasterized=rasterise, **kwargs)
     else:
-        scat = ax.scatter(f, q, s=1, marker='.', c=p, norm=cnorm, cmap=cmap,
-                   alpha=alpha, linewidth=0, rasterized=rasterise)
+        scat = ax.scatter(f, q, s=markersize, marker=marker, c=p, norm=cnorm,
+                          cmap=cmap, alpha=alpha, linewidth=linewidth,
+                          rasterized=rasterise, **kwargs)
 
     cbar = plt.colorbar(scat, extend='min') if extend else plt.colorbar(scat)
     cbar.set_alpha(1)

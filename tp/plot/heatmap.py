@@ -23,11 +23,12 @@ warnings.filterwarnings('ignore', module='matplotlib')
 
 def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
                 xscale='linear', yscale='linear', cscale='linear',
-                cmin=None, cmax=None, colour='viridis', rasterise=True):
+                cmin=None, cmax=None, colour='viridis', rasterise=True,
+                **kwargs):
     """Adds a heatmap to a set of axes.
 
     Formats limits, parses extra colourmap options, makes sure data
-    isn't obscured. In future perhaps include interpolation?
+    isn't obscured.
 
     Arguments:
         ax : axes
@@ -62,6 +63,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             RGB colours to generate a colour map. Default: viridis.
         rasterise : bool, optional
             rasterises plot. Default: True.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
 
     Returns:
         axes
@@ -122,7 +126,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         elif yscale =='log':
             y.append(y[-1] ** 2 / y[-2])
 
-    heat = ax.pcolormesh(x, y, c, cmap=colours, rasterized=rasterise, norm=cnorm)
+    heat = ax.pcolormesh(x, y, c, cmap=colours, rasterized=rasterise,
+                         norm=cnorm, **kwargs)
     cbar = plt.colorbar(heat, extend=extend)
 
     ax.set_xscale(xscale)
@@ -152,8 +157,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     return ax, cbar
 
-def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None, yinterp=None,
-              kind='linear', colour='viridis', rasterise=True):
+def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
+              yinterp=None, kind='linear', cmin=None, cmax=None,
+              colour='viridis', rasterise=True, **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
 
     Calculates ZT, plots and formats labels etc.
@@ -180,11 +186,18 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None, yinterp=None,
         kind : str, optional
             interpolation kind. Default: linear.
 
+        cmin : float, optional
+            override colour scale minimum. Default: None.
+        cmax : float, optional
+            override colour scale maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
         rasterise : bool, optional
             rasterises plot.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
 
     Returns:
         axes
@@ -214,10 +227,11 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None, yinterp=None,
         data = tp.calculate.zt_fromdict(data)
 
     ax, cbar = add_heatmap(ax, data['temperature'],
-                           list(np.abs(data['doping'])), 
-                           np.transpose(data['zt']),
-                           xinterp=xinterp, yinterp=yinterp, kind=kind,
-                           yscale='log', colour=colour, rasterise=rasterise)
+                           list(np.abs(data['doping'])),
+                           np.transpose(data['zt']), xinterp=xinterp,
+                           yinterp=yinterp, kind=kind, yscale='log', cmin=cmin,
+                           cmax=cmax, colour=colour, rasterise=rasterise,
+                           **kwargs)
 
     labels = tp.settings.labels()
     ax.set_xlabel(labels['temperature'])
@@ -227,7 +241,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None, yinterp=None,
     return ax, cbar
 
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None, yinterp=None,
-                     kind='linear', colour='viridis', rasterise=True):
+                     kind='linear', cmin=0, cmax=None, colour='viridis',
+                     rasterise=True, **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels etc.
@@ -253,11 +268,18 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None, yinterp=None
         kind : str, optional
             interpolation kind. Default: linear.
 
+        cmin : float, optional
+            override colour scale minimum. Default: 0.
+        cmax : float, optional
+            override colour scale maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
         rasterise : bool, optional
             rasterises plot.
+
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
 
     Returns:
         axes
@@ -277,8 +299,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None, yinterp=None
                            list(np.abs(data['doping'])),
                            np.transpose(data['lattice_thermal_conductivity']),
                            xinterp=xinterp, yinterp=yinterp, kind=kind,
-                           yscale='log', cmin=0, colour=colour,
-                           rasterise=rasterise)
+                           yscale='log', cmin=0, cmax=None, colour=colour,
+                           rasterise=rasterise, **kwargs)
 
     labels = tp.settings.labels()
     ax.set_xlabel(labels['temperature'])

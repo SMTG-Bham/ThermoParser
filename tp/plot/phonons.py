@@ -27,7 +27,8 @@ import warnings
 warnings.filterwarnings('ignore', module='matplotlib')
 
 def add_dispersion(ax, data, bandrange=None, main=True, label=None,
-                   colour='#800080', linestyle='solid', axcolour='black'):
+                   colour='#800080', linestyle='solid', xmarkcolour='black',
+                   xmarkwidth=None, xmarkkwargs={}, **kwargs):
     """Adds a phonon band structure to a set of axes.
 
     Future: work out a good way to add line style and colour while
@@ -63,8 +64,16 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
             Default: #800080.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
-        axcolour : str
-            axis colour. Default: black.
+        xmarkcolour : str, optional
+            x marker colour. None turns them off. Default: black.
+        xmarkwidth : float, optional
+            x marker width. Default: axis line width.
+
+        xmarkkwargs : dict, optional
+            keyword arguments for x markers passed to
+            matplotlib.pyplot.axvline.
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.plot.
 
     Returns:
         axes
@@ -110,19 +119,22 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
     # ensures only one legend entry
     if bdiff == 1:
         ax.plot(data['x'], f, label=label, color=colours[0],
-                              linestyle=linestyles[0])
+                linestyle=linestyles[0], **kwargs)
     else:
         ax.plot(data['x'], f[:,0], label=label, color=colours[0],
-                                   linestyle=linestyles[0])
+                linestyle=linestyles[0], **kwargs)
         for n in range(bdiff):
             ax.plot(data['x'], f[:,n], color=colours[n],
-                                       linestyle=linestyles[n])
+                    linestyle=linestyles[n], **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
-        spinewidth = ax.spines['bottom'].get_linewidth()
-        for d in data['tick_position']:
-            ax.axvline(d, color=axcolour, linewidth=spinewidth)
+        if xmarkwidth is None:
+            xmarkwidth = ax.spines['bottom'].get_linewidth()
+        if xmarkcolour is not None:
+            for d in data['tick_position']:
+                ax.axvline(d, color=xmarkcolour, linewidth=xmarkwidth,
+                           **xmarkkwargs)
 
         ax.set_xlabel(axlabels['wavevector'])
         ax.set_ylabel(axlabels['frequency'])
@@ -140,7 +152,8 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
     return ax
 
 def add_multi(ax, data, bandrange=None, main=True, label=None,
-              colour='winter_r', linestyle='solid', axcolour='black'):
+              colour='winter_r', linestyle='solid', xmarkcolour='black',
+              xmarkwidth=None, xmarkkwargs={}, **kwargs):
     """Adds multiple phonon band structures to a set of axes.
 
     Scales the x-scales to match.
@@ -173,8 +186,16 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
             i.e. [[[r,g,b]],...]. Default: winter_r.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
-        axcolour : str
-            axis colour. Default: black.
+        xmarkcolour : str, optional
+            x marker colour. None turns them off. Default: black.
+        xmarkwidth : float, optional
+            x marker width. Default: axis line width.
+
+        xmarkkwargs : dict, optional
+            keyword arguments for x markers passed to
+            matplotlib.pyplot.axvline.
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.plot.
 
     Returns:
         axes
@@ -206,13 +227,16 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
     for i in range(len(data)):
         ax = add_dispersion(ax, data[i], bandrange=bandrange, main=False,
                             label=label[i], colour=colours[i],
-                            linestyle=linestyle[i], axcolour=axcolour)
+                            linestyle=linestyle[i], **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
-        spinewidth = ax.spines['bottom'].get_linewidth()
-        for d in data[0]['tick_position']:
-            ax.axvline(d, color=axcolour, linewidth=spinewidth)
+        if xmarkwidth is None:
+            xmarkwidth = ax.spines['bottom'].get_linewidth()
+        if xmarkcolour is not None:
+            for d in data[0]['tick_position']:
+                ax.axvline(d, color=xmarkcolour, linewidth=xmarkwidth,
+                           **xmarkkwargs)
 
         ax.set_xlabel(axlabels['wavevector'])
         ax.set_ylabel(axlabels['frequency'])
@@ -231,13 +255,12 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
     return ax
 
 def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
-                       temperature=300, direction='avg',
-                       label=['Longitudinal', 'Transverse_1',
-                       'Transverse_2', 'Optic'], poscar='POSCAR',
-                       main=True, log=False, interpolate=5,
-                       colour=['#44ffff', '#ff8044', '#ff4444',
-                       '#00000010'], linestyle='-', axcolour='black',
-                       rasterise=True, workers=32):
+                       temperature=300, direction='avg', label=['Longitudinal',
+                       'Transverse_1', 'Transverse_2', 'Optic'],
+                       poscar='POSCAR', main=True, log=False, interpolate=5,
+                       colour=['#44ffff', '#ff8044', '#ff4444', '#00000010'],
+                       linestyle='-', xmarkcolour='black', xmarkwidth=None,
+                       rasterise=True, workers=32, xmarkkwargs={}, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path.
 
     Arguments:
@@ -298,13 +321,21 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
             Default: ['#44ffff', '#ff8044', '#ff4444', '#00000010'].
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
-        axcolour : str
-            axis colour. Default: black.
+        xmarkcolour : str, optional
+            x marker colour. None turns them off. Default: black.
+        xmarkwidth : float, optional
+            x marker width. Default: axis line width.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+
+        xmarkkwargs : dict, optional
+            keyword arguments for x markers passed to
+            matplotlib.pyplot.axvline.
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.plot.
 
     Returns:
         axes
@@ -383,20 +414,25 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
 
     # ensures only one legend entry
     if bdiff == 1:
-        ax.plot(x2, y2, label=label, color=colours[0], linestyle=linestyles[0])
+        ax.plot(x2, y2, label=label, color=colours[0], linestyle=linestyles[0],
+                **kwargs)
     else:
         for i in range(len(label)):
             ax.plot(x2, y2[:,i], label='$\mathregular{{{}}}$'.format(label[i]),
-                    color=colours[i], linestyle=linestyles[i])
+                    color=colours[i], linestyle=linestyles[i], **kwargs)
         if len(label) < bdiff:
             for n in range(len(label), bdiff):
-                ax.plot(x2, y2[:,n], color=colours[n], linestyle=linestyles[n])
+                ax.plot(x2, y2[:,n], color=colours[n], linestyle=linestyles[n],
+                        **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
-        spinewidth = ax.spines['bottom'].get_linewidth()
-        for d in pdata['tick_position']:
-            ax.axvline(d, color=axcolour, linewidth=spinewidth)
+        if xmarkwidth is None:
+            xmarkwidth = ax.spines['bottom'].get_linewidth()
+        if xmarkcolour is not None:
+            for d in pdata['tick_position']:
+                ax.axvline(d, color=xmarkcolour, linewidth=xmarkwidth,
+                           **xmarkkwargs)
 
         ax.set_xlabel(axlabels['wavevector'])
         ax.set_ylabel(axlabels[quantity])
@@ -419,7 +455,9 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
 def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
                              temperature=300, direction='avg', poscar='POSCAR',
                              main=True, interpolate=5, colour='viridis_r',
-                             axcolour='black', rasterise=True, workers=32):
+                             xmarkcolour='black', xmarkwidth=None,
+                             rasterise=True, workers=32, xmarkkwargs={},
+                             **kwargs):
     """Plots a phonon dispersion with projected colour.
 
     Plots a phonon dispersion, and projects a quantity onto the colour
@@ -469,13 +507,21 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis_r.
-        axcolour : str
-            axis colour. Default: black.
+        xmarkcolour : str, optional
+            x marker colour. None turns them off. Default: black.
+        xmarkwidth : float, optional
+            x marker width. Default: axis line width.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+
+        xmarkkwargs : dict, optional
+            keyword arguments for x markers passed to
+            matplotlib.pyplot.axvline.
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.scatter.
 
     Returns:
         axes
@@ -541,13 +587,16 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 
     for n in range(bdiff):
         line = ax.scatter(x2, f[:,n], c=c2[:,n], cmap=colour, norm=cnorm,
-                          marker='.', s=1, rasterized=rasterise)
+                          marker='.', s=1, rasterized=rasterise, **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
-        spinewidth = ax.spines['bottom'].get_linewidth()
-        for d in pdata['tick_position']:
-            ax.axvline(d, color=axcolour, linewidth=spinewidth)
+        if xmarkwidth is None:
+            xmarkwidth = ax.spines['bottom'].get_linewidth()
+        if xmarkcolour is not None:
+            for d in pdata['tick_position']:
+                ax.axvline(d, color=xmarkcolour, linewidth=xmarkwidth,
+                           **xmarkkwargs)
 
         cbar = plt.colorbar(line)
         cbar.set_label(axlabels[quantity])
@@ -571,7 +620,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  temperature=300, direction='avg',
                                  poscar='POSCAR', main=True, log=False,
                                  interpolate=5, colour='viridis',
-                                 axcolour='black', rasterise=True, workers=32):
+                                 xmarkcolour='black', xmarkwidth=None,
+                                 rasterise=True, workers=32, xmarkkwargs={},
+                                 **kwargs):
     """Plots a phono3py quantity on a high-symmetry path and projection.
 
     Just because you can, doesn't mean you should. A maxim I may fail to
@@ -622,13 +673,21 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis.
-        axcolour : str
-            axis colour. Default: black.
+        xmarkcolour : str, optional
+            x marker colour. None turns them off. Default: black.
+        xmarkwidth : float, optional
+            x marker width. Default: axis line width.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+
+        xmarkkwargs : dict, optional
+            keyword arguments for x markers passed to
+            matplotlib.pyplot.axvline.
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.scatter.
 
     Returns:
         axes
@@ -691,13 +750,17 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     for n in range(len(y2[0])):
         line = ax.scatter(x2, y2[:,n], c=c2[:,n], cmap=colour,
-                          norm=cnorm, marker='.', s=1, rasterized=rasterise)
+                          norm=cnorm, marker='.', s=1, rasterized=rasterise,
+                          **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
-        spinewidth = ax.spines['bottom'].get_linewidth()
-        for d in pdata['tick_position']:
-            ax.axvline(d, color=axcolour, linewidth=spinewidth)
+        if xmarkwidth is None:
+            xmarkwidth = ax.spines['bottom'].get_linewidth()
+        if xmarkcolour is not None:
+            for d in pdata['tick_position']:
+                ax.axvline(d, color=xmarkcolour, linewidth=xmarkwidth,
+                           **xmarkkwargs)
 
         cbar = plt.colorbar(line)
         cbar.set_label(axlabels[projected])
@@ -721,7 +784,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     return ax, cbar
 
 def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
-                 interpolate=5, colour='viridis', rasterise=True, workers=32):
+                 interpolate=5, colour='viridis', xmarkcolour=None,
+                 xmarkwidth=None, rasterise=True, workers=32,
+                 xmarkkwargs={}, **kwargs):
     """Plots a phonon dispersion with broadened bands.
 
     Arguments:
@@ -761,11 +826,21 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis.
+        xmarkcolour : str, optional
+            x marker colour. None turns them off. Default: None.
+        xmarkwidth : float, optional
+            x marker width. Default: axis line width.
         rasterise : bool, optional
             rasterise plot. Default: True.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+
+        xmarkkwargs : dict, optional
+            keyword arguments for x markers passed to
+            matplotlib.pyplot.axvline.
+        **kwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
 
     Returns:
         axes
@@ -824,10 +899,17 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
     cnorm = mpl.colors.LogNorm(vmin=np.amin(area), vmax=np.amax(area))
 
     ax.pcolormesh(x2, f2, np.transpose(area), cmap=colour, norm=cnorm,
-                  rasterized=rasterise)
+                  rasterized=rasterise, **kwargs)
 
     if main:
         axlabels = tp.settings.labels()
+        if xmarkwidth is None:
+            xmarkwidth = ax.spines['bottom'].get_linewidth()
+        if xmarkcolour is not None:
+            for d in pdata['tick_position']:
+                ax.axvline(d, color=xmarkcolour, linewidth=xmarkwidth,
+                           **xmarkkwargs)
+
         ax.set_xlabel(axlabels['wavevector'])
         ax.set_ylabel(axlabels['frequency'])
 

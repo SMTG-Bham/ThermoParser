@@ -23,7 +23,7 @@ dos = tp.data.load.phonopy_dos(dosfile, atoms)
 # Add
 
 ax[0] = tp.plot.phonons.add_dispersion(ax[0], dispersion, colour=colour)
-ax[1] = tp.plot.frequency.add_dos(ax[1], dos, colours, invert=True)
+ax[1] = tp.plot.frequency.add_dos(ax[1], dos, colours, invert=True, line=True)
 
 ax[1].set_xlim(left=0)
 ax[1].set_ylim(ax[0].get_ylim())
