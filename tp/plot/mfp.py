@@ -82,6 +82,8 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     from tp.calculate import cumulate
 
+    # data formatting and calculation
+
     data = resolve.resolve(data, ['mode_kappa', 'mean_free_path'],
                            temperature=temperature, direction=direction)
     k = np.ravel(data['mode_kappa'])
@@ -93,18 +95,25 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     mfp = np.append(mfp, 100*mfp[-1])
     k = np.append(k, k[-1])
 
+    # percentage output
+
     if scale:
         ymin = 0 if main else ax.get_ylim()[0]
         ymax = 100 if main else ax.get_ylim()[1]
         k = np.multiply(k, (ymax-ymin) / k[-1])
         k = np.add(k, ymin)
 
+    # colour
     fillcolour = colour + str(fillalpha) if fill else colour + '00'
     if not line: colour = fillcolour
+
+    # plotting
+
     ax.fill_between(mfp, k, label='$\mathregular{{{}}}$'.format(legend),
                     facecolor=fillcolour, edgecolor=colour,
                     rasterized=rasterise, **kwargs)
 
+    # axes formatting
 
     if main:
         mindex = next(x[0] for x in enumerate(k) if x[1] > kmin*k[-2]/100)
@@ -151,10 +160,14 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
 
     from scipy.interpolate import interp1d
 
+    # get limits
+
     xlim = ax.get_xlim()
     ylim = ax.get_ylim()
     #xticks = list(ax.get_xticks())
     #yticks = list(ax.get_yticks())
+
+    # plot x
 
     if xmarkers is not None:
         yinter = interp1d(x, y)
@@ -164,6 +177,8 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
                     [-1e100,      xmarky[m],   xmarky[m]], c=colour)
         #xticks = np.append(xticks, xmarkers)
         #yticks = np.append(yticks, xmarky)
+
+    # plot y
 
     if ymarkers is not None:
         xinter = interp1d(y, x)

@@ -7,6 +7,7 @@ Functions:
         default style sheet.
     locator:
         default tick locators.
+
     to_tp:
         convert names to tp conventions.
     to_amset:
@@ -15,6 +16,7 @@ Functions:
         convert names to boltztrap conventions.
     to_phono3py:
         convert names to phono3py conventions.
+
     conversions:
         unit conversions (see tp.data.load).
     units:

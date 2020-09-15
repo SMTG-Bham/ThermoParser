@@ -4,7 +4,7 @@ May need to be split by data origin in future.
 
 Functions:
     resolve:
-        currently for phono3py and parts of AMSET.
+        currently for Phono3py, parts of AMSET and BoltzTraP.
 """
 
 import numpy as np
@@ -33,7 +33,9 @@ def resolve(data, quantities, temperature=None, direction=None):
             resolved data.
     """
 
-    data = dict(data)
+    data = dict(data) # sever the link to enable the original data to be reused
+
+    # variables resolved by temperature and direction
     hast = ['average_eff_mass', 'conductivity',
             'electronic_thermal_conductivity', 'fermi_level', 'gamma',
             'heat_capacity', 'lattice_thermal_conductivity', 'lifetime',
@@ -54,6 +56,8 @@ def resolve(data, quantities, temperature=None, direction=None):
            'velocities_product':              aniso.matrix_two,
            'zt':                              aniso.matrix_three}
 
+    # temperature resolution
+
     if temperature is not None and 'temperature' in data:
         ti = np.abs(np.subtract(data['temperature'][:], temperature)).argmin()
         data['meta']['temperature'] = data['temperature'][ti]
@@ -71,10 +75,16 @@ def resolve(data, quantities, temperature=None, direction=None):
     if direction is not None:
         data['meta']['direction'] = direction
 
+    # direction resolution
+
     tnames = tp.settings.to_tp()
     if isinstance(quantities, str):
         quantities = quantities.split()
-    for q in quantities:
+    quantities2 = []
+    for i in quantities:
+        if i not in quantities2:
+            quantities2.append(i)
+    for q in quantities2:
         q2 = tnames[q] if q in tnames else q
         if temperature is not None and q2 in hast:
             data[q] = data[q][ti]

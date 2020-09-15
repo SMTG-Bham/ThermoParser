@@ -161,15 +161,11 @@ class ProjectedDispersionTest(unittest.TestCase):
     def test_xlim(self):
         self.assertEqual(self.ax.get_xlim(), (0, 3))
 
-    def test_qpoints(self):
-        self.assertEqual(np.round(self.cbar.get_clim()[0], 0), 1)
-        self.assertEqual(np.round(self.cbar.get_clim()[1], 0), 2)
-
 class AltProjectedDispersionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # warnings ignored as there are tonnes, likely due to random
-        # input data and real POSCAR. Could do with a P1 POSCAR, but materials.
+        # input data and real POSCAR. Could do with a P1 POSCAR.
         warnings.simplefilter('ignore')
         cls.poscar = 'data/POSCAR'
         cls.d = {'qpoint':      [[0, 1, 2.1],
@@ -207,12 +203,6 @@ class AltProjectedDispersionTest(unittest.TestCase):
 
     def test_xlim(self):
         self.assertEqual(self.ax.get_xlim(), (0, 3))
-
-    def test_qpoints(self):
-        self.assertEqual(np.round(self.ax.get_ylim()[0], 0), 1)
-        self.assertEqual(np.round(self.ax.get_ylim()[1], 0), 2)
-        self.assertEqual(np.round(self.cbar.get_clim()[0], 0), 1)
-        self.assertEqual(np.round(self.cbar.get_clim()[1], 0), 2)
 
 class WidebandTest(unittest.TestCase):
     @classmethod

@@ -74,6 +74,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             colourbar.
     """
 
+    # colour
+
     extend = 'neither'
     if cmin is None:
         cmin = np.amin(c)
@@ -103,6 +105,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             except Exception:
                 colours = tp.plot.colour.linear(colour[1], colour[0])
 
+    # data interpolation
+
     if xinterp is not None or yinterp is not None:
         cinterp = interp2d(x, y, c, kind=kind)
         if xinterp is not None:
@@ -113,6 +117,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             if yscale == 'log': y = np.geomspace(y[0], y[-1], yinterp)
         c = cinterp(x, y)
 
+    # ensure all data is shown
     if len(x) == len(c[0]):
         x = list(x)
         if xscale == 'linear':
@@ -126,6 +131,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         elif yscale =='log':
             y.append(y[-1] ** 2 / y[-2])
 
+    # plotting
+
     heat = ax.pcolormesh(x, y, c, cmap=colours, rasterized=rasterise,
                          norm=cnorm, **kwargs)
     cbar = plt.colorbar(heat, extend=extend)
@@ -133,6 +140,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     ax.set_xscale(xscale)
     ax.set_yscale(yscale)
 
+    # axes formatting
     if xscale == 'linear':
         ax.xaxis.set_major_locator(tp.settings.locator()['major'])
         ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
@@ -206,6 +214,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
             colourbar.
     """
 
+    # data formatting
+
     if 'zt' in data:
         if np.ndim(data['zt']) == 4:
             data = tp.data.resolve(data, 'zt', direction)
@@ -221,10 +231,12 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
                                kdata['lattice_thermal_conductivity'],
                                kind='cubic')
             data['lattice_thermal_conductivity'] = kinterp(data['temperature'])
-        else:
+        else: # if no kappa_lat, set to 1
             data['lattice_thermal_conductivity'] = np.ones(len(data['temperature']))
 
         data = tp.calculate.zt_fromdict(data)
+
+    # plotting
 
     ax, cbar = add_heatmap(ax, data['temperature'],
                            list(np.abs(data['doping'])),
@@ -232,6 +244,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
                            yinterp=yinterp, kind=kind, yscale='log', cmin=cmin,
                            cmax=cmax, colour=colour, rasterise=rasterise,
                            **kwargs)
+
+    # axes formatting
 
     labels = tp.settings.labels()
     ax.set_xlabel(labels['temperature'])
@@ -288,6 +302,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None, yinterp=None
             colourbar.
     """
 
+    # data formatting
+
     data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
                                    'electronic_thermal_conductivity'],
                                    direction=direction)
@@ -295,12 +311,16 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None, yinterp=None
 
     data = tp.calculate.kl_fromdict(data)
 
+    # plotting
+
     ax, cbar = add_heatmap(ax, data['temperature'],
                            list(np.abs(data['doping'])),
                            np.transpose(data['lattice_thermal_conductivity']),
                            xinterp=xinterp, yinterp=yinterp, kind=kind,
                            yscale='log', cmin=0, cmax=None, colour=colour,
                            rasterise=rasterise, **kwargs)
+
+    # axes formatting
 
     labels = tp.settings.labels()
     ax.set_xlabel(labels['temperature'])

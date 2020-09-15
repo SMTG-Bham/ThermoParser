@@ -15,7 +15,7 @@ atoms = ['Sb', 2, 'Mg', 3]
 
 colours = {'Sb': '#00ff00',
            'Mg': '#800080'}
-colour = tp.plot.colour.highlight(cm.get_cmap('viridis'), 'grey')
+colour = cm.get_cmap('viridis')
 
 # Axes
 

@@ -9,13 +9,18 @@ Functions:
         scatter plots of various values.
     add_projected_waterfall:
         waterfall, but with a second quantity projected.
+
+    format_waterfall
+        formatting for the waterfall plots
+    scale_to_axes
+        scales data to axes limits
 """
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
-import tp.settings
+import tp
 from tp.data import resolve
 
 def add_dos(ax, data, colour, total=False, main=False, invert=False,
@@ -60,41 +65,21 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             axes with DoS.
     """
 
-    exempt = ['frequency', 'meta', 'total']
-    if total:
-        dmax = max(data['total'])
-    else:
-        dmax = 0
-        for key in data:
-            if key not in exempt:
-                kmax = float(np.amax(data[key]))
-                if kmax > dmax: dmax = kmax
+    # data scaling
 
-    # Scaling
+    exempt = ['frequency', 'meta']
+    dmax = 0
+    for key in data:
+        if key not in exempt:
+            ymax = float(np.amax(data[key]))
+            if ymax > dmax: dmax = ymax
 
-    if scale:
-        if invert:
-            ymin = 0 if main else ax.get_xlim()[0]
-            ymax = 100 if main else ax.get_xlim()[1]
-            log = ax.get_xaxis().get_scale()
-        else:
-            ymin = 0 if main else ax.get_ylim()[0]
-            ymax = 100 if main else ax.get_ylim()[1]
-            log = ax.get_yaxis().get_scale()
-        if log == 'log':
-            ymin = np.log10(ymin)
-            ymax = np.log10(ymax)
+    if scale: data = scale_to_axes(ax, data, dmax, main, invert)
 
-        for key in data:
-            if key not in exempt:
-                data[key] = np.multiply(data[key], (ymax-ymin) / dmax)
-                data[key] = np.add(ymin, data[key])
-                if log == 'log':
-                    data[key] = np.power(10, data[key])
-        dmax = ymax
+    # colours
 
-    # Plot
-
+    if total and 'total' not in colour:
+        colour['total'] = '#000000'
     fillcolour = {}
     for c in colour:
         if fill:
@@ -102,6 +87,8 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
         else:
             colour[c][:7] + '00'
         if not line: colour[c] = fillcolour[c]
+
+    # plotting
 
     if total:
         if invert:
@@ -115,6 +102,7 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
                             edgecolor=colour['total'], rasterized=rasterise,
                             **kwargs)
 
+    exempt = ['frequency', 'meta', 'total']
     for key in data:
         if key not in exempt:
             if invert:
@@ -127,6 +115,8 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
                                 facecolor=fillcolour[key],
                                 edgecolor=colour[key], rasterized=rasterise,
                                 **kwargs)
+
+    # axes formatting
 
     if main:
         axlabels = tp.settings.labels()
@@ -198,39 +188,29 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
             axes with cumulated kappa.
     """
 
-    from tp.calculate import cumulate
+    # data formatting and calculation
 
-    data = resolve.resolve(data, 'mode_kappa', temperature=temperature,
-                                               direction=direction)
+    data = tp.resolve.resolve(data, 'mode_kappa', temperature=temperature,
+                                                  direction=direction)
     k = np.ravel(data['mode_kappa'])
     f = np.ravel(data['frequency'])
 
-    f, k = cumulate(f, k)
-    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(temperature, direction),
-            np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
+    f, k = tp.calculate.cumulate(f, k)
+    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(temperature,
+                                                          direction),
+               np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
     f = np.append(f, 100*f[-1])
     k = np.append(k, k[-1])
 
-    if scale:
-        if invert:
-            ymin = 0 if main else ax.get_xlim()[0]
-            ymax = 100 if main else ax.get_xlim()[1]
-            log = ax.get_xaxis().get_scale()
-        else:
-            ymin = 0 if main else ax.get_ylim()[0]
-            ymax = 100 if main else ax.get_ylim()[1]
-            log = ax.get_yaxis().get_scale()
-        if log == 'log':
-            ymin = np.log10(ymin)
-            ymax = np.log10(ymax)
+    if scale: k = scale_to_axes(ax, k, k[-1], main, invert)
 
-        k = np.multiply(k, (ymax-ymin) / k[-1])
-        k = np.add(k, ymin)
-        if log == 'log':
-            k = np.power(10, k)
+    # colour
 
     fillcolour = colour + str(fillalpha) if fill else colour + '00'
     if not line: colour = fillcolour
+
+    # plotting
+
     if invert:
         ax.fill_between(k, f, label='$\mathregular{{{}}}$'.format(legend),
                         facecolor=fillcolour, edgecolor=colour,
@@ -239,6 +219,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
         ax.fill_between(f, k, label='$\mathregular{{{}}}$'.format(legend),
                         facecolor=fillcolour, edgecolor=colour,
                         rasterized=rasterise, **kwargs)
+
+    # axes formatting
 
     if main:
         axlabels = tp.settings.labels()
@@ -263,11 +245,13 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
 
     return ax
 
-def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
-                  main=True, invert=False, colour='viridis', alpha=0.3,
-                  markersize=1, marker='.', linewidth=0, rasterise=True,
-                  **kwargs):
+def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
+                  direction='avg', main=True, invert=False, colour='viridis',
+                  alpha=0.3, markersize=1, marker='.', linewidth=0,
+                  rasterise=True, **kwargs):
     """Adds a waterfall plot of quantities against frequency.
+
+    Has an option to change the x-quantity.
 
     Arguments:
         ax : axes
@@ -275,9 +259,14 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
         data : dict
             data including frequency and quantity.
         quantity : str
-            y-axis quantity. Accepts gamma, group_velocity, gv_by_gv,
-            heat_capacity, lifetime, mean_free_path or mode_kappa.
+            y-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa.
 
+        xquantity : str, optional
+            x-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa. Default: frequency.
         temperature : float, optional
             temperature in K. Default: 300.
         direction : str, optional
@@ -287,7 +276,7 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
         main : bool, optional
             set ticks, labels, limits. Default: True.
         invert : bool, optional
-            plot frequency on y-axis. Default: False.
+            invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name or list of colours (one for
@@ -312,81 +301,64 @@ def add_waterfall(ax, data, quantity, temperature=300, direction='avg',
             axes with waterfall.
     """
 
-    tnames = tp.settings.to_tp()
-    quantity = tnames[quantity] if quantity in tnames else quantity
-    data = tp.data.resolve.resolve(data, quantity, temperature, direction)
-    f = np.ravel(data['frequency'])
-    q = np.abs(np.ravel(data[quantity]))
+    # data formatting
 
-    fs = np.shape(data['frequency'])
+    tnames = tp.settings.to_tp()
+    if invert: quantity, xquantity = xquantity, quantity
+    quantity = tnames[quantity] if quantity in tnames else quantity
+    xquantity = tnames[xquantity] if xquantity in tnames else xquantity
+    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+                                   temperature, direction)
+    x = np.ravel(data[xquantity])
+    y = np.abs(np.ravel(data[quantity]))
+
+    # colour
+
+    s = np.shape(data[xquantity])
     try:
         colour = mpl.cm.get_cmap(colour)
-        colours = [colour(i) for i in np.linspace(0, 1, fs[1])]
-        colours = np.tile(colours, (fs[0], 1))
+        colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+        colours = np.tile(colours, (s[0], 1))
     except Exception:
         if isinstance(colour, mpl.colors.ListedColormap):
-            colours = [colour(i) for i in np.linspace(0, 1, fs[1])]
-            colours = np.tile(colours, (fs[0], 1))
+            colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+            colours = np.tile(colours, (s[0], 1))
         elif isinstance(colour, str) and colour == 'skelton':
-            from tp import plot
-            colour = plot.colour.skelton()
-            colours = [colour(i) for i in np.linspace(0, 1, fs[1])]
-            colours = np.tile(colours, (fs[0], 1))
+            colour = tp.plot.colour.skelton()
+            colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+            colours = np.tile(colours, (s[0], 1))
         elif (isinstance(colour, list) or isinstance(colour, np.ndarray) and
-              len(colour) == fs[1]):
+              len(colour) == s[1]):
             if np.ndim(colour) == 1:
-                colours = np.tile(colour, fs[0])
+                colours = np.tile(colour, s[0])
             elif np.ndim(colour) == 2:
-                colours = np.tile(colour, (fs[0], 1))
+                colours = np.tile(colour, (s[0], 1))
         else:
             colours = colour
 
-    if invert:
-        ax.scatter(q, f, s=markersize, marker=marker, facecolor=colours,
-                   alpha=alpha, linewidth=linewidth, rasterized=rasterise,
-                   **kwargs)
-    else:
-        ax.scatter(f, q, s=markersize, marker=marker, facecolor=colours,
-                   alpha=alpha, linewidth=linewidth, rasterized=rasterise,
-                   **kwargs)
+    # plotting
+
+    ax.scatter(x, y, s=markersize, marker=marker, facecolor=colours,
+               alpha=alpha, linewidth=linewidth, rasterized=rasterise,
+               **kwargs)
+
+    # axes formatting
 
     if main:
-        qsort = np.ma.masked_invalid(q)
-        qsort = qsort[qsort.argsort()]
-        axlabels = tp.settings.labels()
-        if invert:
-            ax.set_xlabel(axlabels[quantity])
-            ax.set_ylabel(axlabels['frequency'])
-
-            ax.set_xlim(qsort[int(round(len(qsort)/100, 0))],
-                        qsort[int(round(len(qsort)*99.9/100, 0))])
-            ax.set_ylim(0, np.amax(f))
-
-            ax.set_xscale('log')
-            ax.xaxis.set_major_locator(tp.settings.locator()['log'])
-            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
-            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
-
-        else:
-            ax.set_ylabel(axlabels[quantity])
-            ax.set_xlabel(axlabels['frequency'])
-
-            ax.set_ylim(qsort[int(round(len(qsort)/100, 0))],
-                        qsort[int(round(len(qsort)*99.9/100, 0))])
-            ax.set_xlim(0, np.amax(f))
-
-            ax.set_yscale('log')
-            ax.yaxis.set_major_locator(tp.settings.locator()['log'])
-            ax.xaxis.set_major_locator(tp.settings.locator()['major'])
-            ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
+        format_waterfall(ax, x, xquantity, 'x')
+        format_waterfall(ax, y, quantity, 'y')
 
     return ax
 
-def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
+def add_projected_waterfall(ax, data, quantity, projected,
+                            xquantity='frequency', temperature=300,
                             direction='avg', main=True, invert=False,
-                            colour='viridis', alpha=0.3, markersize=1,
+                            colour='viridis', alpha=0.3, cmin=None, cmax=None,
+                            cscale=None, unoccupied='grey', markersize=1,
                             marker='.', linewidth=0, rasterise=True, **kwargs):
     """Adds a waterfall plot against frequency with a colour axis.
+
+    Has an option to change the x-quantity.
 
     Arguments:
         ax : axes
@@ -401,6 +373,10 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
             mode_kappa or occupation.
 
+        xquantity : str, optional
+            x-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa. Default: frequency.
         temperature : float, optional
             temperature in K. Default: 300.
         direction : str, optional
@@ -416,6 +392,16 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
             colourmap or colourmap name. Default: viridis.
         alpha : float
             colour alpha from 0-1. Default: 0.3.
+        cmin : float, optional
+            colour scale minimum. Default: display 99 % data.
+        cmax : float, optional
+            colour scale maximum. Default: display 99.9 % data.
+        cscale : str, optional
+            override colour scale (linear/ log). Default: None.
+        unoccupied : str, optional
+            if the colour variable is occupation, values below 1 are
+            coloured in this colour. If set to None, or cmin is set,
+            this feature is turned off. Default: grey.
         markersize : float, optional
             marker size in points. Default: 1.
         marker : str, optional
@@ -435,76 +421,136 @@ def add_projected_waterfall(ax, data, quantity, projected, temperature=300,
             colourbar for projected data.
     """
 
+    # data formatting
+
     tnames = tp.settings.to_tp()
     axlabels = tp.settings.labels()
+    if invert: quantity, xquantity = xquantity, quantity
     quantity = tnames[quantity] if quantity in tnames else quantity
+    xquantity = tnames[xquantity] if xquantity in tnames else xquantity
     projected = tnames[projected] if projected in tnames else projected
-    data = tp.data.resolve.resolve(data, [quantity, projected], temperature,
-                                                                     direction)
-    f = np.ravel(data['frequency'])
-    q = np.abs(np.ravel(data[quantity]))
-    p = np.abs(np.ravel(data[projected]))
+    data = tp.data.resolve.resolve(data, [quantity, xquantity, projected],
+                                   temperature, direction)
+    x = np.ravel(data[xquantity])
+    y = np.abs(np.ravel(data[quantity]))
+    c = np.abs(np.ravel(data[projected]))
 
-    fs = np.shape(data['frequency'])
+    # colour
+
     try:
         cmap = mpl.cm.get_cmap(colour)
     except Exception:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = colour
         elif isinstance(colour, str) and colour == 'skelton':
-            from tp import plot
-            cmap = plot.colour.skelton()
+            cmap = tp.plot.colour.skelton()
         else:
             raise Exception('Unrecognised colour argument. '
                             'Expected a colourmap or colourmap name.')
 
-    csort = np.ravel(np.ma.masked_invalid(p).compressed())
-    csort = csort[csort.argsort()]
-    cmin = csort[int(round(len(csort)/100, 0))]
-    extend = False
-    if projected == 'occupation' and cmin < 1:
-        cmin = 1
-        extend = True
-    cmax = csort[-1]
-    cnorm = mpl.colors.LogNorm(vmin=cmin, vmax=cmax)
+    cnorm, extend = tp.plot.utilities.colour_scale(c, projected, cmap, cmin,
+                                                   cmax, cscale, unoccupied)
 
-    if invert:
-        scat = ax.scatter(q, f, s=markersize, marker=marker, c=p, norm=cnorm,
-                          cmap=cmap, alpha=alpha, linewidth=linewidth,
-                          rasterized=rasterise, **kwargs)
-    else:
-        scat = ax.scatter(f, q, s=markersize, marker=marker, c=p, norm=cnorm,
-                          cmap=cmap, alpha=alpha, linewidth=linewidth,
-                          rasterized=rasterise, **kwargs)
+    # plotting
 
-    cbar = plt.colorbar(scat, extend='min') if extend else plt.colorbar(scat)
+    scat = ax.scatter(x, y, s=markersize, marker=marker, c=c, norm=cnorm,
+                      cmap=cmap, alpha=alpha, linewidth=linewidth,
+                      rasterized=rasterise, **kwargs)
+
+    # axes formatting
+
+    cbar = plt.colorbar(scat, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
     cbar.draw_all()
 
     if main:
-        qsort = np.ma.masked_invalid(q)
-        qsort = qsort[qsort.argsort()]
-        if invert:
-            ax.set_xlabel(axlabels[quantity])
-            ax.set_ylabel(axlabels['frequency'])
-
-            ax.set_xlim(qsort[int(round(len(qsort)/100, 0))], qsort[-1])
-            ax.set_ylim(0, np.amax(f))
-
-            ax.set_xscale('log')
-            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
-            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
-
-        else:
-            ax.set_ylabel(axlabels[quantity])
-            ax.set_xlabel(axlabels['frequency'])
-
-            ax.set_ylim(qsort[int(round(len(qsort)/100, 0))], qsort[-1])
-            ax.set_xlim(0, np.amax(f))
-
-            ax.set_yscale('log')
-            ax.xaxis.set_major_locator(tp.settings.locator()['major'])
-            ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
+        format_waterfall(ax, x, xquantity, 'x')
+        format_waterfall(ax, y, quantity, 'y')
 
     return ax, cbar
+
+def format_waterfall(ax, data, quantity, axis):
+    """Formats axes for waterfall plots
+
+    Arguments:
+        ax : axes
+            axes to format.
+        data : array-like
+            data for the axis in question.
+        quantity : str
+            quantity name.
+        axis : str
+            axis (x or y).
+    """
+
+    axes =  {'x': ax.xaxis,      'y': ax.yaxis}
+    label = {'x': ax.set_xlabel, 'y': ax.set_ylabel}
+    limit = {'x': ax.set_xlim,   'y': ax.set_ylim}
+    scale = {'x': ax.set_xscale, 'y': ax.set_yscale}
+
+    axlabels = tp.settings.labels()
+    label[axis](axlabels[quantity])
+
+    if quantity in ['frequency', 'heat_capacity']:
+        limit[axis](np.amin(data), np.amax(data))
+        axes[axis].set_major_locator(tp.settings.locator()['major'])
+        axes[axis].set_minor_locator(tp.settings.locator()['minor'])
+    else:
+        sort = np.ma.masked_invalid(np.ma.masked_equal(data, 0)).compressed()
+        sort = sort[sort.argsort()]
+        limit[axis](sort[int(round(len(sort)/100, 0))],
+                    sort[int(round(len(sort)*99.9/100, 0))])
+        scale[axis]('log')
+        axes[axis].set_major_locator(tp.settings.locator()['log'])
+
+    return
+
+def scale_to_axes(ax, data, dmax, main, invert):
+    """Scale data to fit axes.
+
+    Works for linear and log axes.
+
+    Arguments:
+        ax : axes
+            axes to fit to.
+        data : array-like or dict
+            data to scale.
+        dmax
+            maximum data value.
+        main : bool
+            scale to percent.
+        invert : bool
+            inverted axes.
+
+    Returns:
+        data
+            scaled data.
+    """
+
+    if not isinstance(data, dict):
+        data = {'qwerfv': data}
+    if invert:
+        ymin = 0 if main else ax.get_xlim()[0]
+        ymax = 100 if main else ax.get_xlim()[1]
+        log = ax.get_xaxis().get_scale()
+    else:
+        ymin = 0 if main else ax.get_ylim()[0]
+        ymax = 100 if main else ax.get_ylim()[1]
+        log = ax.get_yaxis().get_scale()
+    if log == 'log':
+        ymin = np.log10(ymin)
+        ymax = np.log10(ymax)
+
+    exempt = ['frequency', 'meta']
+    for key in data:
+        if key not in exempt:
+            data[key] = np.multiply(data[key], (ymax-ymin) / dmax)
+            data[key] = np.add(ymin, data[key])
+            if log == 'log':
+                data[key] = np.power(10, data[key])
+
+    if 'qwerfv' in data:
+        data = data['qwerfv']
+
+    return data

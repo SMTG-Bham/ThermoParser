@@ -39,6 +39,8 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
 
     import json
 
+    # name conversions and abbreviations
+
     conversions = settings.amset_conversions()
     anames = settings.to_amset()
     tnames = settings.to_tp()
@@ -50,13 +52,17 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
     hasdata = ['doping', 'temperatures', 'fermi_levels', 'conductivity',
                'seebeck', 'electronic_thermal_conductivity',# 'mobility',
                'kpoints', 'ir_kpoints', 'ir_to_full_kpoint_mapping']
+    hastype = ['mobility', 'scattering_rates', 'scattering_labels']
+    hasspin = ['energies', 'vb_idx', 'velocities_product']#, 'scattering_rates']
+
+    # list of quantities dependant on doping and temperature
     hasdope = ['fermi_levels', 'conductivity', 'seebeck',
                'electronic_thermal_conductivity', 'mobility', 'scattering_rates']
     hastemp = ['fermi_levels', 'conductivity', 'seebeck',
                'electronic_thermal_conductivity', 'mobility', 'energies',
                'velocities_product', 'scattering_rates']
-    hastype = ['mobility', 'scattering_rates', 'scattering_labels']
-    hasspin = ['energies', 'vb_idx', 'velocities_product']#, 'scattering_rates']
+
+    # add dependant variables
 
     if 'doping' not in quantities:
         for q in quantities:
@@ -84,6 +90,7 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
         if q in hasspin: data2[q2] = data2[q2][spin]
         if q in hasdata: data2[q2] = data2[q2]['data']
         if q in hasdope and q not in hastype:
+            # for consistency with other codes
             data2[q2] = np.swapaxes(data2[q2],0,1)
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
@@ -119,6 +126,8 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     import h5py
 
+    # name conversions and abbreviations
+
     conversions = settings.boltztrap_conversions()
     bnames = settings.to_boltztrap()
     tnames = settings.to_tp()
@@ -126,11 +135,13 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [bnames[q] if q in bnames else q for q in quantities]
 
-    # list of quantities requiring 'data' key, scattering type and spin
+    # list of quantities dependant on doping and temperature
     hasdope = ['average_eff_mass', 'conductivity', 'fermi_level', 'seebeck',
                'power_factor', 'thermal_conductivity']
     hastemp = ['average_eff_mass', 'conductivity', 'fermi_level', 'seebeck',
                'power_factor', 'thermal_conductivity']
+
+    # add dependant variables
 
     if 'doping' not in quantities:
         for q in quantities:
@@ -198,6 +209,8 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
 
     import h5py
 
+    # name conversions and abbreviations
+
     conversions = settings.phono3py_conversions()
     pnames = settings.to_phono3py()
     tnames = settings.to_tp()
@@ -215,13 +228,15 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
 
     quantities = list(np.ravel(quantities))
 
+    # add dependant variables
+
     if 'temperature' not in quantities:
         for q in quantities:
             if q in hast:
                 quantities.append('temperature')
                 break
 
-    # load data
+    # load and calculate data
 
     data = h5py.File(filename, 'r')
 
@@ -249,6 +264,7 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 
+    # write calculated data (loath to mess with original file)
 
     if write_lifetime and 'lifetime' in quantities:
         ldata = h5py.File('lifetime-{}'.format(filename), 'w')
@@ -280,7 +296,6 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
         odata.close()
 
     # check mode_kappa and correct for certain phono3py versions
-
     if 'mode_kappa' in data2:
         try:
             k = round(data['kappa'][-1][0], 3)
@@ -331,6 +346,8 @@ def phonopy_dispersion(filename, xdata=None):
 
     import yaml
 
+    # load data
+
     with open(filename, 'r') as f:
         data = yaml.safe_load(f)
 
@@ -338,6 +355,8 @@ def phonopy_dispersion(filename, xdata=None):
     qp = [q['q-position'] for q in data['phonon']]
     d2, ticks = get_path(data)
     eigs = [[b['frequency'] for b in p['band']] for p in data['phonon']]
+
+    # scale data to other path
 
     if xdata is not None:
         d1 = xdata['tick_position']
@@ -362,8 +381,7 @@ def phonopy_dispersion(filename, xdata=None):
              'tick_label':    ticks,
              'meta':
                  {'phonon_dispersion_source': 'phonopy',
-                  'units':
-                      {'frequency': units['frequency']}}}
+                     'units': {'frequency': units['frequency']}}}
 
     return data2
 
@@ -384,15 +402,21 @@ def phonopy_dos(filename, atoms):
             frequency, DoS per atom and total.
     """
 
+    # load data
+
     data = np.transpose(np.loadtxt(filename))
+    units = tp.settings.units()
     data2 = {'frequency': data[0],
-             'meta':      {'phonon_dos_source': 'phonopy'}}
+             'meta':      {'phonon_dos_source': 'phonopy',
+                           'units': {'frequency': units['frequency']}}}
 
     conversions = settings.phonopy_conversions()
     if 'frequency' in conversions:
         data2['frequency'] *= conversions['frequency']
 
     if isinstance(atoms, str): atoms = atoms.split()
+
+    # combine atoms contributions
 
     i = 0
     n = 1
@@ -401,7 +425,7 @@ def phonopy_dos(filename, atoms):
         data2[atoms[i]] = np.sum(data[n:n+atoms[i+1]], axis=0)
         n += atoms[i+1]
         i += 2
-    data2['total'] = np.sum(data, axis=0)
+    data2['total'] = np.sum(data[1:], axis=0)
 
     return data2
 

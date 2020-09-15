@@ -54,7 +54,7 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
 
     temperature = np.arange(200, tmax, tstep)
 
-    if run:
+    if run: # run boltztrap from vasprun.xml -> boltztrap directory
         doping = np.array(doping)
         vr = Vasprun(vasprun)
         bs = vr.get_band_structure(line_mode=zero_weighted)
@@ -73,8 +73,10 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
     else:
         btr_dir = 'boltztrap'
 
-    if analyse:
+    if analyse: # run boltztrap from boltztrap directory -> hdf5 file
+        print('Analysing Boltztrap...', end='')
         bta = BoltztrapAnalyzer.from_files(btr_dir)
+        print('Done.')
 
         data = {'average_eff_mass':     {},
                 'conductivity':         {},
@@ -84,6 +86,9 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
                 'temperature':          temperature,
                 'thermal_conductivity': {}}
 
+        # load data
+
+        print('Calculating transport...', end='')
         c = bta._cond_doping
         dp = bta.doping
         e = constants.e
@@ -91,6 +96,8 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
         k = bta._kappa_doping
         me = constants.m_e
         s = bta._seebeck_doping
+
+        # calculate transport properties
 
         for d in ['n', 'p']:
             c[d] = np.array([c[d][t] for t in temperature])
@@ -108,6 +115,9 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
                                             * temperature[:,None,None,None]) \
                                             * relaxation_time
         data['fermi_level'] = f
+        print('Done.')
+
+        # write data
 
         datafile = h5py.File(output, 'w')
         for key in data.keys():
