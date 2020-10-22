@@ -7,6 +7,8 @@ Functions:
         default style sheet.
     locator:
         default tick locators.
+    set_locators:
+        set locators one-liner.
 
     to_tp:
         convert names to tp conventions.
@@ -48,9 +50,56 @@ def locator():
 
     locators = {'major': ticker.MaxNLocator(5),
                 'minor': ticker.AutoMinorLocator(2),
-                'log':   ticker.LogLocator()}
+                'log':   ticker.LogLocator(),
+                'null':  ticker.NullLocator()}
 
     return locators
+
+def set_locators(ax, x=None, y=None, dos=False):
+    """Set locators quickly
+
+    If log, sets scale as well.
+
+    Arguments:
+        ax : axes
+            axes to format
+        x : str, optional
+            locator on x axis. Accepts linear, log or null.
+            Default: do nothing.
+        y : str, optional
+            locator on y axis. Accepts linear, log or null.
+            Default: do nothing.
+        dos : bool, optional
+            removes axes ticks and ticklabels and y axis label. Runs
+            first, so ticks can be reinstated on x, e.g. for waterfall
+            plots using x='log'. Default: False.
+    """
+
+    assert isinstance(dos, bool), 'dos must be True or False.'
+    if dos:
+        ax.xaxis.set_major_locator(locator()['null'])
+        ax.xaxis.set_minor_locator(locator()['null'])
+        ax.yaxis.set_major_locator(locator()['null'])
+        ax.yaxis.set_minor_locator(locator()['null'])
+        ax.set_ylabel('')
+
+    if x == 'log': ax.set_xscale('log')
+    if y == 'log': ax.set_yscale('log')
+    for a, scale in zip([ax.xaxis, ax.yaxis], [x, y]):
+        if scale is not None:
+            if scale == 'linear':
+                a.set_major_locator(locator()['major'])
+                a.set_minor_locator(locator()['minor'])
+            elif scale == 'log':
+                a.set_major_locator(locator()['log'])
+            elif scale == 'null':
+                a.set_major_locator(locator()['null'])
+                a.set_minor_locator(locator()['null'])
+            else:
+                raise Exception('x and y must be "linear", "log" or '
+                                '"null" if specified.')
+
+    return
 
 def to_tp():
     """Get dictionary to translate to tp."""
@@ -187,7 +236,7 @@ def labels():
               'doping':
                   'Carrier Concentration (cm$\mathregular{^{-1}}$)',
               'dos':
-                  '',#'Arbitrary Units',#
+                  'Density of States',
               'efermi':
                   'Fermi Energy (eV)',
               'effective_mass':

@@ -22,12 +22,11 @@ pdata = tp.data.load.phonopy_dispersion(phile)
 
 # Add
 
-ax = tp.plot.phonons.add_alt_dispersion(ax, data, pdata, 'group_velocity',
-                                        direction=direction,
-                                        temperature=temperature,
-                                        poscar=poscar)
+tp.plot.phonons.add_alt_dispersion(ax, data, pdata, 'group_velocity',
+                                   direction=direction,
+                                   temperature=temperature, poscar=poscar)
 
 # Save
 
-legend = ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 plt.savefig('altphon.pdf')

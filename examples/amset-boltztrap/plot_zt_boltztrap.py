@@ -22,8 +22,8 @@ kdata = tp.data.load.phono3py(kfile, quantities=kquants)
 
 # Add
 
-ax, cbar = tp.plot.heatmap.add_ztmap(ax, bdata, kdata, direction=direction,
-                                     colour=colour, xinterp=200, yinterp=200)
+cbar = tp.plot.heatmap.add_ztmap(ax, bdata, kdata, direction=direction,
+                                 colour=colour, xinterp=200, yinterp=200)
 
 # Save
 

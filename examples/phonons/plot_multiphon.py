@@ -20,8 +20,8 @@ data = [tp.data.load.phonopy_dispersion(f) for f in files]
 
 # Add
 
-ax = tp.plot.phonons.add_multi(ax, data, colour=colour, label=label,
-                               linestyle=linestyle)
+tp.plot.phonons.add_multi(ax, data, colour=colour, label=label,
+                          linestyle=linestyle)
 
 # Save
 

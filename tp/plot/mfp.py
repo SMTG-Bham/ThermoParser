@@ -13,13 +13,13 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import tp.settings
+import warnings
 from tp.data import resolve
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   xmarkers=None, ymarkers=None, legend='\kappa_l', main=True,
-                  scale=False, colour='#000000', fill=False, fillalpha=20,
-                  line=True, markercolour='black', markerkwargs={},
-                  rasterise=False, **kwargs):
+                  scale=False, colour='#000000', fill=False, fillcolour=20,
+                  line=True, markerkwargs={}, **kwargs):
     """Cumulates and plots kappa against mean free path.
 
     Arguments:
@@ -42,8 +42,6 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c or
             average/ avg. Default: average
-        legend : str, optional
-            legend entry, accepts maths. Default: \kappa_l.
 
         xmarkers : array-like, optional
             mark kappa at certain mean free paths.
@@ -57,30 +55,37 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             limits. Default: False.
 
         colour : str, optional
-            RGB line colour. Default: #000000.
+            #RRGGBB line colour. Default: #000000.
         fill : bool, optional
             fill below lines. Default: False.
-        fillalpha : int, optional
-            fill alpha in %. Default: 20.
+        fillcolour : int or str, optional
+            if an integer from 0-99, and colour in #RRGGBB format,
+            applies alpha in % to colour. Otherwise treats it as a
+            colour. Default: 20.
         line : bool, optional
             plot lines. Default: True.
-        markercolour : str, optional
-            marker line colours. Default: black.
+
         markerkwargs : dict, optional
-          keyword arguments for the markers, passed to
-          matplotlib.pyplot.plot. Default: {}.
-        rasterise : bool, optional
-            rasterise plot. Default: False.
-
+            keyword arguments for the markers, passed to
+            matplotlib.pyplot.plot.
+            Defaults: {'color':      'black',
+                       'rasterized': False}.
         **kwargs : dict, optional
-            keyword arguments passed to matplotlib.pyplot.fill_between.
-
-    Returns:
-        axes
-            axes with cumulated kappa.
+            keyword arguments passed to matplotlib.pyplot.fill_between
+            if filled or matplotlib.pyplot.plot otherwise.
+            Defaults: {'label':      '$\mathregular{\kappa_l}$',
+                       'rasterized': False}
     """
 
     from tp.calculate import cumulate
+
+    # defaults
+
+    defkwargs = {'label':      '$\mathregular{\kappa_l}$',
+                 'rasterized': False}
+    for key in defkwargs:
+        if key not in kwargs:
+            kwargs[key] = defkwargs[key]
 
     # data formatting and calculation
 
@@ -98,20 +103,32 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     # percentage output
 
     if scale:
-        ymin = 0 if main else ax.get_ylim()[0]
-        ymax = 100 if main else ax.get_ylim()[1]
-        k = np.multiply(k, (ymax-ymin) / k[-1])
-        k = np.add(k, ymin)
+        axscale = [0, 100] if main else None
+        k, _ = tp.plot.frequency.scale_to_axes(ax, k, scale=axscale)
 
     # colour
-    fillcolour = colour + str(fillalpha) if fill else colour + '00'
-    if not line: colour = fillcolour
 
-    # plotting
+    if fill:
+        if colour.startswith('#') and isinstance(fillcolour, int) and \
+           len(colour) == 7:
+            if fillcolour >= 0 and fillcolour <= 9:
+                fillcolour = colour + '0' + str(fillcolour)
+            elif fillcolour >= 10 and fillcolour <= 99:
+                fillcolour = colour + str(fillcolour)
+            else:
+                raise Exception('Expected alpha value between 0 and 99')
+        elif isinstance(fillcolour, int):
+            warnings.warn('integer fill colours ignored when colour format is '
+                          'not #RRGGBB.')
+            fillcolour = colour
+        if not line: colour = fillcolour
 
-    ax.fill_between(mfp, k, label='$\mathregular{{{}}}$'.format(legend),
-                    facecolor=fillcolour, edgecolor=colour,
-                    rasterized=rasterise, **kwargs)
+        # plotting
+
+        ax.fill_between(mfp, k, facecolor=fillcolour, edgecolor=colour,
+                        **kwargs)
+    else:
+        ax.plot(mfp, k, color=colour, **kwargs)
 
     # axes formatting
 
@@ -120,22 +137,16 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         axlabels = tp.settings.labels()
         ax.set_ylabel(axlabels['cumulative_kappa'])
         ax.set_xlabel(axlabels['mean_free_path'])
-        ax.set_xscale('log')
         ax.set_ylim(0, k[-2])
         ax.set_xlim(mfp[mindex], mfp[-2])
-
-        ax.xaxis.set_major_locator(tp.settings.locator()['log'])
-        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
-        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
+        tp.settings.set_locators(ax, x='log', y='linear')
 
     if xmarkers is not None or ymarkers is not None:
-        add_markers(ax, mfp, k, xmarkers, ymarkers, colour=markercolour,
-                    **markerkwargs)
+        add_markers(ax, mfp, k, xmarkers, ymarkers, **markerkwargs)
 
-    return ax
+    return
 
-def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
-                **kwargs):
+def add_markers(ax, x, y, xmarkers=None, ymarkers=None, **kwargs):
     """Adds marker lines linking a linear plot to the axes.
 
     Args:
@@ -152,13 +163,21 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
 
         **kwargs : dict, optional
             keyword arguments passed to matplotlib.pyplot.plot.
-
-    Returns:
-        axes
-            axes with markers.
+            Defaults: {'color':      'black',
+                       'linewidth':  axes line width,
+                       'rasterized': False}.
     """
 
     from scipy.interpolate import interp1d
+
+    # defaults
+
+    defkwargs = {'color':      'black',
+                 'linewidth':  ax.spines['bottom'].get_linewidth(),
+                 'rasterized': False}
+    for key in defkwargs:
+        if key not in kwargs:
+            kwargs[key] = defkwargs[key]
 
     # get limits
 
@@ -174,7 +193,7 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
         xmarky = yinter(xmarkers)
         for m in range(len(xmarkers)):
             ax.plot([xmarkers[m], xmarkers[m], -1e100],
-                    [-1e100,      xmarky[m],   xmarky[m]], c=colour)
+                    [-1e100,      xmarky[m],   xmarky[m]], **kwargs)
         #xticks = np.append(xticks, xmarkers)
         #yticks = np.append(yticks, xmarky)
 
@@ -194,4 +213,4 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, colour='black',
     #ax.set_xlim(xlim)
     #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f'))
 
-    return ax
+    return

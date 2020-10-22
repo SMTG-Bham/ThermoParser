@@ -5,7 +5,7 @@ import tp
 
 phile = '../data/band.yaml'
 dosfile = '../data/projected_dos.dat'
-atoms = ['Sb', 2, 'Mg', 3]
+poscar = '../data/POSCAR'
 
 colour = '#ff8000'
 colours = {'Sb': '#00ff00',
@@ -18,19 +18,15 @@ fig, ax = tp.plot.axes.one_dos_small_legend()
 # Load
 
 dispersion = tp.data.load.phonopy_dispersion(phile)
-dos = tp.data.load.phonopy_dos(dosfile, atoms)
+dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 
 # Add
 
-ax[0] = tp.plot.phonons.add_dispersion(ax[0], dispersion, colour=colour)
-ax[1] = tp.plot.frequency.add_dos(ax[1], dos, colours, invert=True, line=True)
+tp.plot.phonons.add_dispersion(ax[0], dispersion, colour=colour)
+tp.plot.frequency.add_dos(ax[1], dos, colours, invert=True, line=True)
 
-ax[1].set_xlim(left=0)
 ax[1].set_ylim(ax[0].get_ylim())
-ax[1].set_xticks([])
-ax[1].set_xticklabels([])
-ax[1].set_yticks([])
-ax[1].set_yticklabels([])
+tp.settings.set_locators(ax[1], dos=True)
 
 # Save
 

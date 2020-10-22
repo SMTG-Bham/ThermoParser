@@ -21,11 +21,11 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import tp
+import warnings
 from tp.data import resolve
 
-def add_dos(ax, data, colour, total=False, main=False, invert=False,
-            scale=True, fill=True, fillalpha=20, line=False, rasterise=False,
-            **kwargs):
+def add_dos(ax, data, colour, total=False, main=True, invert=False,
+            scale=False, fill=True, fillalpha=20, line=False, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments:
@@ -40,12 +40,12 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             plot total DoS. Default: False
 
         main : bool, optional
-            set ticks, labels, limits. Default: False.
+            set ticks, labels, limits. Default: True.
         invert : bool, optional
             plot on y axis. Default: False.
         scale : bool, optional
             if main, scale to percent. If not main, scale to axis
-            limits. Default: True.
+            limits. Default: False.
 
         fill : bool, optional
             fill below lines. Default: True.
@@ -54,27 +54,27 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
             Default: 20.
         line : bool, optional
             plot lines. Default: False.
-        rasterise : bool, optional
-            rasterise plot. Default: False.
 
         **kwargs : dict, optional
             keyword arguments passed to matplotlib.pyplot.fill_between.
-
-    Returns:
-        axes
-            axes with DoS.
+            Defaults: {'rasterized': False}
     """
+
+    # defaults
+
+    defkwargs = {'rasterized': False}
+    for key in defkwargs:
+        if key not in kwargs:
+            kwargs[key] = defkwargs[key]
 
     # data scaling
 
-    exempt = ['frequency', 'meta']
-    dmax = 0
-    for key in data:
-        if key not in exempt:
-            ymax = float(np.amax(data[key]))
-            if ymax > dmax: dmax = ymax
-
-    if scale: data = scale_to_axes(ax, data, dmax, main, invert)
+    exclude = ['frequency', 'meta']
+    if not total: exclude.append('total')
+    if scale:
+        axscale = [0, 100] if main else None
+        axis = 'x' if invert else 'y'
+        data = scale_to_axes(ax, data, exclude, axscale, axis)
 
     # colours
 
@@ -91,30 +91,26 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
     # plotting
 
     if total:
+        exclude.append('total')
         if invert:
             ax.fill_between(data['total'], data['frequency'], label='Total',
                             facecolor=fillcolour['total'],
-                            edgecolor=colour['total'], rasterized=rasterise,
-                            **kwargs)
+                            edgecolor=colour['total'], **kwargs)
         else:
             ax.fill_between(data['frequency'], data['total'], label='Total',
                             facecolor=fillcolour['total'],
-                            edgecolor=colour['total'], rasterized=rasterise,
-                            **kwargs)
+                            edgecolor=colour['total'], **kwargs)
 
-    exempt = ['frequency', 'meta', 'total']
     for key in data:
-        if key not in exempt:
+        if key not in exclude:
             if invert:
                 ax.fill_between(data[key], data['frequency'], label=key,
                                 facecolor=fillcolour[key],
-                                edgecolor=colour[key], rasterized=rasterise,
-                                **kwargs)
+                                edgecolor=colour[key], **kwargs)
             else:
                 ax.fill_between(data['frequency'], data[key], label=key,
                                 facecolor=fillcolour[key],
-                                edgecolor=colour[key], rasterized=rasterise,
-                                **kwargs)
+                                edgecolor=colour[key], **kwargs)
 
     # axes formatting
 
@@ -123,28 +119,19 @@ def add_dos(ax, data, colour, total=False, main=False, invert=False,
         if invert:
             ax.set_ylabel(axlabels['frequency'])
             ax.set_xlabel(axlabels['dos'])
-
-            ax.set_xlim(left=0, right=dmax)
-
-            ax.tick_params(axis='x', which='both', top=False, bottom=False)
-            ax.yaxis.set_major_locator(tp.settings.locator()['major'])
-            ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
+            ax.set_xlim(left=0)
+            tp.settings.set_locators(ax, x='null', y='linear')
         else:
             ax.set_xlabel(axlabels['frequency'])
             ax.set_ylabel(axlabels['dos'])
+            ax.set_ylim(bottom=0)
+            tp.settings.set_locators(ax, y='null', x='linear')
 
-            ax.set_ylim(bottom=0, top=dmax)
+    return
 
-            ax.tick_params(axis='y', which='both', top=False, bottom=False)
-            ax.xaxis.set_major_locator(tp.settings.locator()['major'])
-            ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
-
-    return ax
-
-def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
-                  main=False, invert=False, scale=False, colour='#000000',
-                  fill=False, fillalpha=20, line=True, rasterise=False,
-                  **kwargs):
+def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
+                  invert=False, scale=False, colour='#000000', fill=False,
+                  fillcolour=20, line=True, **kwargs):
     """Cumulates and plots kappa against frequency.
 
     Arguments:
@@ -158,8 +145,6 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c or
             average/ avg. Default: average
-        legend : str, optional
-            legend entry, accepts maths. Default: \kappa_l.
 
         main : bool, optional
             set ticks, labels, limits. Default: False.
@@ -170,23 +155,31 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
             limits. Default: True.
 
         colour : str, optional
-            RGB line colour. Default: #000000.
+            #RRGGBB line colour. Default: #000000.
         fill : bool, optional
             fill below lines. Default: False.
-        fillalpha : int, optional
-            fill alpha in %. Default: 20.
+        fillcolour : int or str, optional
+            if an integer from 0-99, and colour in #RRGGBB format,
+            applies alpha in % to colour. Otherwise treats it as a
+            colour. Default: 20.
         line : bool, optional
             plot lines. Default: True.
-        rasterise : bool, optional
-            rasterise plot. Default: False.
 
         **kwargs : dict, optional
-            keyword arguments passed to matplotlib.pyplot.fill_between.
-
-    Returns:
-        axes
-            axes with cumulated kappa.
+            keyword arguments passed to matplotlib.pyplot.fill_between
+            if filled or matplotlib.pyplot.plot otherwise.
+            Defaults: {'label':      '$\mathregular{\kappa_l}$',
+                       'rasterized': False}
     """
+
+    # defaults
+
+    defkwargs = {'label':      '$\mathregular{\kappa_l}$',
+                 'rasterized': False}
+
+    for key in defkwargs:
+        if key not in kwargs:
+            kwargs[key] = defkwargs[key]
 
     # data formatting and calculation
 
@@ -202,23 +195,41 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
     f = np.append(f, 100*f[-1])
     k = np.append(k, k[-1])
 
-    if scale: k = scale_to_axes(ax, k, k[-1], main, invert)
+    if scale:
+        axscale = [0, 100] if main else None
+        axis = 'x' if invert else 'y'
+        k = scale_to_axes(ax, k, scale=axscale, axis=axis)
 
     # colour
 
-    fillcolour = colour + str(fillalpha) if fill else colour + '00'
-    if not line: colour = fillcolour
+    if fill:
+        if colour.startswith('#') and isinstance(fillcolour, int) and \
+           len(colour) == 7:
+            if fillcolour >= 0 and fillcolour <= 9:
+                fillcolour = colour + '0' + str(fillcolour)
+            elif fillcolour >= 10 and fillcolour <= 99:
+                fillcolour = colour + str(fillcolour)
+            else:
+                raise Exception('Expected alpha value between 0 and 99')
+        elif isinstance(fillcolour, int):
+            warnings.warn('integer fill colours ignored when colour format is '
+                          'not #RRGGBB.')
+            fillcolour = colour
+        if not line: colour = fillcolour
 
-    # plotting
+        # plotting
 
-    if invert:
-        ax.fill_between(k, f, label='$\mathregular{{{}}}$'.format(legend),
-                        facecolor=fillcolour, edgecolor=colour,
-                        rasterized=rasterise, **kwargs)
+        if invert:
+            ax.fill_between(k, f, facecolor=fillcolour, edgecolor=colour,
+                            **kwargs)
+        else:
+            ax.fill_between(f, k, facecolor=fillcolour, edgecolor=colour,
+                            **kwargs)
     else:
-        ax.fill_between(f, k, label='$\mathregular{{{}}}$'.format(legend),
-                        facecolor=fillcolour, edgecolor=colour,
-                        rasterized=rasterise, **kwargs)
+        if invert:
+            ax.plot(k, f, color=colour, **kwargs)
+        else:
+            ax.plot(f, k, color=colour, **kwargs)
 
     # axes formatting
 
@@ -227,28 +238,22 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', legend='\kappa_l',
         if invert:
             ax.set_xlabel(axlabels['cumulative_kappa'])
             ax.set_ylabel(axlabels['frequency'])
-
             ax.set_xlim(0, k[-2])
             ax.set_ylim(0, f[-2])
 
         else:
             ax.set_ylabel(axlabels['cumulative_kappa'])
             ax.set_xlabel(axlabels['frequency'])
-
             ax.set_ylim(0, k[-2])
             ax.set_xlim(0, f[-2])
 
-        ax.xaxis.set_major_locator(tp.settings.locator()['major'])
-        ax.xaxis.set_minor_locator(tp.settings.locator()['minor'])
-        ax.yaxis.set_major_locator(tp.settings.locator()['major'])
-        ax.yaxis.set_minor_locator(tp.settings.locator()['minor'])
+        tp.settings.set_locators(ax, x='linear', y='linear')
 
-    return ax
+    return
 
 def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                   direction='avg', main=True, invert=False, colour='viridis',
-                  alpha=0.3, markersize=1, marker='.', linewidth=0,
-                  rasterise=True, **kwargs):
+                  **kwargs):
     """Adds a waterfall plot of quantities against frequency.
 
     Has an option to change the x-quantity.
@@ -282,24 +287,26 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             colourmap or colourmap name or list of colours (one for
             each band or one for each point) or a single colour.
             Default: viridis.
-        alpha : float, optional
-            colour alpha from 0-1. Default: 0.3.
-        markersize : float, optional
-            marker size in points. Default: 1.
-        marker : str, optional
-            marker type. Default: '.'.
-        linewidth : float, optional
-            marker edge linewidth. Default: 0.
-        rasterise : bool, optional
-            rasterise plot. Default: True.
 
         **kwargs : dict, optional
             keyword arguments passed to matplotlib.pyplot.scatter.
-
-    Returns:
-        axes
-            axes with waterfall.
+            Defaults: {'alpha':      0.3,
+                       'linewidth':  0,
+                       'marker':     '.',
+                       'rasterized': True,
+                       's':          1}
     """
+
+    # defaults
+
+    defkwargs = {'alpha':      0.3,
+                 'linewidth':  0,
+                 'marker':     '.',
+                 'rasterized': True,
+                 's':          1}
+    for key in defkwargs:
+        if key not in kwargs:
+            kwargs[key] = defkwargs[key]
 
     # data formatting
 
@@ -338,24 +345,20 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     # plotting
 
-    ax.scatter(x, y, s=markersize, marker=marker, facecolor=colours,
-               alpha=alpha, linewidth=linewidth, rasterized=rasterise,
-               **kwargs)
+    ax.scatter(x, y, facecolor=colours, **kwargs)
 
     # axes formatting
 
     if main:
-        format_waterfall(ax, x, xquantity, 'x')
-        format_waterfall(ax, y, quantity, 'y')
+        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity)
 
-    return ax
+    return
 
 def add_projected_waterfall(ax, data, quantity, projected,
                             xquantity='frequency', temperature=300,
                             direction='avg', main=True, invert=False,
-                            colour='viridis', alpha=0.3, cmin=None, cmax=None,
-                            cscale=None, unoccupied='grey', markersize=1,
-                            marker='.', linewidth=0, rasterise=True, **kwargs):
+                            colour='viridis', cmin=None, cmax=None,
+                            cscale=None, unoccupied='grey', **kwargs):
     """Adds a waterfall plot against frequency with a colour axis.
 
     Has an option to change the x-quantity.
@@ -390,8 +393,6 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis.
-        alpha : float
-            colour alpha from 0-1. Default: 0.3.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -402,24 +403,30 @@ def add_projected_waterfall(ax, data, quantity, projected,
             if the colour variable is occupation, values below 1 are
             coloured in this colour. If set to None, or cmin is set,
             this feature is turned off. Default: grey.
-        markersize : float, optional
-            marker size in points. Default: 1.
-        marker : str, optional
-            marker type. Default: '.'.
-        linewidth : float, optional
-            marker edge linewidth. Default: 0.
-        rasterise : bool, optional
-            rasterise plot. Default: True.
 
         **kwargs : dict, optional
             keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults: {'alpha':      0.3,
+                       'linewidth':  0,
+                       'marker':     '.',
+                       'rasterized': True,
+                       's':          1}
 
     Returns:
-        axes
-            axes with projected waterfall.
         colorbar
             colourbar for projected data.
     """
+
+    # defaults
+
+    defkwargs = {'alpha':      0.3,
+                 'linewidth':  0,
+                 'marker':     '.',
+                 'rasterized': True,
+                 's':          1}
+    for key in defkwargs:
+        if key not in kwargs:
+            kwargs[key] = defkwargs[key]
 
     # data formatting
 
@@ -453,9 +460,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
     # plotting
 
-    scat = ax.scatter(x, y, s=markersize, marker=marker, c=c, norm=cnorm,
-                      cmap=cmap, alpha=alpha, linewidth=linewidth,
-                      rasterized=rasterise, **kwargs)
+    scat = ax.scatter(x, y, c=c, norm=cnorm, cmap=cmap, **kwargs)
 
     # axes formatting
 
@@ -465,48 +470,48 @@ def add_projected_waterfall(ax, data, quantity, projected,
     cbar.draw_all()
 
     if main:
-        format_waterfall(ax, x, xquantity, 'x')
-        format_waterfall(ax, y, quantity, 'y')
+        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity)
 
-    return ax, cbar
+    return cbar
 
-def format_waterfall(ax, data, quantity, axis):
+def format_waterfall(ax, data, xquantity, yquantity):
     """Formats axes for waterfall plots
 
     Arguments:
         ax : axes
             axes to format.
         data : array-like
-            data for the axis in question.
-        quantity : str
-            quantity name.
-        axis : str
-            axis (x or y).
+            data.
+        xquantity : str
+            x quantity name.
+        yquantity : str
+            y quantity name.
     """
 
     axes =  {'x': ax.xaxis,      'y': ax.yaxis}
     label = {'x': ax.set_xlabel, 'y': ax.set_ylabel}
     limit = {'x': ax.set_xlim,   'y': ax.set_ylim}
     scale = {'x': ax.set_xscale, 'y': ax.set_yscale}
+    loc = {}
 
     axlabels = tp.settings.labels()
-    label[axis](axlabels[quantity])
-
-    if quantity in ['frequency', 'heat_capacity']:
-        limit[axis](np.amin(data), np.amax(data))
-        axes[axis].set_major_locator(tp.settings.locator()['major'])
-        axes[axis].set_minor_locator(tp.settings.locator()['minor'])
-    else:
-        sort = np.ma.masked_invalid(np.ma.masked_equal(data, 0)).compressed()
-        sort = sort[sort.argsort()]
-        limit[axis](sort[int(round(len(sort)/100, 0))],
-                    sort[int(round(len(sort)*99.9/100, 0))])
-        scale[axis]('log')
-        axes[axis].set_major_locator(tp.settings.locator()['log'])
+    for axis, quantity in zip(['x', 'y'], [xquantity, yquantity]):
+        label[axis](axlabels[quantity])
+        if quantity in ['frequency', 'heat_capacity']:
+            limit[axis](np.amin(data[quantity]), np.amax(data[quantity]))
+            loc[axis] = 'linear'
+        else:
+            sort = np.ma.masked_invalid(np.ma.masked_equal(
+                                        data[quantity], 0)).compressed()
+            sort = sort[sort.argsort()]
+            limit[axis](sort[int(round(len(sort)/100, 0))],
+                        sort[int(round(len(sort)*99.9/100, 0))])
+            loc[axis] = 'log'
+    tp.settings.set_locators(ax, x=loc['x'], y=loc['y'])
 
     return
 
-def scale_to_axes(ax, data, dmax, main, invert):
+def scale_to_axes(ax, data, exclude=[], scale=None, axis='y'):
     """Scale data to fit axes.
 
     Works for linear and log axes.
@@ -516,38 +521,45 @@ def scale_to_axes(ax, data, dmax, main, invert):
             axes to fit to.
         data : array-like or dict
             data to scale.
-        dmax
-            maximum data value.
-        main : bool
-            scale to percent.
-        invert : bool
-            inverted axes.
+
+        exclude : array-like, optional
+            keys to exclude from scaling. Default: none.
+        scale : array-like, optional
+            force scaling limits to [min, max]. Default: axis limits.
+        axis : bool, optional
+            axis to scale to. Default: y.
 
     Returns:
         data
             scaled data.
     """
 
+    if scale is not None:
+        assert isinstance(scale, list) and len(list(scale)) == 2, \
+               'if specified, scale must be a two element array-like [min,max]'
+    assert axis in ['x', 'y'], 'axis must be x or y'
+
     if not isinstance(data, dict):
         data = {'qwerfv': data}
-    if invert:
-        ymin = 0 if main else ax.get_xlim()[0]
-        ymax = 100 if main else ax.get_xlim()[1]
-        log = ax.get_xaxis().get_scale()
-    else:
-        ymin = 0 if main else ax.get_ylim()[0]
-        ymax = 100 if main else ax.get_ylim()[1]
-        log = ax.get_yaxis().get_scale()
-    if log == 'log':
-        ymin = np.log10(ymin)
-        ymax = np.log10(ymax)
-
-    exempt = ['frequency', 'meta']
+    dmax = 0
     for key in data:
-        if key not in exempt:
-            data[key] = np.multiply(data[key], (ymax-ymin) / dmax)
-            data[key] = np.add(ymin, data[key])
-            if log == 'log':
+        if key not in exclude:
+            ymax = float(np.amax(data[key]))
+            if ymax > dmax: dmax = ymax
+
+    axes = {'x': ax.get_xlim(), 'y': ax.get_ylim()}
+    axscale = {'x': ax.get_xaxis().get_scale(), 'y': ax.get_yaxis().get_scale()}
+    if scale is None:
+        scale = axes[axis]
+    log = axscale[axis] == 'log'
+    if log:
+        scale = np.log10(scale)
+
+    for key in data:
+        if key not in exclude:
+            data[key] = np.multiply(data[key], (scale[1]-scale[0]) / dmax)
+            data[key] = np.add(scale[0], data[key])
+            if log:
                 data[key] = np.power(10, data[key])
 
     if 'qwerfv' in data:

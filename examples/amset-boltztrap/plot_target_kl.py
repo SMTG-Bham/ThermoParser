@@ -22,9 +22,9 @@ data = tp.data.load.amset(f, quantities=quantities)
 
 # Add
 
-ax, cbar = tp.plot.heatmap.add_kappa_target(ax, data, zt=target, colour=colour,
-                                            direction=direction,
-                                            xinterp=interp, yinterp=interp)
+cbar = tp.plot.heatmap.add_kappa_target(ax, data, zt=target, colour=colour,
+                                        direction=direction, xinterp=interp,
+                                        yinterp=interp)
 
 # Save
 

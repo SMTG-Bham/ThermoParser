@@ -21,8 +21,8 @@ pdata = tp.data.load.phonopy_dispersion(phile)
 
 # Add
 
-ax = tp.plot.phonons.add_wideband(ax, data, pdata, temperature=temperature,
-                                  colour=colour, poscar=poscar)
+tp.plot.phonons.add_wideband(ax, data, pdata, temperature=temperature,
+                             colour=colour, poscar=poscar)
 
 # Save
 

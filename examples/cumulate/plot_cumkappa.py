@@ -5,8 +5,8 @@ import tp
 
 kappafile = '../data/kappa-m505028.hdf5'
 dosfile = '../data/projected_dos.dat'
+poscar = '../data/POSCAR'
 direction = 'avg'
-atoms = ['Sb', 2, 'Mg', 3]
 quantities = 'mode_kappa frequency'
 
 colours = {'Sb': '#00ff00',
@@ -19,12 +19,12 @@ fig, ax = tp.plot.axes.one_small_legend()
 # Load
 
 data = tp.data.load.phono3py(kappafile, quantities=quantities)
-dos = tp.data.load.phonopy_dos(dosfile, atoms)
+dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 
 # Add
 
-ax = tp.plot.frequency.add_cum_kappa(ax, data, direction=direction, main=True)
-ax = tp.plot.frequency.add_dos(ax, dos, colours)
+tp.plot.frequency.add_cum_kappa(ax, data, direction=direction, main=True)
+tp.plot.frequency.add_dos(ax, dos, colours, main=False, scale=True)
 
 # Save
 

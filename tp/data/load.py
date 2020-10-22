@@ -80,6 +80,8 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
     with open(filename) as f:
         data = json.load(f)
 
+    assert spin in data['scattering_rates'].keys(), \
+      'spin must be in {}'.format(' or '.join(data['scattering_rates'].keys()))
     data2 = {'meta': {'electronic_source': 'amset',
                       'units':             {}}}
     for q in quantities:
@@ -127,6 +129,8 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     import h5py
 
     # name conversions and abbreviations
+
+    assert doping in ['n', 'p'], 'doping must be n or p'
 
     conversions = settings.boltztrap_conversions()
     bnames = settings.to_boltztrap()
@@ -385,17 +389,25 @@ def phonopy_dispersion(filename, xdata=None):
 
     return data2
 
-def phonopy_dos(filename, atoms):
+def phonopy_dos(filename, poscar='POSCAR', atoms=None):
     """Loads phonopy DoS and collates data per atom and as a total.
 
-    Atoms are user-defined, allowing separation of environments.
+    By default reads atom names from a POSCAR, but can be overridden to
+    allow for separation of environments.
 
     Arguments:
         filename : str
-            filepath.
-        atoms : str or array-like
-            atoms and numbers in the format "atom number" in POSCAR
-            order, e.g. for BaSnO3: "Ba 1 Sn 2 O 3"
+            path to phonopy projected_dos.dat or similar.
+        poscar : str, optional
+            path to POSCAR. Ignored if atoms specified. Default: POSCAR.
+        atoms : str or array-like, optional
+            atoms in POSCAR order. Atom names can be repeated, in which
+            case their contributions are summed. Numbers can indicate
+            repetition in the manner of a chemical formula, so the
+            following are all acceptable and equivalent: "Ba 1 Sn 2 O 3",
+            "Ba Sn Sn O O O", "Ba Sn O 3". Different environments can be
+            distinguised with different atom names.
+            Default: read from POSCAR.
 
     Returns:
         dict
@@ -414,17 +426,35 @@ def phonopy_dos(filename, atoms):
     if 'frequency' in conversions:
         data2['frequency'] *= conversions['frequency']
 
-    if isinstance(atoms, str): atoms = atoms.split()
+    if atoms is None:
+        from pymatgen.io.vasp.inputs import Poscar
+        poscar = Poscar.from_file(poscar, check_for_POTCAR=False,
+                                  read_velocities=False).as_dict()
+        atoms = [p['label'] for p in poscar['structure']['sites']]
+    elif isinstance(atoms, str):
+        atoms = atoms.split()
 
     # combine atoms contributions
 
     i = 0
     n = 1
     while i < len(atoms):
-        atoms[i+1] = int(atoms[i+1])
-        data2[atoms[i]] = np.sum(data[n:n+atoms[i+1]], axis=0)
-        n += atoms[i+1]
-        i += 2
+        try:
+            atoms[i+1] = int(atoms[i+1])
+            if atoms[i] in data2:
+                data2[atoms[i]] += np.sum(data[n:n+atoms[i+1]], axis=0)
+            else:
+                data2[atoms[i]] = np.sum(data[n:n+atoms[i+1]], axis=0)
+            n += atoms[i+1]
+            i += 2
+        except Exception:
+            if atoms[i] in data2:
+                data2[atoms[i]] += data[n]
+            else:
+                data2[atoms[i]] = data[n]
+            n += 1
+            i += 1
+
     data2['total'] = np.sum(data[1:], axis=0)
 
     return data2

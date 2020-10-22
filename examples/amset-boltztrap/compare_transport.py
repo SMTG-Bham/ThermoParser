@@ -8,6 +8,7 @@ import tp
 afile = '../data/amset_data_85x85x47.json'
 bfile = '../data/boltztrap.hdf5'
 qs = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+scale = ['log', 'linear', 'log']
 direction = 'avg'
 
 leg = ['10$\mathrm{{^{{{}}}}}$'.format(i) for i in range(18, 22)]
@@ -34,7 +35,6 @@ bdi = [np.where(np.round(bdata['doping']) == np.round(1e18))[0],
 # Add
 
 axlabels = tp.settings.labels()
-locator = tp.settings.locator
 
 for q in range(len(qs)):
     for i in range(4):
@@ -44,20 +44,12 @@ for q in range(len(qs)):
                    label='B-{}'.format(leg[i]))
     ax[q].set_xlabel(axlabels['temperature'])
     ax[q].set_ylabel(axlabels[qs[q]])
-    ax[q].xaxis.set_major_locator(locator()['major'])
-    ax[q].xaxis.set_minor_locator(locator()['minor'])
 
-ax[0].set_yscale('log')
-ax[0].yaxis.set_major_locator(locator()['log'])
-
-ax[1].yaxis.set_major_locator(locator()['major'])
-ax[1].yaxis.set_minor_locator(locator()['minor'])
-
-ax[2].set_yscale('log')
-ax[2].yaxis.set_major_locator(locator()['log'])
+for a in range(len(ax)):
+    tp.settings.set_locators(ax[a], x='linear', y=scale[a])
 
 # Save
 
-legend = ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1), ncol=8,
-                      title=axlabels['doping'])
+ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1), ncol=8,
+             title=axlabels['doping'])
 plt.savefig('compare-transport.pdf')

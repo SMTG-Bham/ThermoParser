@@ -29,10 +29,9 @@ data = tp.data.load.phono3py(kappafile, quantities=quantities)
 # Add
 
 for (i, j), a in np.ndenumerate(ax):
-    ax[i][j] = tp.plot.frequency.add_waterfall(a, data, plots[i][j],
-                                               main=True, colour=colour[i][j],
-                                               temperature=temperature,
-                                               direction=direction[i][j])
+    tp.plot.frequency.add_waterfall(a, data, plots[i][j], colour=colour[i][j],
+                                    temperature=temperature,
+                                    direction=direction[i][j])
 
 # Save
 
