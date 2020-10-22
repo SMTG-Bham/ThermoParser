@@ -236,7 +236,7 @@ def labels():
               'doping':
                   'Carrier Concentration (cm$\mathregular{^{-1}}$)',
               'dos':
-                  'Density of States',
+                  'Density\nof States',
               'efermi':
                   'Fermi Energy (eV)',
               'effective_mass':
