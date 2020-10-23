@@ -3,6 +3,10 @@
 Functions:
     colour_scale:
         Sorts colour limits and colourbar format.
+    scale_to_axis
+        scales data to axes limits
+    set_locators:
+        set locators one-liner.
 """
 
 import matplotlib as mpl
@@ -11,6 +15,9 @@ import numpy as np
 def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
                  unoccupied='grey'):
     """Formats the colour scale for phono3py quantities.
+
+    Attempts to set the limits to maximise visibility of the most
+    important data and determines if the colourbar should be extended.
 
     Arguments:
         c : array-like
@@ -103,3 +110,107 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
         extend = 'neither'
 
     return cnorm, extend
+
+def scale_to_axis(ax, data, exclude=[], scale=None, axis='y'):
+    """Scale data to fit an axis.
+
+    Assumes data is linear, but still works for linear and log axes.
+
+    Arguments:
+        ax : axes
+            axes to fit to.
+        data : array-like or dict
+            data to scale.
+
+        exclude : array-like, optional
+            keys to exclude from scaling. Default: none.
+        scale : array-like, optional
+            force scaling limits to [min, max]. Default: axis limits.
+        axis : bool, optional
+            axis to scale to. Default: y.
+
+    Returns:
+        data
+            scaled data.
+    """
+
+    if scale is not None:
+        assert isinstance(scale, list) and len(list(scale)) == 2, \
+               'if specified, scale must be a two element array-like [min,max]'
+    assert axis in ['x', 'y'], 'axis must be x or y'
+
+    if not isinstance(data, dict):
+        data = {'qwerfv': data}
+    dmax = 0
+    for key in data:
+        if key not in exclude:
+            ymax = float(np.amax(data[key]))
+            if ymax > dmax: dmax = ymax
+
+    axes = {'x': ax.get_xlim(), 'y': ax.get_ylim()}
+    axscale = {'x': ax.get_xaxis().get_scale(), 'y': ax.get_yaxis().get_scale()}
+    if scale is None:
+        scale = axes[axis]
+    log = axscale[axis] == 'log'
+    if log:
+        scale = np.log10(scale)
+
+    for key in data:
+        if key not in exclude:
+            data[key] = np.multiply(data[key], (scale[1]-scale[0]) / dmax)
+            data[key] = np.add(scale[0], data[key])
+            if log:
+                data[key] = np.power(10, data[key])
+
+    if 'qwerfv' in data:
+        data = data['qwerfv']
+
+    return data
+
+def set_locators(ax, x=None, y=None, dos=False):
+    """Set locators quickly
+
+    If log, sets scale as well.
+
+    Arguments:
+        ax : axes
+            axes to format
+        x : str, optional
+            locator on x axis. Accepts linear, log or null.
+            Default: do nothing.
+        y : str, optional
+            locator on y axis. Accepts linear, log or null.
+            Default: do nothing.
+        dos : bool, optional
+            removes axes ticks and ticklabels and y axis label. Runs
+            first, so ticks can be reinstated on x, e.g. for waterfall
+            plots using x='log'. Default: False.
+    """
+
+    assert isinstance(dos, bool), 'dos must be True or False.'
+
+    from tp.settings import locator
+    if dos:
+        ax.xaxis.set_major_locator(locator()['null'])
+        ax.xaxis.set_minor_locator(locator()['null'])
+        ax.yaxis.set_major_locator(locator()['null'])
+        ax.yaxis.set_minor_locator(locator()['null'])
+        ax.set_ylabel('')
+
+    if x == 'log': ax.set_xscale('log')
+    if y == 'log': ax.set_yscale('log')
+    for a, scale in zip([ax.xaxis, ax.yaxis], [x, y]):
+        if scale is not None:
+            if scale == 'linear':
+                a.set_major_locator(locator()['major'])
+                a.set_minor_locator(locator()['minor'])
+            elif scale == 'log':
+                a.set_major_locator(locator()['log'])
+            elif scale == 'null':
+                a.set_major_locator(locator()['null'])
+                a.set_minor_locator(locator()['null'])
+            else:
+                raise Exception('x and y must be "linear", "log" or '
+                                '"null" if specified.')
+
+    return

@@ -26,7 +26,7 @@ tp.plot.phonons.add_dispersion(ax[0], dispersion, colour=colour)
 tp.plot.frequency.add_dos(ax[1], dos, colours, invert=True, line=True)
 
 ax[1].set_ylim(ax[0].get_ylim())
-tp.settings.set_locators(ax[1], dos=True)
+tp.plot.utilities.set_locators(ax[1], dos=True)
 
 # Save
 

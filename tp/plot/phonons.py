@@ -550,6 +550,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     cbar = plt.colorbar(line, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[quantity])
+    tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
     cbar.draw_all()
 
     if main:
@@ -728,6 +729,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     cbar = plt.colorbar(line, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
+    tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
     cbar.draw_all()
 
     if main:
@@ -790,7 +792,8 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
                        'rasterized': False}
         **kwargs : dict, optional
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults: {'rasterized': True}
+            Defaults: {'rasterized': True,
+                       'shading':    'auto'}
     """
 
     from functools import partial
@@ -803,7 +806,8 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # defaults
 
-    defkwargs = {'rasterized': True}
+    defkwargs = {'rasterized': True,
+                 'shading':    'auto'}
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
@@ -855,7 +859,7 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # broadening
 
-    area = np.zeros((len(x2), len(f)))
+    area = np.zeros((len(x2), len(f2)))
     for q in range(len(area)):
         for b in range(len(c2[q])):
             area[q] = np.add(area[q], lorentzian(f2, f[q][b], c2[q][b]))
@@ -970,7 +974,7 @@ def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
     ax.tick_params(axis='x', which='minor', top=False, bottom=False)
     ax.set_xlim(data['x'][0], data['x'][-1])
     scale = 'log' if log else 'linear'
-    tp.settings.set_locators(ax, y=scale)
+    tp.plot.utilities.set_locators(ax, y=scale)
 
     return
 

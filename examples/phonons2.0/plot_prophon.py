@@ -36,9 +36,8 @@ cbar = tp.plot.frequency.add_projected_waterfall(ax[1], data, waterfall,
                                                  direction=direction,
                                                  invert=True)
 
-ax[1].set_xlabel('$\mathrm{\kappa_l}\ (W\ m^{-1}\ K^{-1})$')
 ax[1].set_ylim(ax[0].get_ylim())
-tp.settings.set_locators(ax[1], dos=True, x='log')
+tp.plot.utilities.set_locators(ax[1], dos=True, x='log')
 
 # Save
 

@@ -104,7 +104,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     if scale:
         axscale = [0, 100] if main else None
-        k, _ = tp.plot.frequency.scale_to_axes(ax, k, scale=axscale)
+        k, _ = tp.plot.frequency.scale_to_axis(ax, k, scale=axscale)
 
     # colour
 
@@ -139,7 +139,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         ax.set_xlabel(axlabels['mean_free_path'])
         ax.set_ylim(0, k[-2])
         ax.set_xlim(mfp[mindex], mfp[-2])
-        tp.settings.set_locators(ax, x='log', y='linear')
+        tp.plot.utilities.set_locators(ax, x='log', y='linear')
 
     if xmarkers is not None or ymarkers is not None:
         add_markers(ax, mfp, k, xmarkers, ymarkers, **markerkwargs)

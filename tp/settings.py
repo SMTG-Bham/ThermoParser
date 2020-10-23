@@ -7,8 +7,6 @@ Functions:
         default style sheet.
     locator:
         default tick locators.
-    set_locators:
-        set locators one-liner.
 
     to_tp:
         convert names to tp conventions.
@@ -19,16 +17,29 @@ Functions:
     to_phono3py:
         convert names to phono3py conventions.
 
-    conversions:
+    amset_conversions:
+        unit conversions (see tp.data.load).
+    boltztrap_conversions:
+        unit conversions (see tp.data.load).
+    phonopy_conversions:
+        unit conversions (see tp.data.load).
+    phono3py_conversions:
         unit conversions (see tp.data.load).
     units:
         default units used.
     labels:
         default axis labels.
+    inverted_labels:
+        default inverted axis labels.
+    long_labels:
+        list of long axis labels.
+    short_labels:
+        list of short axis labels.
 """
 
 def __dir__():
-    names = ['to_tp',
+    names = ['locator',
+             'to_tp',
              'to_amset',
              'to_boltztrap',
              'to_phono3py',
@@ -54,52 +65,6 @@ def locator():
                 'null':  ticker.NullLocator()}
 
     return locators
-
-def set_locators(ax, x=None, y=None, dos=False):
-    """Set locators quickly
-
-    If log, sets scale as well.
-
-    Arguments:
-        ax : axes
-            axes to format
-        x : str, optional
-            locator on x axis. Accepts linear, log or null.
-            Default: do nothing.
-        y : str, optional
-            locator on y axis. Accepts linear, log or null.
-            Default: do nothing.
-        dos : bool, optional
-            removes axes ticks and ticklabels and y axis label. Runs
-            first, so ticks can be reinstated on x, e.g. for waterfall
-            plots using x='log'. Default: False.
-    """
-
-    assert isinstance(dos, bool), 'dos must be True or False.'
-    if dos:
-        ax.xaxis.set_major_locator(locator()['null'])
-        ax.xaxis.set_minor_locator(locator()['null'])
-        ax.yaxis.set_major_locator(locator()['null'])
-        ax.yaxis.set_minor_locator(locator()['null'])
-        ax.set_ylabel('')
-
-    if x == 'log': ax.set_xscale('log')
-    if y == 'log': ax.set_yscale('log')
-    for a, scale in zip([ax.xaxis, ax.yaxis], [x, y]):
-        if scale is not None:
-            if scale == 'linear':
-                a.set_major_locator(locator()['major'])
-                a.set_minor_locator(locator()['minor'])
-            elif scale == 'log':
-                a.set_major_locator(locator()['log'])
-            elif scale == 'null':
-                a.set_major_locator(locator()['null'])
-                a.set_minor_locator(locator()['null'])
-            else:
-                raise Exception('x and y must be "linear", "log" or '
-                                '"null" if specified.')
-
-    return
 
 def to_tp():
     """Get dictionary to translate to tp."""
@@ -223,7 +188,15 @@ def units():
     return units
 
 def labels():
-    """Get dictionary of axis labels used in tp"""
+    """Get the default labels for use in tp"""
+    return long_labels()
+
+def inverted_labels():
+    """Get the default labels for inverted axes in tp"""
+    return short_labels()
+
+def long_labels():
+    """Get a dictionary of long-form axis labels"""
 
     labels = {'chemical_potential':
                   'Chemical Potential (eV)',
@@ -279,6 +252,68 @@ def labels():
                   'Temperature (K)',
               'wavevector':
                   'Wavevector',
+              'zt':
+                  'ZT'}
+
+    return labels
+
+def short_labels():
+    """Get dictionary of short-form axis labels"""
+
+    labels = {'chemical_potential':
+                  '$\mathregular{\mu}$ (eV)',
+              'complexity_factor':
+                  'Comp. Fac.',
+              'conductivity':
+                  '$\mathregular{\sigma\ (S\ m^{-1})}$',
+              'cumulative_kappa':
+                  '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+              'doping':
+                  'n (cm$\mathregular{^{-1}}$)',
+              'dos':
+                  'Density\nof States',
+              'efermi':
+                  'E$\mathregular{_{F}}$ (eV)',
+              'effective_mass':
+                  '$\mathregular{m^*\ (m_e})$',
+              'energy':
+                  'E (eV)',
+              'electronic_thermal_conductivity':
+                  '$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$',
+              'fermi_level':
+                  'E$\mathregular{_{F}}$ (eV)',
+              'frequency':
+                  '$\mathregular{\\nu}$ (THz)',
+              'gamma':
+                  '$\mathregular{\Gamma}$ (THz)',
+              'group_velocity':
+                  '$\mathregular{g_v\ (m\ s^{-1})}$',
+              'gv_by_gv':
+                  '$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$',
+              'heat_capacity':
+                  'C (J K$\mathregular{^{-1}}$)',
+              'lattice_thermal_conductivity':
+                  '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+              'lifetime':
+                  '$\mathregular{\\tau}$ (s)',
+              'mean_free_path':
+                  '$\mathregular{\Lambda}$ (m)',
+              'mobility':
+                  '$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$',
+              'mode_kappa':
+                  '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+              'power_factor':
+                  'PF (W m$\mathregular{^{-1}\ K^{-2}}$)',
+              'occupation':
+                  'Occupation',
+              'scattering_rates':
+                  '$\mathregular{\\tau^{-1}\ (s^{-1})}$',
+              'seebeck':
+                  '$\mathregular{\\alpha\ (\mu V\ K^{-1})}$',
+              'temperature':
+                  'T (K)',
+              'wavevector':
+                  'q',
               'zt':
                   'ZT'}
 

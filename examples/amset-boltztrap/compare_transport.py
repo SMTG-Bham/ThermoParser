@@ -46,7 +46,7 @@ for q in range(len(qs)):
     ax[q].set_ylabel(axlabels[qs[q]])
 
 for a in range(len(ax)):
-    tp.settings.set_locators(ax[a], x='linear', y=scale[a])
+    tp.plot.utilities.set_locators(ax[a], x='linear', y=scale[a])
 
 # Save
 

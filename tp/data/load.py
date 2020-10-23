@@ -485,6 +485,6 @@ def get_path(yamldata):
     except: # new phonopy/ sumo
         ticks = [yamldata['phonon'][i - 1]['label'] for i in tickindex]
     ticks = ['$\mathregular{\Gamma}$' if i == 'G' or 'gamma' in i.lower() else
-             '$\mathregular{{{}}}$'.format(i) for i in ticks]
+             '$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
 
     return tickpos, ticks

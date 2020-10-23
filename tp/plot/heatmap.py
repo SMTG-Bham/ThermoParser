@@ -143,8 +143,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     ax.set_yscale(yscale)
 
     # axes formatting
-    tp.settings.set_locators(ax, x=xscale, y=yscale)
-    tp.settings.set_locators(cbar.ax, y=cscale)
+    tp.plot.utilities.set_locators(ax, x=xscale, y=yscale)
+    tp.plot.utilities.set_locators(cbar.ax, y=cscale)
 
     ax.set_xlim(x[0], x[-1])
     ax.set_ylim(y[0], y[-1])

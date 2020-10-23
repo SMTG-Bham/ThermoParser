@@ -12,8 +12,6 @@ Functions:
 
     format_waterfall
         formatting for the waterfall plots
-    scale_to_axes
-        scales data to axes limits
 """
 
 import matplotlib as mpl
@@ -74,7 +72,7 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
     if scale:
         axscale = [0, 100] if main else None
         axis = 'x' if invert else 'y'
-        data = scale_to_axes(ax, data, exclude, axscale, axis)
+        data = tp.plot.utilities.scale_to_axis(ax, data, exclude, axscale,axis)
 
     # colours
 
@@ -115,17 +113,18 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
     # axes formatting
 
     if main:
-        axlabels = tp.settings.labels()
         if invert:
+            axlabels = tp.settings.inverted_labels()
             ax.set_ylabel(axlabels['frequency'])
             ax.set_xlabel(axlabels['dos'])
             ax.set_xlim(left=0)
-            tp.settings.set_locators(ax, x='null', y='linear')
+            tp.plot.utilities.set_locators(ax, x='null', y='linear')
         else:
+            axlabels = tp.settings.labels()
             ax.set_xlabel(axlabels['frequency'])
             ax.set_ylabel(axlabels['dos'])
             ax.set_ylim(bottom=0)
-            tp.settings.set_locators(ax, y='null', x='linear')
+            tp.plot.utilities.set_locators(ax, y='null', x='linear')
 
     return
 
@@ -198,7 +197,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
     if scale:
         axscale = [0, 100] if main else None
         axis = 'x' if invert else 'y'
-        k = scale_to_axes(ax, k, scale=axscale, axis=axis)
+        k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale, axis=axis)
 
     # colour
 
@@ -234,20 +233,21 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
     # axes formatting
 
     if main:
-        axlabels = tp.settings.labels()
         if invert:
+            axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels['cumulative_kappa'])
             ax.set_ylabel(axlabels['frequency'])
             ax.set_xlim(0, k[-2])
             ax.set_ylim(0, f[-2])
 
         else:
+            axlabels = tp.settings.labels()
             ax.set_ylabel(axlabels['cumulative_kappa'])
             ax.set_xlabel(axlabels['frequency'])
             ax.set_ylim(0, k[-2])
             ax.set_xlim(0, f[-2])
 
-        tp.settings.set_locators(ax, x='linear', y='linear')
+        tp.plot.utilities.set_locators(ax, x='linear', y='linear')
 
     return
 
@@ -350,7 +350,8 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # axes formatting
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity)
+        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity,
+                         invert=invert)
 
     return
 
@@ -467,14 +468,16 @@ def add_projected_waterfall(ax, data, quantity, projected,
     cbar = plt.colorbar(scat, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
+    tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
     cbar.draw_all()
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity)
+        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity,
+                         invert=invert)
 
     return cbar
 
-def format_waterfall(ax, data, xquantity, yquantity):
+def format_waterfall(ax, data, xquantity, yquantity, invert=False):
     """Formats axes for waterfall plots
 
     Arguments:
@@ -486,6 +489,9 @@ def format_waterfall(ax, data, xquantity, yquantity):
             x quantity name.
         yquantity : str
             y quantity name.
+
+        invert : bool, optional
+            use inverted labels. Default: False.
     """
 
     axes =  {'x': ax.xaxis,      'y': ax.yaxis}
@@ -494,7 +500,7 @@ def format_waterfall(ax, data, xquantity, yquantity):
     scale = {'x': ax.set_xscale, 'y': ax.set_yscale}
     loc = {}
 
-    axlabels = tp.settings.labels()
+    axlabels = tp.settings.inverted_labels() if invert else tp.settings.labels()
     for axis, quantity in zip(['x', 'y'], [xquantity, yquantity]):
         label[axis](axlabels[quantity])
         if quantity in ['frequency', 'heat_capacity']:
@@ -507,62 +513,6 @@ def format_waterfall(ax, data, xquantity, yquantity):
             limit[axis](sort[int(round(len(sort)/100, 0))],
                         sort[int(round(len(sort)*99.9/100, 0))])
             loc[axis] = 'log'
-    tp.settings.set_locators(ax, x=loc['x'], y=loc['y'])
+    tp.plot.utilities.set_locators(ax, x=loc['x'], y=loc['y'])
 
     return
-
-def scale_to_axes(ax, data, exclude=[], scale=None, axis='y'):
-    """Scale data to fit axes.
-
-    Works for linear and log axes.
-
-    Arguments:
-        ax : axes
-            axes to fit to.
-        data : array-like or dict
-            data to scale.
-
-        exclude : array-like, optional
-            keys to exclude from scaling. Default: none.
-        scale : array-like, optional
-            force scaling limits to [min, max]. Default: axis limits.
-        axis : bool, optional
-            axis to scale to. Default: y.
-
-    Returns:
-        data
-            scaled data.
-    """
-
-    if scale is not None:
-        assert isinstance(scale, list) and len(list(scale)) == 2, \
-               'if specified, scale must be a two element array-like [min,max]'
-    assert axis in ['x', 'y'], 'axis must be x or y'
-
-    if not isinstance(data, dict):
-        data = {'qwerfv': data}
-    dmax = 0
-    for key in data:
-        if key not in exclude:
-            ymax = float(np.amax(data[key]))
-            if ymax > dmax: dmax = ymax
-
-    axes = {'x': ax.get_xlim(), 'y': ax.get_ylim()}
-    axscale = {'x': ax.get_xaxis().get_scale(), 'y': ax.get_yaxis().get_scale()}
-    if scale is None:
-        scale = axes[axis]
-    log = axscale[axis] == 'log'
-    if log:
-        scale = np.log10(scale)
-
-    for key in data:
-        if key not in exclude:
-            data[key] = np.multiply(data[key], (scale[1]-scale[0]) / dmax)
-            data[key] = np.add(scale[0], data[key])
-            if log:
-                data[key] = np.power(10, data[key])
-
-    if 'qwerfv' in data:
-        data = data['qwerfv']
-
-    return data
