@@ -2,6 +2,7 @@
 
 Functions:
     amset
+    amset_mesh
     phono3py
     phonopy_dispersion
     phonopy_dos
@@ -15,22 +16,21 @@ import tp
 from tp import settings
 
 def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
-          'conductivity', 'electronic_thermal_conductivity'], spin='up'):
-    """Loads AMSET data.
+          'conductivity', 'electronic_thermal_conductivity']):
+    """Loads AMSET transport data.
 
     Includes unit conversion and outputs units (see tp.settings).
+    Swaps temperature and doping indices so temperature is first, for
+    consistency with other codes, and mobility is formatted as an array,
+    like scattering_rates is in the mesh.h5 file.
 
     Arguments:
         filename : str
             filepath.
 
         quantites : dict, optional
-            values to extract. Accepts AMSET keys
-            Default: temperatures, doping, seebeck, conductivity,
-            electronic_thermal_conductivity.
-
-        spin : str, optional
-            spin.  Default: up.
+            values to extract. Default: temperatures, doping, seebeck,
+            conductivity, electronic_thermal_conductivity.
 
     Returns:
         dict
@@ -48,22 +48,14 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [anames[q] if q in anames else q for q in quantities]
 
-    # list of quantities requiring 'data' key, scattering type and spin
-    hasdata = ['doping', 'temperatures', 'fermi_levels', 'conductivity',
-               'seebeck', 'electronic_thermal_conductivity',# 'mobility',
-               'kpoints', 'ir_kpoints', 'ir_to_full_kpoint_mapping']
-    hastype = ['mobility', 'scattering_rates', 'scattering_labels']
-    hasspin = ['energies', 'vb_idx', 'velocities_product']#, 'scattering_rates']
-
-    # list of quantities dependant on doping and temperature
+    # list of quantities dependant on doping, temperature and scattering
     hasdope = ['fermi_levels', 'conductivity', 'seebeck',
-               'electronic_thermal_conductivity', 'mobility', 'scattering_rates']
+               'electronic_thermal_conductivity', 'mobility']
     hastemp = ['fermi_levels', 'conductivity', 'seebeck',
-               'electronic_thermal_conductivity', 'mobility', 'energies',
-               'velocities_product', 'scattering_rates']
+               'electronic_thermal_conductivity', 'mobility']
+    hastype = ['mobility']
 
     # add dependant variables
-
     if 'doping' not in quantities:
         for q in quantities:
             if q in hasdope:
@@ -80,20 +72,129 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
     with open(filename) as f:
         data = json.load(f)
 
-    assert spin in data['scattering_rates'].keys(), \
-      'spin must be in {}'.format(' or '.join(data['scattering_rates'].keys()))
     data2 = {'meta': {'electronic_source': 'amset',
+                      'units':             {}}}
+    for q in quantities:
+        assert q in data, \
+               '{} unrecognised. Quantity must be in {} or {}.'.format(q,
+               ', '.join(list(data)[:-1]), list(data)[-1])
+        q2 = tnames[q] if q in tnames else q
+        data2[q2] = data[q]
+        if q in hasdope and q in hastemp:
+            # for consistency with other codes
+            if q in hastype:
+                data2[q2] = np.swapaxes(data2[q2],1,2)
+            else:
+                data2[q2] = np.swapaxes(data2[q2],0,1)
+        if q in hastype:
+            if 'scattering_labels' not in data2:
+                data2['scattering_labels'] = data[q].keys()
+            data2[q2] = [data[l] for l in data2['scattering_labels']]
+        if q2 in units:
+            data2['meta']['units'][q2] = units[q2]
+
+    for c in conversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], conversions[c])
+
+    return data2
+
+def amset_mesh(filename, quantities=['temperatures', 'doping',
+               'scattering_rates', 'scattering_labels'], spin='avg'):
+    """Loads AMSET mesh data.
+
+    Includes unit conversion and outputs units (see tp.settings).
+    Swaps temperature and doping indices so temperature is first, for
+    consistency with other codes.
+
+    Arguments:
+        filename : str
+            filepath.
+
+        quantites : dict, optional
+            values to extract. Accepts AMSET keys, without spin
+            channels, which are dealt with in the spin variable.
+            Default: temperatures, doping, seebeck, conductivity,
+            electronic_thermal_conductivity.
+
+        spin : str, optional
+            spin. Accepts up, down or avg. If avg and there is only one
+            spin channel, selects that, else averages both. Default: avg.
+
+    Returns:
+        dict
+            extracted values.
+    """
+
+    import h5py
+
+    # name conversions and abbreviations
+
+    conversions = settings.amset_conversions()
+    anames = settings.to_amset()
+    tnames = settings.to_tp()
+    units = settings.units()
+    if isinstance(quantities, str): quantities = quantities.split()
+    quantities = [anames[q] if q in anames else q for q in quantities]
+
+    # list of quantities dependant on doping and temperature
+    hasdope = ['fermi_levels', 'scattering_rates']
+    hastemp = ['fermi_levels', 'scattering_rates']
+    hastype = ['scattering_rates']
+    hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
+
+    # add dependant variables
+
+    if 'doping' not in quantities:
+        for q in quantities:
+            if q in hasdope:
+                quantities.append('doping')
+                break
+    if 'temperatures' not in quantities:
+        for q in quantities:
+            if q in hastemp:
+                quantities.append('temperatures')
+                break
+    if 'scattering_labels' not in quantities:
+        for q in quantities:
+            if q in hastype:
+                quantities.append('scattering_labels')
+                break
+
+    # load data
+
+    data = h5py.File(filename, 'r')
+
+    if spin in ['avg', 'average']:
+        if 'energies_up' in data and 'energies_down' in data:
+            spin = 'avg'
+        elif 'energies_up' in data:
+            spin = 'up'
+        elif 'energies_down' in data:
+            spin = 'down'
+    data2 = {'meta': {'electronic_source': 'amset',
+                      'spin':              spin,
                       'units':             {}}}
     for q in quantities:
         assert q in data, '{} unrecognised. Quantity must be in {} or {}.'.format(
                 q, ', '.join(list(data)[:-1]), list(data)[-1])
         q2 = tnames[q] if q in tnames else q
-        data2[q2] = data[q]
-        if q in hasspin: data2[q2] = data2[q2][spin]
-        if q in hasdata: data2[q2] = data2[q2]['data']
-        if q in hasdope and q not in hastype:
+        if q in hasspin:
+            if spin == 'avg':
+                data2[q2] = np.average([data['{}_up'.format(q)],
+                                        data['{}_down'.format(q)]], axis=0)
+            elif spin in ['up', 'down']:
+                data2[q2] = data['{}_{}'.format(q, spin)]
+            else:
+                raise Exception('spin must be up or down or avg')
+        else:
+            data2[q2] = data[q]
+        if q in hasdope and q in hastemp:
             # for consistency with other codes
-            data2[q2] = np.swapaxes(data2[q2],0,1)
+            if q in hastype:
+                data2[q2] = np.swapaxes(data2[q2],1,2)
+            else:
+                data2[q2] = np.swapaxes(data2[q2],0,1)
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 
