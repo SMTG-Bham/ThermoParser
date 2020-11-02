@@ -22,7 +22,8 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
     Includes unit conversion and outputs units (see tp.settings).
     Swaps temperature and doping indices so temperature is first, for
     consistency with other codes, and mobility is formatted as an array,
-    like scattering_rates is in the mesh.h5 file.
+    like scattering_rates is in the mesh.h5 file. Maintains basic
+    compatibility with amset 0.1.
 
     Arguments:
         filename : str
@@ -79,7 +80,10 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
                '{} unrecognised. Quantity must be in {} or {}.'.format(q,
                ', '.join(list(data)[:-1]), list(data)[-1])
         q2 = tnames[q] if q in tnames else q
-        data2[q2] = data[q]
+        if 'data' in data[q]:
+            data2[q2] = data[q]['data']
+        else:
+            data2[q2] = data[q]
         if q in hasdope and q in hastemp:
             # for consistency with other codes
             if q in hastype:
@@ -176,8 +180,8 @@ def amset_mesh(filename, quantities=['temperatures', 'doping',
                       'spin':              spin,
                       'units':             {}}}
     for q in quantities:
-        assert q in data, '{} unrecognised. Quantity must be in {} or {}.'.format(
-                q, ', '.join(list(data)[:-1]), list(data)[-1])
+        #assert q in data, '{} unrecognised. Quantity must be in {} or {}.'.format(
+        #        q, ', '.join(list(data)[:-1]), list(data)[-1])
         q2 = tnames[q] if q in tnames else q
         if q in hasspin:
             if spin == 'avg':

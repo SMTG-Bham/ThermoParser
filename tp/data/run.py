@@ -57,12 +57,12 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
     from pymatgen.io.vasp.outputs import Vasprun
     from scipy import constants
 
-    for v, w in zip(['tmax', 'tstep', 'lpfac', 'relaxation_time'],
-                    [tmax, tstep, lpfac, relaxation_time]):
-        assert isinstance(w, (float, int)), '{} must be a number'.forpmat(v)
+    #for v, w in zip(['tmax', 'tstep', 'lpfac', 'relaxation_time'],
+    #                [tmax, tstep, lpfac, relaxation_time]):
+    #    assert isinstance(w, (float, int)), '{} must be a number'.format(v)
     for v, w in zip(['soc,', 'zero_weighted', 'run', 'analyse'],
                     [soc, zero_weighted, run, analyse]):
-        assert isinstance(w, bool), '{} must be True or False'.forpmat(v)
+        assert isinstance(w, bool), '{} must be True or False'.format(v)
 
     temperature = np.arange(200, tmax, tstep)
 

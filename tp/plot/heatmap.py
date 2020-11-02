@@ -220,6 +220,11 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
                                                       len(data['temperature']))
 
         data = tp.calculate.zt_fromdict(data)
+    ztmax = np.amax(data['zt'])
+    loc = np.where(data['zt'] == ztmax)
+    print('Max ZT: {} at {} K, {} carrier cm^-3'.format(np.amax(data['zt']),
+                                                        data['temperature'][loc[0][0]],
+                                                        data['doping'][loc[1][0]]))
 
     # plotting
 
