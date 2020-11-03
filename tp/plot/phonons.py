@@ -388,7 +388,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
 
 def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
                              temperature=300, direction='avg', poscar='POSCAR',
-                             main=True, interpolate=2500, colour='viridis_r',
+                             main=True, interpolate=500, colour='viridis_r',
                              cmin=None, cmax=None, cscale=None,
                              unoccupied='grey', workers=32, xmarkkwargs={},
                              **kwargs):
@@ -437,7 +437,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
         main : bool, optional
             set axis ticks, label, limits. Default: True.
         interpolate : int, optional
-            number of points per line. Default: 2,500.
+            number of points per path. Default: 500.
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis_r.
@@ -517,20 +517,29 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     geq = partial(get_equivalent_qpoint, np.array(qk), symops)
     with Pool(processes=workers) as pool:
         min_id = pool.map(geq, qp)
-    c2 = c[min_id, :]
+    c = c[min_id, :]
 
     x, indices = np.unique(x, return_index=True)
     f = np.array(f)[indices]
-    c2 = np.array(c2)[indices]
+    c = np.array(c)[indices]
 
     # interpolate
 
-    x2 = np.linspace(min(x), max(x), interpolate)
-    finterp = interp1d(x, f, kind='cubic', axis=0)
-    f = finterp(x2)
+    index = [0, 0]
+    x2, f2, c2 = [], [], []
+    for d in pdata['tick_position'][1:]:
+        index[0] = index[1]
+        index[1] = next(i[0] for i in enumerate(x) if i[1] == d)
+        xtemp = np.linspace(x[index[0]], x[index[1]], interpolate)
+        print(xtemp[0],xtemp[-1])
+        print(x[index[0]], x[index[1]])
+        finterp = interp1d(x[index[0]:index[1]], f[index[0]:index[1]], kind='cubic', axis=0, fill_value='extrapolate')
+        x2.append(xtemp)
+        f2.append(finterp(xtemp))
 
-    cinterp = interp1d(x, c2, kind='cubic', axis=0)
-    c2 = np.abs(cinterp(x2))
+        cinterp = interp1d(x[index[0]:index[1]], c[index[0]:index[1]], kind='cubic', axis=0, fill_value='extrapolate')
+        c2.append(np.abs(cinterp(xtemp)))
+
     if isinstance(colour, str):
         cmap = plt.cm.get_cmap(colour)
     else:
@@ -541,8 +550,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     # plotting
 
     for n in range(bdiff):
-        line = ax.scatter(x2, f[:,n], c=c2[:,n], cmap=cmap, norm=cnorm,
-                          **kwargs)
+        for i in range(len(x2)):
+            line = ax.scatter(x2[i], np.array(f2[i])[:,n], c=np.array(c2[i])[:,n], cmap=cmap, norm=cnorm,
+                              **kwargs)
 
     # axes formatting
 
