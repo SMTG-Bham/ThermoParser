@@ -528,7 +528,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     index = [0, 0]
     x2, f2, c2 = [], [], []
     for d in pdata['tick_position'][1:]:
-        index[0] = index[1]
+        index[0] = index[1] + 1
         index[1] = next(i[0] for i in enumerate(x) if i[1] == d)
         xtemp = np.linspace(x[index[0]], x[index[1]], interpolate)
         finterp = interp1d(x[index[0]:index[1]], f[index[0]:index[1]], kind='cubic', axis=0, fill_value='extrapolate')
