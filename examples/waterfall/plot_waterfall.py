@@ -28,12 +28,15 @@ dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 
 # Add
 
+tp.plot.frequency.format_waterfall(ax, data, waterfall,
+                                   temperature=temperature,
+                                   direction=direction)
+tp.plot.frequency.add_dos(ax, dos, colours, scale=True, main=False)
 cbar = tp.plot.frequency.add_projected_waterfall(ax, data, waterfall,
                                                  projected, main=True,
                                                  colour=colour,
                                                  temperature=temperature,
                                                  direction=direction)
-tp.plot.frequency.add_dos(ax, dos, colours, scale=True, main=False)
 
 # Save
 
