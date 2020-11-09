@@ -5,7 +5,7 @@ import tp
 
 files = ['../data/band.yaml', '../data/band.yaml']
 
-label = ['1x1x1', '2x2x2']
+label = ['1\ x\ 1\ x\ 1', '2\ x\ 2\ x\ 2']
 legend_title = 'Supercell Size'
 colour = 'winter_r'
 linestyle = ['-', ':']

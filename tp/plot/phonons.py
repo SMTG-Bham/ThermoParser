@@ -36,6 +36,10 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
                    **kwargs):
     """Adds a phonon band structure to a set of axes.
 
+    Labels, colours and linestyles can be given one for the whole
+    dispersion, or one for each band, with the last entry filling all
+    remaining bands.
+
     Arguments:
         ax : axes
             axes to plot on.
@@ -56,7 +60,7 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
         main : bool, optional
             set axis ticks, labels, limits. Default: True.
         label : str, optional
-            legend label. Default: None
+            legend label(s). Default: None
 
         colour : str or array-like, optional
             line colour(s). Note if retrieved from a colourmap or in
@@ -99,19 +103,25 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
     colour = tile_properties(colour, bmin, bmax)
     linestyle = tile_properties(linestyle, bmin, bmax)
 
+    # prevents unintentionally repeated legend entries
+
+    label2 = []
+    if isinstance(label, str):
+        label2.extend(['$\mathregular{{{}}}$'.format(label)])
+    else:
+        try:
+            label = ['$\mathregular{{{}}}$'.format(l) for l in label]
+            label2.extend(label)
+        except Exception:
+            label2.extend([label])
+    label2.append(None)
+    label2 = tile_properties(label2, bmin, bmax)
+
     # plotting
 
-    # ensures only one legend entry
-    bdiff = bmax - bmin
-    if bdiff == 1:
-        ax.plot(data['x'], f, label=label, color=colour[0],
-                linestyle=linestyle[0], **kwargs)
-    else:
-        ax.plot(data['x'], f[:,0], label=label, color=colour[0],
-                linestyle=linestyle[0], **kwargs)
-        for n in range(bdiff):
-            ax.plot(data['x'], f[:,n], color=colour[n], linestyle=linestyle[n],
-                    **kwargs)
+    for n in range(bmax - bmin):
+        ax.plot(data['x'], f[:,n], color=colour[n], linestyle=linestyle[n],
+                label=label2[n], **kwargs)
 
     # axes formatting
 
@@ -219,10 +229,14 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
                        temperature=300, direction='avg', label=['Longitudinal',
                        'Transverse_1', 'Transverse_2', 'Optic'],
                        poscar='POSCAR', main=True, log=False,
-                       interpolate=10000, colour=['#44ffff', '#ff8044',
-                       '#ff4444', '#00000010'], linestyle='-', workers=32,
-                       xmarkkwargs={}, **kwargs):
+                       interpolate=10000, smoothing=5, colour=['#44ffff',
+                       '#ff8044', '#ff4444', '#00000010'], linestyle='-',
+                       workers=32, xmarkkwargs={}, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path.
+
+    Labels, colours and linestyles can be given one for the whole
+    dispersion, or one for each band, with the last entry filling all
+    remaining bands. Requires a POSCAR.
 
     Arguments:
         ax : axes
@@ -271,12 +285,12 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
             log the y scale. Default: False.
         interpolate : int, optional
             number of points per line. Default: 10,000.
+        smoothing : int, optional
+            every n points to sample. Default: 5.
 
         colour : str or array-like, optional
-            line colour(s). If too few colours are selected, the last
-            one is repeated for the rest of the bands. Note if retrieved
-            from a colourmap or in [r,g,b] notation, the colour should
-            be enclosed in [], e.g.
+            line colour(s). Note if retrieved from a colourmap or in
+            [r,g,b] notation, the colour should be enclosed in [], e.g.
             colour = plt.get_cmap('winter_r')(linspace(0, 1, len(files)))
             tp.plot.phonons.add_dispersion(..., colour=[colour[0]], ...)
             Default: ['#44ffff', '#ff8044', '#ff4444', '#00000010'].
@@ -330,8 +344,12 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
     qp = pdata['qpoint']
     x = pdata['x']
 
-    qpi = [qp[i] for i in range(len(qp)) if i % 5 == 0] if len(qp) > 100 else qp
-    xi = [x[i] for i in range(len(x)) if i % 5 == 0] if len(x) > 100 else x
+    if len(x) > 100:
+        xi = [x[i] for i in range(len(x)) if i % smoothing == 0]
+        qpi = [qp[i] for i in range(len(qp)) if i % smoothing == 0]
+    else:
+        xi = x
+        qpi = qp
     if xi[-1] != x[-1]: qpi.append(qp[-1]); xi.append(x[-1])
 
     # map Phono3py to Phonopy
@@ -362,21 +380,25 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
     colour = tile_properties(colour, bmin, bmax)
     linestyle = tile_properties(linestyle, bmin, bmax)
 
+    # prevents unintentionally repeated legend entries
+
+    label2 = []
+    if isinstance(label, str):
+        label2.extend(['$\mathregular{{{}}}$'.format(label)])
+    else:
+        try:
+            label = ['$\mathregular{{{}}}$'.format(l) for l in label]
+            label2.extend(label)
+        except Exception:
+            label2.extend([label])
+    label2.append(None)
+    label2 = tile_properties(label2, bmin, bmax)
+
     # plotting
 
-    # ensures only one legend entry
-    bdiff = bmax - bmin
-    if bdiff == 1:
-        ax.plot(x2, y2, label=label, color=colour[0], linestyle=linestyle[0],
-                **kwargs)
-    else:
-        for i in range(len(label)):
-            ax.plot(x2, y2[:,i], label='$\mathregular{{{}}}$'.format(label[i]),
-                    color=colour[i], linestyle=linestyle[i], **kwargs)
-        if len(label) < bdiff:
-            for n in range(len(label), bdiff):
-                ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
-                        **kwargs)
+    for n in range(bmax - bmin):
+        ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
+                label=label2[n], **kwargs)
 
     # axes formatting
 
@@ -388,14 +410,14 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
 
 def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
                              temperature=300, direction='avg', poscar='POSCAR',
-                             main=True, interpolate=2500, colour='viridis_r',
+                             main=True, interpolate=500, colour='viridis_r',
                              cmin=None, cmax=None, cscale=None,
                              unoccupied='grey', workers=32, xmarkkwargs={},
                              **kwargs):
     """Plots a phonon dispersion with projected colour.
 
     Plots a phonon dispersion, and projects a quantity onto the colour
-    axis.
+    axis. Requires a POSCAR.
 
     Arguments:
         ax : axes
@@ -437,7 +459,8 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
         main : bool, optional
             set axis ticks, label, limits. Default: True.
         interpolate : int, optional
-            number of points per line. Default: 2,500.
+            number of points per path (e.g. gamma -> X) per line.
+            Default: 500.
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis_r.
@@ -477,6 +500,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
     import pymatgen.symmetry.analyzer as pmg
+    from copy import copy
     from scipy.interpolate import interp1d
 
     # defaults
@@ -517,32 +541,42 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     geq = partial(get_equivalent_qpoint, np.array(qk), symops)
     with Pool(processes=workers) as pool:
         min_id = pool.map(geq, qp)
-    c2 = c[min_id, :]
+    c = c[min_id, :]
 
     x, indices = np.unique(x, return_index=True)
     f = np.array(f)[indices]
-    c2 = np.array(c2)[indices]
+    c = np.array(c)[indices]
 
     # interpolate
 
-    x2 = np.linspace(min(x), max(x), interpolate)
-    finterp = interp1d(x, f, kind='cubic', axis=0)
-    f = finterp(x2)
+    index = [0, 0]
+    x2, f2, c2 = [], [], []
+    for d in pdata['tick_position'][1:]:
+        index[0] = index[1] + 1
+        index[1] = next(i[0] for i in enumerate(x) if i[1] == d)
+        xtemp = np.linspace(x[index[0]], x[index[1]], interpolate)
+        finterp = interp1d(x[index[0]:index[1]], f[index[0]:index[1]],
+                           kind='cubic', axis=0, fill_value='extrapolate')
+        x2.append(xtemp)
+        f2.append(finterp(xtemp))
 
-    cinterp = interp1d(x, c2, kind='cubic', axis=0)
-    c2 = np.abs(cinterp(x2))
+        cinterp = interp1d(x[index[0]:index[1]], c[index[0]:index[1]],
+                           kind='cubic', axis=0, fill_value='extrapolate')
+        c2.append(np.abs(cinterp(xtemp)))
+
     if isinstance(colour, str):
-        cmap = plt.cm.get_cmap(colour)
+        cmap = copy(plt.cm.get_cmap(colour))
     else:
-        cmap = colour
+        cmap = copy(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c2, quantity, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
     # plotting
 
     for n in range(bdiff):
-        line = ax.scatter(x2, f[:,n], c=c2[:,n], cmap=cmap, norm=cnorm,
-                          **kwargs)
+        for i in range(len(x2)):
+            line = ax.scatter(x2[i], np.array(f2[i])[:,n], c=np.array(c2[i])[:,n], cmap=cmap, norm=cnorm,
+                              **kwargs)
 
     # axes formatting
 
@@ -563,15 +597,15 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  temperature=300, direction='avg',
                                  poscar='POSCAR', main=True, log=False,
-                                 interpolate=10000, colour='viridis',
-                                 cmin=None, cmax=None, cscale=None,
-                                 unoccupied='grey', workers=32, xmarkkwargs={},
-                                 **kwargs):
+                                 interpolate=10000, smoothing=10,
+                                 colour='viridis', cmin=None, cmax=None,
+                                 cscale=None, unoccupied='grey', workers=32,
+                                 xmarkkwargs={}, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path and projection.
 
     Just because you can, doesn't mean you should. A maxim I may fail to
     live up to, so I leave it to you, dear reader, to decide for
-    yourself.
+    yourself. Requires a POSCAR.
 
     Arguments:
         ax : axes
@@ -614,6 +648,8 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
             log the y scale. Default: False.
         interpolate : int, optional
             number of points per line. Default: 10,000.
+        smoothing : int, optional
+            every n points to sample. Default: 10.
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis.
@@ -653,6 +689,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
     import pymatgen.symmetry.analyzer as pmg
+    from copy import copy
     from scipy.interpolate import interp1d
 
     # defaults
@@ -694,8 +731,12 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     x, indices = np.unique(x, return_index=True)
     y2 = np.array(y2)[indices]
     c2 = np.array(c2)[indices]
-    xi = [x[i] for i in range(len(x)) if i % 10 == 0] if len(x) > 100 else x
-    y2 = [y2[i] for i in range(len(y2)) if i % 10 == 0] if len(y2) > 100 else y2
+    if len(x) > 100:
+        xi = [x[i] for i in range(len(x)) if i % smoothing == 0]
+        y2 = [y2[i] for i in range(len(y2)) if i % smoothing == 0]
+    else:
+        xi = x
+        y2 = y2
     if xi[-1] != x[-1]: y2.append(y2[-1]); xi.append(x[-1])
 
     # interpolate
@@ -711,9 +752,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     cinterp = interp1d(x, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
     if isinstance(colour, str):
-        cmap = plt.cm.get_cmap(colour)
+        cmap = copy(plt.cm.get_cmap(colour))
     else:
-        cmap = colour
+        cmap = copy(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c2, projected, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -739,11 +780,14 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     return cbar
 
 def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
-                 interpolate=5, colour='viridis', workers=32, xmarkkwargs={},
+                 smoothing=5, colour='viridis', workers=32, xmarkkwargs={},
                  **kwargs):
     """Plots a phonon dispersion with broadened bands.
 
+    Requires a POSCAR.
+
     Arguments:
+
         ax : axes
             axes to plot on.
         data : dict
@@ -775,7 +819,7 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
         main : bool, optional
             set axis ticks, label, limits. Default: True.
-        interpolate : int, optional
+        smoothing : int, optional
             every n points to sample. Default: 5.
 
         colour : colormap or str, optional
@@ -828,8 +872,8 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
     qp = pdata['qpoint']
     x = pdata['x']
 
-    qpi = [qp[i] for i in range(len(qp)) if i % interpolate == 0]
-    xi = [x[i] for i in range(len(x)) if i % interpolate == 0]
+    qpi = [qp[i] for i in range(len(qp)) if i % smoothing == 0]
+    xi = [x[i] for i in range(len(x)) if i % smoothing == 0]
     if xi[-1] != x[-1]: qpi.append(qp[-1]); xi.append(x[-1])
 
     # map Phono3py to Phonopy
@@ -1005,7 +1049,10 @@ def tile_properties(properties, bmin, bmax):
     elif len(properties) == bdiff:
         tiled = properties
     elif len(properties) > bdiff:
-        tiled = properties[bmin:bmax]
+        if len(properties) < bmax:
+            tiled = properties[bmin:bmax]
+        else:
+            tiled = properties[:bdiff]
     elif len(properties) < bdiff:
         tiled = list(properties)
         while len(tiled) < bdiff:

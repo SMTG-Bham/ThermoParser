@@ -350,8 +350,13 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # axes formatting
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity,
-                         invert=invert)
+        format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        if invert:
+            axlabels = tp.settings.inverted_labels()
+        else:
+            axlabels = tp.settings.labels()
+        ax.set_xlabel(axlabels[xquantity])
+        ax.set_ylabel(axlabels[quantity])
 
     return
 
@@ -418,6 +423,8 @@ def add_projected_waterfall(ax, data, quantity, projected,
             colourbar for projected data.
     """
 
+    from copy import copy
+
     # defaults
 
     defkwargs = {'alpha':      0.3,
@@ -446,10 +453,10 @@ def add_projected_waterfall(ax, data, quantity, projected,
     # colour
 
     try:
-        cmap = mpl.cm.get_cmap(colour)
+        cmap = copy(mpl.cm.get_cmap(colour))
     except Exception:
         if isinstance(colour, mpl.colors.ListedColormap):
-            cmap = colour
+            cmap = copy(colour)
         elif isinstance(colour, str) and colour == 'skelton':
             cmap = tp.plot.colour.skelton()
         else:
@@ -472,47 +479,63 @@ def add_projected_waterfall(ax, data, quantity, projected,
     cbar.draw_all()
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, xquantity, quantity,
-                         invert=invert)
+        format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        if invert:
+            axlabels = tp.settings.inverted_labels()
+        else:
+            axlabels = tp.settings.labels()
+        ax.set_xlabel(axlabels[xquantity])
+        ax.set_ylabel(axlabels[quantity])
 
     return cbar
 
-def format_waterfall(ax, data, xquantity, yquantity, invert=False):
-    """Formats axes for waterfall plots
+def format_waterfall(ax, data, yquantity, xquantity='frequency',
+                     temperature=None, direction=None):
+    """Formats axes for waterfall plots.
 
     Arguments:
         ax : axes
             axes to format.
         data : array-like
             data.
-        xquantity : str
-            x quantity name.
         yquantity : str
             y quantity name.
 
-        invert : bool, optional
-            use inverted labels. Default: False.
+        xquantity : str, optional
+            x quantity name. Default: frequency.
+        temperature : float, optional
+            temperature in K. Default: 300.
+        direction : str, optional
+            direction from anisotropic data, accepts x-z/ a-c or
+            average/ avg. Default: average.
     """
 
-    axes =  {'x': ax.xaxis,      'y': ax.yaxis}
-    label = {'x': ax.set_xlabel, 'y': ax.set_ylabel}
+    data = tp.data.resolve.resolve(data, [xquantity, yquantity], temperature,
+                                   direction)
+    data2 = {'x': np.ravel(data[xquantity]), 'y': np.ravel(data[yquantity])}
+
     limit = {'x': ax.set_xlim,   'y': ax.set_ylim}
     scale = {'x': ax.set_xscale, 'y': ax.set_yscale}
     loc = {}
+    lim = {}
 
-    axlabels = tp.settings.inverted_labels() if invert else tp.settings.labels()
     for axis, quantity in zip(['x', 'y'], [xquantity, yquantity]):
-        label[axis](axlabels[quantity])
         if quantity in ['frequency', 'heat_capacity']:
-            limit[axis](np.amin(data[quantity]), np.amax(data[quantity]))
+            lim[axis] = [np.amin(data2[axis]), np.amax(data2[axis])]
+            limit[axis](lim[axis][0], lim[axis][1])
             loc[axis] = 'linear'
         else:
+            data2[axis] = np.abs(data2[axis])
             sort = np.ma.masked_invalid(np.ma.masked_equal(
-                                        data[quantity], 0)).compressed()
+                                        data2[axis], 0)).compressed()
             sort = sort[sort.argsort()]
-            limit[axis](sort[int(round(len(sort)/100, 0))],
-                        sort[int(round(len(sort)*99.9/100, 0))])
+            lim[axis] = [sort[int(round(len(sort)/100, 0))],
+                         sort[int(round(len(sort)*99.9/100, 0))]]
+            limit[axis](lim[axis][0], lim[axis][1])
             loc[axis] = 'log'
+
+    # dummy data to enable axis formatting before plotting
+    ax.plot(lim['x'], lim['y'], alpha=0)
     tp.plot.utilities.set_locators(ax, x=loc['x'], y=loc['y'])
 
     return

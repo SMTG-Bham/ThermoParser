@@ -59,7 +59,7 @@ def resolve(data, quantities, temperature=None, direction=None):
     # temperature resolution
 
     if temperature is not None and 'temperature' in data:
-        ti = np.abs(np.subtract(data['temperature'][:], temperature)).argmin()
+        ti = np.abs(np.array(data['temperature']) - temperature).argmin()
         data['meta']['temperature'] = data['temperature'][ti]
 
         iso['average_eff_mass'] = aniso.matrix_two
