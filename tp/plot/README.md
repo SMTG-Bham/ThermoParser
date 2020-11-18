@@ -1,4 +1,4 @@
-Please see the (examples)[https://github.com/kbspooner/ThermoPlotter/tree/master/examples].
+Please see the [examples](https://github.com/kbspooner/ThermoPlotter/tree/master/examples).
 
 ## `axes.py`
 
