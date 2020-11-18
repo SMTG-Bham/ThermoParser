@@ -1,10 +1,8 @@
-"""Tests the tp.data.resolve module
+"""Tests the tp.data.resolve module.
 
 This module tests whether the resolve function resolves the correct
 array depth and temperature. For tests on the direction, see
 test_data/test_aniso.
-Failures in tp.data.aniso can cause knock-on effects here.
-Failures here can cause knock on effect in tp.plot modules.
 """
 
 import unittest

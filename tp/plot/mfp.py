@@ -17,9 +17,10 @@ import warnings
 from tp.data import resolve
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
-                  xmarkers=None, ymarkers=None, legend='\kappa_l', main=True,
-                  scale=False, colour='#000000', fill=False, fillcolour=20,
-                  line=True, markerkwargs={}, **kwargs):
+                  xmarkers=None, ymarkers=None, add_xticks=False,
+                  add_yticks=False, legend='\kappa_l', main=True, scale=False,
+                  colour='#000000', fill=False, fillcolour=20, line=True,
+                  markerkwargs={}, **kwargs):
     """Cumulates and plots kappa against mean free path.
 
     Arguments:
@@ -47,6 +48,12 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             mark kappa at certain mean free paths.
         ymarkers : array-like, optional
             mark mean free path at certain kappas.
+        add_xticks : bool, optional
+            add x_ticks for each marker. Doesn't work on log axes.
+            Default: False.
+        add_yticks : bool, optional
+            add y_ticks for each marker. Doesn't work on log axes.
+            Default: False.
 
         main : bool, optional
             set ticks, labels, limits. Default: True.
@@ -95,7 +102,8 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     mfp = np.abs(np.ravel(data['mean_free_path']))
 
     mfp, k = cumulate(mfp, k)
-    np.savetxt('cumkappa-mfp-{:.0f}K-{}.dat'.format(temperature, direction),
+    np.savetxt('cumkappa-mfp-{:.0f}K-{}.dat'.format(
+               data['meta']['temperature'], direction),
                np.transpose([mfp, k]), header='mfp(m) k_l(Wm-1K-1)')
     mfp = np.append(mfp, 100*mfp[-1])
     k = np.append(k, k[-1])
@@ -104,7 +112,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     if scale:
         axscale = [0, 100] if main else None
-        k, _ = tp.plot.frequency.scale_to_axis(ax, k, scale=axscale)
+        k, _ = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale)
 
     # colour
 
@@ -142,11 +150,13 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         tp.plot.utilities.set_locators(ax, x='log', y='linear')
 
     if xmarkers is not None or ymarkers is not None:
-        add_markers(ax, mfp, k, xmarkers, ymarkers, **markerkwargs)
+        add_markers(ax, mfp, k, xmarkers, ymarkers, add_xticks, add_yticks,
+                    **markerkwargs)
 
     return
 
-def add_markers(ax, x, y, xmarkers=None, ymarkers=None, **kwargs):
+def add_markers(ax, x, y, xmarkers=None, ymarkers=None, add_xticks=False,
+                add_yticks=False, **kwargs):
     """Adds marker lines linking a linear plot to the axes.
 
     Args:
@@ -156,10 +166,17 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, **kwargs):
             x data.
         y : array-like
             y data.
-        xmarkers : array-like, optional
+
+        xmarkers : array-like, int or float, optional
             where on the x axis to mark.
-        ymarkers : array-like, optional
+        ymarkers : array-like, int or float, optional
             where on the y axis to mark.
+        add_xticks : bool, optional
+            add x_ticks for each marker. Doesn't work on log axes.
+            Default: False.
+        add_yticks : bool, optional
+            add y_ticks for each marker. Doesn't work on log axes.
+            Default: False.
 
         **kwargs : dict, optional
             keyword arguments passed to matplotlib.pyplot.plot.
@@ -183,34 +200,36 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, **kwargs):
 
     xlim = ax.get_xlim()
     ylim = ax.get_ylim()
-    #xticks = list(ax.get_xticks())
-    #yticks = list(ax.get_yticks())
+    xticks = ax.get_xticks()
+    yticks = ax.get_yticks()
 
     # plot x
 
     if xmarkers is not None:
+        if isinstance(xmarkers, (int, float)): xmarkers = [xmarkers]
         yinter = interp1d(x, y)
         xmarky = yinter(xmarkers)
         for m in range(len(xmarkers)):
-            ax.plot([xmarkers[m], xmarkers[m], -1e100],
-                    [-1e100,      xmarky[m],   xmarky[m]], **kwargs)
-        #xticks = np.append(xticks, xmarkers)
-        #yticks = np.append(yticks, xmarky)
+            ax.plot([xmarkers[m], xmarkers[m], 0],
+                    [0,           xmarky[m],   xmarky[m]], **kwargs)
+        xticks = np.append(xticks, xmarkers)
+        yticks = np.append(yticks, xmarky)
 
     # plot y
 
     if ymarkers is not None:
+        if isinstance(ymarkers, (int, float)): ymarkers = [ymarkers]
         xinter = interp1d(y, x)
-        ymarkx = yinter(ymarkers)
+        ymarkx = xinter(ymarkers)
         for m in range(len(ymarkers)):
-            ax.axvline(ymarkers[m], ymax=ymarkx[m], c='black')
-            ax.axhline(ymarkx[m], xmax=ymarkers[m], c='black')
-        #yticks = np.append(yticks, ymarkers)
-        #xticks = np.append(xticks, ymarkx)
+            ax.plot([ymarkx[m], ymarkx[m],   0],
+                    [0,         ymarkers[m], ymarkers[m]], **kwargs)
+        yticks = np.append(yticks, ymarkers)
+        xticks = np.append(xticks, ymarkx)
 
-    #ax.set_xticks(xticks)
-    #ax.set_yticks(yticks)
-    #ax.set_xlim(xlim)
-    #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f'))
+    if add_xticks:
+        ax.set_xticks(xticks)
+    if add_yticks:
+        ax.set_yticks(yticks)
 
     return

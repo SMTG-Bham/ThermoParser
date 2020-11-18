@@ -6,9 +6,9 @@
 | |   |                           :|   \ |           |     |             /
 | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
 | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
-| |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_
-| |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    : \
-|_________________________________:______________________________________:_/
+| |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
+| |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.2.0\
+|_________________________________:______________________________________:_____/
 ```
 
 ThermoPlotter is a toolkit for quickly, easily and prettily plotting the
@@ -27,6 +27,15 @@ ThermoPlotter can easily be installed with git and pip:
 git clone https://github.com/kbspooner/ThermoPlotter
 cd ThermoPlotter
 python3 -m pip install --user -e .
+```
+
+As it is designed to be customisable, when upgrading you may want to
+preserve your changes:
+
+```bash
+git stash
+git pull
+git stash apply
 ```
 
 ## Usage
@@ -85,6 +94,15 @@ Adding options is inteded to be straightforward, for example adding a
 new axes layout should be as simple as copying another function in
 `tp.plt.axes` and altering the numbers; and adding support for a new
 code should only require adding a function in the `tp.data.load` module.
+We would of course be happy to discuss, if desired.
+
+Bugs and feature requests can be submitted to the [issue tracker](https://github.com/kbspooner/ThermoPlotter/issues),
+while contributions can be made using the [fork and pull](https://guides.github.com/activities/forking)
+approach.
+Contributions should have comprehensive docstrings, and where
+appropriate [examples](https://github.com/kbspooner/ThermoPlotter/tree/master/examples),
+documentation and [tests](https://github.com/kbspooner/ThermoPlotter/tree/master/tests)
+are greatly appreciated.
 
 ## License
 

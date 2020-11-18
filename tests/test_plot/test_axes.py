@@ -1,13 +1,10 @@
-"""Tests tp.plot.axes functions
-
-Failures here can have knock on effects on tp.plot modules.
-"""
+"""Tests tp.plot.axes functions."""
 
 import unittest
 from matplotlib import pyplot as plt
 from tp.plot import axes
 
-class AxesTestCase(unittest.TestCase):
+class AxesTest(unittest.TestCase):
     def test_fig(self):
         for name, func in axes.__dict__.items():
             if name in axes.__dir__():

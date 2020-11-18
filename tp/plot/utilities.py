@@ -1,4 +1,4 @@
-"""Utilities to aid the plotting scripts
+"""Utilities to aid the plotting scripts.
 
 Functions:
     colour_scale:

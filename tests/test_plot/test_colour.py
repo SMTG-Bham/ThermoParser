@@ -1,4 +1,4 @@
-"""Tests the tp.plot.colour module"""
+"""Tests the tp.plot.colour module."""
 
 import unittest
 from tp.plot import colour

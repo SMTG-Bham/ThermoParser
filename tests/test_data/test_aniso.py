@@ -1,8 +1,4 @@
-"""Tests the tp.data.aniso module
-
-Failures here can have knock-on effects in tp.data.resolve and tp.plot
-modules.
-"""
+"""Tests the tp.data.aniso module."""
 
 import unittest
 from tp.data import aniso

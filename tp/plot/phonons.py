@@ -10,7 +10,7 @@ Functions:
     add_projected_dispersion:
         phonon dispersion with phono3py quantity on colour axis.
     add_alt_projected_dispersion:
-        alt_dispersion + projection
+        alt_dispersion + projection.
     add_wideband:
         phonon dispersion broadened according to scattering.
 
@@ -20,7 +20,7 @@ Functions:
     formatting:
         formatting axes.
     tile_properties:
-        tiling properties intelligently.
+        tiling properties semi-intelligently.
 """
 
 import matplotlib as mpl
@@ -31,7 +31,7 @@ import tp
 import warnings
 warnings.filterwarnings('ignore', module='matplotlib')
 
-def add_dispersion(ax, data, bandrange=None, main=True, label=None,
+def add_dispersion(ax, data, bandmin=None, bandmax=None, main=True, label=None,
                    colour='#800080', linestyle='solid', xmarkkwargs={},
                    **kwargs):
     """Adds a phonon band structure to a set of axes.
@@ -54,8 +54,10 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
                 tick_label : array-like
                     x-tick labels.
 
-        bandrange : array-like, optional
-            minumum and maximum band indices to plot. Default: None.
+        bandmin : int, optional
+            Zero-indexed minimum band index to plot. Default: 0.
+        bandmax : int, optional
+            Zero-indexed maximum band index to plot. Default: max index.
 
         main : bool, optional
             set axis ticks, labels, limits. Default: True.
@@ -91,17 +93,20 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
 
     # data selection
 
-    if bandrange is None:
-        bmin = 0; bmax = len(data['frequency'][0])
+    if bandmin is None:
+        bandmin = 0
     else:
-        bmin = np.amax([0, bandrange[0]])
-        bmax = np.amin([len(data['frequency'][0]), bandrange[1]])
-    f = np.array(data['frequency'])[:,bmin:bmax]
+        bandmin = np.amax([0, bandmin])
+    if bandmax is None:
+        bandmax = len(data['frequency'][0])
+    else:
+        bandmax = np.amin([len(data['frequency'][0]), bandmax])
+    f = np.array(data['frequency'])[:,bandmin:bandmax]
 
     # line appearance
 
-    colour = tile_properties(colour, bmin, bmax)
-    linestyle = tile_properties(linestyle, bmin, bmax)
+    colour = tile_properties(colour, bandmin, bandmax)
+    linestyle = tile_properties(linestyle, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
 
@@ -115,11 +120,11 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
         except Exception:
             label2.extend([label])
     label2.append(None)
-    label2 = tile_properties(label2, bmin, bmax)
+    label2 = tile_properties(label2, bandmin, bandmax)
 
     # plotting
 
-    for n in range(bmax - bmin):
+    for n in range(len(f[0])):
         ax.plot(data['x'], f[:,n], color=colour[n], linestyle=linestyle[n],
                 label=label2[n], **kwargs)
 
@@ -132,7 +137,7 @@ def add_dispersion(ax, data, bandrange=None, main=True, label=None,
 
     return
 
-def add_multi(ax, data, bandrange=None, main=True, label=None,
+def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
               colour='winter_r', linestyle='solid', xmarkkwargs={}, **kwargs):
     """Adds multiple phonon band structures to a set of axes.
 
@@ -152,8 +157,10 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
                 tick_label : array-like
                     x-tick labels.
 
-        bandrange : array-like, optional
-            minumum and maximum band indices to plot. Default: None.
+        bandmin : int, optional
+            Zero-indexed minimum band index to plot. Default: 0.
+        bandmax : int, optional
+            Zero-indexed maximum band index to plot. Default: max index.
 
         main : bool, optional
             set axis ticks, labels, limits. Default: True.
@@ -211,21 +218,32 @@ def add_multi(ax, data, bandrange=None, main=True, label=None,
     # plotting
 
     for i in range(len(data)):
-        add_dispersion(ax, data[i], bandrange=bandrange, main=False,
-                       label=label[i], colour=colours[i],
+        add_dispersion(ax, data[i], bandmin=bandmin, bandmax=bandmax,
+                       main=False, label=label[i], colour=colours[i],
                        linestyle=linestyle[i], **kwargs)
 
     # axes formatting
 
     if main:
+        if bandmin is None:
+            bandmin = 0
+        else:
+            bandmin = np.amax([0, bandmin])
+        if bandmax is None:
+            bandmax = len(data[0]['frequency'][0])
+        else:
+            bandmax = np.amin([len(data[0]['frequency'][0]), bandmax])
+
         f = [d['frequency'] for d in data]
+        f = np.array(f)[:,:,bandmin:bandmax]
+
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
         formatting(ax, data[0], 'frequency', **xmarkkwargs)
 
     return
 
-def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
+def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
                        temperature=300, direction='avg', label=['Longitudinal',
                        'Transverse_1', 'Transverse_2', 'Optic'],
                        poscar='POSCAR', main=True, log=False,
@@ -262,8 +280,10 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
         quantity : str
             quantity to plot.
 
-        bandrange : array-like, optional
-            minumum and maximum band indices to plot. Default: None.
+        bandmin : int, optional
+            Zero-indexed minimum band index to plot. Default: 0.
+        bandmax : int, optional
+            Zero-indexed maximum band index to plot. Default: max index.
         temperature : float, optional
             approximate temperature in K (finds closest). Default: 300.
         direction : str, optional
@@ -331,12 +351,15 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
     if quantity in tnames: quantity = tnames[quantity]
     data = tp.data.resolve.resolve(data, quantity, temperature, direction)
     y = data[quantity]
-    if bandrange is None:
-        bmin = 0; bmax = len(y[0])
+    if bandmin is None:
+        bandmin = 0
     else:
-        bmin = np.amax([0, bandrange[0]])
-        bmax = np.amin([len(y[0]), bandrange[1]])
-    y = np.array(y)[:,bmin:bmax]
+        bandmin = np.amax([0, bandmin])
+    if bandmax is None:
+        bandmax = len(y[0])
+    else:
+        bandmax = np.amin([len(y[0]), bandmax])
+    y = np.array(y)[:,bandmin:bandmax]
     qk = data['qpoint']
 
     # Phonopy data formatting
@@ -377,8 +400,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
 
     # line appearance
 
-    colour = tile_properties(colour, bmin, bmax)
-    linestyle = tile_properties(linestyle, bmin, bmax)
+    colour = tile_properties(colour, bandmin, bandmax)
+    linestyle = tile_properties(linestyle, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
 
@@ -392,11 +415,11 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
         except Exception:
             label2.extend([label])
     label2.append(None)
-    label2 = tile_properties(label2, bmin, bmax)
+    label2 = tile_properties(label2, bandmin, bandmax)
 
     # plotting
 
-    for n in range(bmax - bmin):
+    for n in range(len(y2[0])):
         ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
                 label=label2[n], **kwargs)
 
@@ -408,12 +431,12 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandrange=None,
 
     return
 
-def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
-                             temperature=300, direction='avg', poscar='POSCAR',
-                             main=True, interpolate=500, colour='viridis_r',
-                             cmin=None, cmax=None, cscale=None,
-                             unoccupied='grey', workers=32, xmarkkwargs={},
-                             **kwargs):
+def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
+                             bandmax=None, temperature=300, direction='avg',
+                             poscar='POSCAR', main=True, interpolate=500,
+                             colour='viridis_r', cmin=None, cmax=None,
+                             cscale=None, unoccupied='grey', workers=32,
+                             xmarkkwargs={}, **kwargs):
     """Plots a phonon dispersion with projected colour.
 
     Plots a phonon dispersion, and projects a quantity onto the colour
@@ -445,8 +468,10 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
         quantity : str
             quantity to project.
 
-        bandrange : array-like, optional
-            minumum and maximum band indices to plot. Default: None.
+        bandmin : int, optional
+            Zero-indexed minimum band index to plot. Default: 0.
+        bandmax : int, optional
+            Zero-indexed maximum band index to plot. Default: max index.
         temperature : float, optional
             approximate temperature in K (finds closest). Default: 300.
         direction : str, optional
@@ -518,20 +543,22 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     quantity = tnames[quantity] if quantity in tnames else quantity
     data = tp.data.resolve.resolve(data, quantity, temperature, direction)
     c = data[quantity]
-    if bandrange is None:
-        bmin = 0; bmax = len(c[0])
+    if bandmin is None:
+        bandmin = 0
     else:
-        bmin = np.amax([0, bandrange[0]])
-        bmax = np.amin([len(c[0]), bandrange[1]])
-    bdiff = bmax - bmin
-    c = np.array(c)[:, bmin:bmax]
+        bandmin = np.amax([0, bandmin])
+    if bandmax is None:
+        bandmax = len(c[0])
+    else:
+        bandmax = np.amin([len(c[0]), bandmax])
+    c = np.array(c)[:, bandmin:bandmax]
     qk = data['qpoint']
 
     # Phonopy data formatting
 
     qp = pdata['qpoint']
     x = pdata['x']
-    f = np.array(pdata['frequency'])[:, bmin:bmax]
+    f = np.array(pdata['frequency'])[:, bandmin:bandmax]
 
     # map Phono3py to Phonopy
 
@@ -573,7 +600,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
 
     # plotting
 
-    for n in range(bdiff):
+    for n in range(len(f2[0][0])):
         for i in range(len(x2)):
             line = ax.scatter(x2[i], np.array(f2[i])[:,n], c=np.array(c2[i])[:,n], cmap=cmap, norm=cnorm,
                               **kwargs)
@@ -595,9 +622,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandrange=None,
     return cbar
 
 def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
-                                 temperature=300, direction='avg',
-                                 poscar='POSCAR', main=True, log=False,
-                                 interpolate=10000, smoothing=10,
+                                 bandmin=None, bandmax=None, temperature=300,
+                                 direction='avg', poscar='POSCAR', main=True,
+                                 log=False, interpolate=10000, smoothing=10,
                                  colour='viridis', cmin=None, cmax=None,
                                  cscale=None, unoccupied='grey', workers=32,
                                  xmarkkwargs={}, **kwargs):
@@ -633,6 +660,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
         projected: str
             quantity to project.
 
+        bandmin : int, optional
+            Zero-indexed minimum band index to plot. Default: 0.
+        bandmax : int, optional
+            Zero-indexed maximum band index to plot. Default: max index.
         temperature : float, optional
             approximate temperature in K (finds closest). Default: 300.
         direction : str, optional
@@ -710,6 +741,16 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     data = tp.data.resolve.resolve(data, qs, temperature, direction)
     y = data[quantity]
     c = data[projected]
+    if bandmin is None:
+        bandmin = 0
+    else:
+        bandmin = np.amax([0, bandmin])
+    if bandmax is None:
+        bandmax = len(y[0])
+    else:
+        bandmax = np.amin([len(y[0]), bandmax])
+    y = np.array(y)[:, bandmin:bandmax]
+    c = np.array(c)[:, bandmin:bandmax]
     qk = data['qpoint']
 
     # Phonopy data formatting
@@ -929,11 +970,11 @@ def get_equivalent_qpoint(qk, symops, qp, tol=1e-2):
 
     Arguments:
         qk : array-like
-            qpoint from the phono3py kappa file.
+            all qpoints from the phono3py kappa file.
         symmops
             symmetry operations (e.g. from Pymatgen)
         qp : array-like
-            qpoint from the phonon dispersion.
+            single qpoint from the phonon dispersion.
 
         tol : float, optional
             tolerance. Default: 1e-2.
@@ -1022,7 +1063,7 @@ def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
 
     return
 
-def tile_properties(properties, bmin, bmax):
+def tile_properties(properties, bandmin, bandmax):
     """Tiles properties for dispersion and alt_dispersion
 
     Allows for different colour formats and fills out arrays with the
@@ -1031,9 +1072,9 @@ def tile_properties(properties, bmin, bmax):
     Arguments:
         property : array-like or str
             array or string to tile.
-        bmin : int
+        bandmin : int
             minimum band.
-        bmax : int
+        bandmax : int
             maximum band.
 
     Returns:
@@ -1041,7 +1082,7 @@ def tile_properties(properties, bmin, bmax):
             array.
     """
 
-    bdiff = bmax - bmin
+    bdiff = bandmax - bandmin
     if isinstance(properties, str):
         tiled = np.repeat(properties, bdiff)
     elif len(properties) == 1:
@@ -1049,8 +1090,8 @@ def tile_properties(properties, bmin, bmax):
     elif len(properties) == bdiff:
         tiled = properties
     elif len(properties) > bdiff:
-        if len(properties) < bmax:
-            tiled = properties[bmin:bmax]
+        if len(properties) >= bandmax:
+            tiled = properties[bandmin:bandmax]
         else:
             tiled = properties[:bdiff]
     elif len(properties) < bdiff:

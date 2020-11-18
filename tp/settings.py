@@ -1,6 +1,9 @@
-"""Settings for appearance, naming, units and labels.
+"""Settings and defaults.
 
-Also adds abbreviations. In future may have to split up conversions.
+This module is envisioned as the primary place one would go to customise
+tp. It sets out the default style sheet, tick locators and axis labels;
+as well as providing a means to automatically convert the units
+presented and add abbreviations that can be used when loading data.
 
 Functions:
     style:
@@ -18,13 +21,14 @@ Functions:
         convert names to phono3py conventions.
 
     amset_conversions:
-        unit conversions (see tp.data.load).
+        unit conversions.
     boltztrap_conversions:
-        unit conversions (see tp.data.load).
+        unit conversions.
     phonopy_conversions:
-        unit conversions (see tp.data.load).
+        unit conversions.
     phono3py_conversions:
-        unit conversions (see tp.data.load).
+        unit conversions.
+
     units:
         default units used.
     labels:
@@ -38,24 +42,32 @@ Functions:
 """
 
 def __dir__():
-    names = ['locator',
-             'to_tp',
-             'to_amset',
-             'to_boltztrap',
-             'to_phono3py',
+   """It's a bit of a hack."""
 
-             'conversions',
-             'units',
-             'labels']
+   names = ['locator',
+            'to_tp',
+            'to_amset',
+            'to_boltztrap',
+            'to_phono3py',
 
-    return names
+            'amset_conversions',
+            'boltztrap_conversions',
+            'phonopy_conversions',
+            'phono3py_conversions',
+            'units',
+            'labels',
+            'inverted_labels',
+            'long_labels',
+            'short_labels']
+
+   return names
 
 def style():
     """Get default style sheet."""
     return 'tp'
 
 def locator():
-    """Get default locators"""
+    """Get default locators."""
 
     import matplotlib.ticker as ticker
 
@@ -109,7 +121,7 @@ def to_boltztrap():
     return names
 
 def to_phono3py():
-    """Get dictionary to convert to phono3py variable names."""
+    """Get dictionary to convert to phono3py."""
 
     names = {'gv':                           'group_velocity',
              'kappal':                       'kappa',
@@ -122,28 +134,46 @@ def to_phono3py():
     return names
 
 def amset_conversions():
-    """Get dictionary of unit conversions for phonopy."""
+    """Get dictionary of unit conversions for amset.
+
+    If modified, you will probably want to change tp.settings.units,
+    tp.settings.long_labels, tp.settings.short_labels and maybe
+    tp.settings.boltztrap_conversions.
+    """
 
     conversions = {}
 
     return conversions
 
 def boltztrap_conversions():
-    """Get dictionary of unit conversions for phonopy."""
+    """Get dictionary of unit conversions for boltztrap.
+
+    If modified, you will probably want to change tp.settings.units,
+    tp.settings.long_labels, tp.settings.short_labels and maybe
+    tp.settings.amset_conversions.
+    """
 
     conversions = {}
 
     return conversions
 
 def phonopy_conversions():
-    """Get dictionary of unit conversions for phonopy."""
+    """Get dictionary of unit conversions for phonopy.
 
-    conversions = {'power_factor': 1e-6} # muW m-1 K-2 to W m-1 K-2
+    If modified, you will probably want to change tp.settings.units,
+    tp.settings.long_labels and tp.settings.short_labels.
+    """
+
+    conversions = {}
 
     return conversions
 
 def phono3py_conversions():
-    """Get dictionary of unit conversions for phono3py."""
+    """Get dictionary of unit conversions for phono3py.
+
+    If modified, you will probably want to change tp.settings.units,
+    tp.settings.long_labels and tp.settings.short_labels.
+    """
 
     conversions = {'group_velocity': 1e2,         # THz AA to m s-1
                    'gv_by_gv':       1e4,         # THz2 AA2 to m2 s-2
@@ -154,7 +184,7 @@ def phono3py_conversions():
     return conversions
 
 def units():
-    """Get dictionary of units of quantities used in tp"""
+    """Get dictionary of units of quantities used in tp."""
 
     units = {'average_eff_mass':                'm_e',
              'chemical_potential':              'eV',
@@ -188,15 +218,15 @@ def units():
     return units
 
 def labels():
-    """Get the default labels for use in tp"""
+    """Get the default labels for use in tp."""
     return long_labels()
 
 def inverted_labels():
-    """Get the default labels for inverted axes in tp"""
+    """Get the default labels for inverted axes in tp."""
     return short_labels()
 
 def long_labels():
-    """Get a dictionary of long-form axis labels"""
+    """Get a dictionary of long-form axis labels."""
 
     labels = {'chemical_potential':
                   'Chemical Potential (eV)',
@@ -258,7 +288,7 @@ def long_labels():
     return labels
 
 def short_labels():
-    """Get dictionary of short-form axis labels"""
+    """Get dictionary of short-form axis labels."""
 
     labels = {'chemical_potential':
                   '$\mathregular{\mu}$ (eV)',

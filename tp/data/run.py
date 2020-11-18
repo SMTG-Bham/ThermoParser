@@ -52,7 +52,6 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
 
     import h5py
     import os
-    from multiprocessing import Pool
     from pymatgen.electronic_structure.boltztrap import BoltztrapRunner, BoltztrapAnalyzer
     from pymatgen.io.vasp.outputs import Vasprun
     from scipy import constants

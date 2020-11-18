@@ -1,4 +1,4 @@
-"""Tests the tp.settings module"""
+"""Tests the tp.settings module."""
 
 import unittest
 from tp import settings

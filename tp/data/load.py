@@ -80,20 +80,23 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
                '{} unrecognised. Quantity must be in {} or {}.'.format(q,
                ', '.join(list(data)[:-1]), list(data)[-1])
         q2 = tnames[q] if q in tnames else q
-        if 'data' in data[q]:
+        # compatibility with previous version
+        if isinstance(data[q], dict) and 'data' in data[q]:
             data2[q2] = data[q]['data']
         else:
             data2[q2] = data[q]
         if q in hasdope and q in hastemp:
-            # for consistency with other codes
+            # temperature index first for consistency with other codes
             if q in hastype:
-                data2[q2] = np.swapaxes(data2[q2],1,2)
+                for t in data2[q2]:
+                    data2[q2][t] = np.swapaxes(data2[q2][t],0,1)
             else:
                 data2[q2] = np.swapaxes(data2[q2],0,1)
         if q in hastype:
             if 'scattering_labels' not in data2:
                 data2['scattering_labels'] = data[q].keys()
-            data2[q2] = [data[l] for l in data2['scattering_labels']]
+            # for consistency with the format in the mesh data
+            data2[q2] = [data2[q2][l] for l in data2['scattering_labels']]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 
@@ -194,7 +197,7 @@ def amset_mesh(filename, quantities=['temperatures', 'doping',
         else:
             data2[q2] = data[q]
         if q in hasdope and q in hastemp:
-            # for consistency with other codes
+            # temperature in first index for consistency with other codes
             if q in hastype:
                 data2[q2] = np.swapaxes(data2[q2],1,2)
             else:
@@ -374,35 +377,13 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
             data2['meta']['units'][q2] = units[q2]
 
     # write calculated data (loath to mess with original file)
-
-    if write_lifetime and 'lifetime' in quantities:
-        ldata = h5py.File('lifetime-{}'.format(filename), 'w')
-        ldata.create_dataset('lifetime', np.shape(data2['lifetime']),
-                             data=data2['lifetime'])
-        ldata.create_dataset('temperature',
-                             np.shape(data2['temperature']),
-                             data=data2['temperature'])
-        ldata.close()
-
-    if write_mfp and 'mean_free_path' in quantities:
-        mdata = h5py.File('mfp-{}'.format(filename), 'w')
-        mdata.create_dataset('mean_free_path',
-                             np.shape(data2['mean_free_path']),
-                             data=data2['mean_free_path'])
-        mdata.create_dataset('temperature',
-                             np.shape(data2['temperature']),
-                             data=data2['temperature'])
-        mdata.close()
-
-    if write_occupation and 'occupation' in quantities:
-        odata = h5py.File('occupation-{}'.format(filename), 'w')
-        odata.create_dataset('occupation',
-                             np.shape(data2['occupation']),
-                             data=data2['occupation'])
-        odata.create_dataset('temperature',
-                             np.shape(data2['temperature']),
-                             data=data2['temperature'])
-        odata.close()
+    for write, q in zip([write_lifetime, write_mfp, write_occupation],
+                        ['lifetime', 'mean_free_path', 'occupation']):
+        if write and q in quantities:
+            data3 = h5py.File('{}-{}'.format(q, filename), 'w')
+            for q2 in [q, 'temperature', 'qpoint']:
+                data3.create_dataset(q2, np.shape(data2[q2]), data=data2[q2])
+            data3.close()
 
     # check mode_kappa and correct for certain phono3py versions
     if 'mode_kappa' in data2:

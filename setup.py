@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+
+__author__ = 'Kieran B. Spooner'
+__copyright__ = 'Copyright Kieran B. Spooner (2020)'
+__version__ = '0.2.0'
+__maintainer__ = 'Kieran B.Spooner'
+__email__ = 'kieran.spooner.14@ucl.ac.uk'
+__date__ = 'Nov 18 2020'
+
 import matplotlib as mpl
 import os
 import setuptools
@@ -30,8 +39,8 @@ class PostInstallMoveFile(install):
 
 setuptools.setup(
     name='ThermoPlotter',
-    version='0.1.0',
-    author='Kieran B Spooner',
+    version='0.2.0',
+    author='Kieran B. Spooner',
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -49,7 +58,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Visualization'],
     keywords='chemistry materials thermoelectric dft phonopy phono3py amset tp',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen', 'scipy',
-                      'pyyaml'],
+    install_requires=['h5py', 'json', 'matplotlib', 'numpy', 'pymatgen',
+                      'scipy', 'pyyaml'],
     python_requires='>=3',
     cmdclass={'install': PostInstallMoveFile})

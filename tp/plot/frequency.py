@@ -67,6 +67,7 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
 
     # data scaling
 
+    data = dict(data)
     exclude = ['frequency', 'meta']
     if not total: exclude.append('total')
     if scale:
@@ -76,6 +77,8 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
 
     # colours
 
+    if not fill and not line:
+        raise Exception('fill or line or both must be True.')
     if total and 'total' not in colour:
         colour['total'] = '#000000'
     fillcolour = {}
@@ -83,7 +86,7 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
         if fill:
             fillcolour[c] = colour[c][:7] + str(fillalpha)
         else:
-            colour[c][:7] + '00'
+            fillcolour[c] = colour[c][:7] + '00'
         if not line: colour[c] = fillcolour[c]
 
     # plotting
@@ -91,24 +94,40 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
     if total:
         exclude.append('total')
         if invert:
-            ax.fill_between(data['total'], data['frequency'], label='Total',
-                            facecolor=fillcolour['total'],
-                            edgecolor=colour['total'], **kwargs)
+            if fill:
+                ax.fill_between(data['total'], data['frequency'],
+                                label='Total', facecolor=fillcolour['total'],
+                                edgecolor=colour['total'], **kwargs)
+            else:
+                ax.plot(data['total'], data['frequency'], label='Total',
+                        color=colour['total'], **kwargs)
         else:
-            ax.fill_between(data['frequency'], data['total'], label='Total',
-                            facecolor=fillcolour['total'],
-                            edgecolor=colour['total'], **kwargs)
+            if fill:
+                ax.fill_between(data['frequency'], data['total'],
+                                label='Total', facecolor=fillcolour['total'],
+                                edgecolor=colour['total'], **kwargs)
+            else:
+                ax.plot(data['frequency'], data['total'], label='Total',
+                        color=colour['total'], **kwargs)
 
     for key in data:
         if key not in exclude:
             if invert:
-                ax.fill_between(data[key], data['frequency'], label=key,
-                                facecolor=fillcolour[key],
-                                edgecolor=colour[key], **kwargs)
+                if fill:
+                    ax.fill_between(data[key], data['frequency'], label=key,
+                                    facecolor=fillcolour[key],
+                                    edgecolor=colour[key], **kwargs)
+                else:
+                    ax.plot(data[key], data['frequency'], label=key,
+                            color=colour[key], **kwargs)
             else:
-                ax.fill_between(data['frequency'], data[key], label=key,
-                                facecolor=fillcolour[key],
-                                edgecolor=colour[key], **kwargs)
+                if fill:
+                    ax.fill_between(data['frequency'], data[key], label=key,
+                                    facecolor=fillcolour[key],
+                                    edgecolor=colour[key], **kwargs)
+                else:
+                    ax.plot(data['frequency'], data[key], label=key,
+                            color=colour[key], **kwargs)
 
     # axes formatting
 
@@ -128,7 +147,7 @@ def add_dos(ax, data, colour, total=False, main=True, invert=False,
 
     return
 
-def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
+def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
                   invert=False, scale=False, colour='#000000', fill=False,
                   fillcolour=20, line=True, **kwargs):
     """Cumulates and plots kappa against frequency.
@@ -146,7 +165,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
             average/ avg. Default: average
 
         main : bool, optional
-            set ticks, labels, limits. Default: False.
+            set ticks, labels, limits. Default: True.
         invert : bool, optional
             plot on y axis. Default: False.
         scale : bool, optional
@@ -188,8 +207,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
     f = np.ravel(data['frequency'])
 
     f, k = tp.calculate.cumulate(f, k)
-    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(temperature,
-                                                          direction),
+    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
+               data['meta']['temperature'], direction),
                np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
     f = np.append(f, 100*f[-1])
     k = np.append(k, k[-1])
@@ -211,8 +230,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=False,
             else:
                 raise Exception('Expected alpha value between 0 and 99')
         elif isinstance(fillcolour, int):
-            warnings.warn('integer fill colours ignored when colour format is '
-                          'not #RRGGBB.')
+            warnings.warn('integer fill colours (alpha values) ignored when'
+                          'colour format is not #RRGGBB.')
             fillcolour = colour
         if not line: colour = fillcolour
 
@@ -535,7 +554,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
             loc[axis] = 'log'
 
     # dummy data to enable axis formatting before plotting
-    ax.plot(lim['x'], lim['y'], alpha=0)
+    ax.scatter(lim['x'], lim['y'], alpha=0)
     tp.plot.utilities.set_locators(ax, x=loc['x'], y=loc['y'])
 
     return

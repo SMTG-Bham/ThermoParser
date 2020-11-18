@@ -1,7 +1,4 @@
-"""Tests the tp.calculate module
-
-Failures here can have knock on effects in tp.plot modules.
-"""
+"""Tests the tp.calculate module."""
 
 import unittest
 from tp import calculate

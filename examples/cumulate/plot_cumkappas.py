@@ -27,7 +27,7 @@ for i in [0, 1]:
                                     main=main[i], **{'label': direction[i]})
     tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
                               direction=direction[i], colour=colour[i],
-                              xmarkers=[2e-8], main=main[i],
+                              xmarkers=2e-8, main=main[i],
                               **{'label': direction[i]})
 
 # Save
