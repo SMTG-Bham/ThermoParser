@@ -58,7 +58,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Visualization'],
     keywords='chemistry materials thermoelectric dft phonopy phono3py amset tp',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'json', 'matplotlib', 'numpy', 'pymatgen',
-                      'scipy', 'pyyaml'],
+    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen', 'scipy',
+                      'pyyaml'],
     python_requires='>=3',
     cmdclass={'install': PostInstallMoveFile})
