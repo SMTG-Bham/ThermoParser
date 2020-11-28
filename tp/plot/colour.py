@@ -12,6 +12,8 @@ Functions:
 
     hsb2rgb:
         colour converter.
+    rgb2array:
+        colour converter.
 """
 
 from matplotlib.colors import ListedColormap
@@ -40,16 +42,55 @@ def linear(cmax, cmin='#ffffff', alpha=1., density=512):
         colourmap
             colourmap.
     """
-    colours = np.full((density, 4), alpha)
-    for n in range(0,3):
-        cmin2 = int(cmin[2*n+1:2*n+3], 16)
-        cmax2 = int(cmax[2*n+1:2*n+3], 16)
-        colours[:,n] = np.linspace(cmin2/256, cmax2/256, density)
+
+    cmin2 = rgb2array(cmin, alpha)
+    cmax2 = rgb2array(cmax, alpha)
+    colours = np.linspace(cmin2, cmax2, density)
 
     return ListedColormap(colours)
 
-def elbow(cmid, cmin='#ffffff', cmax='#000000',
-               midpoint=0.5, alpha=1., density=512, kind='linear'):
+def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
+          density=512):
+    """Attmept at higher contrast colour maps. Requires refinement
+
+    Adjusts mid colour position relative to similarity to endpoint
+    colours.
+
+    Arguments:
+        cmid : str
+            colour at midpoint.
+
+        cmin : str, optional.
+            colour at minimum. Default: #ffffff.
+        cmax : str, optional
+            colour at maximum. Default: #000000.
+        alpha : float, optional
+            colour alpha (from 0-1). Default: 1.0.
+
+        density : int, optional
+            number of colours to output. Default: 512.
+
+    Returns:
+        colormap
+            colourmap.
+    """
+
+    cmin2 = np.array(rgb2array(cmin, alpha))
+    cmid2 = np.array(rgb2array(cmid, alpha))
+    cmax2 = np.array(rgb2array(cmax, alpha))
+    cnorm = (cmid2[:3] - cmin2[:3]) / (cmax2[:3] - cmin2[:3])
+    midpoint = np.sqrt(((1-cnorm[0])**2 + (1-cnorm[1])**2 + (1-cnorm[2])**2)/3)
+    x = [0, midpoint, 1]
+    y = [cmin2, cmid2, cmax2]
+    colours = []
+    x2 = np.linspace(0, 1, density)
+    c = interp1d(x, y, 'linear', axis=0)
+    colour = c(x2)
+
+    return ListedColormap(colour)
+
+def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
+          density=512):
     """Attmept at higher contrast colour maps. Requires refinement.
 
     Arguments:
@@ -61,36 +102,29 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000',
         cmax : str, optional
             colour at maximum. Default: #000000.
         midpoint : float, optional
-            midpoint position (from 0-1). Default: 0.5.
+            midpoint position (from 0-1). Default: 0.7.
         alpha : float, optional
             colour alpha (from 0-1). Default: 1.0.
 
         density : int, optional
             number of colours to output. Default: 512.
-        kind : str, optional
-            interpolation scheme (see scipy.interpolate.interp1d).
-            Default: linear.
 
     Returns:
         colormap
             colourmap.
     """
 
+    x = [0, midpoint, 1]
+    cmin2 = rgb2array(cmin, alpha)
+    cmid2 = rgb2array(cmid, alpha)
+    cmax2 = rgb2array(cmax, alpha)
+    y = [cmin2, cmid2, cmax2]
     colours = []
-    for n in range(3):
-        cmin2 = int(cmin[2*n+1:2*n+3], 16)
-        cmid2 = int(cmid[2*n+1:2*n+3], 16)
-        cmax2 = int(cmax[2*n+1:2*n+3], 16)
-        x = [0, midpoint, 1]
-        y = [float(cmin2)/255, float(cmid2)/255, float(cmax2)/255]
-        x2 = np.linspace(0, 1, density)
-        c = interp1d(x, y, kind)
-        colour = c(x2)
-        colours.append(list(colour))
-    colours.append(list(np.full((density), alpha)))
-    colours = np.array(colours).reshape(4, density)
+    x2 = np.linspace(0, 1, density)
+    c = interp1d(x, y, 'linear', axis=0)
+    colour = c(x2)
 
-    return ListedColormap(colours.transpose())
+    return ListedColormap(colour)
 
 def highlight(cmap, colour, position=[0], density=512):
     """Highlights values in a colourmap.
@@ -139,7 +173,7 @@ def skelton(density=512, alpha=1.):
     return ListedColormap(c)
 
 def hsb2rgb(h, s, b, alpha=1):
-    """Converts hsb to rgba colours.
+    """Converts hsb to an rgba colour array.
 
     Arguments:
         h : float
@@ -154,7 +188,7 @@ def hsb2rgb(h, s, b, alpha=1):
 
     Returns:
         list
-            red, green, blue, alpha.
+            rgba.
     """
 
     import math
@@ -193,3 +227,25 @@ def hsb2rgb(h, s, b, alpha=1):
         b = tempX
 
     return [r + tempMin, g + tempMin, b + tempMin, alpha]
+
+def rgb2array(colour, alpha=1.):
+    """Converts #RRGGBB string to rgba array.
+
+    Arguments:
+        colour : str
+            #RRGGBB colour string
+
+        alpha : float, optional
+            colour alpha (from 0-1). Default: 1.0.
+
+    Returns:
+        list
+            rgba.
+    """
+
+    colour2 = [1, 1, 1, alpha]
+    colour = colour.strip('#')
+    for n in range(0,3):
+        colour2[n] = int(colour[2*n:2*n+2], 16) / 255
+
+    return colour2

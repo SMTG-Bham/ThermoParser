@@ -197,7 +197,10 @@ def set_locators(ax, x=None, y=None, dos=False):
         ax.yaxis.set_minor_locator(locator()['null'])
         ax.set_ylabel('')
 
-    if x == 'log': ax.set_xscale('log')
+    if x is not None:
+        ax.set_xscale(x)
+    if y is not None:
+        ax.set_yscale(y)
     if y == 'log': ax.set_yscale('log')
     for a, scale in zip([ax.xaxis, ax.yaxis], [x, y]):
         if scale is not None:

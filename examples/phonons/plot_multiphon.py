@@ -12,7 +12,7 @@ linestyle = ['-', ':']
 
 # Axes
 
-fig, ax = tp.plot.axes.one_medium_legend()
+fig, ax, add_legend = tp.axes.one.medium_legend()
 
 # Load
 
@@ -22,8 +22,8 @@ data = [tp.data.load.phonopy_dispersion(f) for f in files]
 
 tp.plot.phonons.add_multi(ax, data, colour=colour, label=label,
                           linestyle=linestyle)
+add_legend(title=legend_title)
 
 # Save
 
-ax.legend(loc="center left", bbox_to_anchor=(1, 0.5), title=legend_title)
 plt.savefig('multiphon.pdf')

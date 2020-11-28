@@ -13,7 +13,7 @@ quantities = ['frequency', 'dispersion', projected]
 
 # Axes
 
-fig, ax = tp.plot.axes.one_wide_large_legend()
+fig, ax, add_legend = tp.axes.one.wide_large_legend()
 
 # Load
 
@@ -25,8 +25,8 @@ pdata = tp.data.load.phonopy_dispersion(phile)
 tp.plot.phonons.add_alt_dispersion(ax, data, pdata, 'group_velocity',
                                    direction=direction,
                                    temperature=temperature, poscar=poscar)
+add_legend()
 
 # Save
 
-ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 plt.savefig('altphon.pdf')

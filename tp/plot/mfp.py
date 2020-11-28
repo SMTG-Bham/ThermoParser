@@ -18,9 +18,9 @@ from tp.data import resolve
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   xmarkers=None, ymarkers=None, add_xticks=False,
-                  add_yticks=False, legend='\kappa_l', main=True, scale=False,
-                  colour='#000000', fill=False, fillcolour=20, line=True,
-                  markerkwargs={}, **kwargs):
+                  add_yticks=False, main=True, scale=False, colour='#000000',
+                  fill=False, fillcolour=0.2, line=True, markerkwargs={},
+                  **kwargs):
     """Cumulates and plots kappa against mean free path.
 
     Arguments:
@@ -66,9 +66,9 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         fill : bool, optional
             fill below lines. Default: False.
         fillcolour : int or str, optional
-            if an integer from 0-99, and colour in #RRGGBB format,
-            applies alpha in % to colour. Otherwise treats it as a
-            colour. Default: 20.
+            if a float from 0-1 and colour in #RRGGBB format, sets
+            fill colour opacity. Otherwise treats it as a colour.
+            Default: 0.2.
         line : bool, optional
             plot lines. Default: True.
 
@@ -117,23 +117,24 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     # colour
 
     if fill:
-        if colour.startswith('#') and isinstance(fillcolour, int) and \
-           len(colour) == 7:
-            if fillcolour >= 0 and fillcolour <= 9:
-                fillcolour = colour + '0' + str(fillcolour)
-            elif fillcolour >= 10 and fillcolour <= 99:
-                fillcolour = colour + str(fillcolour)
+        try:
+            fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
+        except Exception:
+            if isinstance(colour, list) and \
+               isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
+               fillcolour <= 1:
+                fillcolour2 = list(colour)
+                if len(colour) == 3:
+                    fillcolour2.append(fillcolour)
+                elif len(colour) == 4:
+                    fillcolour2[3] = fillcolour
             else:
-                raise Exception('Expected alpha value between 0 and 99')
-        elif isinstance(fillcolour, int):
-            warnings.warn('integer fill colours ignored when colour format is '
-                          'not #RRGGBB.')
-            fillcolour = colour
-        if not line: colour = fillcolour
+                fillcolour2 = colour
+        if not line: colour = fillcolour2
 
         # plotting
 
-        ax.fill_between(mfp, k, facecolor=fillcolour, edgecolor=colour,
+        ax.fill_between(mfp, k, facecolor=fillcolour2, edgecolor=colour,
                         **kwargs)
     else:
         ax.plot(mfp, k, color=colour, **kwargs)

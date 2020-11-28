@@ -25,7 +25,7 @@ legend.fontsize             : medium
 
 # Ticks
 
-axes.formatter.limits       : -4, 4
+axes.formatter.limits       : -5, 5
 axes.formatter.min_exponent : 0
 
 ## Borders

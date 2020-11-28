@@ -20,7 +20,7 @@ plots = [['mode_kappa', 'group_velocity'],
 
 # Axes
 
-fig, ax = tp.plot.axes.four_square(['tp', 'dark_background'])
+fig, ax = tp.axes.four.square(['tp', 'dark_background'])
 
 # Load
 

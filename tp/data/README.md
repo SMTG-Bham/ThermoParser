@@ -12,8 +12,23 @@ dictionary form.
 It also applys a consisitent naming convention, data structure and unit
 convention across codes, with help of `tp.settings`; and attaches
 metadata including the data source and units.
+
+(AMSET)[https://hackingmaterials.lbl.gov/amset/]:
+`tp.load.amset` loads transport properties from `json`, while
+`tp.load.amset_mesh` loads scattering properties from `hdf5`.
+
+BoltzTraP:
+`tp.load.boltztrap` reads the `hdf5` outputted by `tp.run.boltztrap`,
+although this can show questionable reliability.
+
+(Phono3py)[https://phonopy.github.io/phono3py/hdf5_howto.html#kappa-hdf5-file]
 `tp.load.phono3py` includes derived quantities (lifetime, mean free path
 and occupation), which can be written to hdf5.
+
+(Phonopy)[https://phonopy.github.io/phonopy/]:
+`tp.load.phonopy_dispersion` reads both Phonopy and (sumo)[https://github.com/SMTG-UCL/sumo]
+`disp.yaml`s.
+`tp.load.phonopy_dos` reads `projected_dos.dat`.
 
 ## `run.py`
 

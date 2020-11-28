@@ -7,7 +7,7 @@
 | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
 | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
 | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-| |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.2.0\
+| |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.3.0\
 |_________________________________:______________________________________:_____/
 ```
 
@@ -18,6 +18,7 @@ thermoelectrics materials.
 It essentially wraps around [Matplotlib](https://matplotlib.org/)
 functions, and is intended to be used as a python package, to build
 easily customisable plotting scripts.
+There are also several basic command-line scripts.
 
 ## Installation
 
@@ -35,15 +36,19 @@ preserve your changes:
 ```bash
 git stash
 git pull
+python3 -m pip install --user -e .
 git stash apply
 ```
+
+You only need to repeat the pip stage if you want to update the command-
+line script list.
 
 ## Usage
 
 ThermoPlotter is designed to have four main stages:
 
   1. *Axes*:
-     Pick an axis layout from `tp.plot.axes`.
+     Pick an axis layout from `tp.axes`.
   2. *Load*:
      Use the functions is `tp.data.load` to load the relevant data.
   3. *Add*:
@@ -92,8 +97,8 @@ We welcome any contributions, whether they be a feature request or a new
 piece of code (or anything else).
 Adding options is inteded to be straightforward, for example adding a
 new axes layout should be as simple as copying another function in
-`tp.plt.axes` and altering the numbers; and adding support for a new
-code should only require adding a function in the `tp.data.load` module.
+`tp.axes` and altering the numbers; and adding support for a new code
+should only require adding a function in the `tp.data.load` module.
 We would of course be happy to discuss, if desired.
 
 Bugs and feature requests can be submitted to the [issue tracker](https://github.com/kbspooner/ThermoPlotter/issues),

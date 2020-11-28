@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Plots a ZT heatmap against temperature and '
+                     'carrier concentration.')
+parser.add_argument('file',
+                    help='Electronic transport (transport_xxx.json or '
+                         'boltztrap.hdf5).')
+parser.add_argument('-k', '--kappa', metavar='file',
+                    help='phono3py kappa-mxxx.hdf5.')
+parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
+                    default=['viridis'],
+                    help='colourmap name or key colour or min and max '
+                         'colours to generate a colourmap from. '
+                         'Default: viridis.')
+parser.add_argument('-d', '--direction', metavar='direction', default='avg',
+                    help='direction for anisotropic data. Accepts a-c/ '
+                         'x-z or average/ avg. Default: avg.')
+parser.add_argument('--nodata', action='store_true',
+                    help='do not print data file.')
+parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
+                    default=['pdf'],
+                    help='output extension(s). Default: pdf.')
+parser.add_argument('-i', '--interpolate', metavar='interpolate', type=int,
+                    default=200,
+                    help='number of points to interpolate to on each '
+                         'axis. Default: 200.')
+parser.add_argument('--kind', metavar='kind', default='linear',
+                    help='interpolation kind. Default: linear.')
+parser.add_argument('-o', '--output', metavar='file', default='tp-ztmap',
+                    help='output filename, sans extension. '
+                         'Default: tp-ztmap.')
+parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
+                    help='style sheet to overlay. Later ones override '
+                         'earlier ones.')
+parser.add_argument('--xmin', metavar='xmin', type=float,
+                    help='override minimum temperature. Default: None.')
+parser.add_argument('--xmax', metavar='xmax', type=float,
+                    help='override maximum temperature. Default: None.')
+parser.add_argument('--ymin', metavar='ymin', type=float,
+                    help='override minimum doping. Default: None.')
+parser.add_argument('--ymax', metavar='ymax', type=float,
+                    help='override maximum doping. Default: None.')
+parser.add_argument('--cmin', metavar='cmin', type=float,
+                    help='override minimum ZT. Default: None.')
+parser.add_argument('--cmax', metavar='cmax', type=float,
+                    help='override maximum ZT. Default: None.')
+
+args=parser.parse_args()
+
+import matplotlib.pyplot as plt
+import tp
+
+style = ['tp']
+style.extend(args.style)
+if len(args.colour) == 1:
+    args.colour = args.colour[0]
+if args.nodata:
+    ztdata = None
+else:
+    ztdata = 'zt-{}.hdf5'.format(args.direction)
+
+try:
+    edata = tp.data.load.amset(args.file)
+except Exception:
+    edata = tp.data.load.boltztrap(args.file)
+
+if args.kappa is not None:
+    kdata = tp.data.load.phono3py(args.kappa)
+else:
+    kdata = None
+
+fig, ax = tp.axes.one.colourbar(style)
+
+tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=args.direction,
+                          xinterp=args.interpolate, yinterp=args.interpolate,
+                          kind=args.kind, colour=args.colour, xmin=args.xmin,
+                          xmax=args.xmax, ymin=args.ymin, ymax=args.ymax,
+                          cmin=args.cmin, cmax=args.cmax, output=ztdata)
+
+for ext in args.extension:
+    plt.savefig('{}.{}'.format(args.output, ext))

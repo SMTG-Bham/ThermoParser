@@ -15,7 +15,7 @@ import numpy as np
 import tp
 from tp import settings
 
-def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
+def amset(filename, quantities=['temperature', 'doping', 'seebeck',
           'conductivity', 'electronic_thermal_conductivity']):
     """Loads AMSET transport data.
 
@@ -30,7 +30,7 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
             filepath.
 
         quantites : dict, optional
-            values to extract. Default: temperatures, doping, seebeck,
+            values to extract. Default: temperature, doping, seebeck,
             conductivity, electronic_thermal_conductivity.
 
     Returns:
@@ -106,7 +106,7 @@ def amset(filename, quantities=['temperatures', 'doping', 'seebeck',
 
     return data2
 
-def amset_mesh(filename, quantities=['temperatures', 'doping',
+def amset_mesh(filename, quantities=['temperature', 'doping',
                'scattering_rates', 'scattering_labels'], spin='avg'):
     """Loads AMSET mesh data.
 
@@ -121,8 +121,8 @@ def amset_mesh(filename, quantities=['temperatures', 'doping',
         quantites : dict, optional
             values to extract. Accepts AMSET keys, without spin
             channels, which are dealt with in the spin variable.
-            Default: temperatures, doping, seebeck, conductivity,
-            electronic_thermal_conductivity.
+            Default: temperature, doping, scattering_rates,
+            scattering_labels.
 
         spin : str, optional
             spin. Accepts up, down or avg. If avg and there is only one

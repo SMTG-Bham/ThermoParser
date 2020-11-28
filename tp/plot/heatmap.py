@@ -99,6 +99,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     yi = np.where((y >= ymin) & (y <= ymax))[0]
     x = x[xi]
     y = y[yi]
+
     try:
         c = c[np.ix_(xi, yi)]
     except IndexError:
@@ -131,7 +132,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             colours = colour
         else:
             try:
-                colours = tp.plot.colour.elbow(colour)
+                colours = tp.plot.colour.uniform(colour)
             except Exception:
                 colours = tp.plot.colour.linear(colour[1], colour[0])
 
@@ -206,17 +207,17 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
             interpolation kind. Default: linear.
 
         xmin : float, optional
-            override x minimum. Default: None.
+            override temperature minimum. Default: None.
         xmax : float, optional
-            override x maximum. Default: None.
+            override temperature maximum. Default: None.
         ymin : float, optional
-            override y minimum. Default: None.
+            override doping minimum. Default: None.
         ymax : float, optional
-            override y maximum. Default: None.
+            override doping maximum. Default: None.
         cmin : float, optional
-            override colour scale minimum. Default: None.
+            override ZT minimum. Default: None.
         cmax : float, optional
-            override colour scale maximum. Default: None.
+            override ZT maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
@@ -313,17 +314,17 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None,
             interpolation kind. Default: linear.
 
         xmin : float, optional
-            override x minimum. Default: None.
+            override temperature minimum. Default: None.
         xmax : float, optional
-            override x maximum. Default: None.
+            override temperature maximum. Default: None.
         ymin : float, optional
-            override y minimum. Default: None.
+            override doping minimum. Default: None.
         ymax : float, optional
-            override y maximum. Default: None.
+            override doping maximum. Default: None.
         cmin : float, optional
-            override colour scale minimum. Default: 0.
+            override kappa minimum. Default: 0.
         cmax : float, optional
-            override colour scale maximum. Default: None.
+            override kappa maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
@@ -356,7 +357,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None,
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       np.transpose(data['lattice_thermal_conductivity']),
+                       data['lattice_thermal_conductivity'],
                        xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,**kwargs)

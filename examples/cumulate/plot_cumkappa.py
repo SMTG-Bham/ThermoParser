@@ -14,7 +14,7 @@ colours = {'Sb': '#00ff00',
 
 # Axes
 
-fig, ax = tp.plot.axes.one_small_legend()
+fig, ax, add_legend = tp.axes.one.small_legend()
 
 # Load
 
@@ -24,9 +24,9 @@ dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 # Add
 
 tp.plot.frequency.add_cum_kappa(ax, data, direction=direction, main=True)
-tp.plot.frequency.add_dos(ax, dos, colours, main=False, scale=True)
+tp.plot.frequency.add_dos(ax, dos, colour=colours, main=False, scale=True)
+add_legend()
 
 # Save
 
-ax.legend(loc="center left", bbox_to_anchor=(1, 0.5))
 plt.savefig('cumkappa-{}.pdf'.format(direction))

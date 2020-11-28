@@ -12,7 +12,7 @@ colour = tp.plot.colour.linear('#ff0000', '#000000')
 
 # Axes
 
-fig, ax = tp.plot.axes.one(['tp', 'dark_background'])
+fig, ax = tp.axes.one.plain(['tp', 'dark_background'])
 
 # Load
 

@@ -7,6 +7,7 @@ __maintainer__ = 'Kieran B.Spooner'
 __email__ = 'kieran.spooner.14@ucl.ac.uk'
 __date__ = 'Nov 18 2020'
 
+import glob
 import matplotlib as mpl
 import os
 import setuptools
@@ -28,7 +29,6 @@ def install_style():
     if not os.path.exists(styledir):
         os.makedirs(styledir)
 
-    print('Installing tp style sheet in ', styledir)
     shutil.copy(os.path.join(os.path.dirname(__file__), style),
                 os.path.join(styledir, style))
 
@@ -37,9 +37,11 @@ class PostInstallMoveFile(install):
         super().__init__(*args, **kwargs)
         install_style()
 
+scripts = glob.glob("scripts/*")
+
 setuptools.setup(
     name='ThermoPlotter',
-    version='0.2.0',
+    version='0.3.0',
     author='Kieran B. Spooner',
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
@@ -58,7 +60,8 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Visualization'],
     keywords='chemistry materials thermoelectric dft phonopy phono3py amset tp',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'json', 'matplotlib', 'numpy', 'pymatgen',
-                      'scipy', 'pyyaml'],
+    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen', 'scipy',
+                      'pyyaml'],
     python_requires='>=3',
-    cmdclass={'install': PostInstallMoveFile})
+    cmdclass={'install': PostInstallMoveFile},
+    scripts=scripts)

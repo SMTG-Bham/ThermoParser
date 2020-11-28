@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Plot 3rd-order phonon properties per band per '
+                     'q-point.')
+parser.add_argument('file',
+                    help='phono3py kappa-mxxx.hdf5.')
+parser.add_argument('-y', metavar='y', default='kappa',
+                    help='y-axis quantity. Options include frequency, '
+                         'kappa, group_velocity, lifetime, '
+                         'mean_free_path and occupation. '
+                         'Default: kappa.')
+parser.add_argument('-x', metavar='x', default='frequency',
+                    help='x-axis quantity. Options include frequency, '
+                         'kappa, group_velocity, lifetime, '
+                         'mean_free_path and occupation. '
+                         'Default: frequency.')
+parser.add_argument('-p', '--projected', metavar='projected',
+                    help='optional colour quantity. Options include '
+                         'frequency, kappa, group_velocity, lifetime, '
+                         'mean_free_path and occupation. Default: None.')
+parser.add_argument('-a', '--alpha', metavar='alpha', type=float, default=0.3,
+                    help='marker opacity (0-1). Default: 0.3.')
+parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
+                    default=['viridis'],
+                    help='colourmap name or colour or list of colours '
+                         '(one per band). If projected, only colourmap '
+                         'name. Default: viridis.')
+parser.add_argument('-d', '--direction', metavar='direction', default='avg',
+                    help='direction for anisotropic data. Accepts a-c/ '
+                         'x-z or average/ avg. Default: avg.')
+parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
+                    default=['pdf'],
+                    help='output extension(s). Default: pdf.')
+parser.add_argument('--edgecolour', metavar='edgecolour', default='black',
+                    help='marker edge colour. Default: black.')
+parser.add_argument('-l', '--linewidth', metavar='linewidth', type=float,
+                    default=0,
+                    help='marker linewidth. Default: 0.')
+parser.add_argument('-m', '--marker', metavar='marker', default='.',
+                    help='marker shape. Default: ".".')
+parser.add_argument('--markersize', metavar='markersize', type=float,
+                    default=1,
+                    help='marker size. Default: 1.')
+parser.add_argument('-o', '--output', metavar='file', default='tp-waterfall',
+                    help='output filename, sans extension. '
+                         'Default: tp-waterfall.')
+parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
+                    help='style sheet to overlay. Later ones override '
+                         'earlier ones.')
+parser.add_argument('-t', '--temperature', metavar='temperature', type=float,
+                    default=300,
+                    help='temperature in K. Default: 300')
+parser.add_argument('--xmin', metavar='xmin', type=float,
+                    help='override minimum x. Default: None.')
+parser.add_argument('--xmax', metavar='xmax', type=float,
+                    help='override maximum x. Default: None.')
+parser.add_argument('--xscale', metavar='xscale',
+                    help='override x-scale (linear or log). '
+                         'Default: None.')
+parser.add_argument('--ymin', metavar='ymin', type=float,
+                    help='override minimum y. Default: None.')
+parser.add_argument('--ymax', metavar='ymax', type=float,
+                    help='override maximum y. Default: None.')
+parser.add_argument('--yscale', metavar='yscale',
+                    help='override y-scale (linear or log). '
+                         'Default: None.')
+parser.add_argument('--cmin', metavar='cmin', type=float,
+                    help='override minimum colour value. Default: None.')
+parser.add_argument('--cmax', metavar='cmax', type=float,
+                    help='override maximum colour value. Default: None.')
+parser.add_argument('--cscale', metavar='cscale',
+                    help='override colour scale (linear or log). '
+                         'Default: None.')
+
+args=parser.parse_args()
+
+import matplotlib.pyplot as plt
+import tp
+
+style = ['tp']
+style.extend(args.style)
+if len(args.colour) == 1:
+    args.colour = args.colour[0]
+
+if args.x == 'kappa': args.x = 'mode_kappa'
+if args.y == 'kappa': args.y = 'mode_kappa'
+quantities = [args.x, args.y]
+if args.projected is not None:
+    if args.projected == 'kappa': args.projected = 'mode_kappa'
+    quantities.append(args.projected)
+data = tp.data.load.phono3py(args.file, quantities)
+
+fig, ax = tp.axes.one.plain(style)
+
+if args.projected is not None:
+    tp.plot.frequency.add_projected_waterfall(ax, data, args.y, args.projected,
+                                              xquantity=args.x,
+                                              temperature=args.temperature,
+                                              direction=args.direction,
+                                              colour=args.colour,
+                                              alpha=args.alpha,
+                                              linewidth=args.linewidth,
+                                              edgecolors=args.edgecolour,
+                                              marker=args.marker,
+                                              s=args.markersize,
+                                              cmin=args.cmin, cmax=args.cmax,
+                                              cscale=args.cscale)
+else:
+    tp.plot.frequency.add_waterfall(ax, data, args.y, xquantity=args.x,
+                                    temperature=args.temperature,
+                                    direction=args.direction,
+                                    colour=args.colour, alpha=args.alpha,
+                                    linewidth=args.linewidth,
+                                    edgecolors=args.edgecolour,
+                                    marker=args.marker, s=args.markersize)
+
+tp.plot.utilities.set_locators(ax, args.xscale, args.yscale)
+
+for ext in args.extension:
+    plt.savefig('{}.{}'.format(args.output, ext))

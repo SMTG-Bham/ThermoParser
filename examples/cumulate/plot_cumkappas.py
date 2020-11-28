@@ -13,7 +13,7 @@ colour = ['#ff8000', '#0000ff']
 
 # Axes
 
-fig, ax = tp.plot.axes.two_h_small_legend()
+fig, ax, add_legend = tp.axes.two.h_small_legend()
 
 # Load
 
@@ -24,13 +24,12 @@ data = tp.data.load.phono3py(kappafile, quantities=quantities)
 for i in [0, 1]:
     tp.plot.frequency.add_cum_kappa(ax[0], data, temperature=temperature,
                                     direction=direction[i], colour=colour[i],
-                                    main=main[i], **{'label': direction[i]})
+                                    main=main[i], label=direction[i])
     tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
                               direction=direction[i], colour=colour[i],
-                              xmarkers=2e-8, main=main[i],
-                              **{'label': direction[i]})
+                              xmarkers=2e-8, main=main[i], label=direction[i])
+add_legend(title='Direction')
 
 # Save
 
-ax[1].legend(loc='center left', bbox_to_anchor=(1, 0.5), title='Direction')
 plt.savefig('cumkappas.pdf')

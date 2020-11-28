@@ -349,6 +349,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     tnames = tp.settings.to_tp()
     if quantity in tnames: quantity = tnames[quantity]
+    if quantity == 'kappa': quantity = 'mode_kappa'
+
     data = tp.data.resolve.resolve(data, quantity, temperature, direction)
     y = data[quantity]
     if bandmin is None:
@@ -541,6 +543,8 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
     tnames = tp.settings.to_tp()
     quantity = tnames[quantity] if quantity in tnames else quantity
+    if quantity == 'kappa': quantity = 'mode_kappa'
+
     data = tp.data.resolve.resolve(data, quantity, temperature, direction)
     c = data[quantity]
     if bandmin is None:
@@ -737,7 +741,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     tnames = tp.settings.to_tp()
     if quantity in tnames: quantity = tnames[quantity]
     if projected in tnames: projected = tnames[projected]
+    if quantity == 'kappa': quantity = 'mode_kappa'
+    if projected == 'kappa': projected = 'mode_kappa'
     qs = quantity if quantity == projected else [quantity, projected]
+
     data = tp.data.resolve.resolve(data, qs, temperature, direction)
     y = data[quantity]
     c = data[projected]
@@ -820,7 +827,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     return cbar
 
-def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
+def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
                  smoothing=5, colour='viridis', workers=32, xmarkkwargs={},
                  **kwargs):
     """Plots a phonon dispersion with broadened bands.
@@ -831,7 +838,7 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
         ax : axes
             axes to plot on.
-        data : dict
+        kdata : dict
             Phono3py-like data containing:
                 qpoint : array-like
                     q-point locations.
@@ -863,8 +870,9 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
         smoothing : int, optional
             every n points to sample. Default: 5.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis.
+        colour : colormap or str or list, optional
+            colourmap or colourmap name or max #RRGGBB colour (fades to
+            white) or min and max #RRGGBB colours. Default: viridis.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
@@ -904,9 +912,9 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # Phono3py data formatting
 
-    data = tp.data.resolve.resolve(data, 'gamma', temperature)
-    c = np.array(data['gamma'])
-    qk = data['qpoint']
+    kdata = tp.data.resolve.resolve(kdata, 'gamma', temperature)
+    c = np.array(kdata['gamma'])
+    qk = kdata['qpoint']
 
     # Phonopy data formatting
 
@@ -951,9 +959,22 @@ def add_wideband(ax, data, pdata, temperature=300, poscar='POSCAR', main=True,
 
     cnorm = mpl.colors.LogNorm(vmin=np.amin(area), vmax=np.amax(area))
 
+    # colours
+
+    try:
+        colours = mpl.cm.get_cmap(colour)
+    except Exception:
+        if isinstance(colour, mpl.colors.ListedColormap):
+            colours = colour
+        else:
+            try:
+                colours = tp.plot.colour.linear(colour)
+            except Exception:
+                colours = tp.plot.colour.linear(colour[1], colour[0])
+
     # plotting
 
-    ax.pcolormesh(x2, f2, np.transpose(area), cmap=colour, norm=cnorm,
+    ax.pcolormesh(x2, f2, np.transpose(area), cmap=colours, norm=cnorm,
                   **kwargs)
 
     # axes formatting

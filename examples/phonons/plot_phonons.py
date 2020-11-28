@@ -13,7 +13,7 @@ colours = {'Sb': '#00ff00',
 
 # Axes
 
-fig, ax = tp.plot.axes.one_dos_small_legend()
+fig, ax, add_legend = tp.axes.one.dos_small_legend()
 
 # Load
 
@@ -23,12 +23,12 @@ dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 # Add
 
 tp.plot.phonons.add_dispersion(ax[0], dispersion, colour=colour)
-tp.plot.frequency.add_dos(ax[1], dos, colours, invert=True, line=True)
+tp.plot.frequency.add_dos(ax[1], dos, colour=colours, invert=True, line=True)
 
 ax[1].set_ylim(ax[0].get_ylim())
 tp.plot.utilities.set_locators(ax[1], dos=True)
+add_legend()
 
 # Save
 
-ax[1].legend(loc="center left", bbox_to_anchor=(1, 0.5))
 plt.savefig('phonons.pdf')

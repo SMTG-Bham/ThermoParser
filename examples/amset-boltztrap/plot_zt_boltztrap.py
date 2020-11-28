@@ -13,7 +13,7 @@ colour = '#ff8080'
 
 # Axes
 
-fig, ax = tp.plot.axes.one_colourbar()
+fig, ax = tp.axes.one.colourbar()
 
 # Load
 
@@ -22,8 +22,8 @@ kdata = tp.data.load.phono3py(kfile, quantities=kquants)
 
 # Add
 
-cbar = tp.plot.heatmap.add_ztmap(ax, bdata, kdata, direction=direction,
-                                 colour=colour, xinterp=200, yinterp=200)
+tp.plot.heatmap.add_ztmap(ax, bdata, kdata, direction=direction, colour=colour,
+                          xinterp=200, yinterp=200)
 
 # Save
 

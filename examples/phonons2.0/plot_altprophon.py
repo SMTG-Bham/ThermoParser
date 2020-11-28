@@ -14,7 +14,7 @@ temperature = 300
 quantities = [dispersion, projected, 'dispersion']
 
 # Axes
-fig, ax = tp.plot.axes.one_colourbar()
+fig, ax = tp.axes.one.colourbar()
 
 # Load
 data = tp.data.load.phono3py(kappafile, quantities=quantities)

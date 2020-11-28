@@ -1,10 +1,5 @@
 Please see the (examples)[https://github.com/kbspooner/ThermoPlotter/tree/master/examples].
 
-## `axes.py`
-
-Pre-sized axes for plotting convenience. Many users may want to ignore
-this module.
-
 ## `colour.py`
 
 Contains colourmap generators:
@@ -15,7 +10,7 @@ the map. Varyingly successful.
 * `highlight`: adds a highlight colour to an existing colourmap.
 may be useful in `tp.plot.frequency.waterfall` or `tp.plot.phonons`.
 * `skelton`: Jonathan Skelton's rainbowy colourmap from his waterfall
-plots.
+plots. He has lots of useful stuff in (Phono3py-Power-Tools)[https://github.com/skelton-group/Phono3py-Power-Tools].
 
 ## `frequency.py`
 

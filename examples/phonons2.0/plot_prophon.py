@@ -16,7 +16,7 @@ colour = 'viridis_r'
 
 # Axes
 
-fig, ax = tp.plot.axes.one_dos_colourbar()
+fig, ax = tp.axes.one.dos_colourbar()
 
 # Load
 

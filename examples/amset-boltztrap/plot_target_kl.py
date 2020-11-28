@@ -14,7 +14,7 @@ interp=200
 
 # Axes
 
-fig, ax = tp.plot.axes.one_colourbar()
+fig, ax = tp.axes.one.colourbar()
 
 # Load
 
@@ -22,9 +22,9 @@ data = tp.data.load.amset(f, quantities=quantities)
 
 # Add
 
-cbar = tp.plot.heatmap.add_kappa_target(ax, data, zt=target, colour=colour,
-                                        direction=direction, xinterp=interp,
-                                        yinterp=interp)
+tp.plot.heatmap.add_kappa_target(ax, data, zt=target, colour=colour,
+                                 direction=direction, xinterp=interp,
+                                 yinterp=interp)
 
 # Save
 

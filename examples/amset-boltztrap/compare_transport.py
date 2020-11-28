@@ -17,7 +17,7 @@ bcmap = plt.get_cmap('autumn')(np.linspace(0, 1, 4))
 
 # Axes
 
-fig, ax = tp.plot.axes.three_h_top_legend()
+fig, ax, add_legend = tp.axes.three.h_top_legend()
 
 # Load
 
@@ -50,6 +50,5 @@ for a in range(len(ax)):
 
 # Save
 
-ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, 1), ncol=8,
-             title=axlabels['doping'])
+add_legend(title=axlabels['doping'])
 plt.savefig('compare-transport.pdf')

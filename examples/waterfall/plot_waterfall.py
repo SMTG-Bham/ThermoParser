@@ -19,7 +19,7 @@ colour = cm.get_cmap('viridis')
 
 # Axes
 
-fig, ax = tp.plot.axes.one_colourbar_small_legend()
+fig, ax, add_legend = tp.axes.one.colourbar_small_legend()
 
 # Load
 
@@ -31,14 +31,14 @@ dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 tp.plot.frequency.format_waterfall(ax, data, waterfall,
                                    temperature=temperature,
                                    direction=direction)
-tp.plot.frequency.add_dos(ax, dos, colours, scale=True, main=False)
+tp.plot.frequency.add_dos(ax, dos, colour=colours, scale=True, main=False)
 cbar = tp.plot.frequency.add_projected_waterfall(ax, data, waterfall,
                                                  projected, main=True,
                                                  colour=colour,
                                                  temperature=temperature,
                                                  direction=direction)
+add_legend()
 
 # Save
 
-ax.legend(loc="center left", bbox_to_anchor=(1.25, 0.5))
 plt.savefig('waterfall-kappa.pdf')

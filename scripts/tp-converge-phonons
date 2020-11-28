@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Plots phonon dispersions for comparison.')
+parser.add_argument('files', nargs='+',
+                    help='band.yamls from Phonopy or sumo.')
+parser.add_argument('--bandmin', metavar='bandmin', type=int,
+                    help='minimum band index. Default: None.')
+parser.add_argument('--bandmax', metavar='bandmax', type=int,
+                    help='maximum band index. Default: None.')
+parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
+                    default='winter_r',
+                    help='colourmap name or list of colours. '
+                         'Default: winter_r.')
+parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
+                    default=['pdf'],
+                    help='output extension(s). Default: pdf.')
+parser.add_argument('-l', '--labels', metavar='label', nargs='+',
+                    help='legend labels, one for each dispersion. '
+                         'Default: None.')
+parser.add_argument('--linestyle', metavar='linestyle', nargs='+',
+                    default=['solid'],
+                    help='linestyle or list of linestyles. '
+                         'Default: solid.')
+parser.add_argument('-o', '--output', metavar='file',
+                    default='tp-converge-phonons',
+                    help='output filename, sans extension. '
+                         'Default: tp-converge-phonons.')
+parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
+                    help='style sheet to overlay. Later ones override '
+                         'earlier ones.')
+parser.add_argument('-t', '--title', metavar='title',
+                    help='legend title. Default: None.')
+
+args=parser.parse_args()
+
+import matplotlib.pyplot as plt
+import tp
+
+style = ['tp']
+style.extend(args.style)
+
+data = [tp.data.load.phonopy_dispersion(f) for f in args.files]
+
+if args.labels is not None:
+    fig, ax, add_legend = tp.axes.one.medium_legend(style)
+else:
+    fig, ax = tp.axes.one.plain(style)
+
+tp.plot.phonons.add_multi(ax, data, colour=args.colour,
+                          label=args.labels, linestyle=args.linestyle,
+                          bandmin=args.bandmin, bandmax=args.bandmax)
+
+if args.labels is not None:
+    add_legend(title=args.title)
+
+for ext in args.extension:
+    plt.savefig('{}.{}'.format(args.output, ext))

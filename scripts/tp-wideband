@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Plots a broadened phonon dispersion.')
+parser.add_argument('phonons',
+                    help='band.yaml from phonopy or sumo.')
+parser.add_argument('kappa', metavar='file',
+                    help='phono3py kappa-mxxx.hdf5.')
+parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
+                    default=['viridis'],
+                    help='colourmap name or max colour (fades to white) '
+                         'or min and max colours to generate a '
+                         'colourmap from. Default: viridis.')
+parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
+                    default=['pdf'],
+                    help='output extension(s). Default: pdf.')
+parser.add_argument('-o', '--output', metavar='file', default='tp-wideband',
+                    help='output filename, sans extension. '
+                         'Default: tp-wideband.')
+parser.add_argument('-p', '--poscar', metavar='POSCAR', default='POSCAR',
+                    help='Path to POSCAR file. Default: POSCAR.')
+parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
+                    help='style sheet to overlay. Later ones override '
+                         'earlier ones.')
+parser.add_argument('--smoothing', metavar='smoothing', type=int, default=5,
+                    help='every n points to sample. Default: 5.')
+parser.add_argument('-t', '--temperature', metavar='temperature', type=float,
+                    default=300,
+                    help='temperature in K. Default: 300.')
+
+args=parser.parse_args()
+
+import matplotlib.pyplot as plt
+import tp
+
+style = ['tp']
+style.extend(args.style)
+if len(args.colour) == 1:
+    args.colour = args.colour[0]
+
+pdata = tp.data.load.phonopy_dispersion(args.phonons)
+kdata = tp.data.load.phono3py(args.kappa, 'wideband')
+
+fig, ax = tp.axes.one.plain(style)
+
+tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=args.temperature,
+                             poscar=args.poscar, smoothing=args.smoothing,
+                             colour=args.colour)
+
+for ext in args.extension:
+    plt.savefig('{}.{}'.format(args.output, ext))
