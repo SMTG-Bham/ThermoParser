@@ -14,14 +14,15 @@ class DosTest(unittest.TestCase):
         self.data =   {'frequency': [0, 1],
                        'A':         [0, 1],
                        'B':         [0, 1],
-                       'total':     [0, 2]}
+                       'total':     [0, 2],
+                       'meta':      {}}
         self.colour = {'A':         '#ff0000',
                        'B':         '#00ff0080',
                        'total':     '#000000'}
         self.ax = Mock()
 
     def test_default(self):
-        frequency.add_dos(self.ax, self.data, self.colour, total=False,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=False,
                           main=True, scale=False, fill=False, line=True,
                           invert=False)
 
@@ -32,7 +33,7 @@ class DosTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
 
     def test_fill(self):
-        frequency.add_dos(self.ax, self.data, self.colour, total=False,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=False,
                           main=True, scale=False, fill=True, line=True,
                           invert=False)
 
@@ -43,7 +44,7 @@ class DosTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
 
     def test_not_main(self):
-        frequency.add_dos(self.ax, self.data, self.colour, total=False,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=False,
                           main=False, scale=False, fill=False, line=True,
                           invert=False)
 
@@ -54,7 +55,7 @@ class DosTest(unittest.TestCase):
         self.ax.set_ylim.assert_not_called()
 
     def test_total(self):
-        frequency.add_dos(self.ax, self.data, self.colour, total=True,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=True,
                           main=True, scale=False, fill=False, line=True,
                           invert=False)
 
@@ -65,7 +66,7 @@ class DosTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
 
     def test_invert(self):
-        frequency.add_dos(self.ax, self.data, self.colour, total=False,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=False,
                           main=True, scale=False, fill=False, line=True,
                           invert=True)
 
@@ -82,7 +83,7 @@ class DosTest(unittest.TestCase):
         self.ax.get_yaxis().get_scale.return_value = 'linear'
         self.ax.reset_mock()
 
-        frequency.add_dos(self.ax, self.data, self.colour, total=False,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=False,
                           main=False, scale=True, fill=False, line=True,
                           invert=False)
 
@@ -104,7 +105,7 @@ class DosTest(unittest.TestCase):
         self.ax.get_yaxis().get_scale.return_value = 'log'
         self.ax.reset_mock()
 
-        frequency.add_dos(self.ax, self.data, self.colour, total=False,
+        frequency.add_dos(self.ax, self.data, colour=self.colour, total=False,
                           main=False, scale=True, fill=False, line=True,
                           invert=False)
 

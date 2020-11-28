@@ -26,12 +26,12 @@ class HeatmapTest(unittest.TestCase):
                                    yscale='linear', cscale='linear')
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 4)
         self.ax.set_ylim.assert_called_once_with(2, 8)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_log(self, mock_colourbar):
@@ -58,12 +58,12 @@ class HeatmapTest(unittest.TestCase):
                                    cscale='linear')
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 3.5)
         self.ax.set_ylim.assert_called_once_with(2, 7)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_fixed_x_y(self, mock_colourbar):
@@ -74,12 +74,12 @@ class HeatmapTest(unittest.TestCase):
                                    yscale='linear', cscale='linear')
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 4)
         self.ax.set_ylim.assert_called_once_with(2, 8)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_min(self, mock_colourbar):
@@ -89,12 +89,12 @@ class HeatmapTest(unittest.TestCase):
                                    ymin=4, cmin=4)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(2, 4)
         self.ax.set_ylim.assert_called_once_with(4, 8)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_max(self, mock_colourbar):
@@ -104,12 +104,12 @@ class HeatmapTest(unittest.TestCase):
                                    ymax=4, cmax=4)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 3)
         self.ax.set_ylim.assert_called_once_with(2, 6)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_colourmap(self, mock_colourbar):
@@ -120,12 +120,12 @@ class HeatmapTest(unittest.TestCase):
                                    colour=cmap)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 4)
         self.ax.set_ylim.assert_called_once_with(2, 8)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_colour(self, mock_colourbar):
@@ -136,12 +136,12 @@ class HeatmapTest(unittest.TestCase):
                                    colour=colour)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 4)
         self.ax.set_ylim.assert_called_once_with(2, 8)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
     @patch.object(plt, 'colorbar')
     def test_colours(self, mock_colourbar):
@@ -152,12 +152,12 @@ class HeatmapTest(unittest.TestCase):
                                    colour=colours)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_not_called()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('linear')
         self.ax.set_xlim.assert_called_once_with(1, 4)
         self.ax.set_ylim.assert_called_once_with(2, 8)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
 
 class ZTMapTest(unittest.TestCase):
     def setUp(self):
@@ -196,12 +196,12 @@ class ZTMapTest(unittest.TestCase):
                                  yinterp=None)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
         self.ax.set_xlim.assert_called_once_with(1, 3)
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
         mock_resolve.assert_called_once()
         mock_zt.assert_called_once()
 
@@ -214,12 +214,12 @@ class ZTMapTest(unittest.TestCase):
                                  yinterp=None)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
         self.ax.set_xlim.assert_called_once_with(1, 3)
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
         mock_resolve.assert_not_called()
         mock_zt.assert_not_called()
 
@@ -258,12 +258,12 @@ class TargetKLTest(unittest.TestCase):
                                         yinterp=None)
 
         self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_not_called()
-        self.ax.set_yscale.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
         self.ax.set_xlim.assert_called_once_with(1, 3)
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_not_called()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
         mock_resolve.assert_called_once()
         mock_kl.assert_called_once()
 

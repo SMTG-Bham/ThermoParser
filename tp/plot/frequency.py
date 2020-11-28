@@ -23,7 +23,7 @@ import warnings
 from tp.data import resolve
 
 def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
-            colour='tab10', fill=True, fillcolour=0.2, line=False, **kwargs):
+            colour='tab10', fill=True, fillalpha=0.2, line=False, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments:
@@ -49,10 +49,8 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
             Default: tab10.
         fill : bool, optional
             fill below lines. Default: True.
-        fillcolour : int or str, optional
-            if a float from 0-1 and colour in #RRGGBB format, sets
-            fill colour opacity. Otherwise treats it as a colour.
-            Default: 0.2.
+        fillalpha : float, optional
+            fill alpha scaled to 0-1. Default: 0.2.
         line : bool, optional
             plot lines. Default: False.
 
@@ -73,7 +71,7 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     data = dict(data)
     f = data['frequency']
     del data['frequency']
-    del data['meta']
+    if 'meta' in data: del data['meta']
     if not total:
         del data['total']
 
@@ -196,8 +194,10 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
             RGB line colour. Default: #000000.
         fill : bool, optional
             fill below lines. Default: False.
-        fillalpha : float, optional
-            fill alpha scaled to 0-1. Default: 0.2.
+        fillcolour : int or str, optional
+            if a float from 0-1 and colour in #RRGGBB format, sets
+            fill colour opacity. Otherwise treats it as a colour.
+            Default: 0.2.
         line : bool, optional
             plot lines. Default: True.
 
