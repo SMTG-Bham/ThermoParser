@@ -10,7 +10,7 @@ the map. Varyingly successful.
 * `highlight`: adds a highlight colour to an existing colourmap.
 may be useful in `tp.plot.frequency.waterfall` or `tp.plot.phonons`.
 * `skelton`: Jonathan Skelton's rainbowy colourmap from his waterfall
-plots. He has lots of useful stuff in (Phono3py-Power-Tools)[https://github.com/skelton-group/Phono3py-Power-Tools].
+plots. He has lots of useful stuff in [Phono3py-Power-Tools](https://github.com/skelton-group/Phono3py-Power-Tools).
 
 ## `frequency.py`
 
