@@ -19,25 +19,25 @@ units.
 
 * `AMSET`_
 
-    * ``tp.load.amset`` loads transport properties from ``json``
-    * ``tp.load.amset_mesh`` loads scattering properties from ``hdf5``
+  * ``tp.load.amset`` loads transport properties from ``json``
+  * ``tp.load.amset_mesh`` loads scattering properties from ``hdf5``
 
 * BoltzTraP:
 
-    * ``tp.load.boltztrap`` reads the ``hdf5`` outputted by
-      ``tp.run.boltztrap``, although this can show questionable
-      reliability
+  * ``tp.load.boltztrap`` reads the ``hdf5`` outputted by
+    ``tp.run.boltztrap``, although this can show questionable
+    reliability
 
 * `Phono3py`_
 
-    * ``tp.load.phono3py`` includes derived quantities (lifetime, mean
-      free path and occupation), which can be written to ``hdf5``
+  * ``tp.load.phono3py`` includes derived quantities (lifetime, mean
+    free path and occupation), which can be written to ``hdf5``
 
 * `Phonopy`_
 
-    * ``tp.load.phonopy_dispersion`` reads both Phonopy and `sumo`_
-      ``disp.yaml``\ s
-    * ``tp.load.phonopy_dos`` reads ``projected_dos.dat``
+  * ``tp.load.phonopy_dispersion`` reads both Phonopy and `sumo`_
+    ``disp.yaml``\ s
+  * ``tp.load.phonopy_dos`` reads ``projected_dos.dat``
 
 .. _AMSET: <https://hackingmaterials.lbl.gov/amset/>
 .. _Phono3py: <https://phonopy.github.io/phono3py/hdf5_howto.html#kappa-hdf5-file>
