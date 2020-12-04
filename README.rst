@@ -1,6 +1,6 @@
 .. code-block::
 
-    \ ________
+     ________
     ///// \\\\
     \________/_______________________________________________________________
     |_____                            : ___                                  \
@@ -19,7 +19,7 @@ essentially wraps around `Matplotlib`_ functions, and is intended to be
 used as a python package, to build easily customisable plotting scripts.
 There are also several basic command-line scripts.
 
-.. _Matplotlib: <https://matplotlib.org/>
+.. _Matplotlib: https://matplotlib.org/
 
 ------------
 Installation
@@ -77,12 +77,12 @@ supplemented with helper functions, such as default labels in
 Currently supported codes are:
 
 Phononic properties:
-* `Phonopy <https://phonopy.github.io/phonopy/>`
-* `Phono3py <http://phonopy.github.io/phono3py/>`
+* `Phonopy <https://phonopy.github.io/phonopy/>`_
+* `Phono3py <http://phonopy.github.io/phono3py/>`_
 
 Electronic properties:
-* `AMSET <https://hackingmaterials.lbl.gov/amset/>`
-* `BoltzTraP <https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/>`
+* `AMSET <https://hackingmaterials.lbl.gov/amset/>`_
+* `BoltzTraP <https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/>`_
 
 Current plotting modes are split into four areas.
 
@@ -120,10 +120,10 @@ Contributions should have comprehensive docstrings, and where
 appropriate `examples`_, documentation and `tests`_ are greatly
 appreciated.
 
-.. _issue tracker: <https://github.com/kbspooner/ThermoPlotter/issues>
-.. _fork and pull: <https://guides.github.com/activities/forking>
-.. _examples: <https://github.com/kbspooner/ThermoPlotter/tree/master/examples>
-.. _tests: <https://github.com/kbspooner/ThermoPlotter/tree/master/tests>
+.. _issue tracker: https://github.com/kbspooner/ThermoPlotter/issues
+.. _fork and pull: https://guides.github.com/activities/forking
+.. _examples: https://github.com/kbspooner/ThermoPlotter/tree/master/examples
+.. _tests: https://github.com/kbspooner/ThermoPlotter/tree/master/tests
 
 -------
 License
@@ -138,11 +138,11 @@ Requirements
 
 ThermoPlotter uses the following open-source packages:
 
-* `h5py <http://docs.h5py.org/>`
-* `json <https://docs.python.org/3/library/json.html>`
-* `matplotlib <https://matplotlib.org>`
-* `numpy <https://numpy.org>`
-* `pymatgen <https://pymatgen.org>`
-* `scipy <https://www.scipy.org>`
-* `sphinx <https://www.sphinx-doc.org>`
-* `yaml <https://pyyaml.org/>`
+* `h5py <http://docs.h5py.org/>`_
+* `json <https://docs.python.org/3/library/json.html>`_
+* `matplotlib <https://matplotlib.org>`_
+* `numpy <https://numpy.org>`_
+* `pymatgen <https://pymatgen.org>`_
+* `scipy <https://www.scipy.org>`_
+* `sphinx <https://www.sphinx-doc.org>`_
+* `yaml <https://pyyaml.org/>`_
