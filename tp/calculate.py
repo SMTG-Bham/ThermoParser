@@ -158,6 +158,7 @@ def power_factor_fromdict(data):
     Arguments:
         data : dict
             dictionary containing:
+
                 conductivity array-like
                     conductivities.
                 seebeck : array-like
@@ -178,19 +179,19 @@ def zt_fromdict(data):
     """Convenience wrapper to calculate ZT from a dictionary.
 
     Arguments:
-    data : dict
-        dictionary containing:
+        data : dict
+            dictionary containing:
 
-            conductivity : array-like
-                conductivities.
-            seebeck : array-like
-                seebeck coefficients.
-            electronic_thermal_conductivity : array-like
-                electronic thermal conductivities.
-            lattice_thermal_conductivity : array-like
-                lattice thermal conductivities by temperature.
-            temperature : array-like
-                temperatures in K.
+                conductivity : array-like
+                    conductivities.
+                seebeck : array-like
+                    seebeck coefficients.
+                electronic_thermal_conductivity : array-like
+                    electronic thermal conductivities.
+                lattice_thermal_conductivity : array-like
+                    lattice thermal conductivities by temperature.
+                temperature : array-like
+                    temperatures in K.
 
     Returns:
         dict
@@ -209,19 +210,19 @@ def kl_fromdict(data):
     """Convenience wrapper to calculate k_latt from a dictionary.
 
     Arguments:
-    data : dict
-        dictionary containing:
+        data : dict
+            dictionary containing:
 
-            conductivity : array-like
-                conductivities.
-            seebeck : array-like
-                seebeck coefficients.
-            electronic_thermal_conductivity : array-like
-                electronic thermal conductivities.
-            zt : array-like
-                ZT.
-            temperature : array-like
-                temperatures in K.
+                conductivity : array-like
+                    conductivities.
+                seebeck : array-like
+                    seebeck coefficients.
+                electronic_thermal_conductivity : array-like
+                    electronic thermal conductivities.
+                zt : array-like
+                    ZT.
+                temperature : array-like
+                    temperatures in K.
 
     Returns:
         dict

@@ -1,10 +1,10 @@
-"""Resolves quantities by temperature and/ or q-point index.
+"""Resolves quantities by temperature and/ or direction.
 
 May need to be split by data origin in future.
 
 Functions:
     resolve:
-        currently for Phono3py, parts of AMSET and BoltzTraP.
+        currently for Phono3py, AMSET and BoltzTraP.
 """
 
 import numpy as np
@@ -13,8 +13,6 @@ from tp.data import aniso
 
 def resolve(data, quantities, temperature=None, direction=None):
     """Selects temperature and/or direction.
-
-    AMSET properties currently only support direction.
 
     Arguments:
         data : dict

@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
-__author__ = 'Kieran B. Spooner'
-__copyright__ = 'Copyright Kieran B. Spooner (2020)'
-__version__ = '0.2.0'
-__maintainer__ = 'Kieran B.Spooner'
-__email__ = 'kieran.spooner.14@ucl.ac.uk'
-__date__ = 'Nov 18 2020'
+__name__ =       'ThermoPlotter'
+__author__ =     'Kieran B. Spooner'
+__copyright__ =  'Copyright Kieran B. Spooner (2020)'
+__version__ =    '0.3.0'
+__maintainer__ = 'Kieran B. Spooner'
+__email__ =      'kieran.spooner.14@ucl.ac.uk'
+__date__ =       'Dec 4 2020'
 
 import glob
 import matplotlib as mpl
 import os
 import setuptools
 from setuptools.command.install import install
+from sphinx.setup_command import BuildDoc
 import shutil
 
-with open('README.md', 'r') as f:
+with open('README.rst', 'r') as f:
     long_description=f.read()
 
 def load_test_suite():
@@ -37,7 +39,7 @@ class PostInstallMoveFile(install):
         super().__init__(*args, **kwargs)
         install_style()
 
-scripts = glob.glob("scripts/*")
+scripts = glob.glob("scripts/tp-*")
 
 setuptools.setup(
     name='ThermoPlotter',
@@ -45,7 +47,7 @@ setuptools.setup(
     author='Kieran B. Spooner',
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type='text/x-rst',
     url='https://github.com/kbspooner/ThermoPlotter',
     packages=setuptools.find_packages(),
     classifiers=[
@@ -58,10 +60,16 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Chemistry',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Scientific/Engineering :: Visualization'],
-    keywords='chemistry materials thermoelectric dft phonopy phono3py amset tp',
+    keywords='chemistry materials thermoelectric dft phonopy phono3py '
+             'amset tp matplotlib',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen', 'scipy',
-                      'pyyaml'],
+    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
+                      'pyyaml', 'scipy', 'sphinx']
     python_requires='>=3',
-    cmdclass={'install': PostInstallMoveFile},
+    cmdclass={'build_sphinx': BuildDoc,
+              'install':      PostInstallMoveFile},
+    command_options={'build_sphinx':
+                        {'project':    ('setup.py', __name__),
+                         'version':    ('setup.py', __version__),
+                         'source_dir': ('setup.py', 'docs')}},
     scripts=scripts)

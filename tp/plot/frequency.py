@@ -16,11 +16,12 @@ Functions:
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import numpy as np
 import tp
 import warnings
 from tp.data import resolve
+
+warnings.filterwarnings('ignore', module='matplotlib')
 
 def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
             colour='tab10', fill=True, fillalpha=0.2, line=False, **kwargs):
@@ -54,9 +55,11 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         line : bool, optional
             plot lines. Default: False.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between.
-            Defaults: {'rasterized': False}
+            Defaults:
+
+                rasterized: False
     """
 
     # defaults
@@ -65,6 +68,16 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
+
+    # input checks
+
+    for name, value in zip(['total', 'main', 'invert', 'scale', 'fill', 'line'],
+                           [ total,   main,   invert,   scale,   fill,   line]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
+    assert fill or line, 'fill or line or both must be True.'
+    assert isinstance(fillalpha, (float, int)) and fillalpha >= 0 \
+                                               and fillalpha <= 1, \
+           'fillalpha must be a float/ integer between 0 and 1.'
 
     # data scaling
 
@@ -98,8 +111,6 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         for i, c in enumerate(data):
             colour[c] = cmap[i]
 
-    if not fill and not line:
-        raise Exception('fill or line or both must be True.')
     if total and 'total' not in colour:
         colour['total'] = '#000000'
     fillcolour = {}
@@ -201,11 +212,13 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         line : bool, optional
             plot lines. Default: True.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
-            Defaults: {'label':      '$\mathregular{\kappa_l}$',
-                       'rasterized': False}
+            Defaults:
+
+                label:      $\mathregular{\kappa_l}$
+                rasterized: False
     """
 
     # defaults
@@ -216,6 +229,13 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
+
+    # input checks
+
+    for name, value in zip(['main', 'invert', 'scale', 'fill', 'line'],
+                           [ main,   invert,   scale,   fill,   line]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
+    assert fill or line, 'fill or line or both must be True.'
 
     # data formatting and calculation
 
@@ -326,14 +346,16 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             each band or one for each point) or a single colour.
             Default: viridis.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
-            Defaults: {'alpha':      0.3,
-                       'edgecolors': 'black',
-                       'linewidth':  0,
-                       'marker':     '.',
-                       'rasterized': True,
-                       's':          1}
+            Defaults:
+
+                alpha:      0.3
+                edgecolors: black
+                linewidth:  0
+                marker:     '.'
+                rasterized: True
+                s:          1
     """
 
     # defaults
@@ -347,6 +369,12 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
+
+    # input checks
+
+    for name, value in zip(['main', 'invert'],
+                           [ main,   invert]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
 
     # data formatting
 
@@ -446,21 +474,23 @@ def add_projected_waterfall(ax, data, quantity, projected,
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
             colour scale maximum. Default: display 99.9 % data.
-        cscale : str, optional
+        cscale : str optional
             override colour scale (linear/ log). Default: None.
-        unoccupied : str, optional
+        unoccupied : str or array-like, optional
             if the colour variable is occupation, values below 1 are
             coloured in this colour. If set to None, or cmin is set,
             this feature is turned off. Default: grey.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
-            Defaults: {'alpha':      0.3,
-                       'edgecolors': 'black',
-                       'linewidth':  0,
-                       'marker':     '.',
-                       'rasterized': True,
-                       's':          1}
+            Defaults:
+
+                alpha:      0.3
+                edgecolors: black
+                linewidth:  0
+                marker:     .
+                rasterized: True
+                s:          1
 
     Returns:
         colorbar
@@ -480,6 +510,12 @@ def add_projected_waterfall(ax, data, quantity, projected,
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
+
+    # input checks
+
+    for name, value in zip(['main', 'invert'],
+                           [ main,   invert]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
 
     # data formatting
 

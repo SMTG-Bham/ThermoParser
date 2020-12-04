@@ -3,8 +3,10 @@
 Functions:
     linear:
         linear between two colours.
+    uniform:
+        attempt at three-colour linear for higher contrast. WIP.
     elbow:
-        attempt at bigradient linear for higher contrast. WIP.
+        Like uniform, except one can chose the midpoint location.
     highlight:
         takes an existing map and highlights specific entries.
     skelton:
@@ -79,6 +81,7 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
     cmid2 = np.array(rgb2array(cmid, alpha))
     cmax2 = np.array(rgb2array(cmax, alpha))
     cnorm = (cmid2[:3] - cmin2[:3]) / (cmax2[:3] - cmin2[:3])
+    # pythagoras
     midpoint = np.sqrt(((1-cnorm[0])**2 + (1-cnorm[1])**2 + (1-cnorm[2])**2)/3)
     x = [0, midpoint, 1]
     y = [cmin2, cmid2, cmax2]

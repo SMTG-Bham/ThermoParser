@@ -7,15 +7,15 @@ Functions:
 import numpy as np
 import tp
 
-def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
+def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
               vasprun='vasprun.xml', soc=False, zero_weighted=False,
               kpoints=None, lpfac=10, relaxation_time=1e-14, run=True,
-              analyse=True, output='boltztrap.hdf5'):
+              analyse=True, output='boltztrap.hdf5', write_doping=False):
     """Runs BoltzTraP
 
     Runs quicker than the pymatgen from_files version.
     Also writes to a hdf5 file.
-    Minimum temperature is always 200 K, because BoltzTraP.
+    Minimum temperature is 200 K or tstep, whichever is larger.
     Note: BoltzTraP can be a fickle friend, so if you're getting errors,
     it may be worth reinstalling or trying on a different machine.
     Testing with a small number of temperature/ doping combinations is also
@@ -48,6 +48,11 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
             analyse BoltzTraP. Default: True.
         output : str, optional
             output hdf5 filename. Default: boltztrap.hdf5.
+        write_doping : bool, optional
+            manually write doping concentrations at the end of the
+            boltztrap/boltztrap.outputtrans file.
+            Toggling may fix np.linalg errors; you may want to set the
+            default manually on a per-computer basis. Default: False.
     """
 
     import h5py
@@ -56,14 +61,19 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
     from pymatgen.io.vasp.outputs import Vasprun
     from scipy import constants
 
-    #for v, w in zip(['tmax', 'tstep', 'lpfac', 'relaxation_time'],
-    #                [tmax, tstep, lpfac, relaxation_time]):
-    #    assert isinstance(w, (float, int)), '{} must be a number'.format(v)
-    for v, w in zip(['soc,', 'zero_weighted', 'run', 'analyse'],
-                    [soc, zero_weighted, run, analyse]):
-        assert isinstance(w, bool), '{} must be True or False'.format(v)
+    # check inputs
 
-    temperature = np.arange(200, tmax, tstep)
+    for name, value in zip(['soc', 'zero_weighted', 'run', 'analyse',
+                            'write_doping'],
+                           [ soc,   zero_weighted,   run,   analyse,
+                             write_doping]):
+        assert isinstance(value, bool), '{} must be True or False'.format(name)
+
+    tmax += tstep
+    tmin = 200
+    if tstep > tmin:
+        tmin = tstep
+    temperature = np.arange(tmin, tmax, tstep)
 
     if run: # run boltztrap from vasprun.xml -> boltztrap directory
         doping = np.array(doping)
@@ -77,6 +87,13 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
         print('Running Boltztrap...', end='')
         btr_dir = btr.run(path_dir='.')
         print('Done.')
+
+        if write_doping:
+            with open(os.path.join(btr_dir, 'boltztrap.outputtrans'),'a') as f:
+                for i, x in enumerate(np.concatenate((doping, -doping))):
+                    f.write(
+                      'Doping level number {} n = {} carriers/cm3\n'.format(i,
+                                                                            x))
 
     else:
         btr_dir = 'boltztrap'
@@ -125,17 +142,6 @@ def boltztrap(tmax=1000, tstep=10, doping=np.logspace(18, 21, 100),
         data['fermi_level'] = f
         print('Done.')
 
-        # write data
-
-        datafile = h5py.File(output, 'w')
-        for key in data.keys():
-            if isinstance(data[key], dict):
-                group = datafile.create_group(key)
-                for k in data[key].keys():
-                    group[k] = data[key][k]
-            else:
-                datafile.create_dataset(key, np.shape(data[key]),
-                                        data=data[key])
-        datafile.close()
+        tp.plot.save.hdf5(data, output)
 
     return

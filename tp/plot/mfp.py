@@ -10,11 +10,12 @@ Functions:
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import numpy as np
 import tp.settings
 import warnings
 from tp.data import resolve
+
+warnings.filterwarnings('ignore', module='matplotlib')
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   xmarkers=None, ymarkers=None, add_xticks=False,
@@ -28,6 +29,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             axes to plot on.
         data : dict
             Phono3py-like data including:
+
                 mode_kappa: array-like
                     frequency and q-point decomposed lattice thermal
                     conductivity.
@@ -35,6 +37,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                     mean free paths.
                 temperature : array-like
                     temperature.
+
         kmin : float or int, optional
             minimum kappa to plot in percent. Default: 1.
 
@@ -75,13 +78,18 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         markerkwargs : dict, optional
             keyword arguments for the markers, passed to
             matplotlib.pyplot.plot.
-            Defaults: {'color':      'black',
-                       'rasterized': False}.
-        **kwargs : dict, optional
+            Defaults:
+
+                color:      black
+                rasterized: False
+
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
-            Defaults: {'label':      '$\mathregular{\kappa_l}$',
-                       'rasterized': False}
+            Defaults:
+
+                label:      $\mathregular{\kappa_l}$
+                rasterized: False
     """
 
     from tp.calculate import cumulate
@@ -93,6 +101,15 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
+
+    # input checks
+
+    for name, value in zip(['main', 'scale', 'fill', 'line', 'add_xticks',
+                                                             'add_yticks'],
+                           [ main,   scale,   fill,   line,   add_xticks,
+                                                              add_yticks]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
+    assert fill or line, 'fill or line or both must be True.'
 
     # data formatting and calculation
 
@@ -179,11 +196,13 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, add_xticks=False,
             add y_ticks for each marker. Doesn't work on log axes.
             Default: False.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
-            Defaults: {'color':      'black',
-                       'linewidth':  axes line width,
-                       'rasterized': False}.
+            Defaults:
+
+                color:      black
+                linewidth:  axes line width
+                rasterized: False
     """
 
     from scipy.interpolate import interp1d

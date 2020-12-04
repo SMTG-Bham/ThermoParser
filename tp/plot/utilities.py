@@ -197,9 +197,9 @@ def set_locators(ax, x=None, y=None, dos=False):
         ax.yaxis.set_minor_locator(locator()['null'])
         ax.set_ylabel('')
 
-    if x is not None:
+    if x is not None and x != 'null':
         ax.set_xscale(x)
-    if y is not None:
+    if y is not None and y != 'null':
         ax.set_yscale(y)
     for a, scale in zip([ax.xaxis, ax.yaxis], [x, y]):
         if scale is not None:

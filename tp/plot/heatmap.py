@@ -10,13 +10,10 @@ Functions:
 """
 
 import matplotlib as mpl
-import matplotlib.colors as colors
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import numpy as np
 import tp
 import warnings
-from matplotlib import cm
 from scipy.interpolate import interp1d, interp2d
 
 warnings.filterwarnings('ignore', module='matplotlib')
@@ -41,9 +38,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             colour data.
 
         xinterp : int, optional
-            density of interpolation. Default: None.
+            density of interpolation. None turns it off. Default: None.
         yinterp : int, optional
-            density of interpolation. Default: None.
+            density of interpolation. None turns it off. Default: None.
         kind : str, optional
             interpolation kind. Default: linear.
 
@@ -70,9 +67,11 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults: {'rasterized': False}
+            Defaults:
+
+                rasterized: False
 
     Returns:
         colourbar
@@ -121,9 +120,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             extend = 'max'
 
     if cscale == 'linear':
-        cnorm = colors.Normalize(vmin=cmin, vmax=cmax)
+        cnorm = mpl.colors.Normalize(vmin=cmin, vmax=cmax)
     elif cscale == 'log':
-        cnorm = colors.LogNorm(vmin=cmin, vmax=cmax)
+        cnorm = mpl.colors.LogNorm(vmin=cmin, vmax=cmax)
 
     try:
         colours = mpl.cm.get_cmap(colour)
@@ -176,8 +175,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     return cbar
 
-def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
-              yinterp=None, kind='linear', xmin=None, xmax=None, ymin=None,
+def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
+              yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
               ymax=None, cmin=None, cmax=None, colour='viridis',
               output='zt.hdf5', **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
@@ -200,9 +199,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
             average/ avg. Default: average.
 
         xinterp : int, optional
-            density of interpolation. Default: None.
+            density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
-            density of interpolation. Default: None.
+            density of interpolation. None turns it off. Default: 200.
         kind : str, optional
             interpolation kind. Default: linear.
 
@@ -227,9 +226,11 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
             within this function. Set to None to not write.
             Default: zt.hdf5.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults: {'rasterized': False}
+            Defaults:
+
+                rasterized: False
 
     Returns:
         colourbar
@@ -284,8 +285,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=None,
 
     return cbar
 
-def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None,
-                     yinterp=None, kind='linear', xmin=None, xmax=None,
+def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
+                     yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
                      output='target-kl.hdf5', **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
@@ -307,9 +308,9 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None,
             average/ avg. Default: average.
 
         xinterp : int, optional
-            density of interpolation. Default: None.
+            density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
-            density of interpolation. Default: None.
+            density of interpolation. None turns it off. Default: 200.
         kind : str, optional
             interpolation kind. Default: linear.
 
@@ -333,9 +334,11 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=None,
             output filename to write to. Set to None to not write.
             Default: target-kl.hdf5.
 
-        **kwargs : dict, optional
+        **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults: {'rasterized': False}
+            Defaults:
+
+                rasterized: False
 
     Returns:
         colourbar

@@ -183,8 +183,6 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
                       'spin':              spin,
                       'units':             {}}}
     for q in quantities:
-        #assert q in data, '{} unrecognised. Quantity must be in {} or {}.'.format(
-        #        q, ', '.join(list(data)[:-1]), list(data)[-1])
         q2 = tnames[q] if q in tnames else q
         if q in hasspin:
             if spin == 'avg':
