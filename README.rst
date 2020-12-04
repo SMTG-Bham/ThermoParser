@@ -76,13 +76,15 @@ supplemented with helper functions, such as default labels in
 
 Currently supported codes are:
 
-Phononic properties:
-* `Phonopy <https://phonopy.github.io/phonopy/>`_
-* `Phono3py <http://phonopy.github.io/phono3py/>`_
+* Phononic properties:
 
-Electronic properties:
-* `AMSET <https://hackingmaterials.lbl.gov/amset/>`_
-* `BoltzTraP <https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/>`_
+  * `Phonopy <https://phonopy.github.io/phonopy/>`_
+  * `Phono3py <http://phonopy.github.io/phono3py/>`_
+
+* Electronic properties:
+
+  * `AMSET <https://hackingmaterials.lbl.gov/amset/>`_
+  * `BoltzTraP <https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/>`_
 
 Current plotting modes are split into four areas.
 
