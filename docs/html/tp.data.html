@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tp.data package &#8212; ThermoPlotter 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="tp-data-package">
+<h1>tp.data package<a class="headerlink" href="#tp-data-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tp.data.aniso">
+<span id="tp-data-aniso-module"></span><h2>tp.data.aniso module<a class="headerlink" href="#module-tp.data.aniso" title="Permalink to this headline">¶</a></h2>
+<p>Functions for resolving anisotropic variables.</p>
+<p>Naming convention: number indicates ordinal to be resolved; a lone
+number indicates the form [x, y, z] (or [xx, yy, zz, yz, xz, xy] etc.),
+while matrix_number indicates a three by three matrix.</p>
+<dl class="py function">
+<dt id="tp.data.aniso.four">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">four</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.four" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves fourth-index anisotropy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.aniso.matrix_one">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">matrix_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.matrix_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves third-index anisotropy for matrix representations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.aniso.matrix_three">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">matrix_three</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.matrix_three" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves third-index anisotropy for matrix representations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.aniso.matrix_two">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">matrix_two</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.matrix_two" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves third-index anisotropy for matrix representations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.aniso.one">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves first-index anisotropy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.aniso.three">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">three</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.three" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves third-index anisotropy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.aniso.two">
+<code class="sig-prename descclassname">tp.data.aniso.</code><code class="sig-name descname">two</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.aniso.two" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolves second-index anisotropy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – array-like
+anisotropic variable.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve. Accepts a-c/ x-y, average/ avg. or
+normal/ norm. Default: average.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>resolved variable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tp.data.load">
+<span id="tp-data-load-module"></span><h2>tp.data.load module<a class="headerlink" href="#module-tp.data.load" title="Permalink to this headline">¶</a></h2>
+<p>Data loading tools.</p>
+<dl>
+<dt>Functions:</dt><dd><p>amset
+amset_mesh
+phono3py
+phonopy_dispersion
+phonopy_dos</p>
+<dl class="simple">
+<dt>get_path:</dt><dd><p>gets high path from phonopy dispersion data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py function">
+<dt id="tp.data.load.amset">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['temperature', 'doping', 'seebeck', 'conductivity', 'electronic_thermal_conductivity']</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.amset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads AMSET transport data.</p>
+<p>Includes unit conversion and outputs units (see tp.settings).
+Swaps temperature and doping indices so temperature is first, for
+consistency with other codes, and mobility is formatted as an array,
+like scattering_rates is in the mesh.h5 file. Maintains basic
+compatibility with amset 0.1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – str
+filepath.</p></li>
+<li><p><strong>quantites</strong> – dict, optional
+values to extract. Default: temperature, doping, seebeck,
+conductivity, electronic_thermal_conductivity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>extracted values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.amset_mesh">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset_mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['temperature', 'doping', 'scattering_rates', 'scattering_labels']</span></em>, <em class="sig-param"><span class="n">spin</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.amset_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads AMSET mesh data.</p>
+<p>Includes unit conversion and outputs units (see tp.settings).
+Swaps temperature and doping indices so temperature is first, for
+consistency with other codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – str
+filepath.</p></li>
+<li><p><strong>quantites</strong> – dict, optional
+values to extract. Accepts AMSET keys, without spin
+channels, which are dealt with in the spin variable.
+Default: temperature, doping, scattering_rates,
+scattering_labels.</p></li>
+<li><p><strong>spin</strong> – str, optional
+spin. Accepts up, down or avg. If avg and there is only one
+spin channel, selects that, else averages both. Default: avg.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>extracted values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.boltztrap">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['temperature', 'doping', 'seebeck', 'conductivity', 'electronic_thermal_conductivity']</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.boltztrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads BoltzTraP data from the tp boltztrap.hdf5 file.</p>
+<p>Includes unit conversion and outputs units (see tp.settings).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – str
+filepath.</p></li>
+<li><p><strong>quantites</strong> – dict, optional
+values to extract. Accepts boltztrap.hdf5 keys.
+Default: temperature, doping, seebeck, conductivity,
+electronic_thermal_conductivity.</p></li>
+<li><p><strong>doping</strong> – str, optional
+doping.  Default: n.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>extracted values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.get_path">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">get_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yamldata</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.get_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the path from a phonopy yaml.</p>
+<p>Works for the old and new phonopy and sumo yaml files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>yamldata</strong> – str
+raw phonopy dispersion data (i.e. from yaml.safe_load).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>x tick ordinates.</p>
+</dd>
+<dt>list</dt><dd><p>x tick labels.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.phono3py">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phono3py</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['kappa', 'temperature']</span></em>, <em class="sig-param"><span class="n">write_lifetime</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">write_mfp</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">write_occupation</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.phono3py" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads Phono3py data.</p>
+<p>Can also calculate lifetimes, mean free paths and occupations, which
+can be written to a file.
+Includes unit conversions and outputs units for all the data (see
+tp.settings). Also corrects mode_kappa for different phono3py
+versions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – str
+filepath.</p></li>
+<li><p><strong>quantities</strong> – list, optional
+values to extract. Accepts Phono3py keys, lifetime,
+mean_free_path and occupation. Default: kappa, temperature.</p></li>
+<li><p><strong>write_lifetime</strong> – bool, optional
+write lifetimes to a new hdf5 file if in quantites.
+Default: False.</p></li>
+<li><p><strong>write_mfp</strong> – bool, optional
+write mean free paths to a new hdf5 file if in quantities.
+Default: False.</p></li>
+<li><p><strong>write_occupation</strong> – bool, optional
+write occupations to a new hdf5 file if in quantities.
+Default: False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>output data.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.phonopy_dispersion">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phonopy_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">xdata</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.phonopy_dispersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads phonopy dispersion, and can scale the x values.</p>
+<p>Scaling the x values is necessary to plot multiple dispersions on
+the same axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – str
+filepath.</p></li>
+<li><p><strong>xdata</strong> – dict, optional
+data for the dispersion to scale this to. Should have the
+same path, must have the same number of labels. Default: None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>dispersion data.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.phonopy_dos">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phonopy_dos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">atoms</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.load.phonopy_dos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads phonopy DoS and collates data per atom and as a total.</p>
+<p>By default reads atom names from a POSCAR, but can be overridden to
+allow for separation of environments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – str
+path to phonopy projected_dos.dat or similar.</p></li>
+<li><p><strong>poscar</strong> – str, optional
+path to POSCAR. Ignored if atoms specified. Default: POSCAR.</p></li>
+<li><p><strong>atoms</strong> – str or array-like, optional
+atoms in POSCAR order. Atom names can be repeated, in which
+case their contributions are summed. Numbers can indicate
+repetition in the manner of a chemical formula, so the
+following are all acceptable and equivalent: “Ba 1 Sn 2 O 3”,
+“Ba Sn Sn O O O”, “Ba Sn O 3”. Different environments can be
+distinguised with different atom names.
+Default: read from POSCAR.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>frequency, DoS per atom and total.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tp.data.resolve">
+<span id="tp-data-resolve-module"></span><h2>tp.data.resolve module<a class="headerlink" href="#module-tp.data.resolve" title="Permalink to this headline">¶</a></h2>
+<p>Resolves quantities by temperature and/ or direction.</p>
+<p>May need to be split by data origin in future.</p>
+<dl class="simple">
+<dt>Functions:</dt><dd><dl class="simple">
+<dt>resolve:</dt><dd><p>currently for Phono3py, AMSET and BoltzTraP.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py function">
+<dt id="tp.data.resolve.resolve">
+<code class="sig-prename descclassname">tp.data.resolve.</code><code class="sig-name descname">resolve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantities</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.resolve.resolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects temperature and/or direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – dict
+data.</p></li>
+<li><p><strong>quantities</strong> – array-like or str
+quantities to resolve</p></li>
+<li><p><strong>temperature</strong> – float, optional
+temperature to select. Default: None.</p></li>
+<li><p><strong>direction</strong> – str, optional
+direction to resolve, accepts x-z/, a-c, average/ avg or
+normal/ norm. Default: None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>resolved data.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tp.data.run">
+<span id="tp-data-run-module"></span><h2>tp.data.run module<a class="headerlink" href="#module-tp.data.run" title="Permalink to this headline">¶</a></h2>
+<p>Code running tools.</p>
+<dl class="simple">
+<dt>Functions:</dt><dd><p>boltztrap</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt id="tp.data.run.boltztrap">
+<code class="sig-prename descclassname">tp.data.run.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">1001</span></em>, <em class="sig-param"><span class="n">tstep</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">array([1e+18, 1.53992653e+18, 2.37137371e+18, 3.65174127e+18, 5.62341325e+18, 8.65964323e+18, 1.33352143e+19, 2.05352503e+19, 3.16227766e+19, 4.86967525e+19, 7.49894209e+19, 1.15478198e+20, 1.77827941e+20, 2.73841963e+20, 4.21696503e+20, 6.49381632e+20, 1e+21])</span></em>, <em class="sig-param"><span class="n">vasprun</span><span class="o">=</span><span class="default_value">'vasprun.xml'</span></em>, <em class="sig-param"><span class="n">soc</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">zero_weighted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kpoints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lpfac</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">relaxation_time</span><span class="o">=</span><span class="default_value">1e-14</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">analyse</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'boltztrap.hdf5'</span></em>, <em class="sig-param"><span class="n">write_doping</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.run.boltztrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs BoltzTraP</p>
+<p>Runs quicker than the pymatgen from_files version.
+Also writes to a hdf5 file.
+Minimum temperature is 200 K or tstep, whichever is larger.
+Note: BoltzTraP can be a fickle friend, so if you’re getting errors,
+it may be worth reinstalling or trying on a different machine.
+Testing with a small number of temperature/ doping combinations is also
+recommended</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tmax</strong> – float, optional
+maximum temperature in K. Default: 1000.</p></li>
+<li><p><strong>tstep</strong> – float, optional
+temperature step in K. Default: 10.</p></li>
+<li><p><strong>doping</strong> – array-like, optional
+doping concentrations in cm-1. Default: np.logspace(18, 21, 101).</p></li>
+<li><p><strong>vasprun</strong> – str, optional
+path to vasprun. Default: vasprun.xml.</p></li>
+<li><p><strong>soc</strong> – bool, optional
+spin orbit coupling used. Default: False.</p></li>
+<li><p><strong>zero_weighted</strong> – bool, optional
+zero weighted kpoints used. Default: False.</p></li>
+<li><p><strong>kpoints</strong> – str, optional
+path to KPOINTS file if zero_weighted. Default: KPOINTS.</p></li>
+<li><p><strong>lpfac</strong> – int, optional
+interpolate the DoS k-points by lpfac times. Default: 10.</p></li>
+<li><p><strong>relaxation_time</strong> – float, optional
+charge carrier relaxation time. Default: 1e-14.</p></li>
+<li><p><strong>run</strong> – bool, optional
+run BoltzTraP. Default: True.</p></li>
+<li><p><strong>analyse</strong> – bool, optional
+analyse BoltzTraP. Default: True.</p></li>
+<li><p><strong>output</strong> – str, optional
+output hdf5 filename. Default: boltztrap.hdf5.</p></li>
+<li><p><strong>write_doping</strong> – bool, optional
+manually write doping concentrations at the end of the
+boltztrap/boltztrap.outputtrans file.
+Toggling may fix np.linalg errors; you may want to set the
+default manually on a per-computer basis. Default: False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tp.data.save">
+<span id="tp-data-save-module"></span><h2>tp.data.save module<a class="headerlink" href="#module-tp.data.save" title="Permalink to this headline">¶</a></h2>
+<p>Utility to save to hdf5</p>
+<dl class="py function">
+<dt id="tp.data.save.hdf5">
+<code class="sig-prename descclassname">tp.data.save.</code><code class="sig-name descname">hdf5</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">output</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.save.hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves to hdf5.</p>
+<p>Aims to make saving nested dictionaries easy, works for 3 layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – dict
+data to save.</p></li>
+<li><p><strong>output</strong> – str
+output filename.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tp.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.data" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ThermoPlotter</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Kieran B. Spooner.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tp.data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
