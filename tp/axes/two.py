@@ -3,7 +3,9 @@
 Each function returns a figure and an array of sets of axes. Those with
 legend space also return a function to add a pre-positioned legend.
 
-Functions:
+Functions
+---------
+
     h
     h_small_legend
     h_medium_legend
@@ -22,11 +24,15 @@ style = settings.style()
 def h(style=style):
     """A figure with two sets of axes horizontally.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -47,11 +53,15 @@ def h(style=style):
 def h_small_legend(style=style):
     """A figure with two sets of axes horizontally and space for a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -74,11 +84,15 @@ def h_small_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -93,11 +107,15 @@ def h_small_legend(style=style):
 def h_medium_legend(style=style):
     """A figure with two sets of axes horizontally and space for a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -120,11 +138,15 @@ def h_medium_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -139,11 +161,15 @@ def h_medium_legend(style=style):
 def v(style=style):
     """A figure with two sets of axes vertically.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes

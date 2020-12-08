@@ -1,11 +1,14 @@
 """Data loading tools.
 
-Functions:
+Functions
+---------
+
     amset
     amset_mesh
     phono3py
     phonopy_dispersion
     phonopy_dos
+
 
     get_path:
         gets high path from phonopy dispersion data.
@@ -25,7 +28,9 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
     like scattering_rates is in the mesh.h5 file. Maintains basic
     compatibility with amset 0.1.
 
-    Arguments:
+    Arguments
+    ---------
+
         filename : str
             filepath.
 
@@ -33,7 +38,9 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
             values to extract. Default: temperature, doping, seebeck,
             conductivity, electronic_thermal_conductivity.
 
-    Returns:
+    Returns
+    -------
+
         dict
             extracted values.
     """
@@ -114,7 +121,9 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
     Swaps temperature and doping indices so temperature is first, for
     consistency with other codes.
 
-    Arguments:
+    Arguments
+    ---------
+
         filename : str
             filepath.
 
@@ -128,7 +137,9 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
             spin. Accepts up, down or avg. If avg and there is only one
             spin channel, selects that, else averages both. Default: avg.
 
-    Returns:
+    Returns
+    -------
+
         dict
             extracted values.
     """
@@ -215,7 +226,9 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     Includes unit conversion and outputs units (see tp.settings).
 
-    Arguments:
+    Arguments
+    ---------
+
         filename : str
             filepath.
 
@@ -227,7 +240,9 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
         doping : str, optional
             doping.  Default: n.
 
-    Returns:
+    Returns
+    -------
+
         dict
             extracted values.
     """
@@ -295,7 +310,9 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
     tp.settings). Also corrects mode_kappa for different phono3py
     versions.
 
-    Arguments:
+    Arguments
+    ---------
+
         filename : str
             filepath.
 
@@ -312,7 +329,9 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
             write occupations to a new hdf5 file if in quantities.
             Default: False.
 
-    Returns:
+    Returns
+    -------
+
         dict
             output data.
     """
@@ -419,7 +438,9 @@ def phonopy_dispersion(filename, xdata=None):
     Scaling the x values is necessary to plot multiple dispersions on
     the same axes.
 
-    Arguments:
+    Arguments
+    ---------
+
         filename : str
             filepath.
 
@@ -427,7 +448,9 @@ def phonopy_dispersion(filename, xdata=None):
             data for the dispersion to scale this to. Should have the
             same path, must have the same number of labels. Default: None.
 
-    Returns:
+    Returns
+    -------
+
         dict
             dispersion data.
     """
@@ -479,7 +502,9 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
     By default reads atom names from a POSCAR, but can be overridden to
     allow for separation of environments.
 
-    Arguments:
+    Arguments
+    ---------
+
         filename : str
             path to phonopy projected_dos.dat or similar.
         poscar : str, optional
@@ -493,7 +518,9 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
             distinguised with different atom names.
             Default: read from POSCAR.
 
-    Returns:
+    Returns
+    -------
+
         dict
             frequency, DoS per atom and total.
     """
@@ -548,11 +575,15 @@ def get_path(yamldata):
 
     Works for the old and new phonopy and sumo yaml files.
 
-    Arguments:
+    Arguments
+    ---------
+
         yamldata : str
             raw phonopy dispersion data (i.e. from yaml.safe_load).
 
-    Returns:
+    Returns
+    -------
+
         list
             x tick ordinates.
         list

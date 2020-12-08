@@ -1,6 +1,8 @@
 """Heatmap plotters.
 
-Functions:
+Functions
+---------
+
     add_heatmap:
         heatmap.
     add_ztmap:
@@ -27,7 +29,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     Formats limits, parses extra colourmap options, makes sure data
     isn't obscured.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         x : array-like
@@ -73,7 +77,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
                 rasterized: False
 
-    Returns:
+    Returns
+    -------
+
         colourbar
             colourbar.
     """
@@ -183,7 +189,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
     Calculates ZT and writes to hdf5, plots and formats labels etc.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -232,7 +240,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
                 rasterized: False
 
-    Returns:
+    Returns
+    -------
+
         colourbar
             colourbar.
     """
@@ -305,7 +315,9 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     Calculates lattice thermal conductivity, plots and formats labels
     etc. May be useful to screen materials to calculate kappa_l for.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -351,7 +363,9 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
 
                 rasterized: False
 
-    Returns:
+    Returns
+    -------
+
         colourbar
             colourbar.
     """

@@ -5,11 +5,14 @@ tp. It sets out the default style sheet, tick locators and axis labels;
 as well as providing a means to automatically convert the units
 presented and add abbreviations that can be used when loading data.
 
-Functions:
+Functions
+---------
+
     style:
         default style sheet.
     locator:
         default tick locators.
+
 
     to_tp:
         convert names to tp conventions.
@@ -20,6 +23,7 @@ Functions:
     to_phono3py:
         convert names to phono3py conventions.
 
+
     amset_conversions:
         unit conversions.
     boltztrap_conversions:
@@ -28,6 +32,7 @@ Functions:
         unit conversions.
     phono3py_conversions:
         unit conversions.
+
 
     units:
         default units used.

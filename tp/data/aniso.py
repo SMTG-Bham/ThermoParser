@@ -10,14 +10,18 @@ import numpy as np
 def one(data, direction='avg'):
     """Resolves first-index anisotropy.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """
@@ -43,14 +47,18 @@ def one(data, direction='avg'):
 def two(data, direction='avg'):
     """Resolves second-index anisotropy.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """
@@ -74,14 +82,18 @@ def two(data, direction='avg'):
 def three(data, direction='avg'):
     """Resolves third-index anisotropy.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """
@@ -105,14 +117,18 @@ def three(data, direction='avg'):
 def four(data, direction='avg'):
     """Resolves fourth-index anisotropy.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """
@@ -136,14 +152,18 @@ def four(data, direction='avg'):
 def matrix_one(data, direction='avg'):
     """Resolves third-index anisotropy for matrix representations.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """
@@ -167,14 +187,18 @@ def matrix_one(data, direction='avg'):
 def matrix_two(data, direction='avg'):
     """Resolves third-index anisotropy for matrix representations.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """
@@ -198,14 +222,18 @@ def matrix_two(data, direction='avg'):
 def matrix_three(data, direction='avg'):
     """Resolves third-index anisotropy for matrix representations.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : array-like
             anisotropic variable.
         direction : str, optional
             direction to resolve. Accepts a-c/ x-y, average/ avg. or
             normal/ norm. Default: average.
 
-    Returns:
+    Returns
+    -------
+
         list
             resolved variable.
     """

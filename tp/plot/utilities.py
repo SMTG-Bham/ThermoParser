@@ -1,6 +1,8 @@
 """Utilities to aid the plotting scripts.
 
-Functions:
+Functions
+---------
+
     colour_scale:
         Sorts colour limits and colourbar format.
     scale_to_axis
@@ -19,7 +21,9 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
     Attempts to set the limits to maximise visibility of the most
     important data and determines if the colourbar should be extended.
 
-    Arguments:
+    Arguments
+    ---------
+
         c : array-like
             colour data.
         name : str
@@ -38,7 +42,9 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
             coloured in this colour. If set to None, or cmin is set,
             this feature is turned off. Default: grey.
 
-    Returns:
+    Returns
+    -------
+
         cnorm
             colour normalisation object.
         extend
@@ -116,7 +122,9 @@ def scale_to_axis(ax, data, exclude=[], scale=None, axis='y'):
 
     Assumes data is linear, but still works for linear and log axes.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to fit to.
         data : array-like or dict
@@ -129,7 +137,9 @@ def scale_to_axis(ax, data, exclude=[], scale=None, axis='y'):
         axis : bool, optional
             axis to scale to. Default: y.
 
-    Returns:
+    Returns
+    -------
+
         data
             scaled data.
     """
@@ -168,11 +178,13 @@ def scale_to_axis(ax, data, exclude=[], scale=None, axis='y'):
     return data
 
 def set_locators(ax, x=None, y=None, dos=False):
-    """Set locators quickly
+    """Set locators quickly.
 
     If log, sets scale as well.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to format
         x : str, optional

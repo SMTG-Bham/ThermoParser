@@ -48,7 +48,7 @@ setuptools.setup(
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://github.com/SMTG-UCL/ThermoPlotter',
+    url='https://smtg-ucl.github.io/ThermoPlotter/',
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',

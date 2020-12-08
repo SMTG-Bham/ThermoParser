@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
 project = 'ThermoPlotter'
-copyright = '2020, Kieran B. Spooner'
+copyright = '2020, Scanlon Materials Theory Group'
 author = 'Kieran B. Spooner'
 
 # The full version, including alpha/beta/rc tags

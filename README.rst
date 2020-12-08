@@ -102,7 +102,8 @@ Current plotting modes are split into four areas.
   concentration; and one which plots the lattice thermal conductivity
   required to reach a target ZT, again against temperature and doping.
 
-A full set of example scripts is provided in the ``tp/examples`` folder.
+A set of example scripts is provided in the ``tp/examples`` folder, and
+there is `documentation`_.
 
 ------------
 Contributing
@@ -117,12 +118,13 @@ discuss, if desired.
 Bugs and feature requests can be submitted to the `issue tracker`_,
 while contributions can be made using the `fork and pull`_ approach.
 Contributions should have comprehensive docstrings, and where
-appropriate `examples`_, documentation and `tests`_ are greatly
+appropriate `examples`_, `documentation`_ and `tests`_ are greatly
 appreciated.
 
 .. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
 .. _fork and pull: https://guides.github.com/activities/forking
 .. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
+.. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
 
 -------

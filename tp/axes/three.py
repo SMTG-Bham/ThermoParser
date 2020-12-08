@@ -3,7 +3,9 @@
 Each function returns a figure and an array of sets of axes. Those with
 legend space also return a function to add a pre-positioned legend.
 
-Functions:
+Functions
+---------
+
     h
     h_top_legend
     h_bottom_legend
@@ -21,11 +23,15 @@ style = settings.style()
 def h(style=style):
     """A figure with three sets of axes horizontally.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -48,11 +54,15 @@ def h(style=style):
 def h_top_legend(style=style):
     """A figure with three sets of axes horizontally and a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -77,11 +87,15 @@ def h_top_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -104,11 +118,15 @@ def h_top_legend(style=style):
 def h_bottom_legend(style=style):
     """A figure with three sets of axes horizontally and a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -133,11 +151,15 @@ def h_bottom_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """

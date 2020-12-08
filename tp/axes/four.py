@@ -3,7 +3,9 @@
 Each function returns a figure and an array of sets of axes. Those with
 legend space also return a function to add a pre-positioned legend.
 
-Functions:
+Functions
+---------
+
     square
 """
 
@@ -19,11 +21,15 @@ style = settings.style()
 def square(style=style):
     """A figure with four sets of axes in a square.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         list

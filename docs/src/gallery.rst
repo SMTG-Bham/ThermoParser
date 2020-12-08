@@ -1,5 +1,6 @@
+-------
 Gallery
-=======
+-------
 
 .. hint::
     Click on the images to see the script which generated them.
@@ -66,8 +67,8 @@ particular interactions.
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
 projecting these properties onto phonon dispersions. The former is an
-oft plotted widening of the bands due to scattering, and the latter
-shows the same data, but in a more quantitative way.
+oft plotted widening of the bands due to scattering,\ :sup:`1` and the
+latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.pdf
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-wideband.py
@@ -82,3 +83,20 @@ shows the same data, but in a more quantitative way.
 Through the python interface it is also possible to use individual parts
 of the code in ones own packages, for example the custom colourmaps,
 outside the scope of the package at large.
+
+---------
+Reference
+---------
+
+.. code-block:: bibtex
+
+    @article{Maradudin1962,
+      title={Scattering of neutrons by an anharmonic crystal},
+      author={Maradudin, AA and Fein, AE},
+      journal={Physical Review},
+      volume={128},
+      number={6},
+      pages={2589},
+      year={1962},
+      publisher={APS}
+    }

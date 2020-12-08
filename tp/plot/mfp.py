@@ -1,6 +1,8 @@
 """Functions for plotting against mean free path.
 
-Functions:
+Functions
+---------
+
     add_cum_kappa:
         cumulative kappa vs mean free path.
 
@@ -24,7 +26,9 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   **kwargs):
     """Cumulates and plots kappa against mean free path.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -177,7 +181,9 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, add_xticks=False,
                 add_yticks=False, **kwargs):
     """Adds marker lines linking a linear plot to the axes.
 
-    Args:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         x : array-like

@@ -1,6 +1,6 @@
 Please see the `examples`_.
 
-.. _examples: <https://github.com/kbspooner/ThermoPlotter/tree/master/examples>
+.. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 
 -------------
 ``colour.py``
@@ -19,7 +19,7 @@ Contains colourmap generators:
 * ``skelton``: Jonathan Skelton's rainbowy colourmap from his waterfall
   plots. He has lots of useful stuff in `Phono3py-Power-Tools`_.
 
-.. _Phono3py-Power-Tools: <https://github.com/skelton-group/Phono3py-Power-Tools>
+.. _Phono3py-Power-Tools: https://github.com/skelton-group/Phono3py-Power-Tools
 
 ----------------
 ``frequency.py``

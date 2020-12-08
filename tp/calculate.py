@@ -44,6 +44,7 @@ def lorentzian(x, x0=0, fwhm=1):
 
     Arguments
     ---------
+
         x : np.array
             x-values.
         x0 : float
@@ -53,6 +54,7 @@ def lorentzian(x, x0=0, fwhm=1):
 
     Returns
     -------
+
         np.array
             lorentzian
     """
@@ -66,6 +68,7 @@ def be_occupation(frequency, temperature=300.):
 
     Arguments
     ---------
+
         frequency : array-like or float
             frequencies in THz.
 
@@ -74,6 +77,7 @@ def be_occupation(frequency, temperature=300.):
 
     Returns
     -------
+
         array-like
             occupations.
     """
@@ -93,6 +97,7 @@ def power_factor(conductivity, seebeck):
 
     Arguments
     ---------
+
         conductivity : array-like
             conductivities.
         seebeck : array-like
@@ -100,6 +105,7 @@ def power_factor(conductivity, seebeck):
 
     Returns
     -------
+
         np.array
             power factors.
     """
@@ -112,6 +118,7 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
 
     Arguments
     ---------
+
         conductivity : array-like
             conductivities.
         seebeck : array-like
@@ -125,6 +132,7 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
 
     Returns
     -------
+
         np.array
             ZT.
     """
@@ -141,6 +149,7 @@ def kl(conductivity, seebeck, electronic_thermal_conductivity, zt, temperature):
 
     Arguments
     ---------
+
         conductivity : array-like
             conductivities.
         seebeck : array-like
@@ -154,6 +163,7 @@ def kl(conductivity, seebeck, electronic_thermal_conductivity, zt, temperature):
 
     Returns
     -------
+
         np.array
             lattice thermal conductivity.
     """
@@ -169,6 +179,7 @@ def power_factor_fromdict(data):
 
     Arguments
     ---------
+
         data : dict
             dictionary containing:
 
@@ -179,6 +190,7 @@ def power_factor_fromdict(data):
 
     Returns
     -------
+
         dict
             dictionary with power factors.
     """
@@ -194,6 +206,7 @@ def zt_fromdict(data):
 
     Arguments
     ---------
+
         data : dict
             dictionary containing:
 
@@ -210,6 +223,7 @@ def zt_fromdict(data):
 
     Returns
     -------
+
         dict
             dictionary with ZTs.
     """
@@ -227,6 +241,7 @@ def kl_fromdict(data):
 
     Arguments
     ---------
+
         data : dict
             dictionary containing:
 
@@ -243,6 +258,7 @@ def kl_fromdict(data):
 
     Returns
     -------
+
         dict
             dictionary with lattice thermal conductivities.
     """

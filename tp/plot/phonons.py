@@ -1,6 +1,8 @@
 """Tools for dealing with phonon dispersions.
 
-Functions:
+Functions
+---------
+
     add_dispersion:
         phonon dispersion.
     add_multi:
@@ -14,8 +16,10 @@ Functions:
     add_wideband:
         phonon dispersion broadened according to scattering.
 
+
     get_equivalent_qpoint:
         converts phonopy to phono3py qpoints.
+
 
     formatting:
         formatting axes.
@@ -40,7 +44,8 @@ def add_dispersion(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     dispersion, or one for each band, with the last entry filling all
     remaining bands.
 
-    Arguments:
+    Arguments
+    ---------
         ax : axes
             axes to plot on.
         data : dict
@@ -153,7 +158,9 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
 
     Scales the x-scales to match.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : array-like
@@ -276,7 +283,9 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     dispersion, or one for each band, with the last entry filling all
     remaining bands. Requires a POSCAR.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -479,7 +488,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     Plots a phonon dispersion, and projects a quantity onto the colour
     axis. Requires a POSCAR.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -561,7 +572,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
             rasterized: True
             s:          1
 
-    Returns:
+    Returns
+    -------
+
         colorbar
             colour bar for projected data.
     """
@@ -686,7 +699,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     live up to, so I leave it to you, dear reader, to decide for
     yourself. Requires a POSCAR.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -771,7 +786,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                 rasterized: True
                 s:          1
 
-    Returns:
+    Returns
+    -------
+
         colorbar
             colour bar for projected data.
     """
@@ -897,7 +914,8 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     Requires a POSCAR.
 
-    Arguments:
+    Arguments
+    ---------
 
         ax : axes
             axes to plot on.
@@ -1065,7 +1083,9 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 def get_equivalent_qpoint(qk, symops, qp, tol=1e-2):
     """Finds the closest phono3py qpoint to a phonopy qpoint.
 
-    Arguments:
+    Arguments
+    ---------
+
         qk : array-like
             all qpoints from the phono3py kappa file.
         symmops
@@ -1076,7 +1096,9 @@ def get_equivalent_qpoint(qk, symops, qp, tol=1e-2):
         tol : float, optional
             tolerance. Default: 1e-2.
 
-    Returns:
+    Returns
+    -------
+
         int
             nearest qpoint index.
     """
@@ -1106,7 +1128,9 @@ def get_equivalent_qpoint(qk, symops, qp, tol=1e-2):
 def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
     """Formats the axes of phonon plots.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to format.
         pdata : dict
@@ -1169,7 +1193,9 @@ def tile_properties(properties, bandmin, bandmax):
     Allows for different colour formats and fills out arrays with the
     last element or selects a subset.
 
-    Arguments:
+    Arguments
+    ---------
+
         property : array-like or str
             array or string to tile.
         bandmin : int
@@ -1177,7 +1203,9 @@ def tile_properties(properties, bandmin, bandmax):
         bandmax : int
             maximum band.
 
-    Returns:
+    Returns
+    -------
+
         tiled
             array.
     """

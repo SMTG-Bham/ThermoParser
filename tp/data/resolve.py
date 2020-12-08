@@ -2,7 +2,9 @@
 
 May need to be split by data origin in future.
 
-Functions:
+Functions
+---------
+
     resolve:
         currently for Phono3py, AMSET and BoltzTraP.
 """
@@ -14,7 +16,9 @@ from tp.data import aniso
 def resolve(data, quantities, temperature=None, direction=None):
     """Selects temperature and/or direction.
 
-    Arguments:
+    Arguments
+    ---------
+
         data : dict
             data.
         quantities : array-like or str
@@ -26,7 +30,9 @@ def resolve(data, quantities, temperature=None, direction=None):
             direction to resolve, accepts x-z/, a-c, average/ avg or
             normal/ norm. Default: None.
 
-    Returns:
+    Returns
+    -------
+
         dict
             resolved data.
     """

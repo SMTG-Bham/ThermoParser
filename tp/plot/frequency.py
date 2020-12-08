@@ -1,6 +1,8 @@
 """Functions which plot phonon frequency on the x-axis.
 
-Functions:
+Functions
+---------
+
     add_dos:
         phonon dos.
     add_cum_kappa:
@@ -9,6 +11,7 @@ Functions:
         scatter plots of various values.
     add_projected_waterfall:
         waterfall, but with a second quantity projected.
+
 
     format_waterfall
         formatting for the waterfall plots
@@ -27,7 +30,9 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
             colour='tab10', fill=True, fillalpha=0.2, line=False, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -181,7 +186,9 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
                   fillcolour=0.2, line=True, **kwargs):
     """Cumulates and plots kappa against frequency.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -316,7 +323,9 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     Has an option to change the x-quantity.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -440,7 +449,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
     Has an option to change the x-quantity.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to plot on.
         data : dict
@@ -492,7 +503,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
                 rasterized: True
                 s:          1
 
-    Returns:
+    Returns
+    -------
+
         colorbar
             colourbar for projected data.
     """
@@ -578,7 +591,9 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
                      temperature=None, direction=None):
     """Formats axes for waterfall plots.
 
-    Arguments:
+    Arguments
+    ---------
+
         ax : axes
             axes to format.
         data : array-like

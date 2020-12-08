@@ -1,6 +1,8 @@
 """Colour scheme and colourmap generators.
 
-Functions:
+Functions
+---------
+
     linear:
         linear between two colours.
     uniform:
@@ -11,6 +13,7 @@ Functions:
         takes an existing map and highlights specific entries.
     skelton:
         rainbowy discreet colourmap.
+
 
     hsb2rgb:
         colour converter.
@@ -28,7 +31,9 @@ from scipy.interpolate import interp1d
 def linear(cmax, cmin='#ffffff', alpha=1., density=512):
     """Generates single-gradient colour maps.
 
-    Arguments:
+    Arguments
+    ---------
+
         cmax : str
             colour at maximum.
 
@@ -40,7 +45,9 @@ def linear(cmax, cmin='#ffffff', alpha=1., density=512):
         density : int
             number of colours to output. Default: 512.
 
-    Returns:
+    Returns
+    -------
+
         colourmap
             colourmap.
     """
@@ -58,7 +65,9 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
     Adjusts mid colour position relative to similarity to endpoint
     colours.
 
-    Arguments:
+    Arguments
+    ---------
+
         cmid : str
             colour at midpoint.
 
@@ -72,7 +81,9 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
         density : int, optional
             number of colours to output. Default: 512.
 
-    Returns:
+    Returns
+    -------
+
         colormap
             colourmap.
     """
@@ -96,7 +107,9 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
           density=512):
     """Attmept at higher contrast colour maps. Requires refinement.
 
-    Arguments:
+    Arguments
+    ---------
+
         cmid : str
             colour at midpoint.
 
@@ -112,7 +125,9 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
         density : int, optional
             number of colours to output. Default: 512.
 
-    Returns:
+    Returns
+    -------
+
         colormap
             colourmap.
     """
@@ -132,7 +147,9 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
 def highlight(cmap, colour, position=[0], density=512):
     """Highlights values in a colourmap.
 
-    Arguments:
+    Arguments
+    ---------
+
         cmap : colormap
             colourmap to edit
         colour : str or array-like
@@ -142,7 +159,9 @@ def highlight(cmap, colour, position=[0], density=512):
         density : int, optional
             number of colours. Default: 512
 
-    Returns:
+    Returns
+    -------
+
         colormap
             highlighted colourmap.
     """
@@ -159,13 +178,17 @@ def highlight(cmap, colour, position=[0], density=512):
 def skelton(density=512, alpha=1.):
     """Generates Jonathan Skelton's rainbowy colourmap.
 
-    Arguments:
+    Arguments
+    ---------
+
         density : int, optional
             number of colours. Default: 512.
         alpha : float, optional
             alpha (from 0-1). Default: 1.
 
-    Returns:
+    Returns
+    -------
+
         colourmap
             colourmap.
     """
@@ -178,7 +201,9 @@ def skelton(density=512, alpha=1.):
 def hsb2rgb(h, s, b, alpha=1):
     """Converts hsb to an rgba colour array.
 
-    Arguments:
+    Arguments
+    ---------
+
         h : float
             hue.
         s : float
@@ -189,7 +214,9 @@ def hsb2rgb(h, s, b, alpha=1):
         alpha : float, optional
             colour alpha (from 0-1). Default: 1.
 
-    Returns:
+    Returns
+    -------
+
         list
             rgba.
     """
@@ -234,14 +261,18 @@ def hsb2rgb(h, s, b, alpha=1):
 def rgb2array(colour, alpha=1.):
     """Converts #RRGGBB string to rgba array.
 
-    Arguments:
+    Arguments
+    ---------
+
         colour : str
             #RRGGBB colour string
 
         alpha : float, optional
             colour alpha (from 0-1). Default: 1.0.
 
-    Returns:
+    Returns
+    -------
+
         list
             rgba.
     """

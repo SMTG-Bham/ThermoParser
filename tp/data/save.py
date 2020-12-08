@@ -8,7 +8,9 @@ def hdf5(data, output):
 
     Aims to make saving nested dictionaries easy, works for 3 layers.
 
-    Arguments:
+    Arguments
+    ---------
+
         data: dict
             data to save.
         output : str

@@ -4,7 +4,9 @@ Each function returns a figure and a set of axes, or an array of sets of
 axes for those with DoSs. Those with legend space also return a function
 to add a pre-positioned legend.
 
-Functions:
+Functions
+---------
+
     plain
     colourbar
     colourbar_small_legend
@@ -30,11 +32,15 @@ style = settings.style()
 def plain(style=style):
     """A figure with a set of axes.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -52,11 +58,15 @@ def plain(style=style):
 def colourbar(style=style):
     """A figure with a set of axes and colourbar space.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -74,11 +84,15 @@ def colourbar(style=style):
 def colourbar_small_legend(style=style):
     """A figure with one set of axes and space for a colourbar and legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -98,11 +112,15 @@ def colourbar_small_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -117,11 +135,15 @@ def colourbar_small_legend(style=style):
 def dos(style=style):
     """A figure with a set of axes and a DoS-style attachment.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -142,11 +164,15 @@ def dos(style=style):
 def dos_colourbar(style=style):
     """A figure with axes, DoS-style attachment and colourbar space.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -167,11 +193,15 @@ def dos_colourbar(style=style):
 def dos_colourbar_small_legend(style=style):
     """A figure with axes, DoS-style attachment and legend space.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -194,14 +224,18 @@ def dos_colourbar_small_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
-        """
+    """
 
         legend = ax[1].legend(loc="center left", bbox_to_anchor=(1.75, 0.5),
                               *args, **kwargs)
@@ -213,11 +247,15 @@ def dos_colourbar_small_legend(style=style):
 def dos_small_legend(style=style):
     """A figure with axes, DoS-style attachment and legend space.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -240,11 +278,15 @@ def dos_small_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -259,11 +301,15 @@ def dos_small_legend(style=style):
 def small_legend(style=style):
     """A figure with one set of axes and space for a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -283,11 +329,15 @@ def small_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -302,11 +352,15 @@ def small_legend(style=style):
 def medium_legend(style=style):
     """A figure with one set of axes and space for a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -326,11 +380,15 @@ def medium_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """
@@ -345,11 +403,15 @@ def medium_legend(style=style):
 def wide(style=style):
     """A figure with one set of axes and more space on the left.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -367,11 +429,15 @@ def wide(style=style):
 def wide_large_legend(style=style):
     """A figure with one set of axes and space for a legend.
 
-    Arguments:
+    Arguments
+    ---------
+
         style : str, optional
             style sheet(s). Default: tp.
 
-    Returns:
+    Returns
+    -------
+
         figure
             figure.
         axes
@@ -391,11 +457,15 @@ def wide_large_legend(style=style):
 
         Accepts all normal plt.legend inputs (title etc.).
 
-        Arguments:
+        Arguments
+        ---------
+
             *args, **kwargs : optional
                 passed to ax.legend.
 
-        Returns:
+        Returns
+        -------
+
             legend
                 legend.
         """

@@ -1,6 +1,6 @@
 Please see the `examples`_.
 
-.. _examples: <https://github.com/kbspooner/ThermoPlotter/tree/master/examples>
+.. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 
 Pre-sized axes for plotting convenience. Many users may want to ignore
 this module.

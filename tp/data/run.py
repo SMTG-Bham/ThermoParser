@@ -1,6 +1,8 @@
 """Code running tools.
 
-Functions:
+Functions
+---------
+
     boltztrap
 """
 
@@ -21,7 +23,9 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
     Testing with a small number of temperature/ doping combinations is also
     recommended.
 
-    Arguments:
+    Arguments
+    ---------
+
         tmax : float, optional
             maximum temperature in K. Default: 1000.
         tstep : float, optional
@@ -88,6 +92,10 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
         btr_dir = btr.run(path_dir='.')
         print('Done.')
 
+        """
+        Detects whether the BoltzTraP build on this computer writes the
+        doping concentrations correctly, and if it doesn't, writes them.
+        """
         with open('boltztrap/boltztrap.outputtrans', 'r') as f:
             for line in f: pass
         if len(line) >= 23 and line[:23] == ' Calling FermiIntegrals':

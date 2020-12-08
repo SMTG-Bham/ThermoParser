@@ -8,7 +8,9 @@ have a height of 16.6 cm, which more effectively maintains relative
 scale, as legends etc. are normally added on the side). As per the
 guidelines, font size is 8 pt.
 
-Modules:
+Modules
+-------
+
     one
     two
     three
