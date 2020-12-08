@@ -19,7 +19,6 @@ essentially wraps around `matplotlib`_ functions, and is intended to be
 used as a python package, to build easily customisable plotting scripts.
 There are also several basic command-line scripts.
 
-------------
 Installation
 ------------
 
@@ -45,7 +44,6 @@ upgrading you may want to preserve your changes:
 You only need to repeat the pip stage if you want to update the command-
 line script list.
 
------
 Usage
 -----
 
@@ -99,7 +97,6 @@ Current plotting modes are split into four areas.
 A set of example scripts is provided in the ``tp/examples`` folder, and
 there is `documentation`_.
 
-------------
 Contributing
 ------------
 
@@ -121,14 +118,12 @@ appreciated.
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
 
--------
 License
 -------
 
 ThermoPlotter is licensed under the GNU Affero General Public License v3
 (AGPLv3).
 
-------------
 Requirements
 ------------
 
