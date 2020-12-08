@@ -22,10 +22,12 @@ copyright = '2020, Scanlon Materials Theory Group'
 author = 'Kieran B. Spooner'
 
 # The full version, including alpha/beta/rc tags
-release = '0.3'
+release = '0.3.1'
 
 
 # -- General configuration ---------------------------------------------------
+
+master_doc = 'contents'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -54,7 +56,7 @@ html_theme = 'alabaster'
 html_theme_options = {'github_user':   'SMTG-UCL',
                       'github_repo':   'ThermoPlotter',
                       'description':   'A simple thermoelectrics plotting tool',
-                      'page_width':    '1000px',
+                      'page_width':    '1070px',
                       'sidebar_width': '250px',
                       'github_banner': True,
                       'github_button': True}
