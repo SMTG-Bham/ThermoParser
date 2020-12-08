@@ -27,7 +27,7 @@ ThermoPlotter can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone https://github.com/kbspooner/ThermoPlotter
+    git clone https://github.com/smtg-ucl/ThermoPlotter
     cd ThermoPlotter
     python3 -m pip install --user -e .
 
@@ -120,10 +120,10 @@ Contributions should have comprehensive docstrings, and where
 appropriate `examples`_, documentation and `tests`_ are greatly
 appreciated.
 
-.. _issue tracker: https://github.com/kbspooner/ThermoPlotter/issues
+.. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
 .. _fork and pull: https://guides.github.com/activities/forking
-.. _examples: https://github.com/kbspooner/ThermoPlotter/tree/master/examples
-.. _tests: https://github.com/kbspooner/ThermoPlotter/tree/master/tests
+.. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
+.. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
 
 -------
 License

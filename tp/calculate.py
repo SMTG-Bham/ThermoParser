@@ -1,6 +1,8 @@
 """Calculates stuff.
 
-Functions:
+Functions
+---------
+
     cumulate:
         sorts and cumulates.
     lorentzian:
@@ -40,7 +42,8 @@ def cumulate(x, y):
 def lorentzian(x, x0=0, fwhm=1):
     """Area conserved Lorentzian function centered on x0.
 
-    Arguments:
+    Arguments
+    ---------
         x : np.array
             x-values.
         x0 : float
@@ -48,7 +51,8 @@ def lorentzian(x, x0=0, fwhm=1):
         fwhm : float
             full-width at half-maximum.
 
-    Returns:
+    Returns
+    -------
         np.array
             lorentzian
     """
@@ -60,14 +64,16 @@ def lorentzian(x, x0=0, fwhm=1):
 def be_occupation(frequency, temperature=300.):
     """Calculates Bose-Einstein occupation.
 
-    Arguments:
+    Arguments
+    ---------
         frequency : array-like or float
             frequencies in THz.
 
         temperature : float, optional
             temperature in K. Default: 300.
 
-    Returns:
+    Returns
+    -------
         array-like
             occupations.
     """
@@ -85,13 +91,15 @@ def be_occupation(frequency, temperature=300.):
 def power_factor(conductivity, seebeck):
     """Calculates power factor.
 
-    Arguments:
+    Arguments
+    ---------
         conductivity : array-like
             conductivities.
         seebeck : array-like
             seebeck coefficients.
 
-    Returns:
+    Returns
+    -------
         np.array
             power factors.
     """
@@ -102,7 +110,8 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
        lattice_thermal_conductivity, temperature):
     """Calculates ZT.
 
-    Arguments:
+    Arguments
+    ---------
         conductivity : array-like
             conductivities.
         seebeck : array-like
@@ -114,7 +123,8 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
         temperature : array-like
             temperatures.
 
-    Returns:
+    Returns
+    -------
         np.array
             ZT.
     """
@@ -129,7 +139,8 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
 def kl(conductivity, seebeck, electronic_thermal_conductivity, zt, temperature):
     """Calculates lattice thermal conductivity.
 
-    Arguments:
+    Arguments
+    ---------
         conductivity : array-like
             conductivities.
         seebeck : array-like
@@ -141,7 +152,8 @@ def kl(conductivity, seebeck, electronic_thermal_conductivity, zt, temperature):
         temperature : array-like
             temperatures.
 
-    Returns:
+    Returns
+    -------
         np.array
             lattice thermal conductivity.
     """
@@ -155,7 +167,8 @@ def kl(conductivity, seebeck, electronic_thermal_conductivity, zt, temperature):
 def power_factor_fromdict(data):
     """Convenience wrapper to calculate power factor from a dictionary.
 
-    Arguments:
+    Arguments
+    ---------
         data : dict
             dictionary containing:
 
@@ -164,7 +177,8 @@ def power_factor_fromdict(data):
                 seebeck : array-like
                     seebeck coefficients.
 
-    Returns:
+    Returns
+    -------
         dict
             dictionary with power factors.
     """
@@ -178,7 +192,8 @@ def power_factor_fromdict(data):
 def zt_fromdict(data):
     """Convenience wrapper to calculate ZT from a dictionary.
 
-    Arguments:
+    Arguments
+    ---------
         data : dict
             dictionary containing:
 
@@ -193,7 +208,8 @@ def zt_fromdict(data):
                 temperature : array-like
                     temperatures in K.
 
-    Returns:
+    Returns
+    -------
         dict
             dictionary with ZTs.
     """
@@ -209,7 +225,8 @@ def zt_fromdict(data):
 def kl_fromdict(data):
     """Convenience wrapper to calculate k_latt from a dictionary.
 
-    Arguments:
+    Arguments
+    ---------
         data : dict
             dictionary containing:
 
@@ -224,7 +241,8 @@ def kl_fromdict(data):
                 temperature : array-like
                     temperatures in K.
 
-    Returns:
+    Returns
+    -------
         dict
             dictionary with lattice thermal conductivities.
     """

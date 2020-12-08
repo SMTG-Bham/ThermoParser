@@ -8,7 +8,7 @@ At its simplest, ``ThermoPlotter`` is a way to quickly plot useful data
 from either a python script or the command line.
 
 .. image:: figures/ztmap.pdf
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-zt.rst
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-zt.py
 
 Click on the plot to see the script, or one could use
 
@@ -21,7 +21,7 @@ which calculates the lattice thermal conductivity required to reach a
 ZT, in this case 2.
 
 .. image:: figures/kappa-target.pdf
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-kappa-target.rst
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-kappa-target.py
 
 .. code-block:: bash
 
@@ -55,13 +55,13 @@ plotting, to enable nicely formatted multi-axes plots
 .. _command-line scripts: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/scripts
 
 .. image:: figures/cumkappa.pdf
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-cumkappa.rst
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-cumkappa.py
 
 and ones where multiple plots are on the same axes, to highlight
 particular interactions.
 
 .. image:: figures/waterfall.pdf
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-waterfall.rst
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-waterfall.py
 
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
@@ -70,14 +70,14 @@ oft plotted widening of the bands due to scattering, and the latter
 shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.pdf
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-wideband.rst
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-wideband.py
 
 .. code-block:: bash
 
    tp-wideband band.yaml kappa-m<xxx>.hdf5 -c #000000 #ff0000 -s dark_background
 
 .. image:: figures/prophon.pdf
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-projected-phonons.rst
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-projected-phonons.py
 
 Through the python interface it is also possible to use individual parts
 of the code in ones own packages, for example the custom colourmaps,
