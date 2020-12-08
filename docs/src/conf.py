@@ -56,8 +56,8 @@ html_theme = 'alabaster'
 html_theme_options = {'github_user':   'SMTG-UCL',
                       'github_repo':   'ThermoPlotter',
                       'description':   'A simple thermoelectrics plotting tool',
-                      'page_width':    '1100px',
-                      'sidebar_width': '230px',
+                      'page_width':    '1000px',
+                      'sidebar_width': '240px',
                       'fixed_sidebar': True,
                       'github_banner': True,
                       'github_button': True}
