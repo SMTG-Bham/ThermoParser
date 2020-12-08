@@ -10,7 +10,7 @@ ThermoPlotter
    :maxdepth: 3
 
    introduction
-   python package <modules>
+   Python Package <modules>
    gallery
 
 Indices and tables

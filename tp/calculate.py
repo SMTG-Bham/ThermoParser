@@ -45,7 +45,7 @@ def lorentzian(x, x0=0, fwhm=1):
     Arguments
     ---------
 
-        x : np.array
+        x : array-like
             x-values.
         x0 : float
             origin of function.

@@ -49,8 +49,15 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
+
 html_theme = 'alabaster'
+html_theme_options = {'github_user':   'SMTG-UCL',
+                      'github_repo':   'ThermoPlotter',
+                      'description':   'A simple thermoelectrics plotting tool',
+                      'page_width':    '1000px',
+                      'sidebar_width': '250px',
+                      'github_banner': True,
+                      'github_button': True}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
