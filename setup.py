@@ -2,7 +2,7 @@
 
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
-__copyright__ =  'Copyright Kieran B. Spooner (2020)'
+__copyright__ =  'Copyright Scanlon Materials Theory Group (2020)'
 __version__ =    '0.3.1'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
@@ -48,7 +48,7 @@ setuptools.setup(
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://github.com/kbspooner/ThermoPlotter',
+    url='https://github.com/SMTG-UCL/ThermoPlotter',
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
