@@ -84,7 +84,6 @@ Through the python interface it is also possible to use individual parts
 of the code in ones own packages, for example the custom colourmaps,
 outside the scope of the package at large.
 
----------
 Reference
 ---------
 
