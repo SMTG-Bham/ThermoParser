@@ -40,7 +40,7 @@
 </div>
 <p>At its simplest, <code class="docutils literal notranslate"><span class="pre">ThermoPlotter</span></code> is a way to quickly plot useful data
 from either a python script or the command line.</p>
-<a class="reference external image-reference" href="../../examples/plot-zt.py"><img alt="_images/ztmap.pdf" src="_images/ztmap.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-zt.rst"><img alt="_images/ztmap.pdf" src="_images/ztmap.pdf" /></a>
 <p>Click on the plot to see the script, or one could use</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp-ztmap boltztrap.hdf5 -k kappa-m&lt;xxx&gt;.hdf5 -c <span class="c1">#800080 -d x</span>
 </pre></div>
@@ -48,40 +48,40 @@ from either a python script or the command line.</p>
 <p>A related plot we hope people find useful is the kappa-target plot,
 which calculates the lattice thermal conductivity required to reach a
 ZT, in this case 2.</p>
-<a class="reference external image-reference" href="../../examples/plot-kappa-target.py"><img alt="_images/kappa-target.pdf" src="_images/kappa-target.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-kappa-target.rst"><img alt="_images/kappa-target.pdf" src="_images/kappa-target.pdf" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp-kappa-target boltztrap.hdf5 -c <span class="c1">#008080 -d x</span>
 </pre></div>
 </div>
 <p>Slightly more complex plots also with command line scripts are the
 phonon dispersions:</p>
-<a class="reference external image-reference" href="../../examples/plot-multiphon.py"><img alt="_images/multiphon.pdf" src="_images/multiphon.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-multiphon.py"><img alt="_images/multiphon.pdf" src="_images/multiphon.pdf" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp-converge-phonons &lt;list of band.yamls&gt; -l <span class="m">111</span> <span class="m">222</span> <span class="m">333</span> <span class="m">444</span> <span class="m">555</span> -t Supercell<span class="se">\ </span>Size
 </pre></div>
 </div>
-<a class="reference external image-reference" href="../../examples/plot-phonons.py"><img alt="_images/phonons.pdf" src="_images/phonons.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-phonons.py"><img alt="_images/phonons.pdf" src="_images/phonons.pdf" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp-phonons band.yaml -c <span class="c1">#ff8000 -d projected_dos.dat --doscolour #ffff00 #00ffff</span>
 </pre></div>
 </div>
 <p>This is where some of the more useful functions of <code class="docutils literal notranslate"><span class="pre">ThermoPlotter</span></code>
 come in, e.g. the rescaling of the x axis in the former plot, and the
 simplicity of compund plots in the latter.</p>
-<p>There are other <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/tree/master/scripts">command-line scripts</a>, but the main functionality is
+<p>There are other <a class="reference external" href="https://github.com/SMTG-UCL/ThermoPlotter/tree/master/scripts">command-line scripts</a>, but the main functionality is
 intended as a python package, which enables much more customisable
 plotting, to enable nicely formatted multi-axes plots</p>
-<a class="reference external image-reference" href="../../examples/plot-cumkappa.py"><img alt="_images/cumkappa.pdf" src="_images/cumkappa.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-cumkappa.rst"><img alt="_images/cumkappa.pdf" src="_images/cumkappa.pdf" /></a>
 <p>and ones where multiple plots are on the same axes, to highlight
 particular interactions.</p>
-<a class="reference external image-reference" href="../../examples/plot-waterfall.py"><img alt="_images/waterfall.pdf" src="_images/waterfall.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-waterfall.rst"><img alt="_images/waterfall.pdf" src="_images/waterfall.pdf" /></a>
 <p>As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
 projecting these properties onto phonon dispersions. The former is an
 oft plotted widening of the bands due to scattering, and the latter
 shows the same data, but in a more quantitative way.</p>
-<a class="reference external image-reference" href="../../examples/plot-wideband.py"><img alt="_images/wideband.pdf" src="_images/wideband.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-wideband.rst"><img alt="_images/wideband.pdf" src="_images/wideband.pdf" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp-wideband band.yaml kappa-m&lt;xxx&gt;.hdf5 -c <span class="c1">#000000 #ff0000 -s dark_background</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="../../examples/plot-projected-phonons.py"><img alt="_images/prophon.pdf" src="_images/prophon.pdf" /></a>
+<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-projected-phonons.rst"><img alt="_images/prophon.pdf" src="_images/prophon.pdf" /></a>
 <p>Through the python interface it is also possible to use individual parts
 of the code in ones own packages, for example the custom colourmaps,
 outside the scope of the package at large.</p>
