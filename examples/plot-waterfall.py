@@ -48,3 +48,4 @@ add_legend()
 # Save
 
 plt.savefig('waterfall.pdf')
+plt.savefig('waterfall.png')

@@ -33,3 +33,4 @@ add_legend(title='Direction')
 # Save
 
 plt.savefig('cumkappa.pdf')
+plt.savefig('cumkappa.png')

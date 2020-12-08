@@ -27,3 +27,4 @@ tp.plot.phonons.add_wideband(ax, data, pdata, temperature=temperature,
 # Save
 
 plt.savefig('wideband.pdf')
+plt.savefig('wideband.png')

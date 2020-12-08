@@ -31,3 +31,4 @@ tp.plot.phonons.add_projected_dispersion(ax, data, pdata, projected,
 # Save
 
 plt.savefig('prophon.pdf')
+plt.savefig('prophon.png')

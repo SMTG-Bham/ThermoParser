@@ -32,3 +32,4 @@ add_legend()
 # Save
 
 plt.savefig('phonons.pdf')
+plt.savefig('phonons.png')

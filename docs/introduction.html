@@ -54,29 +54,22 @@ There are also several basic command-line scripts.</p>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>ThermoPlotter can easily be installed with git and pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/kbspooner/ThermoPlotter
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/smtg-ucl/ThermoPlotter
 <span class="nb">cd</span> ThermoPlotter
 python3 -m pip install --user -e .
 </pre></div>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">-e</span></code> or editable option is encouraged so you can add your own
-defaults in <code class="docutils literal notranslate"><span class="pre">tp.settings</span></code> and elsewhere.</p>
-</div>
-<p>As it is designed to be customisable, when upgrading you may want to
-preserve your changes:</p>
+defaults in <code class="docutils literal notranslate"><span class="pre">tp.settings</span></code> and elsewhere. For the same reason, when
+upgrading you may want to preserve your changes:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git stash
 git pull
 python3 -m pip install --user -e .
 git stash apply
 </pre></div>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
 <p>You only need to repeat the pip stage if you want to update the command-
 line script list.</p>
-</div>
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
@@ -138,7 +131,8 @@ format appropriately for ZT against temperature and doping
 concentration; and one which plots the lattice thermal conductivity
 required to reach a target ZT, again against temperature and doping.</p></li>
 </ul>
-<p>A full set of example scripts is provided in the <code class="docutils literal notranslate"><span class="pre">tp/examples</span></code> folder.</p>
+<p>A set of example scripts is provided in the <code class="docutils literal notranslate"><span class="pre">tp/examples</span></code> folder, and
+there is <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">documentation</a>.</p>
 </div>
 <div class="section" id="contributing">
 <h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
@@ -147,10 +141,10 @@ piece of code (or anything else). Adding options is inteded to be
 straightforward, as each step is mostly independant of the others, so
 only one new function should be required. We would of course be happy to
 discuss, if desired.</p>
-<p>Bugs and feature requests can be submitted to the <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/issues">issue tracker</a>,
+<p>Bugs and feature requests can be submitted to the <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/issues">issue tracker</a>,
 while contributions can be made using the <a class="reference external" href="https://guides.github.com/activities/forking">fork and pull</a> approach.
 Contributions should have comprehensive docstrings, and where
-appropriate <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/tree/master/examples">examples</a>, documentation and <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/tree/master/tests">tests</a> are greatly
+appropriate <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples">examples</a>, <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">documentation</a> and <a class="reference external" href="https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests">tests</a> are greatly
 appreciated.</p>
 </div>
 <div class="section" id="license">
@@ -197,8 +191,9 @@ appreciated.</p>
 <li class="toctree-l1"><a class="reference internal" href="#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">python modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html#reference">Reference</a></li>
 </ul>
 
 <div class="relations">
@@ -233,7 +228,7 @@ appreciated.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Kieran B. Spooner.
+      &copy;2020, Scanlon Materials Theory Group.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>

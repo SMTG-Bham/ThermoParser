@@ -31,13 +31,9 @@ ThermoPlotter can easily be installed with git and pip:
     cd ThermoPlotter
     python3 -m pip install --user -e .
 
-.. tip::
-
-    The ``-e`` or editable option is encouraged so you can add your own
-    defaults in ``tp.settings`` and elsewhere.
-
-As it is designed to be customisable, when upgrading you may want to
-preserve your changes:
+The ``-e`` or editable option is encouraged so you can add your own
+defaults in ``tp.settings`` and elsewhere. For the same reason, when
+upgrading you may want to preserve your changes:
 
 .. code-block:: bash
 
@@ -46,10 +42,8 @@ preserve your changes:
     python3 -m pip install --user -e .
     git stash apply
 
-.. tip::
-
-    You only need to repeat the pip stage if you want to update the command-
-    line script list.
+You only need to repeat the pip stage if you want to update the command-
+line script list.
 
 -----
 Usage

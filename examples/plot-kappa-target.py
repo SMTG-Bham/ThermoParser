@@ -25,4 +25,5 @@ tp.plot.heatmap.add_kappa_target(ax, data, zt=target, colour=colour,
 
 # Save
 
-plt.savefig('target-kl.pdf')
+plt.savefig('kappa-target.pdf')
+plt.savefig('kappa-target.png')

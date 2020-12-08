@@ -11,7 +11,7 @@ ThermoPlotter
    :caption: Contents:
 
    introduction
-   python modules <modules>
+   python package <modules>
    gallery
 
 Indices and tables

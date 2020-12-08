@@ -8,7 +8,7 @@ Gallery
 At its simplest, ``ThermoPlotter`` is a way to quickly plot useful data
 from either a python script or the command line.
 
-.. image:: figures/ztmap.pdf
+.. image:: figures/ztmap.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-zt.py
 
 Click on the plot to see the script, or one could use
@@ -21,7 +21,7 @@ A related plot we hope people find useful is the kappa-target plot,
 which calculates the lattice thermal conductivity required to reach a
 ZT, in this case 2.
 
-.. image:: figures/kappa-target.pdf
+.. image:: figures/kappa-target.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-kappa-target.py
 
 .. code-block:: bash
@@ -31,14 +31,14 @@ ZT, in this case 2.
 Slightly more complex plots also with command line scripts are the
 phonon dispersions:
 
-.. image:: figures/multiphon.pdf
+.. image:: figures/multiphon.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-multiphon.py
 
 .. code-block:: bash
 
    tp-converge-phonons <list of band.yamls> -l 111 222 333 444 555 -t Supercell\ Size
 
-.. image:: figures/phonons.pdf
+.. image:: figures/phonons.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-phonons.py
 
 .. code-block:: bash
@@ -55,13 +55,13 @@ plotting, to enable nicely formatted multi-axes plots
 
 .. _command-line scripts: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/scripts
 
-.. image:: figures/cumkappa.pdf
+.. image:: figures/cumkappa.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-cumkappa.py
 
 and ones where multiple plots are on the same axes, to highlight
 particular interactions.
 
-.. image:: figures/waterfall.pdf
+.. image:: figures/waterfall.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-waterfall.py
 
 As well as projecting third-order phonon properties onto each other as
@@ -70,14 +70,14 @@ projecting these properties onto phonon dispersions. The former is an
 oft plotted widening of the bands due to scattering,\ :sup:`1` and the
 latter shows the same data, but in a more quantitative way.
 
-.. image:: figures/wideband.pdf
+.. image:: figures/wideband.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-wideband.py
 
 .. code-block:: bash
 
    tp-wideband band.yaml kappa-m<xxx>.hdf5 -c #000000 #ff0000 -s dark_background
 
-.. image:: figures/prophon.pdf
+.. image:: figures/prophon.png
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-projected-phonons.py
 
 Through the python interface it is also possible to use individual parts

@@ -24,3 +24,4 @@ tp.plot.heatmap.add_ztmap(ax, adata, kdata, direction=direction, colour=colour)
 # Save
 
 plt.savefig('ztmap.pdf')
+plt.savefig('ztmap.png')

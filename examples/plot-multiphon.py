@@ -24,3 +24,4 @@ add_legend(title=legend_title)
 # Save
 
 plt.savefig('multiphon.pdf')
+plt.savefig('multiphon.png')
