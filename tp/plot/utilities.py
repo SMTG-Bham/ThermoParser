@@ -48,12 +48,12 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
     extend = [False, False]
     if name in ['frequency', 'heat_capacity']:
         if cmin is None:
-            cmin = np.amin(c)
-        elif cmin > np.amin(c):
+            cmin = np.nanmin(c)
+        elif cmin > np.nanmin(c):
             extend[0] = True
         if cmax is None:
-            cmax = np.amax(c)
-        elif cmax < np.amax(c):
+            cmax = np.nanmax(c)
+        elif cmax < np.nanmax(c):
             extend[1] = True
         cnorm = mpl.colors.Normalize(vmin=cmin, vmax=cmax)
 
@@ -62,17 +62,17 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
         csort = csort[csort.argsort()]
         clim = csort[int(round(len(csort)*99.9/100 - 1, 0))]
         if cmin is None:
-            cmin = np.amin(c)
+            cmin = np.nanmin(c)
             if unoccupied is not None and cmin < 1:
                 cmin = 1
                 extend[0] = True
                 cmap.set_under(unoccupied)
-        elif cmin > np.amin(c):
+        elif cmin > np.nanmin(c):
             extend[0] = True
         if cmax is None:
             cmax = clim
             extend[1] = True
-        elif cmax < np.amax(c):
+        elif cmax < np.nanmax(c):
             extend[1] = True
         if cmax/cmin < 10:
             cnorm = mpl.colors.Normalize(vmin=cmin, vmax=cmax)

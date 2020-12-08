@@ -3,7 +3,7 @@
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Kieran B. Spooner (2020)'
-__version__ =    '0.3.0'
+__version__ =    '0.3.1'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
 __date__ =       'Dec 4 2020'
@@ -42,16 +42,16 @@ class PostInstallMoveFile(install):
 scripts = glob.glob("scripts/tp-*")
 
 setuptools.setup(
-    name='ThermoPlotter',
-    version='0.3.0',
-    author='Kieran B. Spooner',
+    name=__name__,
+    version=__version__,
+    author=__author__,
     description='A simple thermoelectrics plotting tool',
     long_description=long_description,
     long_description_content_type='text/x-rst',
     url='https://github.com/kbspooner/ThermoPlotter',
     packages=setuptools.find_packages(),
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Natural Language :: English',
@@ -71,5 +71,5 @@ setuptools.setup(
     command_options={'build_sphinx':
                         {'project':    ('setup.py', __name__),
                          'version':    ('setup.py', __version__),
-                         'source_dir': ('setup.py', 'docs-src')}},
+                         'source_dir': ('setup.py', 'docs/src')}},
     scripts=scripts)

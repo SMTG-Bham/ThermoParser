@@ -1012,6 +1012,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     x, indices = np.unique(x, return_index=True)
     f = np.array(pdata['frequency'])[indices]
+    where = np.where(c2 == np.amax(c2))
 
     # interpolate
 
@@ -1032,7 +1033,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
         for b in range(len(c2[q])):
             area[q] = np.add(area[q], lorentzian(f2, f[q][b], c2[q][b]))
 
-    cnorm = mpl.colors.LogNorm(vmin=np.amin(area), vmax=np.amax(area))
+    cnorm = mpl.colors.LogNorm(vmin=np.nanmin(area), vmax=np.nanmax(area))
 
     # colours
 

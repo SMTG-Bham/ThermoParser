@@ -8,9 +8,9 @@ import numpy as np
 import tp
 
 def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
-              vasprun='vasprun.xml', soc=False, zero_weighted=False,
-              kpoints=None, lpfac=10, relaxation_time=1e-14, run=True,
-              analyse=True, output='boltztrap.hdf5', write_doping=False):
+              vasprun='vasprun.xml', zero_weighted=False, kpoints=None,
+              relaxation_time=1e-14, run=True, analyse=True,
+              output='boltztrap.hdf5', **kwargs):
     """Runs BoltzTraP
 
     Runs quicker than the pymatgen from_files version.
@@ -19,7 +19,7 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
     Note: BoltzTraP can be a fickle friend, so if you're getting errors,
     it may be worth reinstalling or trying on a different machine.
     Testing with a small number of temperature/ doping combinations is also
-    recommended
+    recommended.
 
     Arguments:
         tmax : float, optional
@@ -31,14 +31,10 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
 
         vasprun : str, optional
             path to vasprun. Default: vasprun.xml.
-        soc : bool, optional
-            spin orbit coupling used. Default: False.
         zero_weighted : bool, optional
             zero weighted kpoints used. Default: False.
         kpoints : str, optional
             path to KPOINTS file if zero_weighted. Default: KPOINTS.
-        lpfac : int, optional
-            interpolate the DoS k-points by lpfac times. Default: 10.
         relaxation_time : float, optional
             charge carrier relaxation time. Default: 1e-14.
 
@@ -48,11 +44,17 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
             analyse BoltzTraP. Default: True.
         output : str, optional
             output hdf5 filename. Default: boltztrap.hdf5.
-        write_doping : bool, optional
-            manually write doping concentrations at the end of the
-            boltztrap/boltztrap.outputtrans file.
-            Toggling may fix np.linalg errors; you may want to set the
-            default manually on a per-computer basis. Default: False.
+
+        **kwargs
+            passed to pymatgen.electronic.structure.boltztrap.BoltztrapRunner.
+            Recommended arguments include:
+
+                soc : bool, optional
+                    spin orbit coupling. Default: False.
+                lpfac : int, optional
+                    interpolation factor. Default: 10.
+                timeout : float, optional
+                    Convergence time limit in seconds. Default: 7200.
     """
 
     import h5py
@@ -63,10 +65,8 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
 
     # check inputs
 
-    for name, value in zip(['soc', 'zero_weighted', 'run', 'analyse',
-                            'write_doping'],
-                           [ soc,   zero_weighted,   run,   analyse,
-                             write_doping]):
+    for name, value in zip(['zero_weighted', 'run', 'analyse'],
+                           [ zero_weighted,   run,   analyse]):
         assert isinstance(value, bool), '{} must be True or False'.format(name)
 
     tmax += tstep
@@ -83,17 +83,18 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
         nelect = vr.parameters['NELECT']
 
         btr = BoltztrapRunner(bs, nelect, doping=list(doping), tmax=tmax,
-                                  tgrid=tstep, lpfac=lpfac)
+                              tgrid=tstep, **kwargs)
         print('Running Boltztrap...', end='')
         btr_dir = btr.run(path_dir='.')
         print('Done.')
 
-        if write_doping:
+        with open('boltztrap/boltztrap.outputtrans', 'r') as f:
+            for line in f: pass
+        if len(line) >= 23 and line[:23] == ' Calling FermiIntegrals':
             with open(os.path.join(btr_dir, 'boltztrap.outputtrans'),'a') as f:
                 for i, x in enumerate(np.concatenate((doping, -doping))):
                     f.write(
-                      'Doping level number {} n = {} carriers/cm3\n'.format(i,
-                                                                            x))
+                   'Doping level number {} n = {} carriers/cm3\n'.format(i, x))
 
     else:
         btr_dir = 'boltztrap'
@@ -130,6 +131,7 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
             k[d] = np.array([k[d][t] for t in temperature])
             f[d] = np.array([f[d][t] for t in temperature])
             s[d] = np.array([s[d][t] for t in temperature])
+
             data['average_eff_mass'][d] = np.linalg.inv(c[d]) \
                                         * dp[d][None, :, None, None] \
                                         * 1e6 * e ** 2 / me
@@ -142,6 +144,6 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
         data['fermi_level'] = f
         print('Done.')
 
-        tp.plot.save.hdf5(data, output)
+        tp.data.save.hdf5(data, output)
 
     return

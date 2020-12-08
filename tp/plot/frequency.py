@@ -378,12 +378,12 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     # data formatting
 
+    if quantity == 'kappa': quantity = 'mode_kappa'
+    if xquantity == 'kappa': xquantity = 'mode_kappa'
     tnames = tp.settings.to_tp()
     if invert: quantity, xquantity = xquantity, quantity
     quantity = tnames[quantity] if quantity in tnames else quantity
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
-    if quantity == 'kappa': quantity = 'mode_kappa'
-    if xquantity == 'kappa': xquantity = 'mode_kappa'
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity],
                                    temperature, direction)
@@ -519,15 +519,15 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
     # data formatting
 
+    if quantity == 'kappa': quantity = 'mode_kappa'
+    if xquantity == 'kappa': xquantity = 'mode_kappa'
+    if projected == 'kappa': projected = 'mode_kappa'
     tnames = tp.settings.to_tp()
     axlabels = tp.settings.labels()
     if invert: quantity, xquantity = xquantity, quantity
     quantity = tnames[quantity] if quantity in tnames else quantity
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
     projected = tnames[projected] if projected in tnames else projected
-    if quantity == 'kappa': quantity = 'mode_kappa'
-    if xquantity == 'kappa': xquantity = 'mode_kappa'
-    if projected == 'kappa': projected = 'mode_kappa'
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity, projected],
                                    temperature, direction)

@@ -246,13 +246,24 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             data = tp.data.resolve(data, 'zt', direction)
     else:
         data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
-                                        'electronic_thermal_conductivity'],
-                                        direction=direction)
+                                       'electronic_thermal_conductivity'],
+                                       direction=direction)
 
         if kdata is not None:
             kdata = tp.data.resolve.resolve(kdata,
                                             'lattice_thermal_conductivity',
                                             direction=direction)
+
+            # scale to smallest data set (don't extrapolate)
+            # interpolation takes care of it if data is smaller than kdata
+            tindex = np.where((data['temperature'] <= kdata['temperature'][-1])
+                            & (data['temperature'] >= kdata['temperature'][0]))
+            data['temperature'] = np.array(data['temperature'])[tindex[0]]
+            data['conductivity'] = np.array(data['conductivity'])[tindex[0]]
+            data['electronic_thermal_conductivity'] = \
+                   np.array(data['electronic_thermal_conductivity'])[tindex[0]]
+            data['seebeck'] = np.array(data['seebeck'])[tindex[0]]
+
             kinterp = interp1d(kdata['temperature'],
                                kdata['lattice_thermal_conductivity'],
                                kind='cubic')
@@ -260,7 +271,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             data['meta']['kappa_source'] = kdata['meta']['kappa_source']
         else: # if no kappa_lat, set to 1
             data['lattice_thermal_conductivity'] = np.ones(
-                                                      len(data['temperature']))
+                                                   len(data['temperature']))
             data['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
 
         data = tp.calculate.zt_fromdict(data)

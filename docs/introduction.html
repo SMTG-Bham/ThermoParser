@@ -15,6 +15,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tp" href="modules.html" />
+    <link rel="prev" title="ThermoPlotter" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -31,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\ <span class="n">________</span>
+  <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">________</span>
 <span class="o">/////</span> \\\\
 \<span class="n">________</span><span class="o">/</span><span class="n">_______________________________________________________________</span>
 <span class="o">|</span><span class="n">_____</span>                            <span class="p">:</span> <span class="n">___</span>                                  \
@@ -46,7 +48,7 @@
 <p>ThermoPlotter is a toolkit for quickly, easily and prettily plotting the
 outputs of specialised analytical codes. It is focused on computational
 materials science and particularly thermoelectrics materials. It
-essentially wraps around <a class="reference external" href="&lt;https://matplotlib.org/&gt;">Matplotlib</a> functions, and is intended to be
+essentially wraps around <a class="reference external" href="https://matplotlib.org">matplotlib</a> functions, and is intended to be
 used as a python package, to build easily customisable plotting scripts.
 There are also several basic command-line scripts.</p>
 <div class="section" id="installation">
@@ -104,12 +106,20 @@ or <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.
 supplemented with helper functions, such as default labels in
 <code class="docutils literal notranslate"><span class="pre">tp.settings</span></code> or colourmap generators in <code class="docutils literal notranslate"><span class="pre">tp.plot.colour</span></code>.</p>
 <p>Currently supported codes are:</p>
-<p>Phononic properties:
-* <cite>Phonopy &lt;https://phonopy.github.io/phonopy/&gt;</cite>
-* <cite>Phono3py &lt;http://phonopy.github.io/phono3py/&gt;</cite></p>
-<p>Electronic properties:
-* <cite>AMSET &lt;https://hackingmaterials.lbl.gov/amset/&gt;</cite>
-* <cite>BoltzTraP &lt;https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/&gt;</cite></p>
+<ul class="simple">
+<li><p>Phononic properties:</p>
+<ul>
+<li><p><a class="reference external" href="https://phonopy.github.io/phonopy/">Phonopy</a></p></li>
+<li><p><a class="reference external" href="http://phonopy.github.io/phono3py/">Phono3py</a></p></li>
+</ul>
+</li>
+<li><p>Electronic properties:</p>
+<ul>
+<li><p><a class="reference external" href="https://hackingmaterials.lbl.gov/amset/">AMSET</a></p></li>
+<li><p><a class="reference external" href="https://www.imc.tuwien.ac.at/forschungsbereich_theoretische_chemie/forschungsgruppen/prof_dr_gkh_madsen_theoretical_materials_chemistry/boltztrap/">BoltzTraP</a></p></li>
+</ul>
+</li>
+</ul>
 <p>Current plotting modes are split into four areas.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">tp.plot.phonons</span></code> contains plots along a high-symmetry path,
@@ -137,10 +147,10 @@ piece of code (or anything else). Adding options is inteded to be
 straightforward, as each step is mostly independant of the others, so
 only one new function should be required. We would of course be happy to
 discuss, if desired.</p>
-<p>Bugs and feature requests can be submitted to the <a class="reference external" href="&lt;https://github.com/kbspooner/ThermoPlotter/issues&gt;">issue tracker</a>,
-while contributions can be made using the <a class="reference external" href="&lt;https://guides.github.com/activities/forking&gt;">fork and pull</a> approach.
+<p>Bugs and feature requests can be submitted to the <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/issues">issue tracker</a>,
+while contributions can be made using the <a class="reference external" href="https://guides.github.com/activities/forking">fork and pull</a> approach.
 Contributions should have comprehensive docstrings, and where
-appropriate <a class="reference external" href="&lt;https://github.com/kbspooner/ThermoPlotter/tree/master/examples&gt;">examples</a>, documentation and <a class="reference external" href="&lt;https://github.com/kbspooner/ThermoPlotter/tree/master/tests&gt;">tests</a> are greatly
+appropriate <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/tree/master/examples">examples</a>, documentation and <a class="reference external" href="https://github.com/kbspooner/ThermoPlotter/tree/master/tests">tests</a> are greatly
 appreciated.</p>
 </div>
 <div class="section" id="license">
@@ -152,13 +162,14 @@ appreciated.</p>
 <h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h1>
 <p>ThermoPlotter uses the following open-source packages:</p>
 <ul class="simple">
-<li><p><cite>h5py &lt;http://docs.h5py.org/en/stable/&gt;</cite></p></li>
-<li><p><cite>json &lt;https://docs.python.org/3/library/json.html&gt;</cite></p></li>
-<li><p><cite>matplotlib &lt;https://matplotlib.org/&gt;</cite></p></li>
-<li><p><cite>numpy &lt;https://numpy.org/&gt;</cite></p></li>
-<li><p><cite>pymatgen &lt;https://pymatgen.org/&gt;</cite></p></li>
-<li><p><cite>scipy &lt;https://www.scipy.org/&gt;</cite></p></li>
-<li><p><cite>yaml &lt;https://pyyaml.org/wiki/PyYAMLDocumentation&gt;</cite></p></li>
+<li><p><a class="reference external" href="http://docs.h5py.org/">h5py</a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/json.html">json</a></p></li>
+<li><p><a class="reference external" href="https://matplotlib.org">matplotlib</a></p></li>
+<li><p><a class="reference external" href="https://numpy.org">numpy</a></p></li>
+<li><p><a class="reference external" href="https://pymatgen.org">pymatgen</a></p></li>
+<li><p><a class="reference external" href="https://www.scipy.org">scipy</a></p></li>
+<li><p><a class="reference external" href="https://www.sphinx-doc.org">sphinx</a></p></li>
+<li><p><a class="reference external" href="https://pyyaml.org/">yaml</a></p></li>
 </ul>
 </div>
 
@@ -179,11 +190,23 @@ appreciated.</p>
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">python modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">ThermoPlotter</a></li>
+      <li>Next: <a href="modules.html" title="next chapter">tp</a></li>
   </ul></li>
 </ul>
 </div>

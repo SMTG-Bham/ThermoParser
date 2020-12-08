@@ -484,7 +484,7 @@ normal/ norm. Default: None.</p></li>
 </dl>
 <dl class="py function">
 <dt id="tp.data.run.boltztrap">
-<code class="sig-prename descclassname">tp.data.run.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">1001</span></em>, <em class="sig-param"><span class="n">tstep</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">array([1e+18, 1.53992653e+18, 2.37137371e+18, 3.65174127e+18, 5.62341325e+18, 8.65964323e+18, 1.33352143e+19, 2.05352503e+19, 3.16227766e+19, 4.86967525e+19, 7.49894209e+19, 1.15478198e+20, 1.77827941e+20, 2.73841963e+20, 4.21696503e+20, 6.49381632e+20, 1e+21])</span></em>, <em class="sig-param"><span class="n">vasprun</span><span class="o">=</span><span class="default_value">'vasprun.xml'</span></em>, <em class="sig-param"><span class="n">soc</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">zero_weighted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kpoints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lpfac</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">relaxation_time</span><span class="o">=</span><span class="default_value">1e-14</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">analyse</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'boltztrap.hdf5'</span></em>, <em class="sig-param"><span class="n">write_doping</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.run.boltztrap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.data.run.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">1001</span></em>, <em class="sig-param"><span class="n">tstep</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">array([1e+18, 1.53992653e+18, 2.37137371e+18, 3.65174127e+18, 5.62341325e+18, 8.65964323e+18, 1.33352143e+19, 2.05352503e+19, 3.16227766e+19, 4.86967525e+19, 7.49894209e+19, 1.15478198e+20, 1.77827941e+20, 2.73841963e+20, 4.21696503e+20, 6.49381632e+20, 1e+21])</span></em>, <em class="sig-param"><span class="n">vasprun</span><span class="o">=</span><span class="default_value">'vasprun.xml'</span></em>, <em class="sig-param"><span class="n">zero_weighted</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kpoints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">relaxation_time</span><span class="o">=</span><span class="default_value">1e-14</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">analyse</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'boltztrap.hdf5'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.data.run.boltztrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs BoltzTraP</p>
 <p>Runs quicker than the pymatgen from_files version.
 Also writes to a hdf5 file.
@@ -492,7 +492,7 @@ Minimum temperature is 200 K or tstep, whichever is larger.
 Note: BoltzTraP can be a fickle friend, so if you’re getting errors,
 it may be worth reinstalling or trying on a different machine.
 Testing with a small number of temperature/ doping combinations is also
-recommended</p>
+recommended.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -504,14 +504,10 @@ temperature step in K. Default: 10.</p></li>
 doping concentrations in cm-1. Default: np.logspace(18, 21, 101).</p></li>
 <li><p><strong>vasprun</strong> – str, optional
 path to vasprun. Default: vasprun.xml.</p></li>
-<li><p><strong>soc</strong> – bool, optional
-spin orbit coupling used. Default: False.</p></li>
 <li><p><strong>zero_weighted</strong> – bool, optional
 zero weighted kpoints used. Default: False.</p></li>
 <li><p><strong>kpoints</strong> – str, optional
 path to KPOINTS file if zero_weighted. Default: KPOINTS.</p></li>
-<li><p><strong>lpfac</strong> – int, optional
-interpolate the DoS k-points by lpfac times. Default: 10.</p></li>
 <li><p><strong>relaxation_time</strong> – float, optional
 charge carrier relaxation time. Default: 1e-14.</p></li>
 <li><p><strong>run</strong> – bool, optional
@@ -520,11 +516,19 @@ run BoltzTraP. Default: True.</p></li>
 analyse BoltzTraP. Default: True.</p></li>
 <li><p><strong>output</strong> – str, optional
 output hdf5 filename. Default: boltztrap.hdf5.</p></li>
-<li><p><strong>write_doping</strong> – bool, optional
-manually write doping concentrations at the end of the
-boltztrap/boltztrap.outputtrans file.
-Toggling may fix np.linalg errors; you may want to set the
-default manually on a per-computer basis. Default: False.</p></li>
+<li><p><strong>**kwargs</strong> – <p>passed to pymatgen.electronic.structure.boltztrap.BoltztrapRunner.
+Recommended arguments include:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>soc<span class="classifier">bool, optional</span></dt><dd><p>spin orbit coupling. Default: False.</p>
+</dd>
+<dt>lpfac<span class="classifier">int, optional</span></dt><dd><p>interpolation factor. Default: 10.</p>
+</dd>
+<dt>timeout<span class="classifier">float, optional</span></dt><dd><p>Convergence time limit in seconds. Default: 7200.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
 </ul>
 </dd>
 </dl>
