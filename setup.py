@@ -13,7 +13,6 @@ import matplotlib as mpl
 import os
 import setuptools
 from setuptools.command.install import install
-from sphinx.setup_command import BuildDoc
 import shutil
 
 with open('README.rst', 'r') as f:
@@ -66,10 +65,4 @@ setuptools.setup(
     install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy'],
     python_requires='>=3',
-    cmdclass={'build_sphinx': BuildDoc,
-              'install':      PostInstallMoveFile},
-    command_options={'build_sphinx':
-                        {'project':    ('setup.py', __name__),
-                         'version':    ('setup.py', __version__),
-                         'source_dir': ('setup.py', 'docs/src')}},
     scripts=scripts)
