@@ -54,7 +54,7 @@ def linear(cmax, cmin='#ffffff', alpha=1., density=512):
 
     cmin2 = rgb2array(cmin, alpha)
     cmax2 = rgb2array(cmax, alpha)
-    colours = np.linspace(cmin2, cmax2, density)
+    colours = np.abs(np.linspace(cmin2, cmax2, density))
 
     return ListedColormap(colours)
 
@@ -99,7 +99,7 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
     colours = []
     x2 = np.linspace(0, 1, density)
     c = interp1d(x, y, 'linear', axis=0)
-    colour = c(x2)
+    colour = np.abs(c(x2))
 
     return ListedColormap(colour)
 
@@ -140,7 +140,7 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
     colours = []
     x2 = np.linspace(0, 1, density)
     c = interp1d(x, y, 'linear', axis=0)
-    colour = c(x2)
+    colour = np.abs(c(x2))
 
     return ListedColormap(colour)
 
