@@ -97,7 +97,7 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
         doping concentrations correctly, and if it doesn't, writes them.
         """
         with open('boltztrap/boltztrap.outputtrans', 'r') as f:
-            line = f.readlines([-2])
+            line = f.readlines()[-2]
         if len(line) >= 23 and line[:23] == ' Calling FermiIntegrals':
             with open(os.path.join(btr_dir, 'boltztrap.outputtrans'),'a') as f:
                 for i, x in enumerate(np.concatenate((doping, -doping))):
