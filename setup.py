@@ -64,7 +64,7 @@ setuptools.setup(
              'amset tp matplotlib',
     test_suite='setup.load_test_suite',
     install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
-                      'pyyaml', 'scipy', 'sphinx']
+                      'pyyaml', 'scipy', 'sphinx'],
     python_requires='>=3',
     cmdclass={'build_sphinx': BuildDoc,
               'install':      PostInstallMoveFile},
