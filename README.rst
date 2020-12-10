@@ -118,7 +118,7 @@ appreciated.
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
 
-Contributing
+Contributors
 ------------
 
 Many thanks to all those who contributed code or ideas to ThermoPlotter!
