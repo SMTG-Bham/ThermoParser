@@ -6,10 +6,12 @@ parser = argparse.ArgumentParser(
          description='Plots a ZT heatmap against temperature and '
                      'carrier concentration.')
 parser.add_argument('file',
-                    help='Electronic transport (transport_xxx.json or '
-                         'boltztrap.hdf5).')
+                    help='Electronic transport data, e.g. amset '
+                         'transport_xxx.json or boltztrap.hdf5 or '
+                         'zt.hdf5 written by this script.')
 parser.add_argument('-k', '--kappa', metavar='file',
-                    help='phono3py kappa-mxxx.hdf5.')
+                    help='phono3py kappa-mxxx.hdf5. Ignored if ZT is '
+                         'in the electronic data file.')
 parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
                     default=['viridis'],
                     help='colourmap name or key colour or min and max '
@@ -35,6 +37,9 @@ parser.add_argument('-o', '--output', metavar='file', default='tp-ztmap',
 parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
                     help='style sheet to overlay. Later ones override '
                          'earlier ones.')
+parser.add_argument('-t', '--type', metavar='doping', default='n',
+                    help='type of doping in BoltzTraP. Must be n or p. '
+                         'Default: n.')
 parser.add_argument('--xmin', metavar='xmin', type=float,
                     help='override minimum temperature. Default: None.')
 parser.add_argument('--xmax', metavar='xmax', type=float,
@@ -50,6 +55,7 @@ parser.add_argument('--cmax', metavar='cmax', type=float,
 
 args=parser.parse_args()
 
+import h5py
 import matplotlib.pyplot as plt
 import tp
 
@@ -60,12 +66,15 @@ if len(args.colour) == 1:
 if args.nodata:
     ztdata = None
 else:
-    ztdata = 'zt-{}.hdf5'.format(args.direction)
+    ztdata = 'zt-{}-{}.hdf5'.format(args.type, args.direction)
 
 try:
     edata = tp.data.load.amset(args.file)
 except Exception:
-    edata = tp.data.load.boltztrap(args.file)
+    try:
+        edata = tp.data.load.boltztrap(args.file, doping=args.type)
+    except Exception:
+        edata = h5py.File(args.file, 'r')
 
 if args.kappa is not None:
     kdata = tp.data.load.phono3py(args.kappa)

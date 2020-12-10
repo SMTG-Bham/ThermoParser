@@ -231,7 +231,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
         output : str, optional
             output filename to write to. Only writes if ZT has been
-            within this function. Set to None to not write.
+            within this function. Set to None to not write. Can be
+            loaded with h5py.File to put back into this function.
             Default: zt.hdf5.
 
         **kwargs
@@ -255,9 +256,10 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         if np.ndim(data['zt']) == 4:
             data = tp.data.resolve(data, 'zt', direction)
     else:
-        data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
-                                       'electronic_thermal_conductivity'],
-                                       direction=direction)
+        if np.ndim(data['conductivity']) == 4:
+            data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
+                                           'electronic_thermal_conductivity'],
+                                           direction=direction)
 
         if kdata is not None:
             kdata = tp.data.resolve.resolve(kdata,

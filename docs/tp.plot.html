@@ -548,7 +548,8 @@ average/ avg. Default: average.</p></li>
 <li><p><strong>colour</strong> (<em>colourmap</em><em> or </em><em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – colourmap or colourmap name; or key colour or min and max
 RGB colours to generate a colour map. Default: viridis.</p></li>
 <li><p><strong>output</strong> (<em>str</em><em>, </em><em>optional</em>) – output filename to write to. Only writes if ZT has been
-within this function. Set to None to not write.
+within this function. Set to None to not write. Can be
+loaded with h5py.File to put back into this function.
 Default: zt.hdf5.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.pcolormesh.
 Defaults:</p>
@@ -1325,6 +1326,7 @@ plots using x=’log’. Default: False.</p></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#id1">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">

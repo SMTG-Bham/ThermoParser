@@ -118,6 +118,20 @@ appreciated.
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
 
+Contributing
+------------
+
+Many thanks to all those who contributed code or ideas to ThermoPlotter!
+Roughly chronologically, they are:
+
+* Kieran B. Spooner
+* David O. Scanlon
+* Maud Einhorn
+* Daniel W. Davies
+* Bonan Zhu
+* Sean R. Kavanagh
+* Warda Rahim
+
 License
 -------
 
