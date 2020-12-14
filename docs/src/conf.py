@@ -55,10 +55,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'alabaster'
 html_theme_options = {'github_user':   'SMTG-UCL',
                       'github_repo':   'ThermoPlotter',
-                      'description':   'A simple thermoelectrics plotting tool',
+                      'description':   'streamlined analysis of '\
+                                       'thermoelectric properties',
                       'page_width':    '1040px',
                       'sidebar_width': '240px',
-                      'github_banner': True,
                       'github_button': True}
 
 # Add any paths that contain custom static files (such as style sheets) here,

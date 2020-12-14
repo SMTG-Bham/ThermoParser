@@ -3,7 +3,7 @@
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Scanlon Materials Theory Group (2020)'
-__version__ =    '0.3.1'
+__version__ =    '0.3.2'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
 __date__ =       'Dec 4 2020'
@@ -60,7 +60,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Scientific/Engineering :: Visualization'],
     keywords='chemistry materials thermoelectric dft phonopy phono3py '
-             'amset tp matplotlib',
+             'amset boltztrap tp te matplotlib',
     test_suite='setup.load_test_suite',
     install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy'],

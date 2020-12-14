@@ -14,7 +14,7 @@ colour = 'viridis'
 
 # Axes
 
-fig, ax = tp.axes.one.colourbar(['tp', 'dark_background'])
+fig, ax = tp.axes.one.colourbar()
 
 # Load
 
@@ -25,8 +25,7 @@ pdata = tp.data.load.phonopy_dispersion(phile)
 
 tp.plot.phonons.add_projected_dispersion(ax, data, pdata, projected,
                                          temperature=temperature,
-                                         colour=colour, poscar=poscar,
-                                         xmarkkwargs={'color': 'white'})
+                                         colour=colour, poscar=poscar)
 
 # Save
 

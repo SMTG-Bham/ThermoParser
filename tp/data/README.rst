@@ -48,7 +48,8 @@ units.
 ``run.py``
 ----------
 
-Currently contains a BoltzTraP runner. Temperamental.
+Currently contains a BoltzTraP runner. Faster and less error-prone than
+the Pymatgen version, and writes to hdf5 for standardisation purposes.
 
 -----------
 ``save.py``

@@ -9,19 +9,16 @@ Functions
 import numpy as np
 import tp
 
-def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
-              vasprun='vasprun.xml', zero_weighted=False, kpoints=None,
-              relaxation_time=1e-14, run=True, analyse=True,
+def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
+              ke_mode='boltzmann', vasprun='vasprun.xml', kpoints=None,
+              relaxation_time=1e-14, lpfac=10, run=True, analyse=True,
               output='boltztrap.hdf5', **kwargs):
-    """Runs BoltzTraP
+    """Runs BoltzTraP from a VASP density of states (DoS).
 
-    Runs quicker than the pymatgen from_files version.
-    Also writes to a hdf5 file.
-    Minimum temperature is 200 K or tstep, whichever is larger.
+    Runs quicker and more robustly than the pymatgen from_files version,
+    and outputs an hdf5 file.
     Note: BoltzTraP can be a fickle friend, so if you're getting errors,
     it may be worth reinstalling or trying on a different machine.
-    Testing with a small number of temperature/ doping combinations is also
-    recommended.
 
     Arguments
     ---------
@@ -29,18 +26,37 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
         tmax : float, optional
             maximum temperature in K. Default: 1000.
         tstep : float, optional
-            temperature step in K. Default: 10.
+            temperature step in K. Default: 50.
+        tmin : float, optional
+            minimum temperature in K. This does not reduce how many
+            temperatures are run in BoltzTraP, only how many are saved
+            to hdf5. Default: tstep.
         doping : array-like, optional
-            doping concentrations in cm-1. Default: np.logspace(18, 21, 101).
+            doping concentrations in cm-1.
+            Default: np.logspace(18, 21, 17).
+        k_mode : str, optional
+            method for calculating the electronic thermal conductivity.
+            Options:
+
+                boltzmann (default):
+                    standard boltztrap method. Madsen and Singh,
+                    Comput. Phys. Commun. 2006, 175, 67.
+                wiedemann:
+                    Wiedemann-Franz law with constant L = 2.44E-8.
+                    Franz and Wiedemann, Ann. Phys. 1853, 165, 497.
+                snyder:
+                    Wiedemann-Franz law, with L varying with Seebeck.
+                    Kim et al., APL Mat. 2015, 3, 041506.
 
         vasprun : str, optional
             path to vasprun. Default: vasprun.xml.
-        zero_weighted : bool, optional
-            zero weighted kpoints used. Default: False.
         kpoints : str, optional
-            path to KPOINTS file if zero_weighted. Default: KPOINTS.
+            path to KPOINTS file if there are zero-weighted k-points.
+            Default: KPOINTS.
         relaxation_time : float, optional
             charge carrier relaxation time. Default: 1e-14.
+        lpfac : int, optional
+            DoS interpolation factor. Default: 10.
 
         run : bool, optional
             run BoltzTraP. Default: True.
@@ -51,46 +67,97 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
 
         **kwargs
             passed to pymatgen.electronic.structure.boltztrap.BoltztrapRunner.
-            Recommended arguments include:
 
-                soc : bool, optional
-                    spin orbit coupling. Default: False.
-                lpfac : int, optional
-                    interpolation factor. Default: 10.
-                timeout : float, optional
-                    Convergence time limit in seconds. Default: 7200.
+    hdf5 File Contents
+    ------------------
+
+        average_eff_mass : dict
+            the charge carrier effective mass in units of m_e, taking
+            into account all bands, as opposed to the single parabolic
+            band model.
+            Data is a dictionary with an array each for n and p doping,
+            of shape (temperatures, concentrations, 3, 3).
+        conductivity : dict
+            electric conductivity in S m-1.
+            Data is a dictionary with an array each for n and p doping,
+            of shape (temperatures, concentrations, 3, 3).
+        doping : array-like
+            carrier concentration in cm-1. Identical to input.
+        electronic_thermal_conductivity : dict
+            electronic thermal conductivity in W m-1 K-1.
+            Data is a dictionary with an array each for n and p doping,
+            of shape (temperatures, concentrations, 3, 3).
+        fermi_level : dict
+            fermi level at different temperatures in units of eV.
+            Data is a dictionary with an array each for n and p doping,
+            of shape (temperatures, concentrations).
+        power_factor : dict
+            power factor in W m-1 K-2.
+            Data is a dictionary with an array each for n and p doping,
+            of shape (temperatures, concentrations, 3, 3).
+        seebeck : dict
+            Seebeck coefficient in muV K-1.
+            Data is a dictionary with an array each for n and p doping,
+            of shape (temperatures, concentrations, 3, 3).
+        temperature : numpy array
+            temperatures in K.
+        meta : dict
+            metadata:
+
+                interpolation_factor : int
+                    lpfac.
+                ke_mode : str
+                    as input.
+                relaxation_time : float
+                    as input.
+                soc : bool
+                    spin-orbit coupling calculation.
+                units : dict
+                    units of each property above.
     """
 
     import h5py
     import os
-    from pymatgen.electronic_structure.boltztrap import BoltztrapRunner, BoltztrapAnalyzer
+    from pymatgen.electronic_structure.boltztrap \
+         import BoltztrapRunner, BoltztrapAnalyzer, BoltztrapError
     from pymatgen.io.vasp.outputs import Vasprun
     from scipy import constants
 
     # check inputs
 
-    for name, value in zip(['zero_weighted', 'run', 'analyse'],
-                           [ zero_weighted,   run,   analyse]):
+    for name, value in zip(['run', 'analyse'],
+                           [ run,   analyse]):
         assert isinstance(value, bool), '{} must be True or False'.format(name)
 
+    ke_mode = ke_mode.lower()
+    ke_modes =  ['boltzmann', 'wiedemann', 'snyder']
+    assert ke_mode in ke_modes, 'ke_mode must be {} or {}.'.format(
+                                ', '.join(ke_modes[:-1]), ke_modes[-1])
+
     tmax += tstep
-    tmin = 200
-    if tstep > tmin:
-        tmin = tstep
+    tmin = tstep if tmin is None else tmin
     temperature = np.arange(tmin, tmax, tstep)
 
     if run: # run boltztrap from vasprun.xml -> boltztrap directory
         doping = np.array(doping)
-        vr = Vasprun(vasprun)
-        bs = vr.get_band_structure(line_mode=zero_weighted,
-                                   kpoints_filename=kpoints)
-        nelect = vr.parameters['NELECT']
+        vr = Vasprun(vasprun, parse_potcar_file=False)
+        soc = vr.as_dict()['input']['parameters']['LSORBIT']
+        try:
+            bs = vr.get_band_structure(line_mode=False)
+            nelect = vr.parameters['NELECT']
+            btr = BoltztrapRunner(bs, nelect, doping=list(doping), tmax=tmax,
+                                  tgrid=tstep, soc=soc, lpfac=lpfac, **kwargs)
+            print('Running Boltztrap...', end='')
+            btr_dir = btr.run(path_dir='.')
+            print('Done.')
+        except BoltztrapError:
+            bs = vr.get_band_structure(line_mode=True,kpoints_filename=kpoints)
+            nelect = vr.parameters['NELECT']
+            btr = BoltztrapRunner(bs, nelect, doping=list(doping), tmax=tmax,
+                                  tgrid=tstep, soc=soc, lpfac=lpfac, **kwargs)
+            btr_dir = btr.run(path_dir='.')
+            print('Done.')
 
-        btr = BoltztrapRunner(bs, nelect, doping=list(doping), tmax=tmax,
-                              tgrid=tstep, **kwargs)
-        print('Running Boltztrap...', end='')
-        btr_dir = btr.run(path_dir='.')
-        print('Done.')
 
         """
         Detects whether the BoltzTraP build on this computer writes the
@@ -112,13 +179,26 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
         bta = BoltztrapAnalyzer.from_files(btr_dir)
         print('Done.')
 
-        data = {'average_eff_mass':     {},
-                'conductivity':         {},
-                'doping':               doping,
-                'power_factor':         {},
-                'seebeck':              {},
-                'temperature':          temperature,
-                'thermal_conductivity': {}}
+        data = {'average_eff_mass':                {},
+                'conductivity':                    {},
+                'doping':                          doping,
+                'electronic_thermal_conductivity': {},
+                'power_factor':                    {},
+                'seebeck':                         {},
+                'temperature':                     temperature,
+                'meta':
+                    {'units': {'average_eff_mass':                'm_e',
+                               'conductivity':                    'S m-1',
+                               'doping':                          'cm-1',
+                               'electronic_thermal_conductivity': 'W m-1 K-1',
+                               'fermi_level':                     'eV',
+                               'power_factor':                    'W m-1 K-2',
+                               'seebeck':                         'muV K-1',
+                               'temperature':                     'K'},
+                   'interpolation_factor': lpfac,
+                   'ke_mode':              ke_mode,
+                   'relaxation_time':      relaxation_time,
+                   'soc':                  soc}}
 
         # load data
 
@@ -145,10 +225,21 @@ def boltztrap(tmax=1001, tstep=50, doping=np.logspace(18, 21, 17),
                                         * 1e6 * e ** 2 / me
             data['conductivity'][d] = np.multiply(c[d], relaxation_time)
             data['seebeck'][d] = np.multiply(s[d], 1e6)
-            data['power_factor'][d] = tp.calculate.power_factor(c[d], s[d])
-            data['thermal_conductivity'][d] = (k[d] - s[d] ** 2 * c[d] \
-                                            * temperature[:,None,None,None]) \
-                                            * relaxation_time
+            data['power_factor'][d] = tp.calculate.power_factor(
+                                                   data['conductivity'][d],
+                                                   data['seebeck'][d])
+            if ke_mode == 'boltztrap':
+                data['electronic_thermal_conductivity'][d] = \
+                      k[d] * relaxation_time \
+                      - data['power_factor'][d] * temperature[:,None,None,None]
+            else:
+                if ke_mode == 'wiedemann':
+                    L = 2.44E-8
+                else:
+                    L = (1.5 + np.exp(-np.abs(data['seebeck'][d])/116)) * 1e-8
+                data['electronic_thermal_conductivity'][d] = \
+                    L * data['conductivity'][d] * temperature[:,None,None,None]
+
         data['fermi_level'] = f
         print('Done.')
 

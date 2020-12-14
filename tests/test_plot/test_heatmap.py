@@ -190,7 +190,6 @@ class ZTMapTest(unittest.TestCase):
     @patch.object(tp.data.resolve, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve, mock_zt):
-        mock_resolve.return_value = self.data
         mock_zt.return_value = self.data2
         cbar = heatmap.add_ztmap(self.ax, self.data, xinterp=None,
                                  yinterp=None)
@@ -202,7 +201,7 @@ class ZTMapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
-        mock_resolve.assert_called_once()
+        mock_resolve.assert_not_called()
         mock_zt.assert_called_once()
 
     @patch.object(tp.calculate, 'zt_fromdict')

@@ -125,7 +125,7 @@ def colourbar_small_legend(style=style):
                 legend.
         """
 
-        legend = ax.legend(loc="center left", bbox_to_anchor=(1.25, 0.5),
+        legend = ax.legend(loc="center left", bbox_to_anchor=(1.27, 0.5),
                            *args, **kwargs)
 
         return legend
