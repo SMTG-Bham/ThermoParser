@@ -21,8 +21,8 @@ There are also several basic command-line scripts.
 
 Click on the image to go to the `gallery`_!
 
-.. image:: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/docs/_images/wideband.png
-   :alt: "A phonon dispersion where widened bands show phonon scattering"
+.. image:: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/docs/src/figures/wideband.png
+   :alt: A phonon dispersion where widened bands show phonon scattering
    :target: https://smtg-ucl.github.io/ThermoPlotter/gallery.html
 
 .. _gallery: https://smtg-ucl.github.io/ThermoPlotter/gallery.html
