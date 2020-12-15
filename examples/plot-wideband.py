@@ -8,7 +8,7 @@ kappafile = 'data/zno/kappa-m404021.hdf5'
 poscar = 'data/zno/POSCAR'
 temperature = 300
 
-colour = 'viridis' #tp.plot.colour.linear('#ff0000', '#000000')
+colour = ['#000000', '#ff0000']
 
 # Axes
 
