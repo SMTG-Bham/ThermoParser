@@ -262,9 +262,9 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     # list of quantities dependant on doping and temperature
     hasdope = ['average_eff_mass', 'conductivity', 'fermi_level', 'seebeck',
-               'power_factor', 'thermal_conductivity']
+               'power_factor', 'electronic_thermal_conductivity']
     hastemp = ['average_eff_mass', 'conductivity', 'fermi_level', 'seebeck',
-               'power_factor', 'thermal_conductivity']
+               'power_factor', 'electronic_thermal_conductivity']
 
     # add dependant variables
 

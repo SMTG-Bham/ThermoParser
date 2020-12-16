@@ -364,7 +364,6 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                 linewidth:  0
                 marker:     '.'
                 rasterized: True
-                s:          1
     """
 
     # defaults
@@ -373,8 +372,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                  'edgecolors': 'black',
                  'linewidth':  0,
                  'marker':     '.',
-                 'rasterized': True,
-                 's':          1}
+                 'rasterized': True}
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
@@ -501,7 +499,6 @@ def add_projected_waterfall(ax, data, quantity, projected,
                 linewidth:  0
                 marker:     .
                 rasterized: True
-                s:          1
 
     Returns
     -------
@@ -518,8 +515,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
                  'edgecolors': 'black',
                  'linewidth':  0,
                  'marker':     '.',
-                 'rasterized': True,
-                 's':          1}
+                 'rasterized': True}
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]

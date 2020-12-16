@@ -3,7 +3,7 @@
 ## Lines
 
 lines.linewidth             : 1
-lines.markersize            : 2
+lines.markersize            : 1
 
 ## Writing
 
@@ -11,7 +11,7 @@ lines.markersize            : 2
 
 font.family                 : sans-serif
 font.size                   : 8.0
-font.sans-serif             : Whitney Book Extended, Whitney Book, Helvetica, Arial, Liberation Sans, Andale Sans
+font.sans-serif             : Whitney Pro, Whitney Book Extended, Whitney Book, Helvetica, Arial, Liberation Sans, Andale Sans
 text.usetex                 : False
 mathtext.fontset            : stixsans
 mathtext.default            : regular

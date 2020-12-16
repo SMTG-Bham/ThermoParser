@@ -10,6 +10,8 @@ Functions
 
     style:
         default style sheet.
+    large_style:
+        style sheet for large axes.
     locator:
         default tick locators.
 
@@ -68,8 +70,12 @@ def __dir__():
    return names
 
 def style():
-    """Get default style sheet."""
+    """Get paper-style style sheet."""
     return 'tp'
+
+def large_style():
+    """Get presentation-style style sheet."""
+    return 'tp-large'
 
 def locator():
     """Get default locators."""
@@ -118,10 +124,10 @@ def to_amset():
 def to_boltztrap():
     """Get dictionary to translate to boltztrap."""
 
-    names = {'electronic_thermal_conductivity': 'thermal_conductivity',
-             'kappa':                           'thermal_conductivity',
-             'kappae':                          'thermal_conductivity',
-             'ke':                              'thermal_conductivity'}
+    names = {'kappa':                'electronic_thermal_conductivity',
+             'kappae':               'electronic_thermal_conductivity',
+             'ke':                   'electronic_thermal_conductivity',
+             'thermal_conductivity': 'electronic_thermal_conductivity'}
 
     return names
 

@@ -570,7 +570,6 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
             marker:     .
             rasterized: True
-            s:          1
 
     Returns
     -------
@@ -590,8 +589,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     # defaults
 
     defkwargs = {'marker':     '.',
-                 'rasterized': True,
-                 's':          1}
+                 'rasterized': True}
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]
@@ -784,7 +782,6 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
                 marker:     .
                 rasterized: True
-                s:          1
 
     Returns
     -------
@@ -804,8 +801,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     # defaults
 
     defkwargs = {'marker':     '.',
-                 'rasterized': True,
-                 's':          1}
+                 'rasterized': True}
     for key in defkwargs:
         if key not in kwargs:
             kwargs[key] = defkwargs[key]

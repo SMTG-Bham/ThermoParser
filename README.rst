@@ -49,9 +49,6 @@ upgrading you may want to preserve your changes:
     python3 -m pip install --user -e .
     git stash apply
 
-You only need to repeat the pip stage if you want to update the command-
-line script list.
-
 Usage
 -----
 
