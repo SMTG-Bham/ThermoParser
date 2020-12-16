@@ -265,6 +265,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         else:
             data = dict(data)
 
+        if 'meta' not in data:
+            data['meta'] = {}
+
         if kdata is not None:
             kdata = tp.data.resolve.resolve(kdata,
                                             'lattice_thermal_conductivity',
