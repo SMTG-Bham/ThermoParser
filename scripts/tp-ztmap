@@ -75,7 +75,7 @@ except Exception:
         edata = tp.data.load.boltztrap(args.file, doping=args.type)
     except Exception:
         data = h5py.File(args.file, 'r')
-        edata = dict(edata)
+        edata = dict(data)
         for key in edata.keys():
             if isinstance(edata[key], dict) and args.type in edata[key]:
                 edata[key] = edata[key][args.type][()]
