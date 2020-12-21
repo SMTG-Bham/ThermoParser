@@ -201,9 +201,9 @@ class BoltzTraPTest(unittest.TestCase):
     @patch.object(h5py, 'File')
     def test_thermal_conductivity(self, mock_h5py):
         q = 'electronic_thermal_conductivity'
-        data = {'thermal_conductivity': {'n': np.zeros((2, 2, 3, 3))},
-                'temperature':          [0, 1],
-                'doping':               [1, 2]}
+        data = {'electronic_thermal_conductivity': {'n': np.zeros((2, 2, 3, 3))},
+                'temperature':                     [0, 1],
+                'doping':                          [1, 2]}
         mock_h5py.return_value = data
 
         data2 = load.boltztrap('mock', q)

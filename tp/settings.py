@@ -71,11 +71,11 @@ def __dir__():
 
 def style():
     """Get paper-style style sheet."""
-    return 'tp'
+    return ['tp'] # should be a list for consistency.
 
 def large_style():
     """Get presentation-style style sheet."""
-    return 'tp-large'
+    return ['tp-large'] # should be a list for consisitency.
 
 def locator():
     """Get default locators."""

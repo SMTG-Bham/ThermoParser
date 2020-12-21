@@ -20,7 +20,12 @@ colour = cm.get_cmap('viridis')
 
 # Axes
 
-fig, ax, add_legend = tp.axes.one.colourbar_small_legend()
+"""
+Plots with legends return an add_legend function, which will place the
+legend nicely and still accepts arguments like title. This doesn't stop
+you using plt.legend instead (see line 51).
+"""
+fig, ax, add_legend = tp.axes.one_large.colourbar_small_legend()
 
 # Load
 
@@ -39,11 +44,17 @@ tp.plot.frequency.format_waterfall(ax, data, waterfall, direction=direction,
                                    temperature=temperature)
 tp.plot.frequency.add_dos(ax, dos, colour=colours, scale=True, main=False)
 cbar = tp.plot.frequency.add_projected_waterfall(ax, data, waterfall,
-                                                 projected, main=True,
-                                                 colour=colour,
+                                                 projected, colour=colour,
                                                  temperature=temperature,
                                                  direction=direction)
 add_legend()
+
+"""
+Some of the longer names don't fit on presentation style plots, but it's
+easy to switch.
+"""
+labels = tp.settings.short_labels()
+cbar.set_label(labels[projected])
 
 # Save
 

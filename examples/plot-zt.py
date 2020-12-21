@@ -10,7 +10,7 @@ colour = '#800080'
 
 # Axes
 
-fig, ax = tp.axes.one.colourbar()
+fig, ax = tp.axes.one_large.colourbar()
 
 # Load
 

@@ -168,14 +168,16 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     if main:
         if invert:
             axlabels = tp.settings.inverted_labels()
+            pad = mpl.rcParams['xtick.major.pad']
             ax.set_ylabel(axlabels['frequency'])
-            ax.set_xlabel(axlabels['dos'])
+            ax.set_xlabel(axlabels['dos'], labelpad=pad)
             ax.set_xlim(left=0)
             tp.plot.utilities.set_locators(ax, x='null', y='linear')
         else:
             axlabels = tp.settings.labels()
+            pad = mpl.rcParams['ytick.major.pad']
             ax.set_xlabel(axlabels['frequency'])
-            ax.set_ylabel(axlabels['dos'])
+            ax.set_ylabel(axlabels['dos'], labelpad=pad)
             ax.set_ylim(bottom=0)
             tp.plot.utilities.set_locators(ax, y='null', x='linear')
 

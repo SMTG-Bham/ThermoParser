@@ -12,7 +12,7 @@ colour = ['#000000', '#ff0000']
 
 # Axes
 
-fig, ax = tp.axes.one.plain(['tp', 'dark_background'])
+fig, ax = tp.axes.one_large.plain('dark_background')
 
 # Load
 

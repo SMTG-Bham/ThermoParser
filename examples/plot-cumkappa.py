@@ -13,7 +13,7 @@ colour = ['#ff8000', '#0000ff']
 
 # Axes
 
-fig, ax, add_legend = tp.axes.two.h_small_legend()
+fig, ax, add_legend = tp.axes.two_large.h_small_legend()
 
 # Load
 
@@ -27,7 +27,7 @@ for i in [0, 1]:
                                     main=main[i], label=direction[i])
     tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
                               direction=direction[i], colour=colour[i],
-                              xmarkers=1e-6, main=main[i], label=direction[i])
+                              xmarkers=1e-6, main=main[i], label='Waterfall')#direction[i])
 add_legend(title='Direction')
 
 # Save
