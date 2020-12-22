@@ -30,6 +30,8 @@ parser.add_argument('-i', '--interpolate', metavar='interpolate', type=int,
                          'axis. Default: 200.')
 parser.add_argument('--kind', metavar='kind', default='linear',
                     help='interpolation kind. Default: linear.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
 parser.add_argument('-o', '--output', metavar='file',
                     default='tp-kappa-target',
                     help='output filename, sans extension. '
@@ -55,8 +57,7 @@ args=parser.parse_args()
 import matplotlib.pyplot as plt
 import tp
 
-style = ['tp']
-style.extend(args.style)
+axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.colour) == 1:
     args.colour = args.colour[0]
 if args.nodata:
@@ -69,16 +70,20 @@ try:
 except Exception:
     edata = tp.data.load.boltztrap(args.file)
 
-fig, ax = tp.axes.one.colourbar(style)
+fig, ax = axes.colourbar(args.style)
 
-tp.plot.heatmap.add_kappa_target(ax, edata, zt=args.zt,
-                                 direction=args.direction,
-                                 xinterp=args.interpolate,
-                                 yinterp=args.interpolate,
-                                 kind=args.kind, colour=args.colour,
-                                 xmin=args.xmin, xmax=args.xmax,
-                                 ymin=args.ymin, ymax=args.ymax,
-                                 cmin=args.cmin, cmax=args.cmax, output=ztdata)
+cbar = tp.plot.heatmap.add_kappa_target(ax, edata, zt=args.zt,
+                                        direction=args.direction,
+                                        xinterp=args.interpolate,
+                                        yinterp=args.interpolate,
+                                        kind=args.kind, colour=args.colour,
+                                        xmin=args.xmin, xmax=args.xmax,
+                                        ymin=args.ymin, ymax=args.ymax,
+                                        cmin=args.cmin, cmax=args.cmax,
+                                        output=ztdata)
+
+if args.large:
+    cbar.set_label(tp.settings.large_labels()['lattice_thermal_conductivity'])
 
 for ext in args.extension:
     plt.savefig('{}.{}'.format(args.output, ext))

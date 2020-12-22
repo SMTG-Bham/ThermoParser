@@ -10,7 +10,7 @@ legend_title = 'Supercell Size'
 
 # Axes
 
-fig, ax, add_legend = tp.axes.one.medium_legend()
+fig, ax, add_legend = tp.axes.one_large.medium_legend()
 
 # Load
 

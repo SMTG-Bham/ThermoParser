@@ -39,6 +39,8 @@ parser.add_argument('--edgecolour', metavar='edgecolour', default='black',
 parser.add_argument('-l', '--linewidth', metavar='linewidth', type=float,
                     default=0,
                     help='marker linewidth. Default: 0.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
 parser.add_argument('-m', '--marker', metavar='marker', default='.',
                     help='marker shape. Default: ".".')
 parser.add_argument('--markersize', metavar='markersize', type=float,
@@ -80,8 +82,7 @@ args=parser.parse_args()
 import matplotlib.pyplot as plt
 import tp
 
-style = ['tp']
-style.extend(args.style)
+axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.colour) == 1:
     args.colour = args.colour[0]
 
@@ -93,21 +94,15 @@ if args.projected is not None:
     quantities.append(args.projected)
 data = tp.data.load.phono3py(args.file, quantities)
 
-fig, ax = tp.axes.one.plain(style)
+fig, ax = axes.plain(args.style)
 
 if args.projected is not None:
-    tp.plot.frequency.add_projected_waterfall(ax, data, args.y, args.projected,
-                                              xquantity=args.x,
-                                              temperature=args.temperature,
-                                              direction=args.direction,
-                                              colour=args.colour,
-                                              alpha=args.alpha,
-                                              linewidth=args.linewidth,
-                                              edgecolors=args.edgecolour,
-                                              marker=args.marker,
-                                              s=args.markersize,
-                                              cmin=args.cmin, cmax=args.cmax,
-                                              cscale=args.cscale)
+    cbar = tp.plot.frequency.add_projected_waterfall(ax, data, args.y,
+              args.projected, xquantity=args.x, temperature=args.temperature,
+              direction=args.direction, colour=args.colour, alpha=args.alpha,
+              linewidth=args.linewidth, edgecolors=args.edgecolour,
+              marker=args.marker, s=args.markersize, cmin=args.cmin,
+              cmax=args.cmax, cscale=args.cscale)
 else:
     tp.plot.frequency.add_waterfall(ax, data, args.y, xquantity=args.x,
                                     temperature=args.temperature,
@@ -118,6 +113,12 @@ else:
                                     marker=args.marker, s=args.markersize)
 
 tp.plot.utilities.set_locators(ax, args.xscale, args.yscale)
+
+if args.large:
+    ax.set_xlabel(tp.settings.large_labels()[args.x])
+    ax.set_ylabel(tp.settings.large_labels()[args.y])
+    if args.projected is not None:
+        cbar.set_label(tp.settings.large_labels()[args.projected])
 
 for ext in args.extension:
     plt.savefig('{}.{}'.format(args.output, ext))

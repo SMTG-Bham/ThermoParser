@@ -236,6 +236,10 @@ def inverted_labels():
     """Get the default labels for inverted axes in tp."""
     return short_labels()
 
+def large_labels():
+    """Get the default labels for large axes (command-line only)."""
+    return medium_labels()
+
 def long_labels():
     """Get a dictionary of long-form axis labels."""
 
@@ -291,6 +295,72 @@ def long_labels():
                   'Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)',
               'temperature':
                   'Temperature (K)',
+              'thermal_conductivity':
+                  'Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'wavevector':
+                  'Wavevector',
+              'zt':
+                  'ZT'}
+
+    return labels
+
+def medium_labels():
+    """Get a dictionary of medium-length axis labels."""
+
+    labels = {'chemical_potential':
+                  'Chemical Potential (eV)',
+              'complexity_factor':
+                  'Complexity Factor',
+              'conductivity':
+                  'Conductivity (S m$\mathregular{^{-1}}$)',
+              'cumulative_kappa':
+                  'Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'doping':
+                  'Carrier Concentration (cm$\mathregular{^{-1}}$)',
+              'dos':
+                  'Density of States',
+              'efermi':
+                  'Fermi Energy (eV)',
+              'effective_mass':
+                  'Effective Mass (m$\mathregular{_e}$)',
+              'energy':
+                  'Energy (eV)',
+              'electronic_thermal_conductivity':
+                  'Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'fermi_level':
+                  'Fermi Level (eV)',
+              'frequency':
+                  'Frequency (THz)',
+              'gamma':
+                  'Imaginary Self Energy (THz)',
+              'group_velocity':
+                  'Group Velocity (m s$\mathregular{^{-1}}$)',
+              'gv_by_gv':
+                  'Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)',
+              'heat_capacity':
+                  'Heat Capacity (J K$\mathregular{^{-1}}$)',
+              'lattice_thermal_conductivity':
+                  'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'lifetime':
+                  'Lifetime (s)',
+              'mean_free_path':
+                  'Mean Free Path (m)',
+              'mobility':
+                  'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
+              'mode_kappa':
+                  'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'power_factor':
+                  'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
+              'occupation':
+                  'Occupation',
+              'scattering_rates':
+                  'Scattering Rates (s$\mathregular{^{-1}}$)',
+              'seebeck':
+                  'Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)',
+              'temperature':
+                  'Temperature (K)',
+              'thermal_conductivity':
+                  'Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'wavevector':
                   'Wavevector',
               'zt':
@@ -304,7 +374,7 @@ def short_labels():
     labels = {'chemical_potential':
                   '$\mathregular{\mu}$ (eV)',
               'complexity_factor':
-                  'Comp. Fac.',
+                  '$\mathregular{N_v*K*}$',
               'conductivity':
                   '$\mathregular{\sigma\ (S\ m^{-1})}$',
               'cumulative_kappa':
@@ -316,7 +386,7 @@ def short_labels():
               'efermi':
                   'E$\mathregular{_{F}}$ (eV)',
               'effective_mass':
-                  '$\mathregular{m^*\ (m_e})$',
+                  '$\mathregular{m*\ (m_e})$',
               'energy':
                   'E (eV)',
               'electronic_thermal_conductivity':
@@ -353,6 +423,8 @@ def short_labels():
                   '$\mathregular{\\alpha\ (\mu V\ K^{-1})}$',
               'temperature':
                   'T (K)',
+              'thermal_conductivity':
+                  '$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)',
               'wavevector':
                   'q',
               'zt':

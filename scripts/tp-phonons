@@ -17,6 +17,8 @@ parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
 parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
                     default=['pdf'],
                     help='output extension(s). Default: pdf.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
 parser.add_argument('--linestyle', metavar='linestyle', nargs='+',
                     default=['solid'],
                     help='linestyle or list of linestyles. '
@@ -61,8 +63,7 @@ args=parser.parse_args()
 import matplotlib.pyplot as plt
 import tp
 
-style = ['tp']
-style.extend(args.style)
+axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.doscolour) == 1:
     args.doscolour = args.doscolour[0]
 if len(args.colour) == 1:
@@ -71,11 +72,11 @@ if len(args.colour) == 1:
 dispersion = tp.data.load.phonopy_dispersion(args.file)
 
 if args.dos is not None:
-    fig, ax, add_legend = tp.axes.one.dos_small_legend(style)
+    fig, ax, add_legend = axes.dos_small_legend(args.style)
     dispax = ax[0]
     dosax = ax[1]
 else:
-    fig, dispax = tp.axes.one.plain(style)
+    fig, dispax = axes.plain(args.style)
 
 tp.plot.phonons.add_dispersion(dispax, dispersion, colour=args.colour,
                                bandmin=args.bandmin, bandmax=args.bandmax,

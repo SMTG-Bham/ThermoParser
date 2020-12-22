@@ -50,9 +50,9 @@ def plain(style=[]):
     if isinstance(style, str): style=[style]
     default_style.extend(style)
     plt.style.use(default_style)
-    fig, ax = plt.subplots(figsize=(8.6, 8.28))
+    fig, ax = plt.subplots(figsize=(9, 8.28))
 
-    plt.subplots_adjust(left=0.17, right=0.95,
+    plt.subplots_adjust(left=0.205, right=0.95,
                         bottom=0.15, top=0.96)
 
     return fig, ax
@@ -78,9 +78,9 @@ def colourbar(style=[]):
     if isinstance(style, str): style=[style]
     default_style.extend(style)
     plt.style.use(default_style)
-    fig, ax = plt.subplots(figsize=(10.9, 8.28))
+    fig, ax = plt.subplots(figsize=(11.4, 8.28))
 
-    plt.subplots_adjust(left=0.18, right=0.94,
+    plt.subplots_adjust(left=0.18, right=0.9,
                         bottom=0.16, top=0.96)
 
     return fig, ax
@@ -388,9 +388,9 @@ def medium_legend(style=[]):
     if isinstance(style, str): style=[style]
     default_style.extend(style)
     plt.style.use(default_style)
-    fig, ax = plt.subplots(figsize=(13.5, 8.28))
+    fig, ax = plt.subplots(figsize=(12.4, 8.28))
 
-    plt.subplots_adjust(left=0.16, right=0.78,
+    plt.subplots_adjust(left=0.16, right=0.7,
                         bottom=0.15, top=0.96)
 
     def add_legend(*args, **kwargs):
@@ -411,7 +411,7 @@ def medium_legend(style=[]):
                 legend.
         """
 
-        legend = ax.legend(loc="center left", bbox_to_anchor=(0.98, 0.5),
+        legend = ax.legend(loc="center left", bbox_to_anchor=(0.95, 0.5),
                            *args, **kwargs)
 
         return legend

@@ -31,6 +31,8 @@ parser.add_argument('-i', '--interpolate', metavar='interpolate', type=int,
                          'axis. Default: 200.')
 parser.add_argument('--kind', metavar='kind', default='linear',
                     help='interpolation kind. Default: linear.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
 parser.add_argument('-o', '--output', metavar='file', default='tp-ztmap',
                     help='output filename, sans extension. '
                          'Default: tp-ztmap.')
@@ -59,8 +61,7 @@ import h5py
 import matplotlib.pyplot as plt
 import tp
 
-style = ['tp']
-style.extend(args.style)
+axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.colour) == 1:
     args.colour = args.colour[0]
 if args.nodata:
@@ -85,7 +86,7 @@ if args.kappa is not None:
 else:
     kdata = None
 
-fig, ax = tp.axes.one.colourbar(style)
+fig, ax = axes.colourbar(args.style)
 
 tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=args.direction,
                           xinterp=args.interpolate, yinterp=args.interpolate,

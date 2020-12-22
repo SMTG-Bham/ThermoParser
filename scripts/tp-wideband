@@ -16,6 +16,8 @@ parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
 parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
                     default=['pdf'],
                     help='output extension(s). Default: pdf.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
 parser.add_argument('-o', '--output', metavar='file', default='tp-wideband',
                     help='output filename, sans extension. '
                          'Default: tp-wideband.')
@@ -35,15 +37,14 @@ args=parser.parse_args()
 import matplotlib.pyplot as plt
 import tp
 
-style = ['tp']
-style.extend(args.style)
+axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.colour) == 1:
     args.colour = args.colour[0]
 
 pdata = tp.data.load.phonopy_dispersion(args.phonons)
 kdata = tp.data.load.phono3py(args.kappa, 'wideband')
 
-fig, ax = tp.axes.one.plain(style)
+fig, ax = axes.plain(args.style)
 
 tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=args.temperature,
                              poscar=args.poscar, smoothing=args.smoothing,

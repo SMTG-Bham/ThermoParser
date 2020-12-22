@@ -20,6 +20,8 @@ parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
 parser.add_argument('-l', '--labels', metavar='label', nargs='+',
                     help='legend labels, one for each dispersion. '
                          'Default: None.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
 parser.add_argument('--linestyle', metavar='linestyle', nargs='+',
                     default=['solid'],
                     help='linestyle or list of linestyles. '
@@ -39,15 +41,13 @@ args=parser.parse_args()
 import matplotlib.pyplot as plt
 import tp
 
-style = ['tp']
-style.extend(args.style)
-
 data = [tp.data.load.phonopy_dispersion(f) for f in args.files]
 
+axes = tp.axes.one_large if args.large else tp.axes.one
 if args.labels is not None:
-    fig, ax, add_legend = tp.axes.one.medium_legend(style)
+    fig, ax, add_legend = axes.medium_legend(args.style)
 else:
-    fig, ax = tp.axes.one.plain(style)
+    fig, ax = axes.plain(args.style)
 
 tp.plot.phonons.add_multi(ax, data, colour=args.colour,
                           label=args.labels, linestyle=args.linestyle,
