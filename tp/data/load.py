@@ -446,7 +446,8 @@ def phonopy_dispersion(filename, xdata=None):
 
         xdata : dict, optional
             data for the dispersion to scale this to. Should have the
-            same path, must have the same number of labels. Default: None.
+            same path, must have the same number of labels. Not
+            necessary if using tp.plot.phonons.add_multi. Default: None.
 
     Returns
     -------
@@ -602,4 +603,5 @@ def get_path(yamldata):
     ticks = ['$\mathregular{\Gamma}$' if i == 'G' or 'gamma' in i.lower() else
              '$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
 
+    print(tickpos, ticks)
     return tickpos, ticks
