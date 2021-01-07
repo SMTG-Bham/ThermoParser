@@ -121,7 +121,7 @@ appreciated.
 .. _fork and pull: https://guides.github.com/activities/forking
 .. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
-.. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
+.. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
 
 Contributors
 ------------
