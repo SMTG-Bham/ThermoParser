@@ -55,7 +55,7 @@ Usage
 ThermoPlotter is designed to have four main stages:
 
 #. *Axes*:
-   Pick an axis layout from ``tp.axes``.
+     Pick an axis layout from ``tp.axes``.
 #. *Load*:
      Use the functions is ``tp.data.load`` to load the relevant data.
 #. *Add*:
