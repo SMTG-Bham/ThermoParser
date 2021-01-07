@@ -107,7 +107,7 @@ Contributing
 
 We welcome any contributions, whether they be a feature request or a new
 piece of code (or anything else). Adding options is inteded to be
-straightforward, as each step is mostly independant of the others, so
+straightforward, as each step is mostly independent of the others, so
 only one new function should be required. We would of course be happy to
 discuss, if desired.
 
