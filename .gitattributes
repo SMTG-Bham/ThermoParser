@@ -1,1 +1,6 @@
-examples/*/*.{hdf5,h5,json} filter=lfs diff=lfs merge=lfs -text
+examples/data/zno/kappa-m404021.hdf5 filter=lfs diff=lfs merge=lfs -text
+examples/data/basno3/transport_75x75x75.json filter=lfs diff=lfs merge=lfs -text
+examples/data/basno3/mesh_75x75x75.h5 filter=lfs diff=lfs merge=lfs -text
+examples/data/basno3/boltztrap.hdf5 filter=lfs diff=lfs merge=lfs -text
+examples/data/basno3/kappa-m363636.hdf5 filter=lfs diff=lfs merge=lfs -text
+examples/data/zno/boltztrap.hdf5 filter=lfs diff=lfs merge=lfs -text

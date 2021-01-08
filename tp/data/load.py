@@ -603,5 +603,4 @@ def get_path(yamldata):
     ticks = ['$\mathregular{\Gamma}$' if i == 'G' or 'gamma' in i.lower() else
              '$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
 
-    print(tickpos, ticks)
     return tickpos, ticks
