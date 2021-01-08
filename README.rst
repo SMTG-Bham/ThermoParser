@@ -123,6 +123,14 @@ appreciated.
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
 
+Testing
+-------
+
+Tests use the `unittest`_ package, and can be run from the test directory
+with ``python3 -m unittest``.
+
+.. _unittest: https://docs.python.org/3/library/unittest.html
+
 Contributors
 ------------
 
