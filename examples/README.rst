@@ -13,48 +13,48 @@ cumkappa
 kappa-target
 ------------
 
-.. image:: kappa-target.png
+.. image:: kappa-target/kappa-target.png
    :alt: Lattice thermal conductivity required to reach a given ZT against carrier concentration and temperature.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/kappa-target
 
 multiphon
 ---------
 
-.. image:: multiphon.png
+.. image:: multiphon/multiphon.png
    :alt: Phonon dispersions for different supercell sizes.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/multiphon
 
 phonons
 -------
 
-.. image:: phonons.png
+.. image:: phonons/phonons.png
    :alt: Phonon dispersion and density of states.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/phonons
 
 projected-phonons
 -----------------
 
-.. image:: prophon.png
+.. image:: projected-phonons/prophon.png
    :alt: Phonon dispersion with phonon lifetime projected.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/projected-phonons
 
 waterfall
 ---------
 
-.. image:: waterfall.png
+.. image:: waterfall/waterfall.png
    :alt: Waterfall plot of mean free path against frequency with lattice thermal conductivity projected.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/waterfall
 
 wideband
 --------
 
-.. image:: wideband.png
+.. image:: wideband/wideband.png
    :alt: Phonon dispersion with broadened bands.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/wideband
 
 ztmap
 -----
 
-.. image:: ztmap.png
+.. image:: ztmap/ztmap.png
    :alt: ZT against carrier concentration and temperature.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/ztmap
