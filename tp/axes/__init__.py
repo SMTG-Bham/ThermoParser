@@ -9,6 +9,7 @@ scale, as legends etc. are normally added on the side). As per the
 guidelines, font size is 8 pt.
 The large style uses larger axes and relatively even larger fonts, which
 is better suited for presentations, posters and non-columnated text.
+legend is for legend handling.
 
 Modules
 -------
@@ -22,4 +23,6 @@ Modules
     two_large
     three_large
     four_large
+
+    legend
 """

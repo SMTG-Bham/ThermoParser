@@ -3,9 +3,9 @@
 import matplotlib.pyplot as plt
 import tp
 
-phile = 'data/zno/band.yaml'
-kappafile = 'data/zno/kappa-m404021.hdf5'
-poscar = 'data/zno/POSCAR'
+phile = '../data/zno/band.yaml'
+kappafile = '../data/zno/kappa-m404021.hdf5'
+poscar = '../data/zno/POSCAR'
 temperature = 300
 
 colour = ['#000000', '#ff0000']

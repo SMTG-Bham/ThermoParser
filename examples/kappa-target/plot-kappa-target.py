@@ -3,7 +3,7 @@
 import tp
 from matplotlib import pyplot as plt
 
-f = 'data/zno/boltztrap.hdf5'
+f = '../data/zno/boltztrap.hdf5'
 target = 2
 direction = 'x'
 

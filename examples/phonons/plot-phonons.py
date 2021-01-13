@@ -3,9 +3,9 @@
 import matplotlib.pyplot as plt
 import tp
 
-phile = 'data/zno/band.yaml'
-dosfile = 'data/zno/projected_dos.dat'
-poscar = 'data/zno/POSCAR'
+phile = '../data/zno/band.yaml'
+dosfile = '../data/zno/projected_dos.dat'
+poscar = '../data/zno/POSCAR'
 
 colour = '#ff8000'
 colours = {'Zn': '#ffff00',
@@ -37,7 +37,6 @@ something has a meaningful x-axis quantity, ticks can be reimplemented
 by adding xscale='linear' or xscale='log' to line 40.
 """
 ax[1].set_ylim(ax[0].get_ylim())
-tp.plot.utilities.set_locators(ax[1], dos=True)
 add_legend()
 
 # Save
