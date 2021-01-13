@@ -1,13 +1,5 @@
-# Example data files
-*.json
-*.yaml
-*.hdf5
-*.dat
-examples/data
-examples/amset-boltztrap/boltztrap*
-*KPOINTS
-*POTCAR
-*vasprun.xml
+examples/data/archive/
+examples/data/*/kappa-m*.hdf5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

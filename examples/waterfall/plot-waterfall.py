@@ -4,9 +4,9 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 import tp
 
-kappafile = 'data/basno3/kappa-m363636.hdf5'
-dosfile = 'data/basno3/projected_dos.dat'
-poscar = 'data/basno3/POSCAR'
+kappafile = '../data/basno3/kappa-m363636.hdf5'
+dosfile = '../data/basno3/projected_dos.dat'
+poscar = '../data/basno3/POSCAR'
 direction = 'avg'
 temperature = 300
 waterfall = 'mean_free_path'
@@ -23,7 +23,7 @@ colour = cm.get_cmap('viridis')
 """
 Plots with legends return an add_legend function, which will place the
 legend nicely and still accepts arguments like title. This doesn't stop
-you using plt.legend instead (see line 51).
+you using plt.legend instead (see line 50).
 """
 fig, ax, add_legend = tp.axes.one_large.colourbar_small_legend()
 
@@ -51,9 +51,12 @@ add_legend()
 
 """
 Some of the longer names don't fit on presentation style plots, but it's
-easy to switch.
+easy to switch. Here large_labels have been used (for large axes), which
+points to mid-length labels in the settings file by default, but
+short_labels could also be used, which uses a symbol (e.g. kappa). The
+default can be changed in the settings file.
 """
-labels = tp.settings.short_labels()
+labels = tp.settings.large_labels()
 cbar.set_label(labels[projected])
 
 # Save

@@ -72,7 +72,8 @@ class DosTest(unittest.TestCase):
 
         self.assertEqual(self.ax.plot.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
-        self.ax.set_ylabel.assert_called_once()
+        self.ax.set_ylabel.assert_not_called()
+        self.ax.tick_params.assert_called_once()
         self.ax.set_xlim.assert_called_once()
         self.ax.set_ylim.assert_not_called()
 
@@ -183,7 +184,8 @@ class CumKappaTest(unittest.TestCase):
 
         self.ax.plot.assert_called_once()
         self.ax.set_xlabel.assert_called_once()
-        self.ax.set_ylabel.assert_called_once()
+        self.ax.set_ylabel.assert_not_called()
+        self.ax.tick_params.assert_called_once()
         self.ax.set_xlim.assert_called_once_with(0, 2)
         self.ax.set_ylim.assert_called_once_with(0, 1)
         mock_resolve.assert_called_once()
@@ -280,7 +282,8 @@ class WaterfallTest(unittest.TestCase):
 
         self.assertEqual(self.ax.scatter.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
-        self.ax.set_ylabel.assert_called_once()
+        self.ax.set_ylabel.assert_not_called()
+        self.ax.tick_params.assert_called_once()
         self.ax.set_xlim.assert_called_once_with(11, 999)
         self.ax.set_ylim.assert_called_once_with(0, 999)
         self.assertEqual(mock_resolve.call_count, 2)
@@ -344,7 +347,8 @@ class ProjectedWaterfallTest(unittest.TestCase):
 
         self.assertEqual(self.ax.scatter.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
-        self.ax.set_ylabel.assert_called_once()
+        self.ax.set_ylabel.assert_not_called()
+        self.ax.tick_params.assert_called_once()
         self.ax.set_xlim.assert_called_once_with(11, 999)
         self.ax.set_ylim.assert_called_once_with(0, 999)
         mock_colourbar.assert_called_once()

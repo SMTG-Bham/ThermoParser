@@ -35,9 +35,9 @@ import warnings
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
-def add_dispersion(ax, data, bandmin=None, bandmax=None, main=True, label=None,
-                   colour='#800080', linestyle='solid', xmarkkwargs={},
-                   **kwargs):
+def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
+                   label=None, colour='#800080', linestyle='solid',
+                   xmarkkwargs={}, **kwargs):
     """Adds a phonon band structure to a set of axes.
 
     Labels, colours and linestyles can be given one for the whole
@@ -60,10 +60,13 @@ def add_dispersion(ax, data, bandmin=None, bandmax=None, main=True, label=None,
                 tick_label : array-like
                     x-tick labels.
 
+        sdata : dict, optional
+            dispersion data to scale to, same format as data.
+            Default: None.
         bandmin : int, optional
-            Zero-indexed minimum band index to plot. Default: None.
+            zero-indexed minimum band index to plot. Default: None.
         bandmax : int, optional
-            Zero-indexed maximum band index to plot. Default: None.
+            zero-indexed maximum band index to plot. Default: None.
 
         main : bool, optional
             set axis ticks, labels, limits. Default: True.
@@ -137,10 +140,25 @@ def add_dispersion(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     label2.append(None)
     label2 = tile_properties(label2, bandmin, bandmax)
 
+    # data scaling
+
+    d2 = data['tick_position']
+    x = data['x']
+    if sdata is not None:
+        d1 = sdata['tick_position']
+        n = 0
+        for i, d0 in enumerate(x):
+            while n <= len(d2) and not (d0 >= d2[n] and d0 <= d2[n+1]):
+                n += 1
+            x[i] = d1[n] + ((d0 - d2[n]) * (d1[n+1] - d1[n]) / \
+                                           (d2[n+1] - d2[n]))
+    else:
+        d1 = d2
+
     # plotting
 
     for n in range(len(f[0])):
-        ax.plot(data['x'], f[:,n], color=colour[n], linestyle=linestyle[n],
+        ax.plot(x, f[:,n], color=colour[n], linestyle=linestyle[n],
                 label=label2[n], **kwargs)
 
     # axes formatting
@@ -148,7 +166,8 @@ def add_dispersion(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
-        formatting(ax, data, 'frequency', **xmarkkwargs)
+        if sdata is None: sdata = data
+        formatting(ax, sdata, 'frequency', **xmarkkwargs)
 
     return
 
@@ -245,9 +264,9 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     # plotting
 
     for i in range(len(data)):
-        add_dispersion(ax, data[i], bandmin=bandmin, bandmax=bandmax,
-                       main=False, label=label[i], colour=colours[i],
-                       linestyle=linestyle[i], **kwargs)
+        add_dispersion(ax, data[i], sdata=data[0], bandmin=bandmin,
+                       bandmax=bandmax, main=False, label=label[i],
+                       colour=colours[i], linestyle=linestyle[i], **kwargs)
 
     # axes formatting
 

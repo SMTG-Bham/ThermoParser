@@ -169,8 +169,8 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         if invert:
             axlabels = tp.settings.inverted_labels()
             pad = mpl.rcParams['xtick.major.pad']
-            ax.set_ylabel(axlabels['frequency'])
             ax.set_xlabel(axlabels['dos'], labelpad=pad)
+            ax.tick_params(axis='y', labelleft=False)
             ax.set_xlim(left=0)
             tp.plot.utilities.set_locators(ax, x='null', y='linear')
         else:
@@ -303,7 +303,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels['cumulative_kappa'])
-            ax.set_ylabel(axlabels['frequency'])
+            ax.tick_params(axis='y', labelleft=False)
             ax.set_xlim(0, k[-2])
             ax.set_ylim(0, f[-2])
 
@@ -433,10 +433,12 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
         format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
+            ax.set_xlabel(axlabels[xquantity])
+            ax.tick_params(axis='y', labelleft=False)
         else:
             axlabels = tp.settings.labels()
-        ax.set_xlabel(axlabels[xquantity])
-        ax.set_ylabel(axlabels[quantity])
+            ax.set_xlabel(axlabels[xquantity])
+            ax.set_ylabel(axlabels[quantity])
 
     return
 
@@ -578,10 +580,12 @@ def add_projected_waterfall(ax, data, quantity, projected,
         format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
+            ax.set_xlabel(axlabels[xquantity])
+            ax.tick_params(axis='y', labelleft=False)
         else:
             axlabels = tp.settings.labels()
-        ax.set_xlabel(axlabels[xquantity])
-        ax.set_ylabel(axlabels[quantity])
+            ax.set_xlabel(axlabels[xquantity])
+            ax.set_ylabel(axlabels[quantity])
 
     return cbar
 

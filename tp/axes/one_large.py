@@ -22,12 +22,12 @@ Functions
 
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from tp import settings
+import tp
 import warnings
 
 warnings.filterwarnings("ignore", module="matplotlib")
 
-default_style = settings.large_style()
+default_style = tp.settings.large_style()
 
 def plain(style=[]):
     """A figure with a set of axes.
@@ -231,7 +231,7 @@ def dos_colourbar_small_legend(style=[]):
                         bottom=0.15, top=0.96,
                         wspace=0)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -239,6 +239,9 @@ def dos_colourbar_small_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -249,8 +252,14 @@ def dos_colourbar_small_legend(style=[]):
                 legend.
     """
 
-        legend = ax[1].legend(loc="center left", bbox_to_anchor=(1.8, 0.5),
-                              *args, **kwargs)
+        if custom:
+            legend = ax[1].legend(loc="center left", bbox_to_anchor=(1.8, 0.5),
+                                  *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1].legend(loc="center left", bbox_to_anchor=(1.8, 0.5),
+                                  handles=handles, labels=labels,
+                                  *args, **kwargs)
 
         return legend
 
@@ -287,7 +296,7 @@ def dos_small_legend(style=[]):
                         bottom=0.15, top=0.96,
                         wspace=0)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -295,6 +304,9 @@ def dos_small_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -305,8 +317,14 @@ def dos_small_legend(style=[]):
                 legend.
         """
 
-        legend = ax[1].legend(loc="center left", bbox_to_anchor=(0.87, 0.5),
-                              *args, **kwargs)
+        if custom:
+            legend = ax[1].legend(loc="center left", bbox_to_anchor=(0.87, 0.5),
+                                  *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1].legend(loc="center left", bbox_to_anchor=(0.87, 0.5),
+                                  handles=handles, labels=labels,
+                                  *args, **kwargs)
 
         return legend
 

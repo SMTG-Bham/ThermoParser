@@ -22,12 +22,12 @@ Functions
 from math import ceil
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from tp import settings
+import tp
 import warnings
 
 warnings.filterwarnings("ignore", module="matplotlib")
 
-default_style = settings.large_style()
+default_style = tp.settings.large_style()
 
 def h(style=[]):
     """Axes horizontally.
@@ -95,7 +95,7 @@ def h_top_legend(style=[]):
                         bottom=0.15, top=0.8,
                         wspace=0.32)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -103,6 +103,9 @@ def h_top_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -121,8 +124,14 @@ def h_top_legend(style=[]):
             else:
                 kwargs['ncol'] = len(ax[1].get_legend_handles_labels()[0])
 
-        legend = ax[1].legend(loc="lower center", bbox_to_anchor=(0.5, 1),
-                              *args, **kwargs)
+        if custom:
+            legend = ax[1].legend(loc="lower center", bbox_to_anchor=(0.5, 1),
+                                  *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1].legend(loc="lower center", bbox_to_anchor=(0.5, 1),
+                                  handles=handles, labels=labels,
+                                  *args, **kwargs)
 
         return legend
 
@@ -161,7 +170,7 @@ def h_big_top_legend(style=[]):
                         bottom=0.14, top=0.76,
                         wspace=0.32)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -169,6 +178,9 @@ def h_big_top_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -188,8 +200,14 @@ def h_big_top_legend(style=[]):
                 kwargs['ncol'] = ceil(len(ax[1].get_legend_handles_labels()[0])
                                                                             /2)
 
-        legend = ax[1].legend(loc="lower center", bbox_to_anchor=(0.5, 0.98),
-                              *args, **kwargs)
+        if custom:
+            legend = ax[1].legend(loc="lower center", bbox_to_anchor=(0.5, 0.98),
+                                  *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1].legend(loc="lower center", bbox_to_anchor=(0.5, 0.98),
+                                  handles=handles, labels=labels,
+                                  *args, **kwargs)
 
         return legend
 
@@ -228,7 +246,7 @@ def h_bottom_legend(style=[]):
                         bottom=0.3, top=0.95,
                         wspace=0.32)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -236,6 +254,9 @@ def h_bottom_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -254,8 +275,14 @@ def h_bottom_legend(style=[]):
             else:
                 kwargs['ncol'] = len(ax[1].get_legend_handles_labels()[0])
 
-        legend = ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.15),
-                              *args, **kwargs)
+        if custom:
+            legend = ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.15),
+                                  *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.15),
+                                  handles=handles, labels=labels,
+                                  *args, **kwargs)
 
         return legend
 
@@ -294,7 +321,7 @@ def h_big_bottom_legend(style=[]):
                         bottom=0.34, top=0.96,
                         wspace=0.32)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -302,6 +329,9 @@ def h_big_bottom_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -321,8 +351,14 @@ def h_big_bottom_legend(style=[]):
                 kwargs['ncol'] = ceil(len(ax[1].get_legend_handles_labels()[0])
                                                                             /2)
 
-        legend = ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.14),
-                              *args, **kwargs)
+        if custom:
+            legend = ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.14),
+                                  *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.14),
+                                  handles=handles, labels=labels,
+                                  *args, **kwargs)
 
         return legend
 
@@ -361,7 +397,7 @@ def square_q1_legend(style=[]):
                         bottom=0.08, top=0.97,
                         hspace=0.22, wspace=0.31)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -369,6 +405,9 @@ def square_q1_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -379,8 +418,14 @@ def square_q1_legend(style=[]):
                 legend.
         """
 
-        legend = ax[0][0].legend(loc="center", bbox_to_anchor=(1.81, 0.5),
-                                 *args, **kwargs)
+        if custom:
+            legend = ax[0][0].legend(loc="center", bbox_to_anchor=(1.81, 0.5),
+                                     *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[0][0].legend(loc="center", bbox_to_anchor=(1.81, 0.5),
+                                     handles=handles, labels=labels,
+                                     *args, **kwargs)
 
         return legend
 
@@ -419,7 +464,7 @@ def square_q2_legend(style=[]):
                         bottom=0.08, top=0.97,
                         hspace=0.22, wspace=0.31)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -427,6 +472,9 @@ def square_q2_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -437,8 +485,14 @@ def square_q2_legend(style=[]):
                 legend.
         """
 
-        legend = ax[0][1].legend(loc="center", bbox_to_anchor=(-0.81, 0.5),
-                                 *args, **kwargs)
+        if custom:
+            legend = ax[0][1].legend(loc="center", bbox_to_anchor=(-0.81, 0.5),
+                                     *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[0][1].legend(loc="center", bbox_to_anchor=(-0.81, 0.5),
+                                     handles=handles, labels=labels,
+                                     *args, **kwargs)
 
         return legend
 
@@ -477,7 +531,7 @@ def square_q3_legend(style=[]):
                         bottom=0.08, top=0.97,
                         hspace=0.22, wspace=0.31)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -485,6 +539,9 @@ def square_q3_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -495,8 +552,14 @@ def square_q3_legend(style=[]):
                 legend.
         """
 
-        legend = ax[1][1].legend(loc="center", bbox_to_anchor=(-0.81, 0.5),
-                                 *args, **kwargs)
+        if custom:
+            legend = ax[1][1].legend(loc="center", bbox_to_anchor=(-0.81, 0.5),
+                                     *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1][1].legend(loc="center", bbox_to_anchor=(-0.81, 0.5),
+                                     handles=handles, labels=labels,
+                                     *args, **kwargs)
 
         return legend
 
@@ -535,7 +598,7 @@ def square_q4_legend(style=[]):
                         bottom=0.08, top=0.97,
                         hspace=0.22, wspace=0.31)
 
-    def add_legend(*args, **kwargs):
+    def add_legend(custom=False, *args, **kwargs):
         """Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.).
@@ -543,6 +606,9 @@ def square_q4_legend(style=[]):
         Arguments
         ---------
 
+            custom : bool, optional
+                enable manual editing of handles and labels arguments.
+                Default: False.
             *args, **kwargs
                 passed to ax.legend.
 
@@ -553,8 +619,14 @@ def square_q4_legend(style=[]):
                 legend.
         """
 
-        legend = ax[1][0].legend(loc="center", bbox_to_anchor=(1.81, 0.5),
-                                 *args, **kwargs)
+        if custom:
+            legend = ax[1][0].legend(loc="center", bbox_to_anchor=(1.81, 0.5),
+                                     *args, **kwargs)
+        else:
+            handles, labels = tp.axes.legend.consolidate(ax)
+            legend = ax[1][0].legend(loc="center", bbox_to_anchor=(1.81, 0.5),
+                                     handles=handles, labels=labels,
+                                     *args, **kwargs)
 
         return legend
 

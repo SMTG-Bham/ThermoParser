@@ -3,8 +3,8 @@
 import tp
 from matplotlib import pyplot as plt
 
-bfile = 'data/zno/boltztrap.hdf5'
-kfile = 'data/zno/kappa-m404021.hdf5'
+bfile = '../data/zno/boltztrap.hdf5'
+kfile = '../data/zno/kappa-m404021.hdf5'
 direction = 'x'
 colour = '#800080'
 

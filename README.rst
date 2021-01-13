@@ -55,7 +55,7 @@ Usage
 ThermoPlotter is designed to have four main stages:
 
 #. *Axes*:
-   Pick an axis layout from ``tp.axes``.
+     Pick an axis layout from ``tp.axes``.
 #. *Load*:
      Use the functions is ``tp.data.load`` to load the relevant data.
 #. *Add*:
@@ -107,7 +107,7 @@ Contributing
 
 We welcome any contributions, whether they be a feature request or a new
 piece of code (or anything else). Adding options is inteded to be
-straightforward, as each step is mostly independant of the others, so
+straightforward, as each step is mostly independent of the others, so
 only one new function should be required. We would of course be happy to
 discuss, if desired.
 
@@ -121,7 +121,15 @@ appreciated.
 .. _fork and pull: https://guides.github.com/activities/forking
 .. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
-.. _tests: https://github.com/smtg0ucl/ThermoPlotter/tree/master/tests
+.. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
+
+Testing
+-------
+
+Tests use the `unittest`_ package, and can be run from the test directory
+with ``python3 -m unittest``.
+
+.. _unittest: https://docs.python.org/3/library/unittest.html
 
 Contributors
 ------------
