@@ -61,15 +61,19 @@ ThermoPlotter is designed to have four main stages:
 #. *Load*:
      Use the functions is ``tp.data.load`` to load the relevant data.
 #. *Add*:
-     Use functions in modules in ``tp.plot`` to add graphs to the axes.
+     Use functions in ``tp.plot`` modules to add graphs to the axes.
 #. *Save*:
      Use ``plt.savefig`` or equivalent to produce the figure.
 
-As ThermoPlotter is simply a scripting code, each option can be
-substituted with bespoke code (i.e. using ``matplotlib.pyplot.subplots``
-or ``matplotlib.axes.Axes.scatter``); but these can still be
-supplemented with helper functions, such as default labels in
-``tp.settings`` or colourmap generators in ``tp.plot.colour``.
+As ThermoPlotter is dependent on matplotlib, each stage can be
+substituted with bespoke code, e.g. using ``matplotlib.pyplot.subplots``
+or ``matplotlib.axes.Axes.scatter``. These can still be
+supplemented with ThermoPlotter helper functions, such as default labels 
+which the user can set in ``tp.settings`` 
+or colourmap generators in ``tp.plot.colour``.
+
+**The best way to get a feel for ThermoPlotter is to see it in action:
+Take a look at our  `examples`_ scripts**
 
 Currently supported codes are:
 
