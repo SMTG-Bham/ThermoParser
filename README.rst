@@ -113,14 +113,13 @@ Contributing
 
 We welcome any contributions, whether they be a feature request or a new
 piece of code (or anything else). Adding options is inteded to be
-straightforward, as each step is mostly independent of the others, so
-only one new function should be required. We would of course be happy to
-discuss, if desired.
+straightforward; the modularity of the code means that each step is mostly 
+independent of the others. 
 
 Bugs and feature requests can be submitted to the `issue tracker`_,
 while contributions can be made using the `fork and pull`_ approach.
-Contributions should have comprehensive docstrings, and where
-appropriate `examples`_, `documentation`_ and `tests`_ are greatly
+Contributions should include comprehensive docstrings, and where
+appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
 appreciated.
 
 .. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
