@@ -12,12 +12,14 @@
     |_________________________________:______________________________________:_____/
 
 
-ThermoPlotter is a toolkit for quickly, easily and prettily plotting the
-outputs of specialised analytical codes. It is focused on computational
-materials science and particularly thermoelectrics materials. It
-essentially wraps around `matplotlib`_ functions, and is intended to be
-used as a python package, to build easily customisable plotting scripts.
-There are also several basic command-line scripts.
+ThermoPlotter is a toolkit used to simplify the production of high-quality 
+plots from the outputs of specialised analytical codes. It is focused on 
+computational materials science and particularly thermoelectrics materials. 
+Traditionally, the steps required to transform raw data, produce appropriate plots
+and adjust their appearance are arduous andoften result in long, unweidly python scripts.
+ThermoPlotter is built on top of `matplotlib`_ and greatly simplifies this process.
+It can be used to build short, easy-to-customise plotting scripts and there are also several 
+basic command-line interface options.
 
 Click on the image to go to the `gallery`_!
 
