@@ -72,8 +72,8 @@ supplemented with ThermoPlotter helper functions, such as default labels
 which the user can set in ``tp.settings`` 
 or colourmap generators in ``tp.plot.colour``.
 
-**The best way to get a feel for ThermoPlotter is to see it in action:
-Take a look at our  `examples`_ scripts**
+The best way to get a feel for ThermoPlotter is to see it in action:
+Take a look at our  `examples <https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples>`_ scripts.
 
 Currently supported codes are:
 
