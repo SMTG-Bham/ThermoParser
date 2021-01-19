@@ -1,6 +1,7 @@
 """Resolves quantities by temperature and/ or direction.
 
-May need to be split by data origin in future.
+Reads specfic named variables. May need to be split by data origin in
+future.
 
 Functions
 ---------

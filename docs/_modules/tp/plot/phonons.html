@@ -1,0 +1,1551 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>tp.plot.phonons &mdash; ThermoPlotter 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../contents.html">ThermoPlotter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tp.plot.phonons</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tp.plot.phonons</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tools for dealing with phonon dispersions.</span>
+
+<span class="sd">Contains the traditional phonon dispersion plotter, as well as various</span>
+<span class="sd">ways of projecting other quantitites onto a high-symmetry path.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    add_dispersion:</span>
+<span class="sd">        phonon dispersion.</span>
+<span class="sd">    add_multi:</span>
+<span class="sd">        phonon dispersions.</span>
+<span class="sd">    add_alt_dispersion:</span>
+<span class="sd">        phono3py quantity against high symmetry path.</span>
+<span class="sd">    add_projected_dispersion:</span>
+<span class="sd">        phonon dispersion with phono3py quantity on colour axis.</span>
+<span class="sd">    add_alt_projected_dispersion:</span>
+<span class="sd">        alt_dispersion + projection.</span>
+<span class="sd">    add_wideband:</span>
+<span class="sd">        phonon dispersion broadened according to scattering.</span>
+
+<span class="sd">    get_equivalent_qpoint:</span>
+<span class="sd">        converts phonopy to phono3py qpoints.</span>
+
+<span class="sd">    formatting:</span>
+<span class="sd">        formatting axes.</span>
+<span class="sd">    tile_properties:</span>
+<span class="sd">        tiling properties semi-intelligently.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tp</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/.config/tprc.yaml&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="add_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span>
+                   <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adds a phonon band structure to a set of axes.</span>
+
+<span class="sd">    Labels, colours and linestyles can be given one for the whole</span>
+<span class="sd">    dispersion, or one for each band, with the last entry filling all</span>
+<span class="sd">    remaining bands.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            dispersion data containing:</span>
+
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                frequency : array-like</span>
+<span class="sd">                    phonon frequencies.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        sdata : dict, optional</span>
+<span class="sd">            dispersion data to scale to, same format as data.</span>
+<span class="sd">            Default: None.</span>
+<span class="sd">        bandmin : int, optional</span>
+<span class="sd">            zero-indexed minimum band index to plot. Default: None.</span>
+<span class="sd">        bandmax : int, optional</span>
+<span class="sd">            zero-indexed maximum band index to plot. Default: None.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set axis ticks, labels, limits. Default: True.</span>
+<span class="sd">        label : str, optional</span>
+<span class="sd">            legend label(s). Default: None</span>
+
+<span class="sd">        colour : str or array-like, optional</span>
+<span class="sd">            line colour(s). Note if retrieved from a colourmap or in</span>
+<span class="sd">            [r,g,b] notation, the colour should be enclosed in [], e.g.</span>
+<span class="sd">            colour = plt.get_cmap(&#39;winter_r&#39;)(linspace(0, 1, len(files)))</span>
+<span class="sd">            tp.plot.phonons.add_dispersion(..., colour=[colour[0]], ...)</span>
+<span class="sd">            Default: #800080.</span>
+<span class="sd">        linestyle : str or array-like, optional</span>
+<span class="sd">            linestyle(s) (&#39;-&#39;, &#39;--&#39;, &#39;.-&#39;, &#39;:&#39;). Default: solid.</span>
+
+<span class="sd">        xmarkkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for x markers passed to</span>
+<span class="sd">            matplotlib.pyplot.axvline. Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      black</span>
+<span class="sd">                linewidth:  axis line width</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;dispersion_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;dispersion_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;dispersion_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;main must be True or False&#39;</span>
+
+    <span class="c1"># data selection</span>
+
+    <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])[:,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+
+    <span class="c1"># line appearance</span>
+
+    <span class="n">colour</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+    <span class="n">linestyle</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+
+    <span class="c1"># prevents unintentionally repeated legend entries</span>
+
+    <span class="n">label2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">label</span><span class="p">]</span>
+            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">label</span><span class="p">])</span>
+    <span class="n">label2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">label2</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+
+    <span class="c1"># data scaling</span>
+
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">sdata</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d0</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">d0</span> <span class="o">&gt;=</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="ow">and</span> <span class="n">d0</span> <span class="o">&lt;=</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">d1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="n">d0</span> <span class="o">-</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">d1</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">d1</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">/</span> \
+                                           <span class="p">(</span><span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="n">d2</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sdata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">sdata</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="add_multi"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_multi">[docs]</a><span class="k">def</span> <span class="nf">add_multi</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;winter_r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adds multiple phonon band structures to a set of axes.</span>
+
+<span class="sd">    Scales the x-scales to match.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : array-like</span>
+<span class="sd">            dictionaries of dispersion data containing:</span>
+
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                frequency : array-like</span>
+<span class="sd">                    phonon frequencies.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        bandmin : int, optional</span>
+<span class="sd">            Zero-indexed minimum band index to plot. Default: 0.</span>
+<span class="sd">        bandmax : int, optional</span>
+<span class="sd">            Zero-indexed maximum band index to plot. Default: max index.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set axis ticks, labels, limits. Default: True.</span>
+<span class="sd">        label : array-like, optional</span>
+<span class="sd">            legend labels. Default: None</span>
+
+<span class="sd">        colour : colourmap or str or array-like, optional</span>
+<span class="sd">            colourmap or colourmap name or list of colours. Note [r,g,b]</span>
+<span class="sd">            format colours should be enclosed in and additional [],</span>
+<span class="sd">            i.e. [[[r,g,b]],...]. Default: winter_r.</span>
+<span class="sd">        linestyle : str or array-like, optional</span>
+<span class="sd">            linestyle(s) (&#39;-&#39;, &#39;--&#39;, &#39;.-&#39;, &#39;:&#39;). Default: solid.</span>
+
+<span class="sd">        xmarkkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for x markers passed to</span>
+<span class="sd">            matplotlib.pyplot.axvline. Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      black</span>
+<span class="sd">                linewidth:  axis line width</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;multi_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;multi_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;multi_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;main must be True or False&#39;</span>
+
+    <span class="c1"># line appearance</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+        <span class="n">colours</span> <span class="o">=</span> <span class="p">[[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colours</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="p">[[</span><span class="n">colour</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">colour</span> <span class="o">==</span> <span class="s1">&#39;skelton&#39;</span><span class="p">:</span>
+            <span class="n">colour</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">skelton</span><span class="p">()</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="p">[[</span><span class="n">colour</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
+
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">linestyle</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">linestyle</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">linestyle</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">linestyle</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">linestyle</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">linestyle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">linestyle</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+        <span class="n">add_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sdata</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bandmin</span><span class="o">=</span><span class="n">bandmin</span><span class="p">,</span>
+                       <span class="n">bandmax</span><span class="o">=</span><span class="n">bandmax</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                       <span class="n">colour</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">)[:,:,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="add_alt_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_alt_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_alt_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Longitudinal&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;Transverse_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Transverse_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Optic&#39;</span><span class="p">],</span>
+                       <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">interpolate</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;#44ffff&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;#ff8044&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff4444&#39;</span><span class="p">,</span> <span class="s1">&#39;#00000010&#39;</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+                       <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a phono3py quantity on a high-symmetry path.</span>
+
+<span class="sd">    Labels, colours and linestyles can be given one for the whole</span>
+<span class="sd">    dispersion, or one for each band, with the last entry filling all</span>
+<span class="sd">    remaining bands. Requires a POSCAR.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Phono3py-like data containing:</span>
+
+<span class="sd">                qpoint : array-like</span>
+<span class="sd">                    q-point locations.</span>
+<span class="sd">                (quantity) : array-like</span>
+<span class="sd">                    plotted quantity.</span>
+<span class="sd">                temperature : array-like, optional</span>
+<span class="sd">                    temperature, if necessary for quantity.</span>
+
+<span class="sd">        pdata : dict</span>
+<span class="sd">            phonon dispersion data containing:</span>
+
+<span class="sd">                q-point : array-like</span>
+<span class="sd">                    qpoint locations.</span>
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        quantity : str</span>
+<span class="sd">            quantity to plot.</span>
+
+<span class="sd">        bandmin : int, optional</span>
+<span class="sd">            Zero-indexed minimum band index to plot. Default: 0.</span>
+<span class="sd">        bandmax : int, optional</span>
+<span class="sd">            Zero-indexed maximum band index to plot. Default: max index.</span>
+<span class="sd">        temperature : float, optional</span>
+<span class="sd">            approximate temperature in K (finds closest). Default: 300.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            direction from anisotropic data, accepts x-z/ a-c,</span>
+<span class="sd">            average/ avg or normal/ norm. Default: average.</span>
+<span class="sd">        label : array-like, optional</span>
+<span class="sd">            labels per line. A single dataset could have a single label,</span>
+<span class="sd">            or the default labels the lines by type. You&#39;ll want to</span>
+<span class="sd">            change this if a minimum band index is set.</span>
+<span class="sd">            Default: [&#39;Longitudinal&#39;, &#39;Transverse_1&#39;, &#39;Transverse_2&#39;,</span>
+<span class="sd">            &#39;Optic&#39;].</span>
+
+<span class="sd">        poscar : str, optional</span>
+<span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set axis ticks, label, limits. Default: True.</span>
+<span class="sd">        log : bool, optional</span>
+<span class="sd">            log the y scale. Default: False.</span>
+<span class="sd">        interpolate : int, optional</span>
+<span class="sd">            number of points per line. Default: 10,000.</span>
+<span class="sd">        smoothing : int, optional</span>
+<span class="sd">            every n points to sample. Default: 5.</span>
+
+<span class="sd">        colour : str or array-like, optional</span>
+<span class="sd">            line colour(s). Note if retrieved from a colourmap or in</span>
+<span class="sd">            [r,g,b] notation, the colour should be enclosed in [], e.g.</span>
+<span class="sd">            colour = plt.get_cmap(&#39;winter_r&#39;)(linspace(0, 1, len(files)))</span>
+<span class="sd">            tp.plot.phonons.add_dispersion(..., colour=[colour[0]], ...)</span>
+<span class="sd">            Default: [&#39;#44ffff&#39;, &#39;#ff8044&#39;, &#39;#ff4444&#39;, &#39;#00000010&#39;].</span>
+<span class="sd">        linestyle : str or array-like, optional</span>
+<span class="sd">            linestyle(s) (&#39;-&#39;, &#39;--&#39;, &#39;.-&#39;, &#39;:&#39;). Default: solid.</span>
+
+<span class="sd">        workers : int, optional</span>
+<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+
+<span class="sd">        xmarkkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for x markers passed to</span>
+<span class="sd">            matplotlib.pyplot.axvline. Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      black</span>
+<span class="sd">                linewidth:  axis line width</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
+    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
+    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;alt_dispersion_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;alt_dispersion_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;alt_dispersion_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">],</span>
+                           <span class="p">[</span> <span class="n">main</span><span class="p">,</span>   <span class="n">log</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># Phono3py data formatting</span>
+
+    <span class="n">tnames</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)[:,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+    <span class="n">qk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Phonopy data formatting</span>
+
+    <span class="n">qp</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">smoothing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">qpi</span> <span class="o">=</span> <span class="p">[</span><span class="n">qp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qp</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">smoothing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">qpi</span> <span class="o">=</span> <span class="n">qp</span>
+    <span class="k">if</span> <span class="n">xi</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">qpi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span> <span class="n">xi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># map Phono3py to Phonopy</span>
+
+    <span class="n">struct</span> <span class="o">=</span> <span class="n">Poscar</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span><span class="o">.</span><span class="n">structure</span>
+    <span class="n">sg</span> <span class="o">=</span> <span class="n">SpacegroupAnalyzer</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+    <span class="n">symops</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">get_point_group_operations</span><span class="p">(</span><span class="n">cartesian</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">geq</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_equivalent_qpoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">qk</span><span class="p">),</span> <span class="n">symops</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">min_id</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">geq</span><span class="p">,</span> <span class="n">qpi</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">min_id</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y2</span><span class="p">)[</span><span class="n">indices</span><span class="p">]</span>
+
+    <span class="c1"># interpolate</span>
+
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">interpolate</span><span class="p">)</span>
+    <span class="n">yinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
+    <span class="n">ysort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+    <span class="n">ysort</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="n">ysort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># line appearance</span>
+
+    <span class="n">colour</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+    <span class="n">linestyle</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+
+    <span class="c1"># prevents unintentionally repeated legend entries</span>
+
+    <span class="n">label2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">label</span><span class="p">]</span>
+            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">label</span><span class="p">])</span>
+    <span class="n">label2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">label2</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+        <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="add_projected_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_projected_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                             <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+                             <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                             <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                             <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                             <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with projected colour.</span>
+
+<span class="sd">    Plots a phonon dispersion, and projects a quantity onto the colour</span>
+<span class="sd">    axis. Requires a POSCAR.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Phono3py-like data containing:</span>
+
+<span class="sd">                qpoint : array-like</span>
+<span class="sd">                    q-point locations.</span>
+<span class="sd">                (quantity) : array-like</span>
+<span class="sd">                    projected quantity.</span>
+<span class="sd">                temperature : array-like, optional</span>
+<span class="sd">                    temperature, if necessary for quantity.</span>
+
+<span class="sd">        pdata : dict</span>
+<span class="sd">            phonon dispersion data containing:</span>
+
+<span class="sd">                q-point : array-like</span>
+<span class="sd">                    qpoint locations.</span>
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                frequency : array-like</span>
+<span class="sd">                    phonon frequencies.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        quantity : str</span>
+<span class="sd">            quantity to project.</span>
+
+<span class="sd">        bandmin : int, optional</span>
+<span class="sd">            Zero-indexed minimum band index to plot. Default: 0.</span>
+<span class="sd">        bandmax : int, optional</span>
+<span class="sd">            Zero-indexed maximum band index to plot. Default: max index.</span>
+<span class="sd">        temperature : float, optional</span>
+<span class="sd">            approximate temperature in K (finds closest). Default: 300.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            direction from anisotropic data, accepts x-z/ a-c,</span>
+<span class="sd">            average/ avg or normal/ norm. Default: average.</span>
+
+<span class="sd">        poscar : str, optional</span>
+<span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set axis ticks, label, limits. Default: True.</span>
+<span class="sd">        interpolate : int, optional</span>
+<span class="sd">            number of points per path (e.g. gamma -&gt; X) per line.</span>
+<span class="sd">            Default: 500.</span>
+
+<span class="sd">        colour : colormap or str, optional</span>
+<span class="sd">            colourmap or colourmap name. Default: viridis_r.</span>
+<span class="sd">        cmin : float, optional</span>
+<span class="sd">            colour scale minimum. Default: display 99 % data.</span>
+<span class="sd">        cmax : float, optional</span>
+<span class="sd">            colour scale maximum. Default: display 99.9 % data.</span>
+<span class="sd">        cscale : str, optional</span>
+<span class="sd">            override colour scale (linear/ log). Default: None.</span>
+<span class="sd">        unoccupied : str or array-like, optional</span>
+<span class="sd">            if the colour variable is occuption, values below 1 are</span>
+<span class="sd">            coloured in this colour. If set to None, or cmin is set,</span>
+<span class="sd">            this feature is turned off. Default: grey.</span>
+
+<span class="sd">        workers : int, optional</span>
+<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+
+<span class="sd">        xmarkkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for x markers passed to</span>
+<span class="sd">            matplotlib.pyplot.axvline. Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Default</span>
+
+<span class="sd">            color:      black</span>
+<span class="sd">            linewidth:  axis line width</span>
+<span class="sd">            rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">            marker:     .</span>
+<span class="sd">            rasterized: True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        colorbar</span>
+<span class="sd">            colour bar for projected data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
+    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
+    <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;marker&#39;</span><span class="p">:</span>     <span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;projected_dispersion_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;projected_dispersion_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;projected_dispersion_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;main must be True or False&#39;</span>
+
+    <span class="c1"># Phono3py data formatting</span>
+
+    <span class="n">tnames</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">quantity</span>
+    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)[:,</span> <span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+    <span class="n">qk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Phonopy data formatting</span>
+
+    <span class="n">qp</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])[:,</span> <span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+
+    <span class="c1"># map Phono3py to Phonopy</span>
+
+    <span class="n">struct</span> <span class="o">=</span> <span class="n">Poscar</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span><span class="o">.</span><span class="n">structure</span>
+    <span class="n">sg</span> <span class="o">=</span> <span class="n">SpacegroupAnalyzer</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+    <span class="n">symops</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">get_point_group_operations</span><span class="p">(</span><span class="n">cartesian</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">geq</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_equivalent_qpoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">qk</span><span class="p">),</span> <span class="n">symops</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">min_id</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">geq</span><span class="p">,</span> <span class="n">qp</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">min_id</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)[</span><span class="n">indices</span><span class="p">]</span>
+
+    <span class="c1"># interpolate</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">x2</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">d</span><span class="p">)</span>
+        <span class="n">xtemp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">interpolate</span><span class="p">)</span>
+        <span class="n">finterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">f</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                           <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
+        <span class="n">x2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtemp</span><span class="p">)</span>
+        <span class="n">f2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">finterp</span><span class="p">(</span><span class="n">xtemp</span><span class="p">))</span>
+
+        <span class="n">cinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">c</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                           <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
+        <span class="n">c2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">xtemp</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+    <span class="n">cnorm</span><span class="p">,</span> <span class="n">extend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">colour_scale</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">cmin</span><span class="p">,</span>
+                                                   <span class="n">cmax</span><span class="p">,</span> <span class="n">cscale</span><span class="p">,</span> <span class="n">unoccupied</span><span class="p">)</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">)):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f2</span><span class="p">[</span><span class="n">i</span><span class="p">])[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c2</span><span class="p">[</span><span class="n">i</span><span class="p">])[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span>
+                              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">quantity</span><span class="p">])</span>
+    <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">())</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">draw_all</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cbar</span></div>
+
+<div class="viewcode-block" id="add_alt_projected_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_alt_projected_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_alt_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span>
+                                 <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+                                 <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                 <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                                 <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a phono3py quantity on a high-symmetry path and projection.</span>
+
+<span class="sd">    Just because you can, doesn&#39;t mean you should. A maxim I may fail to</span>
+<span class="sd">    live up to, so I leave it to you, dear reader, to decide for</span>
+<span class="sd">    yourself. Requires a POSCAR.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Phono3py-like data containing:</span>
+
+<span class="sd">                qpoint : array-like</span>
+<span class="sd">                    q-point locations.</span>
+<span class="sd">                (quantities) : array-like</span>
+<span class="sd">                    plotted and projected quantities.</span>
+<span class="sd">                temperature : array-like, optional</span>
+<span class="sd">                    temperature, if necessary for quantities.</span>
+
+<span class="sd">        pdata : dict</span>
+<span class="sd">            phonon dispersion data containing:</span>
+
+<span class="sd">                q-point : array-like</span>
+<span class="sd">                    qpoint locations.</span>
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        quantity : str</span>
+<span class="sd">            quantity to plot.</span>
+<span class="sd">        projected: str</span>
+<span class="sd">            quantity to project.</span>
+
+<span class="sd">        bandmin : int, optional</span>
+<span class="sd">            Zero-indexed minimum band index to plot. Default: 0.</span>
+<span class="sd">        bandmax : int, optional</span>
+<span class="sd">            Zero-indexed maximum band index to plot. Default: max index.</span>
+<span class="sd">        temperature : float, optional</span>
+<span class="sd">            approximate temperature in K (finds closest). Default: 300.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            direction from anisotropic data, accepts x-z/ a-c,</span>
+<span class="sd">            average/ avg or normal/ norm. Default: average.</span>
+
+<span class="sd">        poscar : str, optional</span>
+<span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set axis ticks, label, limits. Default: True.</span>
+<span class="sd">        log : bool, optional</span>
+<span class="sd">            log the y scale. Default: False.</span>
+<span class="sd">        interpolate : int, optional</span>
+<span class="sd">            number of points per line. Default: 10,000.</span>
+<span class="sd">        smoothing : int, optional</span>
+<span class="sd">            every n points to sample. Default: 10.</span>
+
+<span class="sd">        colour : colormap or str, optional</span>
+<span class="sd">            colourmap or colourmap name. Default: viridis.</span>
+<span class="sd">        cmin : float, optional</span>
+<span class="sd">            colour scale minimum. Default: display 99 % data.</span>
+<span class="sd">        cmax : float, optional</span>
+<span class="sd">            colour scale maximum. Default: display 99.9 % data.</span>
+<span class="sd">        cscale : str, optional</span>
+<span class="sd">            override colour scale (linear/ log). Default: None.</span>
+<span class="sd">        unoccupied : str, optional</span>
+<span class="sd">            if the colour variable is occuption, values below 1 are</span>
+<span class="sd">            coloured in this colour. Id set to None, or cmin is set,</span>
+<span class="sd">            this feature is turned off. Default: grey.</span>
+
+<span class="sd">        workers : int, optional</span>
+<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+
+<span class="sd">        xmarkkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for x markers passed to</span>
+<span class="sd">            matplotlib.pyplot.axvline. Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">            color:      black</span>
+<span class="sd">            linewidth:  axis line width</span>
+<span class="sd">            rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                marker:     .</span>
+<span class="sd">                rasterized: True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        colorbar</span>
+<span class="sd">            colour bar for projected data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
+    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
+    <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;marker&#39;</span><span class="p">:</span>     <span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;alt_projected_dispersion_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;alt_projected_dispersion_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;alt_projected_dispersion_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">],</span>
+                           <span class="p">[</span> <span class="n">main</span><span class="p">,</span>   <span class="n">log</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># Phono3py data formatting</span>
+
+    <span class="n">tnames</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">projected</span> <span class="ow">in</span> <span class="n">tnames</span><span class="p">:</span> <span class="n">projected</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">projected</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+    <span class="k">if</span> <span class="n">projected</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">projected</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">quantity</span> <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="n">projected</span> <span class="k">else</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">]</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">projected</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)[:,</span> <span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)[:,</span> <span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+    <span class="n">qk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Phonopy data formatting</span>
+
+    <span class="n">qp</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+
+    <span class="c1"># map Phono3py to Phonopy</span>
+
+    <span class="n">struct</span> <span class="o">=</span> <span class="n">Poscar</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span><span class="o">.</span><span class="n">structure</span>
+    <span class="n">sg</span> <span class="o">=</span> <span class="n">SpacegroupAnalyzer</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+    <span class="n">symops</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">get_point_group_operations</span><span class="p">(</span><span class="n">cartesian</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">geq</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_equivalent_qpoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">qk</span><span class="p">),</span> <span class="n">symops</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">min_id</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">geq</span><span class="p">,</span> <span class="n">qp</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">min_id</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">min_id</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y2</span><span class="p">)[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c2</span><span class="p">)[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">smoothing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="p">[</span><span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">smoothing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="n">y2</span>
+    <span class="k">if</span> <span class="n">xi</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">y2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span> <span class="n">xi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># interpolate</span>
+
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">interpolate</span><span class="p">)</span>
+    <span class="n">yinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
+    <span class="n">ysort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+    <span class="n">ysort</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="n">ysort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+
+    <span class="n">cinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+    <span class="n">cnorm</span><span class="p">,</span> <span class="n">extend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">colour_scale</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">cmin</span><span class="p">,</span>
+                                                   <span class="n">cmax</span><span class="p">,</span> <span class="n">cscale</span><span class="p">,</span> <span class="n">unoccupied</span><span class="p">)</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">c2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span>
+                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">projected</span><span class="p">])</span>
+    <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">())</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">draw_all</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+        <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">log</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cbar</span></div>
+
+<div class="viewcode-block" id="add_wideband"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_wideband">[docs]</a><span class="k">def</span> <span class="nf">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with broadened bands.</span>
+
+<span class="sd">    Requires a POSCAR.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        kdata : dict</span>
+<span class="sd">            Phono3py-like data containing:</span>
+
+<span class="sd">                qpoint : array-like</span>
+<span class="sd">                    q-point locations.</span>
+<span class="sd">                gamma : array-like</span>
+<span class="sd">                    imaginary component of the self-energy.</span>
+<span class="sd">                temperature : array-like</span>
+<span class="sd">                    temperature.</span>
+
+<span class="sd">        pdata : dict</span>
+<span class="sd">            phonon dispersion data containing:</span>
+
+<span class="sd">                q-point : array-like</span>
+<span class="sd">                    qpoint locations.</span>
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                frequency : array-like</span>
+<span class="sd">                    phonon frequencies.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        temperature : float, optional</span>
+<span class="sd">            approximate temperature in K (finds closest). Default: 300.</span>
+
+<span class="sd">        poscar : str, optional</span>
+<span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set axis ticks, label, limits. Default: True.</span>
+<span class="sd">        smoothing : int, optional</span>
+<span class="sd">            every n points to sample. Default: 5.</span>
+
+<span class="sd">        colour : colormap or str or list, optional</span>
+<span class="sd">            colourmap or colourmap name or max #RRGGBB colour (fades to</span>
+<span class="sd">            white) or min and max #RRGGBB colours. Default: viridis.</span>
+
+<span class="sd">        workers : int, optional</span>
+<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+
+<span class="sd">        xmarkkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for x markers passed to</span>
+<span class="sd">            matplotlib.pyplot.axvline. Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      None</span>
+<span class="sd">                linewidth:  axis line width</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: True</span>
+<span class="sd">                shading:    auto</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
+    <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
+    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
+    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+    <span class="kn">from</span> <span class="nn">tp.calculate</span> <span class="kn">import</span> <span class="n">lorentzian</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="s1">&#39;shading&#39;</span><span class="p">:</span>    <span class="s1">&#39;auto&#39;</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;wideband_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;wideband_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;wideband_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="n">defxmarkkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="n">xmarkkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defxmarkkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">}</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;main must be True or False&#39;</span>
+
+    <span class="c1"># Phono3py data formatting</span>
+
+    <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">])</span>
+    <span class="n">qk</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Phonopy data formatting</span>
+
+    <span class="n">qp</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+
+    <span class="n">qpi</span> <span class="o">=</span> <span class="p">[</span><span class="n">qp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qp</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">smoothing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">smoothing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">xi</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">qpi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span> <span class="n">xi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># map Phono3py to Phonopy</span>
+
+    <span class="n">struct</span> <span class="o">=</span> <span class="n">Poscar</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">poscar</span><span class="p">)</span><span class="o">.</span><span class="n">structure</span>
+    <span class="n">sg</span> <span class="o">=</span> <span class="n">SpacegroupAnalyzer</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+    <span class="n">symops</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">get_point_group_operations</span><span class="p">(</span><span class="n">cartesian</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">geq</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_equivalent_qpoint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">qk</span><span class="p">),</span> <span class="n">symops</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">min_id</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">geq</span><span class="p">,</span> <span class="n">qpi</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">min_id</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">where</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">c2</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">c2</span><span class="p">))</span>
+
+    <span class="c1"># interpolate</span>
+
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">2500</span><span class="p">)</span>
+    <span class="n">finterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">finterp</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+
+    <span class="n">cinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
+    <span class="n">fmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
+    <span class="n">fmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span>
+
+    <span class="c1"># broadening</span>
+
+    <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">f2</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">area</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c2</span><span class="p">[</span><span class="n">q</span><span class="p">])):</span>
+            <span class="n">area</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">area</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">lorentzian</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">b</span><span class="p">],</span> <span class="n">c2</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">b</span><span class="p">]))</span>
+
+    <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">area</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">area</span><span class="p">))</span>
+
+    <span class="c1"># colours</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">colours</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">colours</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">colour</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">colour</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">area</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span>
+                  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="get_equivalent_qpoint"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.get_equivalent_qpoint">[docs]</a><span class="k">def</span> <span class="nf">get_equivalent_qpoint</span><span class="p">(</span><span class="n">qk</span><span class="p">,</span> <span class="n">symops</span><span class="p">,</span> <span class="n">qp</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds the closest phono3py qpoint to a phonopy qpoint.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        qk : array-like</span>
+<span class="sd">            all qpoints from the phono3py kappa file.</span>
+<span class="sd">        symmops</span>
+<span class="sd">            symmetry operations (e.g. from Pymatgen)</span>
+<span class="sd">        qp : array-like</span>
+<span class="sd">            single qpoint from the phonon dispersion.</span>
+
+<span class="sd">        tol : float, optional</span>
+<span class="sd">            tolerance. Default: 1e-2.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        int</span>
+<span class="sd">            nearest qpoint index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">pymatgen.util.coord</span> <span class="kn">import</span> <span class="n">pbc_diff</span>
+
+    <span class="c1"># Equivalent qpoints</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">qp</span><span class="p">,</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">rotation_matrix</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">symops</span><span class="p">])</span>
+
+    <span class="c1"># Remove duplicates</span>
+
+    <span class="n">rm_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">pbc_diff</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">tol</span><span class="p">):</span>
+                <span class="n">rm_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">break</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">rm_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Find nearest</span>
+
+    <span class="n">dists</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">seq</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">qk</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">dists</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dists</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="formatting"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.formatting">[docs]</a><span class="k">def</span> <span class="nf">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">yquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Formats the axes of phonon plots.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to format.</span>
+<span class="sd">        pdata : dict</span>
+<span class="sd">            phonon dispersion data containing:</span>
+
+<span class="sd">                x : array-like</span>
+<span class="sd">                    high-symmetry path.</span>
+<span class="sd">                tick_position : array-like</span>
+<span class="sd">                    x-tick positions.</span>
+<span class="sd">                tick_label : array-like</span>
+<span class="sd">                    x-tick labels.</span>
+
+<span class="sd">        yquantity : str, optional</span>
+<span class="sd">            y variable. Default: frequency.</span>
+<span class="sd">        log : bool, optional</span>
+<span class="sd">            log the y scale. Default: False.</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.axvline.</span>
+<span class="sd">            Set color to None to turn off.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      black</span>
+<span class="sd">                linewidth:  axis line width</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            formats ax directly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span>      <span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span>  <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_linewidth</span><span class="p">(),</span>
+                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;xmarkkwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;xmarkkwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;xmarkkwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># lines</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># formatting</span>
+
+    <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;wavevector&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">yquantity</span><span class="p">])</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tick_label&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span> <span class="k">if</span> <span class="n">log</span> <span class="k">else</span> <span class="s1">&#39;linear&#39;</span>
+    <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="tile_properties"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.tile_properties">[docs]</a><span class="k">def</span> <span class="nf">tile_properties</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Tiles properties for dispersion and alt_dispersion</span>
+
+<span class="sd">    Allows for different colour formats and fills out arrays with the</span>
+<span class="sd">    last element or selects a subset.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        property : array-like or str</span>
+<span class="sd">            array or string to tile.</span>
+<span class="sd">        bandmin : int</span>
+<span class="sd">            minimum band.</span>
+<span class="sd">        bandmax : int</span>
+<span class="sd">            maximum band.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        tiled</span>
+<span class="sd">            array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bdiff</span> <span class="o">=</span> <span class="n">bandmax</span> <span class="o">-</span> <span class="n">bandmin</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">tiled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">bdiff</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">tiled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="p">(</span><span class="n">bdiff</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="o">==</span> <span class="n">bdiff</span><span class="p">:</span>
+        <span class="n">tiled</span> <span class="o">=</span> <span class="n">properties</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">bdiff</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">bandmax</span><span class="p">:</span>
+            <span class="n">tiled</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tiled</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[:</span><span class="n">bdiff</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">bdiff</span><span class="p">:</span>
+        <span class="n">tiled</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tiled</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">bdiff</span><span class="p">:</span>
+            <span class="n">tiled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tiled</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">tiled</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

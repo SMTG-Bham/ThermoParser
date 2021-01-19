@@ -68,6 +68,12 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
         **kwargs
             passed to pymatgen.electronic.structure.boltztrap.BoltztrapRunner.
 
+    Returns
+    -------
+
+        None
+            instead prints to hdf5 (see below).
+
     hdf5 File Contents
     ------------------
 

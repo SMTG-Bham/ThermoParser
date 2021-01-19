@@ -1,5 +1,11 @@
 """Functions which plot phonon frequency on the x-axis.
 
+Each function takes a set of axes and data dictionary as its main input,
+and and an ``invert`` argument to plot sideways by a phonon dispersion,
+and a main argument, which determines if axes limits are set and
+sometimes how scaling is handled, which helps if plotting multiple
+quantities on the same axes.
+
 Functions
 ---------
 
@@ -20,11 +26,20 @@ Functions
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import tp
 import warnings
+import yaml
 from tp.data import resolve
 
 warnings.filterwarnings('ignore', module='matplotlib')
+
+try:
+    filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
+    with open(filename, 'r') as f:
+        conf = yaml.safe_load(f)
+except Exception:
+    conf = None
 
 def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
             colour='tab10', fill=True, fillalpha=0.2, line=False, **kwargs):
@@ -60,19 +75,30 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         line : bool, optional
             plot lines. Default: False.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     # defaults
 
     defkwargs = {'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'dos_kwargs' not in conf or conf['dos_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['dos_kwargs'], **kwargs}
 
     # input checks
 
@@ -224,10 +250,19 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         **kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 label:      $\mathregular{\kappa_l}$
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     # defaults
@@ -235,9 +270,11 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
     defkwargs = {'label':      '$\mathregular{\kappa_l}$',
                  'rasterized': False}
 
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+    if conf is None or 'frequency_cum_kappa_kwargs' not in conf or \
+       conf['frequency_cum_kappa_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['frequency_cum_kappa_kwargs'], **kwargs}
 
     # input checks
 
@@ -359,6 +396,9 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 alpha:      0.3
@@ -366,6 +406,12 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                 linewidth:  0
                 marker:     '.'
                 rasterized: True
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     # defaults
@@ -375,9 +421,12 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                  'linewidth':  0,
                  'marker':     '.',
                  'rasterized': True}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'waterfall_kwargs' not in conf or \
+       conf['waterfall_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['waterfall_kwargs'], **kwargs}
 
     # input checks
 
@@ -496,6 +545,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 alpha:      0.3
@@ -520,9 +572,12 @@ def add_projected_waterfall(ax, data, quantity, projected,
                  'linewidth':  0,
                  'marker':     '.',
                  'rasterized': True}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'projected_waterall_kwargs' not in conf or \
+       conf['projected_waterfall_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['projected_waterfall_kwargs'], **kwargs}
 
     # input checks
 
@@ -610,6 +665,12 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c or
             average/ avg. Default: average.
+
+    Returns
+    -------
+
+        None
+            formats ax directly.
     """
 
     data = tp.data.resolve.resolve(data, [xquantity, yquantity], temperature,

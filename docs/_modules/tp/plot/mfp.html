@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>tp.plot.mfp &mdash; ThermoPlotter 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../contents.html">ThermoPlotter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tp.plot.mfp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tp.plot.mfp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Function for plotting mean free path on the x-axis.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    add_cum_kappa:</span>
+<span class="sd">        cumulative kappa vs mean free path.</span>
+
+<span class="sd">    add_markers:</span>
+<span class="sd">        add markers lines to a linear plot.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tp.settings</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">tp.data</span> <span class="kn">import</span> <span class="n">resolve</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/.config/tprc.yaml&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="add_cum_kappa"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.mfp.add_cum_kappa">[docs]</a><span class="k">def</span> <span class="nf">add_cum_kappa</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">kmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+                  <span class="n">xmarkers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymarkers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">add_xticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">add_yticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#000000&#39;</span><span class="p">,</span>
+                  <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fillcolour</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markerkwargs</span><span class="o">=</span><span class="p">{},</span>
+                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cumulates and plots kappa against mean free path.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Phono3py-like data including:</span>
+
+<span class="sd">                mode_kappa: array-like</span>
+<span class="sd">                    frequency and q-point decomposed lattice thermal</span>
+<span class="sd">                    conductivity.</span>
+<span class="sd">                mean_free_path : array-like</span>
+<span class="sd">                    mean free paths.</span>
+<span class="sd">                temperature : array-like</span>
+<span class="sd">                    temperature.</span>
+
+<span class="sd">        kmin : float or int, optional</span>
+<span class="sd">            minimum kappa to plot in percent. Default: 1.</span>
+
+<span class="sd">        temperature : float, optional</span>
+<span class="sd">            temperature in K (finds nearest). Default: 300.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            direction from anisotropic data, accepts x-z/ a-c or</span>
+<span class="sd">            average/ avg. Default: average</span>
+
+<span class="sd">        xmarkers : array-like, optional</span>
+<span class="sd">            mark kappa at certain mean free paths.</span>
+<span class="sd">        ymarkers : array-like, optional</span>
+<span class="sd">            mark mean free path at certain kappas.</span>
+<span class="sd">        add_xticks : bool, optional</span>
+<span class="sd">            add x_ticks for each marker. Doesn&#39;t work on log axes.</span>
+<span class="sd">            Default: False.</span>
+<span class="sd">        add_yticks : bool, optional</span>
+<span class="sd">            add y_ticks for each marker. Doesn&#39;t work on log axes.</span>
+<span class="sd">            Default: False.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set ticks, labels, limits. Default: True.</span>
+<span class="sd">        scale : bool, optional</span>
+<span class="sd">            if main, scale to percent. If not main, scale to axis</span>
+<span class="sd">            limits. Default: False.</span>
+
+<span class="sd">        colour : str, optional</span>
+<span class="sd">            #RRGGBB line colour. Default: #000000.</span>
+<span class="sd">        fill : bool, optional</span>
+<span class="sd">            fill below lines. Default: False.</span>
+<span class="sd">        fillcolour : int or str, optional</span>
+<span class="sd">            if a float from 0-1 and colour in #RRGGBB format, sets</span>
+<span class="sd">            fill colour opacity. Otherwise treats it as a colour.</span>
+<span class="sd">            Default: 0.2.</span>
+<span class="sd">        line : bool, optional</span>
+<span class="sd">            plot lines. Default: True.</span>
+
+<span class="sd">        markerkwargs : dict, optional</span>
+<span class="sd">            keyword arguments for the markers, passed to</span>
+<span class="sd">            matplotlib.pyplot.plot.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      black</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.fill_between</span>
+<span class="sd">            if filled or matplotlib.pyplot.plot otherwise.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                label:      $\mathregular{\kappa_l}$</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">tp.calculate</span> <span class="kn">import</span> <span class="n">cumulate</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span>      <span class="s1">&#39;$\mathregular{\kappa_l}$&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;mfp_cum_kappa_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;mfp_cum_kappa_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;mfp_cum_kappa_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># input checks</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;add_xticks&#39;</span><span class="p">,</span>
+                                                             <span class="s1">&#39;add_yticks&#39;</span><span class="p">],</span>
+                           <span class="p">[</span> <span class="n">main</span><span class="p">,</span>   <span class="n">scale</span><span class="p">,</span>   <span class="n">fill</span><span class="p">,</span>   <span class="n">line</span><span class="p">,</span>   <span class="n">add_xticks</span><span class="p">,</span>
+                                                              <span class="n">add_yticks</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">fill</span> <span class="ow">or</span> <span class="n">line</span><span class="p">,</span> <span class="s1">&#39;fill or line or both must be True.&#39;</span>
+
+    <span class="c1"># data formatting and calculation</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">],</span>
+                           <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">])</span>
+    <span class="n">mfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]))</span>
+
+    <span class="n">mfp</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">cumulate</span><span class="p">(</span><span class="n">mfp</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;cumkappa-mfp-</span><span class="si">{:.0f}</span><span class="s1">K-</span><span class="si">{}</span><span class="s1">.dat&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+               <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="n">direction</span><span class="p">),</span>
+               <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">mfp</span><span class="p">,</span> <span class="n">k</span><span class="p">]),</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;mfp(m) k_l(Wm-1K-1)&#39;</span><span class="p">)</span>
+    <span class="n">mfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mfp</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">mfp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># percentage output</span>
+
+    <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+        <span class="n">axscale</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span> <span class="k">if</span> <span class="n">main</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">scale_to_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">axscale</span><span class="p">)</span>
+
+    <span class="c1"># colour</span>
+
+    <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fillcolour2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">rgb2array</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">fillcolour</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> \
+               <span class="nb">isinstance</span><span class="p">(</span><span class="n">fillcolour</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">and</span> <span class="n">fillcolour</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> \
+               <span class="n">fillcolour</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">fillcolour2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">fillcolour2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fillcolour</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">fillcolour2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">fillcolour</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fillcolour2</span> <span class="o">=</span> <span class="n">colour</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="n">colour</span> <span class="o">=</span> <span class="n">fillcolour2</span>
+
+        <span class="c1"># plotting</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">mfp</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mfp</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="n">mindex</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">kmin</span><span class="o">*</span><span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">mfp</span><span class="p">[</span><span class="n">mindex</span><span class="p">],</span> <span class="n">mfp</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xmarkers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ymarkers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">add_markers</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">mfp</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">xmarkers</span><span class="p">,</span> <span class="n">ymarkers</span><span class="p">,</span> <span class="n">add_xticks</span><span class="p">,</span> <span class="n">add_yticks</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">markerkwargs</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="add_markers"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.mfp.add_markers">[docs]</a><span class="k">def</span> <span class="nf">add_markers</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xmarkers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymarkers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">add_xticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">add_yticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adds marker lines linking a linear plot to the axes.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        x : array-like</span>
+<span class="sd">            x data.</span>
+<span class="sd">        y : array-like</span>
+<span class="sd">            y data.</span>
+
+<span class="sd">        xmarkers : array-like, int or float, optional</span>
+<span class="sd">            where on the x axis to mark.</span>
+<span class="sd">        ymarkers : array-like, int or float, optional</span>
+<span class="sd">            where on the y axis to mark.</span>
+<span class="sd">        add_xticks : bool, optional</span>
+<span class="sd">            add x_ticks for each marker. Doesn&#39;t work on log axes.</span>
+<span class="sd">            Default: False.</span>
+<span class="sd">        add_yticks : bool, optional</span>
+<span class="sd">            add y_ticks for each marker. Doesn&#39;t work on log axes.</span>
+<span class="sd">            Default: False.</span>
+
+<span class="sd">        **kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                color:      black</span>
+<span class="sd">                linewidth:  axes line width</span>
+<span class="sd">                rasterized: False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span>      <span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span>  <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_linewidth</span><span class="p">(),</span>
+                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;marker_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;marker_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;marker_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># get limits</span>
+
+    <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+    <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+    <span class="n">xticks</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()</span>
+    <span class="n">yticks</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()</span>
+
+    <span class="c1"># plot x</span>
+
+    <span class="k">if</span> <span class="n">xmarkers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xmarkers</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span> <span class="n">xmarkers</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmarkers</span><span class="p">]</span>
+        <span class="n">yinter</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xmarky</span> <span class="o">=</span> <span class="n">yinter</span><span class="p">(</span><span class="n">xmarkers</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xmarkers</span><span class="p">)):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">xmarkers</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">xmarkers</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span>           <span class="n">xmarky</span><span class="p">[</span><span class="n">m</span><span class="p">],</span>   <span class="n">xmarky</span><span class="p">[</span><span class="n">m</span><span class="p">]],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">xticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xticks</span><span class="p">,</span> <span class="n">xmarkers</span><span class="p">)</span>
+        <span class="n">yticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">yticks</span><span class="p">,</span> <span class="n">xmarky</span><span class="p">)</span>
+
+    <span class="c1"># plot y</span>
+
+    <span class="k">if</span> <span class="n">ymarkers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ymarkers</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span> <span class="n">ymarkers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ymarkers</span><span class="p">]</span>
+        <span class="n">xinter</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">ymarkx</span> <span class="o">=</span> <span class="n">xinter</span><span class="p">(</span><span class="n">ymarkers</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ymarkers</span><span class="p">)):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ymarkx</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">ymarkx</span><span class="p">[</span><span class="n">m</span><span class="p">],</span>   <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span>         <span class="n">ymarkers</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">ymarkers</span><span class="p">[</span><span class="n">m</span><span class="p">]],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">yticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">yticks</span><span class="p">,</span> <span class="n">ymarkers</span><span class="p">)</span>
+        <span class="n">xticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xticks</span><span class="p">,</span> <span class="n">ymarkx</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">add_xticks</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">add_yticks</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

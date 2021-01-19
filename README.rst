@@ -8,22 +8,24 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.3.2\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.4.0\
     |_________________________________:______________________________________:_____/
 
 
-ThermoPlotter is a toolkit used to simplify the production of high-quality 
-plots from the outputs of specialised analytical codes. It is focused on 
-computational materials science and particularly thermoelectrics materials. 
-Traditionally, the steps required to transform raw data, produce appropriate plots
-and adjust their appearance are arduous and often result in long, unweidly python scripts.
-ThermoPlotter is built on top of `matplotlib`_ and greatly simplifies this process.
-It can be used to build short, easy-to-customise plotting scripts and there are also several 
-basic command-line interface options.
+ThermoPlotter is a toolkit used to simplify the production of
+high-quality plots from the outputs of specialised analytical codes. It
+is focused on computational materials science and particularly
+thermoelectrics materials. Traditionally, the steps required to
+transform raw data, produce appropriate plots and adjust their
+appearance are arduous and often result in long, unweildy python
+scripts. ThermoPlotter is built on top of `matplotlib`_ and greatly
+simplifies this process. It can be used to build short,
+easy-to-customise plotting scripts and there are also several basic
+command-line interface options.
 
 Click on the image to go to the `gallery`_!
 
-.. image:: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/docs/src/figures/wideband.png
+.. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
    :target: https://smtg-ucl.github.io/ThermoPlotter/gallery.html
 
@@ -38,18 +40,12 @@ ThermoPlotter can easily be installed with git and pip:
 
     git clone https://github.com/smtg-ucl/ThermoPlotter
     cd ThermoPlotter
-    python3 -m pip install --user -e .
+    python3 -m pip install --user .
 
-The ``-e`` or editable option is encouraged so you can add your own
-defaults in ``tp.settings`` and elsewhere. For the same reason, when
-upgrading you may want to preserve your changes:
-
-.. code-block:: bash
-
-    git stash
-    git pull
-    python3 -m pip install --user -e .
-    git stash apply
+After installing, you may want to copy ``ThermoPlotter/tprc.yaml`` to
+``~/.config/tprc.yaml``, if you want to set your own default axis
+labels, unit conversions, default style sheets (two are provided),
+other aesthetic alterations and more!
 
 Usage
 -----
@@ -140,7 +136,7 @@ Contributors
 ------------
 
 Many thanks to all those who contributed code or ideas to ThermoPlotter!
-Roughly chronologically, they are:
+Roughly chronologically, they are so far:
 
 * Kieran B. Spooner
 * David O. Scanlon

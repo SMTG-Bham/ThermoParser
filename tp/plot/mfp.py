@@ -1,4 +1,4 @@
-"""Functions for plotting against mean free path.
+"""Function for plotting mean free path on the x-axis.
 
 Functions
 ---------
@@ -18,6 +18,13 @@ import warnings
 from tp.data import resolve
 
 warnings.filterwarnings('ignore', module='matplotlib')
+
+try:
+    filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
+    with open(filename, 'r') as f:
+        conf = yaml.safe_load(f)
+except Exception:
+    conf = None
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   xmarkers=None, ymarkers=None, add_xticks=False,
@@ -82,6 +89,9 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         markerkwargs : dict, optional
             keyword arguments for the markers, passed to
             matplotlib.pyplot.plot.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 color:      black
@@ -90,10 +100,19 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         **kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 label:      $\mathregular{\kappa_l}$
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     from tp.calculate import cumulate
@@ -102,9 +121,12 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     defkwargs = {'label':      '$\mathregular{\kappa_l}$',
                  'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'mfp_cum_kappa_kwargs' not in conf or \
+       conf['mfp_cum_kappa_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['mfp_cum_kappa_kwargs'], **kwargs}
 
     # input checks
 
@@ -204,11 +226,20 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, add_xticks=False,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 color:      black
                 linewidth:  axes line width
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     from scipy.interpolate import interp1d
@@ -218,9 +249,12 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, add_xticks=False,
     defkwargs = {'color':      'black',
                  'linewidth':  ax.spines['bottom'].get_linewidth(),
                  'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'marker_kwargs' not in conf or \
+       conf['marker_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['marker_kwargs'], **kwargs}
 
     # get limits
 

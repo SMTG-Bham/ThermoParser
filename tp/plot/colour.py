@@ -6,9 +6,9 @@ Functions
     linear:
         linear between two colours.
     uniform:
-        attempt at three-colour linear for higher contrast. WIP.
+        bigradient colourmap for higher contrast.
     elbow:
-        Like uniform, except one can chose the midpoint location.
+        like uniform, except one can chose the midpoint location.
     highlight:
         takes an existing map and highlights specific entries.
     skelton:
@@ -60,10 +60,9 @@ def linear(cmax, cmin='#ffffff', alpha=1., density=512):
 
 def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
           density=512):
-    """Attmept at higher contrast colour maps. Requires refinement
+    """Generates bigradient colourmaps.
 
-    Adjusts mid colour position relative to similarity to endpoint
-    colours.
+    Adjusts mid colour position to keep the overall gradient even.
 
     Arguments
     ---------
@@ -105,7 +104,9 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
 
 def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
           density=512):
-    """Attmept at higher contrast colour maps. Requires refinement.
+    """Generates bigradient colourmaps.
+
+    Allows for full customisation of colours and midpoint location.
 
     Arguments
     ---------

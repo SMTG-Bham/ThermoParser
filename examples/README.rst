@@ -3,9 +3,9 @@ Here are some examples to give an idea of what ThermoPlotter can do.
 Some require large data files to run, which haven't been included in the
 data folder, but can be downloaded using the ``get-data.sh`` script
 provided in the relevant directories. If ``wget`` doesn't work for you, 
-navigate to the URL (*repo* in `get-data.sh`) in your browser to download
-the required file and add it to the ``../data`` directory (*f* in 
-`get-data.sh`). 
+navigate to the URL (*repo* in `get-data.sh`) in your browser to
+download the required file and add it to the ``../data`` directory (*f*
+in `get-data.sh`).
 
 cumkappa
 --------

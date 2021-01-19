@@ -28,7 +28,24 @@ import numpy as np
 import tp
 
 def cumulate(x, y):
-    """Sorts by x and cumulates y."""
+    """Sorts by x and cumulates y.
+
+    Arguments
+    ---------
+
+        x : array-like
+            x-values.
+        y : array-like
+            y-values.
+
+    Returns
+    -------
+
+        np.array
+            sorted x-values.
+        np.array
+            cumulated y-values.
+    """
 
     x = np.ravel(x)
     xsort = x[x.argsort()]

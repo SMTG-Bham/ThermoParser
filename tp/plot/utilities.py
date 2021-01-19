@@ -197,6 +197,12 @@ def set_locators(ax, x=None, y=None, dos=False):
             removes axes ticks and ticklabels and y axis label. Runs
             first, so ticks can be reinstated on x, e.g. for waterfall
             plots using x='log'. Default: False.
+
+    Returns
+    -------
+
+        None
+            formats ax directly.
     """
 
     assert isinstance(dos, bool), 'dos must be True or False.'

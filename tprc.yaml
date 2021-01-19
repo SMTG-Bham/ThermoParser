@@ -1,0 +1,70 @@
+# This is a counterpart to the ThermoPlotter/tp/settings.py module for
+# saving cutom values. If you want to edit ThermoPlotter, save a copy of
+# this file as ``~/.config/tprc.yaml``, and edit it there. Only that
+# file will be checked and any changes made in the ThermoPlotter
+# directory will be overwritten on upgrading.
+
+# style sheet names or lists of names
+style:       null # default style sheet
+large_style: null # large style sheet
+
+locator:
+    # Unlike other parts of this file, rather than whole arguments, this
+    # should give integers to pass to MaxNLocator and AutoMinorLocator,
+    # respectively.
+    major: null
+    minor: null
+
+# The to_xxx, xxx_conversions, units and long_, medium_ and short_labels
+# functions should contain dictionaries, e.g.
+# to_xxx:
+#     energies: 'energy'
+# and if you change a conversion, remember to change the units as well
+# and vice versa!
+to_tp:                null
+to_amset:             null
+to_boltztrap:         null
+to_phono3py:          null
+
+# These conversions REPLACE the ones in settings.py.
+# They DO NOT stack!
+amset_conversions:     null
+boltztrap_conversions: null
+phonopy_conversions:   null
+phono3py_conversions:  null
+
+units:                null
+
+long_labels:          null
+medium_labels:        null
+short_labels:         null
+
+# The following should contain either long, medium or short, to point to
+# the dictionaries of long_, medium_ or short_labels.
+labels:          null # overall default
+inverted_labels: null # for dos-style axes
+large_labels:    null # for large axes
+
+# The following are default kwargs for each plot type. These will
+# override those specified in the module, but will be overridden by
+# those specified when the function is called.
+# Frequency:
+dos_kwargs:                      null
+frequency_cum_kappa_kwargs:      null
+waterfall_kwargs:                null
+projected_waterfall_kwargs:      null
+# Heatmap:
+heatmap_kwargs:                  null
+ztmap_kwargs:                    null
+kappa_target_kwargs:             null
+# MFP:
+mfp_cum_kappa_kwargs:            null
+marker_kwargs:                   null
+# Phonons:
+dispersion_kwargs:               null
+multi_kwargs:                    null
+alt_dispersion_kwargs:           null
+projected_dispersion_kwargs:     null
+alt_projected_dispersion_kwargs: null
+wideband_kwargs:                 null
+xmarkkwargs:                     null

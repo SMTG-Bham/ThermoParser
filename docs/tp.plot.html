@@ -1,37 +1,184 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tp.plot package &#8212; ThermoPlotter 0.3.1 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>tp.plot package &mdash; ThermoPlotter 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Gallery" href="gallery.html" />
-    <link rel="prev" title="tp.data package" href="tp.data.html" />
+    <link rel="prev" title="tp.data package" href="tp.data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">tp.plot package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">tp</a> &raquo;</li>
+        
+          <li><a href="tp.html">tp package</a> &raquo;</li>
+        
+      <li>tp.plot package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/tp.plot.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="tp-plot-package">
 <h1>tp.plot package<a class="headerlink" href="#tp-plot-package" title="Permalink to this headline">¶</a></h1>
@@ -47,9 +194,9 @@
 <div><dl class="simple">
 <dt>linear:</dt><dd><p>linear between two colours.</p>
 </dd>
-<dt>uniform:</dt><dd><p>attempt at three-colour linear for higher contrast. WIP.</p>
+<dt>uniform:</dt><dd><p>bigradient colourmap for higher contrast.</p>
 </dd>
-<dt>elbow:</dt><dd><p>Like uniform, except one can chose the midpoint location.</p>
+<dt>elbow:</dt><dd><p>like uniform, except one can chose the midpoint location.</p>
 </dd>
 <dt>highlight:</dt><dd><p>takes an existing map and highlights specific entries.</p>
 </dd>
@@ -63,8 +210,9 @@
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.plot.colour.elbow">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">elbow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmid</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">midpoint</span><span class="o">=</span><span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.elbow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attmept at higher contrast colour maps. Requires refinement.</p>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">elbow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmid</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">midpoint</span><span class="o">=</span><span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#elbow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.elbow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates bigradient colourmaps.</p>
+<p>Allows for full customisation of colours and midpoint location.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -87,7 +235,7 @@
 
 <dl class="py function">
 <dt id="tp.plot.colour.highlight">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">highlight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmap</span></em>, <em class="sig-param"><span class="n">colour</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">[0]</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.highlight" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">highlight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmap</span></em>, <em class="sig-param"><span class="n">colour</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">[0]</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#highlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.highlight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Highlights values in a colourmap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -109,7 +257,7 @@
 
 <dl class="py function">
 <dt id="tp.plot.colour.hsb2rgb">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">hsb2rgb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.hsb2rgb" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">hsb2rgb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#hsb2rgb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.hsb2rgb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts hsb to an rgba colour array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -131,7 +279,7 @@
 
 <dl class="py function">
 <dt id="tp.plot.colour.linear">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmax</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.linear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmax</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates single-gradient colour maps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -153,7 +301,7 @@
 
 <dl class="py function">
 <dt id="tp.plot.colour.rgb2array">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">rgb2array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colour</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.rgb2array" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">rgb2array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colour</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#rgb2array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.rgb2array" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts #RRGGBB string to rgba array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -173,7 +321,7 @@
 
 <dl class="py function">
 <dt id="tp.plot.colour.skelton">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">skelton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.skelton" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">skelton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#skelton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.skelton" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates Jonathan Skelton’s rainbowy colourmap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -193,10 +341,9 @@
 
 <dl class="py function">
 <dt id="tp.plot.colour.uniform">
-<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmid</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.colour.uniform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attmept at higher contrast colour maps. Requires refinement</p>
-<p>Adjusts mid colour position relative to similarity to endpoint
-colours.</p>
+<code class="sig-prename descclassname">tp.plot.colour.</code><code class="sig-name descname">uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmid</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">density</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/colour.html#uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.colour.uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates bigradient colourmaps.</p>
+<p>Adjusts mid colour position to keep the overall gradient even.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -221,6 +368,11 @@ colours.</p>
 <div class="section" id="module-tp.plot.frequency">
 <span id="tp-plot-frequency-module"></span><h2>tp.plot.frequency module<a class="headerlink" href="#module-tp.plot.frequency" title="Permalink to this headline">¶</a></h2>
 <p>Functions which plot phonon frequency on the x-axis.</p>
+<p>Each function takes a set of axes and data dictionary as its main input,
+and and an <code class="docutils literal notranslate"><span class="pre">invert</span></code> argument to plot sideways by a phonon dispersion,
+and a main argument, which determines if axes limits are set and
+sometimes how scaling is handled, which helps if plotting multiple
+quantities on the same axes.</p>
 <div class="section" id="id1">
 <h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -239,7 +391,7 @@ colours.</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.plot.frequency.add_cum_kappa">
-<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_cum_kappa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fillcolour</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.frequency.add_cum_kappa" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_cum_kappa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fillcolour</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/frequency.html#add_cum_kappa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.frequency.add_cum_kappa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cumulates and plots kappa against frequency.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -261,6 +413,9 @@ Default: 0.2.</p></li>
 <li><p><strong>line</strong> (<em>bool</em><em>, </em><em>optional</em>) – plot lines. Default: True.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.fill_between
 if filled or matplotlib.pyplot.plot otherwise.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>label:      $mathregular{kappa_l}$
@@ -269,12 +424,18 @@ rasterized: False</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.frequency.add_dos">
-<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_dos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">total</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'tab10'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fillalpha</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.frequency.add_dos" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_dos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">total</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'tab10'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fillalpha</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/frequency.html#add_dos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.frequency.add_dos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a phonon density of states (DoS) to a set of axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -292,7 +453,10 @@ Default: tab10.</p></li>
 <li><p><strong>fill</strong> (<em>bool</em><em>, </em><em>optional</em>) – fill below lines. Default: True.</p></li>
 <li><p><strong>fillalpha</strong> (<em>float</em><em>, </em><em>optional</em>) – fill alpha scaled to 0-1. Default: 0.2.</p></li>
 <li><p><strong>line</strong> (<em>bool</em><em>, </em><em>optional</em>) – plot lines. Default: False.</p></li>
-<li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.fill_between.
+<li><p><strong>kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.fill_between.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -300,12 +464,18 @@ Defaults:</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.frequency.add_projected_waterfall">
-<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_projected_waterfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">projected</span></em>, <em class="sig-param"><span class="n">xquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.frequency.add_projected_waterfall" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_projected_waterfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">projected</span></em>, <em class="sig-param"><span class="n">xquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/frequency.html#add_projected_waterfall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.frequency.add_projected_waterfall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a waterfall plot against frequency with a colour axis.</p>
 <p>Has an option to change the x-quantity.</p>
 <dl class="field-list simple">
@@ -334,14 +504,16 @@ average/ avg. Default: average.</p></li>
 coloured in this colour. If set to None, or cmin is set,
 this feature is turned off. Default: grey.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.scatter.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>alpha:      0.3
 edgecolors: black
 linewidth:  0
 marker:     .
-rasterized: True
-s:          1</p>
+rasterized: True</p>
 </div></blockquote>
 </p></li>
 </ul>
@@ -357,7 +529,7 @@ s:          1</p>
 
 <dl class="py function">
 <dt id="tp.plot.frequency.add_waterfall">
-<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_waterfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">xquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.frequency.add_waterfall" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">add_waterfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">xquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">invert</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/frequency.html#add_waterfall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.frequency.add_waterfall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a waterfall plot of quantities against frequency.</p>
 <p>Has an option to change the x-quantity.</p>
 <dl class="field-list simple">
@@ -380,24 +552,32 @@ average/ avg. Default: average.</p></li>
 each band or one for each point) or a single colour.
 Default: viridis.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.scatter.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>alpha:      0.3
 edgecolors: black
 linewidth:  0
 marker:     ‘.’
-rasterized: True
-s:          1</p>
+rasterized: True</p>
 </div></blockquote>
 </p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.frequency.format_waterfall">
-<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">format_waterfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">yquantity</span></em>, <em class="sig-param"><span class="n">xquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.frequency.format_waterfall" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.frequency.</code><code class="sig-name descname">format_waterfall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">yquantity</span></em>, <em class="sig-param"><span class="n">xquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/frequency.html#format_waterfall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.frequency.format_waterfall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Formats axes for waterfall plots.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -411,6 +591,12 @@ s:          1</p>
 average/ avg. Default: average.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>formats ax directly.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -419,6 +605,9 @@ average/ avg. Default: average.</p></li>
 <div class="section" id="module-tp.plot.heatmap">
 <span id="tp-plot-heatmap-module"></span><h2>tp.plot.heatmap module<a class="headerlink" href="#module-tp.plot.heatmap" title="Permalink to this headline">¶</a></h2>
 <p>Heatmap plotters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">add_heatmap</span></code> is a base function, which handles axes limits, colourbar
+formatting and extra colourmap options compared to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.pcolormesh</span></code>.
+The other functions plot specific quantites using this function.</p>
 <div class="section" id="id2">
 <h3>Functions<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -433,7 +622,7 @@ average/ avg. Default: average.</p></li>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.plot.heatmap.add_heatmap">
-<code class="sig-prename descclassname">tp.plot.heatmap.</code><code class="sig-name descname">add_heatmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">c</span></em>, <em class="sig-param"><span class="n">xinterp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">yinterp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xscale</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">yscale</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.heatmap.add_heatmap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.heatmap.</code><code class="sig-name descname">add_heatmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">c</span></em>, <em class="sig-param"><span class="n">xinterp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">yinterp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xscale</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">yscale</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/heatmap.html#add_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.heatmap.add_heatmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a heatmap to a set of axes.</p>
 <p>Formats limits, parses extra colourmap options, makes sure data
 isn’t obscured.</p>
@@ -459,6 +648,9 @@ isn’t obscured.</p>
 <li><p><strong>colour</strong> (<em>colourmap</em><em> or </em><em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – colourmap or colourmap name; or key colour or min and max
 RGB colours to generate a colour map. Default: viridis.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.pcolormesh.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -477,7 +669,7 @@ Defaults:</p>
 
 <dl class="py function">
 <dt id="tp.plot.heatmap.add_kappa_target">
-<code class="sig-prename descclassname">tp.plot.heatmap.</code><code class="sig-name descname">add_kappa_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">zt</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">xinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">yinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'target-kl.hdf5'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.heatmap.add_kappa_target" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.heatmap.</code><code class="sig-name descname">add_kappa_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">zt</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">xinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">yinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'target-kl.hdf5'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/heatmap.html#add_kappa_target"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.heatmap.add_kappa_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a heatmap of k_latt required for a target ZT</p>
 <p>Calculates lattice thermal conductivity, plots and formats labels
 etc. May be useful to screen materials to calculate kappa_l for.</p>
@@ -504,6 +696,9 @@ RGB colours to generate a colour map. Default: viridis.</p></li>
 <li><p><strong>output</strong> (<em>str</em><em>, </em><em>optional</em>) – output filename to write to. Set to None to not write.
 Default: target-kl.hdf5.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.pcolormesh.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -522,7 +717,7 @@ Defaults:</p>
 
 <dl class="py function">
 <dt id="tp.plot.heatmap.add_ztmap">
-<code class="sig-prename descclassname">tp.plot.heatmap.</code><code class="sig-name descname">add_ztmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">kdata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">xinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">yinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'zt.hdf5'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.heatmap.add_ztmap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.heatmap.</code><code class="sig-name descname">add_ztmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">kdata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">xinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">yinterp</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'zt.hdf5'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/heatmap.html#add_ztmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.heatmap.add_ztmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience wrapper for plotting ZT heatmaps.</p>
 <p>Calculates ZT and writes to hdf5, plots and formats labels etc.</p>
 <dl class="field-list simple">
@@ -552,6 +747,9 @@ within this function. Set to None to not write. Can be
 loaded with h5py.File to put back into this function.
 Default: zt.hdf5.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.pcolormesh.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -572,7 +770,7 @@ Defaults:</p>
 </div>
 <div class="section" id="module-tp.plot.mfp">
 <span id="tp-plot-mfp-module"></span><h2>tp.plot.mfp module<a class="headerlink" href="#module-tp.plot.mfp" title="Permalink to this headline">¶</a></h2>
-<p>Functions for plotting against mean free path.</p>
+<p>Function for plotting mean free path on the x-axis.</p>
 <div class="section" id="id3">
 <h3>Functions<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -585,7 +783,7 @@ Defaults:</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.plot.mfp.add_cum_kappa">
-<code class="sig-prename descclassname">tp.plot.mfp.</code><code class="sig-name descname">add_cum_kappa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">kmin</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">xmarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_xticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">add_yticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fillcolour</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">markerkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.mfp.add_cum_kappa" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.mfp.</code><code class="sig-name descname">add_cum_kappa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">kmin</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">xmarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_xticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">add_yticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fillcolour</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">markerkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/mfp.html#add_cum_kappa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.mfp.add_cum_kappa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cumulates and plots kappa against mean free path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -625,6 +823,9 @@ Default: 0.2.</p></li>
 <li><p><strong>line</strong> (<em>bool</em><em>, </em><em>optional</em>) – plot lines. Default: True.</p></li>
 <li><p><strong>markerkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for the markers, passed to
 matplotlib.pyplot.plot.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>color:      black
@@ -633,6 +834,9 @@ rasterized: False</p>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.fill_between
 if filled or matplotlib.pyplot.plot otherwise.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>label:      $mathregular{kappa_l}$
@@ -641,12 +845,18 @@ rasterized: False</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.mfp.add_markers">
-<code class="sig-prename descclassname">tp.plot.mfp.</code><code class="sig-name descname">add_markers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">xmarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_xticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">add_yticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.mfp.add_markers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.mfp.</code><code class="sig-name descname">add_markers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">xmarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ymarkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_xticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">add_yticks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/mfp.html#add_markers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.mfp.add_markers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds marker lines linking a linear plot to the axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -661,6 +871,9 @@ Default: False.</p></li>
 <li><p><strong>add_yticks</strong> (<em>bool</em><em>, </em><em>optional</em>) – add y_ticks for each marker. Doesn’t work on log axes.
 Default: False.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.plot.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>color:      black
@@ -670,6 +883,12 @@ rasterized: False</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -678,6 +897,8 @@ rasterized: False</p>
 <div class="section" id="module-tp.plot.phonons">
 <span id="tp-plot-phonons-module"></span><h2>tp.plot.phonons module<a class="headerlink" href="#module-tp.plot.phonons" title="Permalink to this headline">¶</a></h2>
 <p>Tools for dealing with phonon dispersions.</p>
+<p>Contains the traditional phonon dispersion plotter, as well as various
+ways of projecting other quantitites onto a high-symmetry path.</p>
 <div class="section" id="id4">
 <h3>Functions<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <blockquote>
@@ -704,7 +925,7 @@ rasterized: False</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.plot.phonons.add_alt_dispersion">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_alt_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">['Longitudinal', 'Transverse_1', 'Transverse_2', 'Optic']</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">log</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">smoothing</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">['#44ffff', '#ff8044', '#ff4444', '#00000010']</span></em>, <em class="sig-param"><span class="n">linestyle</span><span class="o">=</span><span class="default_value">'-'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.add_alt_dispersion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_alt_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">['Longitudinal', 'Transverse_1', 'Transverse_2', 'Optic']</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">log</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">smoothing</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">['#44ffff', '#ff8044', '#ff4444', '#00000010']</span></em>, <em class="sig-param"><span class="n">linestyle</span><span class="o">=</span><span class="default_value">'-'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#add_alt_dispersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.add_alt_dispersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a phono3py quantity on a high-symmetry path.</p>
 <p>Labels, colours and linestyles can be given one for the whole
 dispersion, or one for each band, with the last entry filling all
@@ -764,6 +985,9 @@ Default: [‘#44ffff’, ‘#ff8044’, ‘#ff4444’, ‘#00000010’].</p></li
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 32.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
 matplotlib.pyplot.axvline. Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>color:      black
@@ -772,6 +996,9 @@ rasterized: False</p>
 </div></blockquote>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.plot.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -779,12 +1006,18 @@ Defaults:</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.add_alt_projected_dispersion">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_alt_projected_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">projected</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">log</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">smoothing</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.add_alt_projected_dispersion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_alt_projected_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">projected</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">log</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">smoothing</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#add_alt_projected_dispersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.add_alt_projected_dispersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a phono3py quantity on a high-symmetry path and projection.</p>
 <p>Just because you can, doesn’t mean you should. A maxim I may fail to
 live up to, so I leave it to you, dear reader, to decide for
@@ -841,17 +1074,22 @@ this feature is turned off. Default: grey.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 32.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
 matplotlib.pyplot.axvline. Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <p>color:      black
 linewidth:  axis line width
 rasterized: False</p>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.scatter.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>marker:     .
-rasterized: True
-s:          1</p>
+rasterized: True</p>
 </div></blockquote>
 </p></li>
 </ul>
@@ -867,7 +1105,7 @@ s:          1</p>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.add_dispersion">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'#800080'</span></em>, <em class="sig-param"><span class="n">linestyle</span><span class="o">=</span><span class="default_value">'solid'</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.add_dispersion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">sdata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'#800080'</span></em>, <em class="sig-param"><span class="n">linestyle</span><span class="o">=</span><span class="default_value">'solid'</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#add_dispersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.add_dispersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a phonon band structure to a set of axes.</p>
 <p>Labels, colours and linestyles can be given one for the whole
 dispersion, or one for each band, with the last entry filling all
@@ -890,8 +1128,10 @@ remaining bands.</p>
 </dl>
 </div></blockquote>
 </p></li>
-<li><p><strong>bandmin</strong> (<em>int</em><em>, </em><em>optional</em>) – Zero-indexed minimum band index to plot. Default: None.</p></li>
-<li><p><strong>bandmax</strong> (<em>int</em><em>, </em><em>optional</em>) – Zero-indexed maximum band index to plot. Default: None.</p></li>
+<li><p><strong>sdata</strong> (<em>dict</em><em>, </em><em>optional</em>) – dispersion data to scale to, same format as data.
+Default: None.</p></li>
+<li><p><strong>bandmin</strong> (<em>int</em><em>, </em><em>optional</em>) – zero-indexed minimum band index to plot. Default: None.</p></li>
+<li><p><strong>bandmax</strong> (<em>int</em><em>, </em><em>optional</em>) – zero-indexed maximum band index to plot. Default: None.</p></li>
 <li><p><strong>main</strong> (<em>bool</em><em>, </em><em>optional</em>) – set axis ticks, labels, limits. Default: True.</p></li>
 <li><p><strong>label</strong> (<em>str</em><em>, </em><em>optional</em>) – legend label(s). Default: None</p></li>
 <li><p><strong>colour</strong> (<em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – line colour(s). Note if retrieved from a colourmap or in
@@ -902,6 +1142,9 @@ Default: #800080.</p></li>
 <li><p><strong>linestyle</strong> (<em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – linestyle(s) (‘-‘, ‘–’, ‘.-‘, ‘:’). Default: solid.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
 matplotlib.pyplot.axvline. Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>color:      black
@@ -910,6 +1153,9 @@ rasterized: False</p>
 </div></blockquote>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.plot.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -917,12 +1163,18 @@ Defaults:</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.add_multi">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_multi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'winter_r'</span></em>, <em class="sig-param"><span class="n">linestyle</span><span class="o">=</span><span class="default_value">'solid'</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.add_multi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_multi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'winter_r'</span></em>, <em class="sig-param"><span class="n">linestyle</span><span class="o">=</span><span class="default_value">'solid'</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#add_multi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.add_multi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds multiple phonon band structures to a set of axes.</p>
 <p>Scales the x-scales to match.</p>
 <dl class="field-list simple">
@@ -953,6 +1205,9 @@ i.e. [[[r,g,b]],…]. Default: winter_r.</p></li>
 <li><p><strong>linestyle</strong> (<em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – linestyle(s) (‘-‘, ‘–’, ‘.-‘, ‘:’). Default: solid.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
 matplotlib.pyplot.axvline. Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>color:      black
@@ -961,6 +1216,9 @@ rasterized: False</p>
 </div></blockquote>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.plot.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: False</p>
@@ -968,12 +1226,18 @@ Defaults:</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.add_projected_dispersion">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_projected_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis_r'</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.add_projected_dispersion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_projected_dispersion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">quantity</span></em>, <em class="sig-param"><span class="n">bandmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis_r'</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#add_projected_dispersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.add_projected_dispersion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a phonon dispersion with projected colour.</p>
 <p>Plots a phonon dispersion, and projects a quantity onto the colour
 axis. Requires a POSCAR.</p>
@@ -1029,16 +1293,21 @@ this feature is turned off. Default: grey.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 32.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
 matplotlib.pyplot.axvline. Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Default</p>
 <p>color:      black
 linewidth:  axis line width
 rasterized: False</p>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.scatter.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <p>marker:     .
-rasterized: True
-s:          1</p>
+rasterized: True</p>
 </p></li>
 </ul>
 </dd>
@@ -1053,7 +1322,7 @@ s:          1</p>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.add_wideband">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_wideband</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">kdata</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smoothing</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.add_wideband" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">add_wideband</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">kdata</span></em>, <em class="sig-param"><span class="n">pdata</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">main</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smoothing</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">colour</span><span class="o">=</span><span class="default_value">'viridis'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">xmarkkwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#add_wideband"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.add_wideband" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a phonon dispersion with broadened bands.</p>
 <p>Requires a POSCAR.</p>
 <dl class="field-list simple">
@@ -1097,6 +1366,9 @@ white) or min and max #RRGGBB colours. Default: viridis.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 32.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
 matplotlib.pyplot.axvline. Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>color:      None
@@ -1105,6 +1377,9 @@ rasterized: False</p>
 </div></blockquote>
 </p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.pcolormesh.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
 Defaults:</p>
 <blockquote>
 <div><p>rasterized: True
@@ -1113,12 +1388,18 @@ shading:    auto</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>adds plot directly to ax.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.formatting">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">formatting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">yquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">log</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.formatting" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">formatting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">yquantity</span><span class="o">=</span><span class="default_value">'frequency'</span></em>, <em class="sig-param"><span class="n">log</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#formatting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.formatting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Formats the axes of phonon plots.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1139,7 +1420,11 @@ shading:    auto</p>
 <li><p><strong>yquantity</strong> (<em>str</em><em>, </em><em>optional</em>) – y variable. Default: frequency.</p></li>
 <li><p><strong>log</strong> (<em>bool</em><em>, </em><em>optional</em>) – log the y scale. Default: False.</p></li>
 <li><p><strong>**kwargs</strong> – <p>keyword arguments passed to matplotlib.pyplot.axvline.
-Set color to None to turn off. Defaults:</p>
+Set color to None to turn off.
+Defaults are defined below, which are overridden by those in
+<code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, both of which are overridden by
+arguments passed to this function.
+Defaults:</p>
 <blockquote>
 <div><p>color:      black
 linewidth:  axis line width
@@ -1148,12 +1433,18 @@ rasterized: False</p>
 </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>formats ax directly.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.get_equivalent_qpoint">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">get_equivalent_qpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">qk</span></em>, <em class="sig-param"><span class="n">symops</span></em>, <em class="sig-param"><span class="n">qp</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">0.01</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.get_equivalent_qpoint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">get_equivalent_qpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">qk</span></em>, <em class="sig-param"><span class="n">symops</span></em>, <em class="sig-param"><span class="n">qp</span></em>, <em class="sig-param"><span class="n">tol</span><span class="o">=</span><span class="default_value">0.01</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#get_equivalent_qpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.get_equivalent_qpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the closest phono3py qpoint to a phonopy qpoint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1175,7 +1466,7 @@ rasterized: False</p>
 
 <dl class="py function">
 <dt id="tp.plot.phonons.tile_properties">
-<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">tile_properties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">properties</span></em>, <em class="sig-param"><span class="n">bandmin</span></em>, <em class="sig-param"><span class="n">bandmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.phonons.tile_properties" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.phonons.</code><code class="sig-name descname">tile_properties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">properties</span></em>, <em class="sig-param"><span class="n">bandmin</span></em>, <em class="sig-param"><span class="n">bandmax</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/phonons.html#tile_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.phonons.tile_properties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tiles properties for dispersion and alt_dispersion</p>
 <p>Allows for different colour formats and fills out arrays with the
 last element or selects a subset.</p>
@@ -1215,7 +1506,7 @@ last element or selects a subset.</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.plot.utilities.colour_scale">
-<code class="sig-prename descclassname">tp.plot.utilities.</code><code class="sig-name descname">colour_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">cmap</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.utilities.colour_scale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.utilities.</code><code class="sig-name descname">colour_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">cmap</span></em>, <em class="sig-param"><span class="n">cmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cscale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unoccupied</span><span class="o">=</span><span class="default_value">'grey'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/utilities.html#colour_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.utilities.colour_scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Formats the colour scale for phono3py quantities.</p>
 <p>Attempts to set the limits to maximise visibility of the most
 important data and determines if the colourbar should be extended.</p>
@@ -1245,7 +1536,7 @@ this feature is turned off. Default: grey.</p></li>
 
 <dl class="py function">
 <dt id="tp.plot.utilities.scale_to_axis">
-<code class="sig-prename descclassname">tp.plot.utilities.</code><code class="sig-name descname">scale_to_axis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">'y'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.utilities.scale_to_axis" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.utilities.</code><code class="sig-name descname">scale_to_axis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">axis</span><span class="o">=</span><span class="default_value">'y'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/utilities.html#scale_to_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.utilities.scale_to_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scale data to fit an axis.</p>
 <p>Assumes data is linear, but still works for linear and log axes.</p>
 <dl class="field-list simple">
@@ -1269,7 +1560,7 @@ this feature is turned off. Default: grey.</p></li>
 
 <dl class="py function">
 <dt id="tp.plot.utilities.set_locators">
-<code class="sig-prename descclassname">tp.plot.utilities.</code><code class="sig-name descname">set_locators</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dos</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tp.plot.utilities.set_locators" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.plot.utilities.</code><code class="sig-name descname">set_locators</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dos</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/plot/utilities.html#set_locators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.plot.utilities.set_locators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set locators quickly.</p>
 <p>If log, sets scale as well.</p>
 <dl class="field-list simple">
@@ -1285,6 +1576,12 @@ first, so ticks can be reinstated on x, e.g. for waterfall
 plots using x=’log’. Default: False.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>formats ax directly.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -1293,105 +1590,75 @@ plots using x=’log’. Default: False.</p></li>
 <div class="section" id="module-tp.plot">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.plot" title="Permalink to this headline">¶</a></h2>
 <p>Plotting tools.</p>
+<p>The main tools are called <code class="docutils literal notranslate"><span class="pre">add_</span></code> something, which take a set of axes
+and data dictionaries as inputs, amoung other things; these are
+accompanied by ancillary scripts including formatting scripts and a
+module of colourmap generators.</p>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>colour</dt><dd><p>colourmap generators and colour converters.</p>
+</dd>
+<dt>frequency</dt><dd><p>plots frequency on the x-axis.</p>
+</dd>
+<dt>heatmap</dt><dd><p>generic heatmap plotter and specific wrappers.</p>
+</dd>
+<dt>phonons</dt><dd><p>plots q-points on the x axis.</p>
+</dd>
+<dt>utilities</dt><dd><p>ancillary scripts.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
 </div>
 </div>
 
 
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tp.data.html" class="btn btn-neutral float-left" title="tp.data package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="contents.html">ThermoPlotter</a></h1>
 
+    </section>
 
+  </div>
+  
 
-<p class="blurb">streamlined analysis of thermoelectric properties</p>
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
 
-
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=SMTG-UCL&repo=ThermoPlotter&type=watch&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#usage">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="contents.html">Documentation overview</a><ul>
-  <li><a href="modules.html">tp</a><ul>
-  <li><a href="tp.html">tp package</a><ul>
-      <li>Previous: <a href="tp.data.html" title="previous chapter">tp.data package</a></li>
-      <li>Next: <a href="gallery.html" title="next chapter">Gallery</a></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2020, Scanlon Materials Theory Group.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/tp.plot.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
+  
+  
     
+   
 
-    
-  </body>
+</body>
 </html>

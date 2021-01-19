@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>tp.plot.utilities &mdash; ThermoPlotter 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../contents.html">ThermoPlotter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>tp.plot.utilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tp.plot.utilities</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Utilities to aid the plotting scripts.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    colour_scale:</span>
+<span class="sd">        Sorts colour limits and colourbar format.</span>
+<span class="sd">    scale_to_axis</span>
+<span class="sd">        scales data to axes limits</span>
+<span class="sd">    set_locators:</span>
+<span class="sd">        set locators one-liner.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="colour_scale"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.utilities.colour_scale">[docs]</a><span class="k">def</span> <span class="nf">colour_scale</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Formats the colour scale for phono3py quantities.</span>
+
+<span class="sd">    Attempts to set the limits to maximise visibility of the most</span>
+<span class="sd">    important data and determines if the colourbar should be extended.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        c : array-like</span>
+<span class="sd">            colour data.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            name of colour variable.</span>
+<span class="sd">        cmap : colormap</span>
+<span class="sd">            colourmap.</span>
+
+<span class="sd">        cmin : float, optional</span>
+<span class="sd">            colour scale minimum. Default: display 99 % data.</span>
+<span class="sd">        cmax : float, optional</span>
+<span class="sd">            colour scale maximum. Default: display 99.9 % data.</span>
+<span class="sd">        cscale : str, optional</span>
+<span class="sd">            override colour scale (linear/ log). Default: None.</span>
+<span class="sd">        unoccupied : str, optional</span>
+<span class="sd">            if the colour variable is occupation, values below 1 are</span>
+<span class="sd">            coloured in this colour. If set to None, or cmin is set,</span>
+<span class="sd">            this feature is turned off. Default: grey.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        cnorm</span>
+<span class="sd">            colour normalisation object.</span>
+<span class="sd">        extend</span>
+<span class="sd">            which direction to extend the colourbar in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">extend</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="s1">&#39;heat_capacity&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">cmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cmin</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">cmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cmax</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
+        <span class="n">csort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">compressed</span><span class="p">())</span>
+        <span class="n">csort</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="n">csort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="n">cmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">unoccupied</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cmin</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">cmin</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">cmap</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">unoccupied</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cmin</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">cmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmax</span> <span class="o">=</span> <span class="n">clim</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">cmax</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">cmax</span><span class="o">/</span><span class="n">cmin</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">csort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">compressed</span><span class="p">())</span>
+        <span class="n">csort</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="n">csort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="p">[</span><span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))],</span>
+                <span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]]</span>
+        <span class="k">if</span> <span class="n">cmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmin</span> <span class="o">=</span> <span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">cmin</span> <span class="o">&gt;</span> <span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">cmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmax</span> <span class="o">=</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">cmax</span> <span class="o">&lt;</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cscale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cscale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cscale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">extend</span> <span class="o">=</span> <span class="s1">&#39;both&#39;</span>
+    <span class="k">elif</span> <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">extend</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">extend</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">extend</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">extend</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">extend</span> <span class="o">=</span> <span class="s1">&#39;neither&#39;</span>
+
+    <span class="k">return</span> <span class="n">cnorm</span><span class="p">,</span> <span class="n">extend</span></div>
+
+<div class="viewcode-block" id="scale_to_axis"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.utilities.scale_to_axis">[docs]</a><span class="k">def</span> <span class="nf">scale_to_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[],</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Scale data to fit an axis.</span>
+
+<span class="sd">    Assumes data is linear, but still works for linear and log axes.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to fit to.</span>
+<span class="sd">        data : array-like or dict</span>
+<span class="sd">            data to scale.</span>
+
+<span class="sd">        exclude : array-like, optional</span>
+<span class="sd">            keys to exclude from scaling. Default: none.</span>
+<span class="sd">        scale : array-like, optional</span>
+<span class="sd">            force scaling limits to [min, max]. Default: axis limits.</span>
+<span class="sd">        axis : bool, optional</span>
+<span class="sd">            axis to scale to. Default: y.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        data</span>
+<span class="sd">            scaled data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> \
+               <span class="s1">&#39;if specified, scale must be a two element array-like [min,max]&#39;</span>
+    <span class="k">assert</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="s1">&#39;axis must be x or y&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;qwerfv&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+    <span class="n">dmax</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">:</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">ymax</span> <span class="o">&gt;</span> <span class="n">dmax</span><span class="p">:</span> <span class="n">dmax</span> <span class="o">=</span> <span class="n">ymax</span>
+
+    <span class="n">axes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">(),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()}</span>
+    <span class="n">axscale</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">get_scale</span><span class="p">(),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">get_scale</span><span class="p">()}</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">axscale</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span>
+    <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="p">(</span><span class="n">scale</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">dmax</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="s1">&#39;qwerfv&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;qwerfv&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="set_locators"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.utilities.set_locators">[docs]</a><span class="k">def</span> <span class="nf">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dos</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set locators quickly.</span>
+
+<span class="sd">    If log, sets scale as well.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to format</span>
+<span class="sd">        x : str, optional</span>
+<span class="sd">            locator on x axis. Accepts linear, log or null.</span>
+<span class="sd">            Default: do nothing.</span>
+<span class="sd">        y : str, optional</span>
+<span class="sd">            locator on y axis. Accepts linear, log or null.</span>
+<span class="sd">            Default: do nothing.</span>
+<span class="sd">        dos : bool, optional</span>
+<span class="sd">            removes axes ticks and ticklabels and y axis label. Runs</span>
+<span class="sd">            first, so ticks can be reinstated on x, e.g. for waterfall</span>
+<span class="sd">            plots using x=&#39;log&#39;. Default: False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            formats ax directly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dos</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;dos must be True or False.&#39;</span>
+
+    <span class="kn">from</span> <span class="nn">tp.settings</span> <span class="kn">import</span> <span class="n">locator</span>
+    <span class="k">if</span> <span class="n">dos</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;null&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;null&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;null&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;null&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;null&#39;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">!=</span> <span class="s1">&#39;null&#39;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">scale</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;major&#39;</span><span class="p">])</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;minor&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;log&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;null&#39;</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;null&#39;</span><span class="p">])</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">set_minor_locator</span><span class="p">(</span><span class="n">locator</span><span class="p">()[</span><span class="s1">&#39;null&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;x and y must be &quot;linear&quot;, &quot;log&quot; or &#39;</span>
+                                <span class="s1">&#39;&quot;null&quot; if specified.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

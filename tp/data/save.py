@@ -15,6 +15,12 @@ def hdf5(data, output):
             data to save.
         output : str
             output filename.
+
+    Returns
+    -------
+
+        None
+            instead writes to file.
     """
 
     datafile = h5py.File(output, 'w')

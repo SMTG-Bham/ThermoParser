@@ -1,9 +1,11 @@
 """Settings and defaults.
 
-This module is envisioned as the primary place one would go to customise
-tp. It sets out the default style sheet, tick locators and axis labels;
+This module sets the default style sheet, tick locators and axis labels;
 as well as providing a means to automatically convert the units
 presented and add abbreviations that can be used when loading data.
+Custom defaults can be set by saving a copy of tprc.yaml (found in the
+main ThermoPlotter directory) to ``~/.config/tprc.yaml`` and editing
+that.
 
 Functions
 ---------
@@ -48,6 +50,20 @@ Functions
         list of short axis labels.
 """
 
+import os
+import warnings
+import yaml
+
+try:
+    filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
+    with open(filename, 'r') as f:
+        conf = yaml.safe_load(f)
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except Exception:
+    conf = None
+
 def __dir__():
    """It's a bit of a hack."""
 
@@ -71,19 +87,50 @@ def __dir__():
 
 def style():
     """Get paper-style style sheet."""
-    return ['tp'] # should be a list for consistency.
+
+    if conf is not None and 'style' in conf and conf['style'] is not None:
+        style = conf['style']
+    else:
+        style = ['tp']
+    if isinstance(style, str):
+        style = [style]
+
+    return style
 
 def large_style():
     """Get presentation-style style sheet."""
-    return ['tp-large'] # should be a list for consisitency.
+
+    if conf is not None and 'large_style' in conf and \
+       conf['large_style'] is not None:
+        style = conf['large_style']
+    else:
+        style = ['tp-large']
+    if isinstance(style, str):
+        style = [style]
+
+    return style
 
 def locator():
     """Get default locators."""
 
     import matplotlib.ticker as ticker
 
-    locators = {'major': ticker.MaxNLocator(5),
-                'minor': ticker.AutoMinorLocator(2),
+
+    if conf is not None and 'locator' in conf:
+        if 'major' in conf['locator'] and conf['locator']['major'] is not None:
+            major = conf['locator']['major']
+        else:
+            major = 5
+        if 'minor' in conf['locator'] and conf['locator']['minor'] is not None:
+            minor = conf['locator']['minor']
+        else:
+            minor = 2
+    else:
+        major = 5
+        minor = 2
+
+    locators = {'major': ticker.MaxNLocator(major),
+                'minor': ticker.AutoMinorLocator(minor),
                 'log':   ticker.LogLocator(),
                 'null':  ticker.NullLocator()}
 
@@ -106,6 +153,9 @@ def to_tp():
              'temperatures':         'temperature',
              'thermal_conductivity': 'electronic_thermal_conductivity'}
 
+    if conf is not None and 'to_tp' in conf and conf['to_tp'] is not None:
+        names = {**names, **conf['to_tp']}
+
     return names
 
 def to_amset():
@@ -119,6 +169,10 @@ def to_amset():
              'temperature':          'temperatures',
              'thermal_conductivity': 'electronic_thermal_conductivity'}
 
+    if conf is not None and 'to_amset' in conf and \
+       conf['to_amset'] is not None:
+        names = {**names, **conf['to_amset']}
+
     return names
 
 def to_boltztrap():
@@ -128,6 +182,10 @@ def to_boltztrap():
              'kappae':               'electronic_thermal_conductivity',
              'ke':                   'electronic_thermal_conductivity',
              'thermal_conductivity': 'electronic_thermal_conductivity'}
+
+    if conf is not None and 'to_boltztrap' in conf and \
+       conf['to_boltztrap'] is not None:
+        names = {**names, **conf['to_boltztrap']}
 
     return names
 
@@ -142,6 +200,10 @@ def to_phono3py():
              'mk':                           'mode_kappa',
              'temperatures':                 'temperature'}
 
+    if conf is not None and 'to_phono3py' in conf and \
+       conf['to_phono3py'] is not None:
+        names = {**names, **conf['to_phono3py']}
+
     return names
 
 def amset_conversions():
@@ -153,6 +215,10 @@ def amset_conversions():
     """
 
     conversions = {}
+
+    if conf is not None and 'amset_conversions' in conf and \
+       conf['amset_conversions'] is not None:
+        conversions = {**conversions, **conf['amset_conversions']}
 
     return conversions
 
@@ -166,6 +232,10 @@ def boltztrap_conversions():
 
     conversions = {}
 
+    if conf is not None and 'boltztrap_conversions' in conf and \
+       conf['boltztrap_conversions'] is not None:
+        conversions = {**conversions, **conf['boltztrap_conversions']}
+
     return conversions
 
 def phonopy_conversions():
@@ -176,6 +246,10 @@ def phonopy_conversions():
     """
 
     conversions = {}
+
+    if conf is not None and 'phonopy_conversions' in conf and \
+       conf['phonopy_conversions'] is not None:
+        conversions = {**conversions, **conf['phonopy_conversions']}
 
     return conversions
 
@@ -191,6 +265,10 @@ def phono3py_conversions():
                    'heat_capacity':  1.60218e-19, # eV K-1 to J K-1
                    'lifetime':       1e-12,       # THz-1 to s
                    'mean_free_path': 1e-10}       # AA to m
+
+    if conf is not None and 'phono3py_conversions' in conf and \
+       conf['phono3py_conversions'] is not None:
+        conversions = {**conversions, **conf['phono3py_conversions']}
 
     return conversions
 
@@ -226,19 +304,54 @@ def units():
              'temperature':                     'K',
              'zt':                              ''}
 
+    if conf is not None and 'units' in conf and conf['units'] is not None:
+        units = {**units, **conf['units']}
+
     return units
 
 def labels():
     """Get the default labels for use in tp."""
-    return long_labels()
+
+    labels = {'short':  short_labels,
+              'medium': medium_labels,
+              'long':   long_labels}
+
+    if conf is not None and 'labels' in conf and conf['labels'] is not None:
+        length = conf['labels']
+    else:
+        length = 'long'
+
+    return labels[length]()
 
 def inverted_labels():
     """Get the default labels for inverted axes in tp."""
-    return short_labels()
+
+    labels = {'short':  short_labels,
+              'medium': medium_labels,
+              'long':   long_labels}
+
+    if conf is not None and 'inverted_labels' in conf and \
+       conf['inverted_labels'] is not None:
+        length = conf['inverted_labels']
+    else:
+        length = 'short'
+
+    return labels[length]()
 
 def large_labels():
     """Get the default labels for large axes (command-line only)."""
-    return medium_labels()
+
+    labels = {'short':  short_labels,
+              'medium': medium_labels,
+              'long':   long_labels}
+
+    if conf is not None and 'large_labels' in conf and \
+       conf['large_labels'] is not None:
+        length = conf['large_labels']
+    else:
+        length = 'medium'
+
+    return labels[length]()
 
 def long_labels():
     """Get a dictionary of long-form axis labels."""
@@ -301,6 +414,10 @@ def long_labels():
                   'Wavevector',
               'zt':
                   'ZT'}
+
+    if conf is not None and 'long_labels' in conf and \
+       conf['long_labels'] is not None:
+        labels = {**labels, **conf['long_labels']}
 
     return labels
 
@@ -366,6 +483,10 @@ def medium_labels():
               'zt':
                   'ZT'}
 
+    if conf is not None and 'medium_labels' in conf and \
+       conf['medium_labels'] is not None:
+        labels = {**labels, **conf['medium_labels']}
+
     return labels
 
 def short_labels():
@@ -429,5 +550,9 @@ def short_labels():
                   'q',
               'zt':
                   'ZT'}
+
+    if conf is not None and 'short_labels' in conf and \
+       conf['short_labels'] is not None:
+        labels = {**labels, **conf['short_labels']}
 
     return labels

@@ -1,5 +1,9 @@
 """Heatmap plotters.
 
+``add_heatmap`` is a base function, which handles axes limits, colourbar
+formatting and extra colourmap options compared to ``matplotlib.pyplot.pcolormesh``.
+The other functions plot specific quantites using this function.
+
 Functions
 ---------
 
@@ -19,6 +23,13 @@ import warnings
 from scipy.interpolate import interp1d, interp2d
 
 warnings.filterwarnings('ignore', module='matplotlib')
+
+try:
+    filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
+    with open(filename, 'r') as f:
+        conf = yaml.safe_load(f)
+except Exception:
+    conf = None
 
 def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
                 xscale='linear', yscale='linear', cscale='linear', xmin=None,
@@ -73,6 +84,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
@@ -87,9 +101,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # defaults
 
     defkwargs = {'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'heatmap_kwargs' not in conf or \
+       conf['heatmap_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['heatmap_kwargs'], **kwargs}
 
     # data trimming
 
@@ -237,6 +254,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
@@ -249,6 +269,16 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
     """
 
     import h5py
+
+    # defaults
+
+    defkwargs = {'rasterized': False}
+
+    if conf is None or 'ztmap_kwargs' not in conf or \
+       conf['ztmap_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['ztmap_kwargs'], **kwargs}
 
     # data formatting
 
@@ -368,6 +398,9 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
@@ -378,6 +411,16 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         colourbar
             colourbar.
     """
+
+    # defaults
+
+    defkwargs = {'rasterized': False}
+
+    if conf is None or 'kappa_target_kwargs' not in conf or \
+       conf['kappa_target_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['kappa_target_kwargs'], **kwargs}
 
     # data formatting
 

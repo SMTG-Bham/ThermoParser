@@ -1,5 +1,8 @@
 """Tools for dealing with phonon dispersions.
 
+Contains the traditional phonon dispersion plotter, as well as various
+ways of projecting other quantitites onto a high-symmetry path.
+
 Functions
 ---------
 
@@ -16,10 +19,8 @@ Functions
     add_wideband:
         phonon dispersion broadened according to scattering.
 
-
     get_equivalent_qpoint:
         converts phonopy to phono3py qpoints.
-
 
     formatting:
         formatting axes.
@@ -30,10 +31,19 @@ Functions
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import tp
 import warnings
+import yaml
 
 warnings.filterwarnings('ignore', module='matplotlib')
+
+try:
+    filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
+    with open(filename, 'r') as f:
+        conf = yaml.safe_load(f)
+except Exception:
+    conf = None
 
 def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
                    label=None, colour='#800080', linestyle='solid',
@@ -85,6 +95,9 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
             matplotlib.pyplot.axvline. Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 color:      black
@@ -93,17 +106,29 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     # defaults
 
     defkwargs = {'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'dispersion_kwargs' not in conf or \
+       conf['dispersion_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['dispersion_kwargs'], **kwargs}
 
     # check inputs
 
@@ -214,6 +239,9 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
             matplotlib.pyplot.axvline. Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 color:      black
@@ -222,17 +250,29 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     # defaults
 
     defkwargs = {'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'multi_kwargs' not in conf or \
+       conf['multi_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['multi_kwargs'], **kwargs}
 
     # check inputs
 
@@ -375,6 +415,9 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
             matplotlib.pyplot.axvline. Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 color:      black
@@ -383,9 +426,18 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     from functools import partial
@@ -398,9 +450,12 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     # defaults
 
     defkwargs = {'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'alt_dispersion_kwargs' not in conf or \
+       conf['alt_dispersion_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['alt_dispersion_kwargs'], **kwargs}
 
     # check inputs
 
@@ -577,6 +632,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
             matplotlib.pyplot.axvline. Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Default
 
             color:      black
@@ -585,6 +643,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
             marker:     .
@@ -609,9 +670,12 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
     defkwargs = {'marker':     '.',
                  'rasterized': True}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'projected_dispersion_kwargs' not in conf or \
+       conf['projected_dispersion_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['projected_dispersion_kwargs'], **kwargs}
 
     # check inputs
 
@@ -789,6 +853,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
             matplotlib.pyplot.axvline. Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
             color:      black
@@ -797,6 +864,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 marker:     .
@@ -821,9 +891,12 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     defkwargs = {'marker':     '.',
                  'rasterized': True}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'alt_projected_dispersion_kwargs' not in conf or \
+       conf['alt_projected_dispersion_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['alt_projected_dispersion_kwargs'], **kwargs}
 
     # check inputs
 
@@ -979,6 +1052,9 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
             matplotlib.pyplot.axvline. Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 color:      None
@@ -987,10 +1063,19 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
             Defaults:
 
                 rasterized: True
                 shading:    auto
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
     """
 
     from functools import partial
@@ -1005,14 +1090,15 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     defkwargs = {'rasterized': True,
                  'shading':    'auto'}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'wideband_kwargs' not in conf or \
+       conf['wideband_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['wideband_kwargs'], **kwargs}
 
     defxmarkkwargs = {'color': None}
-    for key in defxmarkkwargs:
-        if key not in xmarkkwargs:
-            xmarkkwargs[key] = defxmarkkwargs[key]
+    xmarkkwargs = {**defxmarkkwargs, **xmarkkwargs}
 
     # check inputs
 
@@ -1165,11 +1251,21 @@ def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
 
         **kwargs
             keyword arguments passed to matplotlib.pyplot.axvline.
-            Set color to None to turn off. Defaults:
+            Set color to None to turn off.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
+            Defaults:
 
                 color:      black
                 linewidth:  axis line width
                 rasterized: False
+
+    Returns
+    -------
+
+        None
+            formats ax directly.
     """
 
     # defaults
@@ -1177,9 +1273,12 @@ def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
     defkwargs = {'color':      'black',
                  'linewidth':  ax.spines['bottom'].get_linewidth(),
                  'rasterized': False}
-    for key in defkwargs:
-        if key not in kwargs:
-            kwargs[key] = defkwargs[key]
+
+    if conf is None or 'xmarkkwargs' not in conf or \
+       conf['xmarkkwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['xmarkkwargs'], **kwargs}
 
     # lines
 

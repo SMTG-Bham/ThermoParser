@@ -1,14 +1,18 @@
 """Data loading tools.
 
+Loads data from codes into a dictionary, with units and array structures
+standardised. Also adds a ``meta`` subdictionary, which contains units
+and the data source.
+
 Functions
 ---------
 
     amset
     amset_mesh
+    boltztrap
     phono3py
     phonopy_dispersion
     phonopy_dos
-
 
     get_path:
         gets high path from phonopy dispersion data.

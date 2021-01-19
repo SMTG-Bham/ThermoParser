@@ -2,6 +2,10 @@ Please see the `examples`_.
 
 .. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 
+All plotting functions can read in defaults from ``~/.config/tprc.yaml``
+to enable consistent customisation. A template ``tprc.yaml`` is
+available in the top directory.
+
 -------------
 ``colour.py``
 -------------
