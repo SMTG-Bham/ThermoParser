@@ -372,7 +372,7 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
     data2 = {'meta': {'kappa_source': 'phono3py',
                       'units':        {}}}
     for q in quantities:
-        assert q in data or q in ['lifetime', 'mean_free_path', 'occupation'], \
+        assert q in data or q in ['lifetime', 'mean_free_path', 'occupation', 'ph_ph_strength'], \
            '{} unrecognised. Quantity must be {}, lifetime, mean_free_path ' \
            'or occupation'.format(q, ', '.join(data))
         q2 = tnames[q] if q in tnames else q
