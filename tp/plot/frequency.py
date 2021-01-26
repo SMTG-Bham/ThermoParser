@@ -371,8 +371,8 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             data including frequency and quantity.
         quantity : str
             y-axis quantity. Accepts frequency, gamma, group_velocity,
-            gv_by_gv, heat_capacity, lifetime, mean_free_path or
-            mode_kappa.
+            gv_by_gv, heat_capacity, lifetime, mean_free_path,
+            mode_kappa or ph_ph_strength.
 
         xquantity : str, optional
             x-axis quantity. Accepts frequency, gamma, group_velocity,

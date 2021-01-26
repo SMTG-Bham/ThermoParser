@@ -21,6 +21,7 @@ import numpy as np
 import tp
 import warnings
 from scipy.interpolate import interp1d, interp2d
+import matplotlib.ticker as ticker
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
@@ -342,6 +343,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
     ax.set_xlabel(labels['temperature'])
     ax.set_ylabel(labels['doping'])
     cbar.set_label(labels['zt'])
+
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(4))
+    ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(5))
 
     return cbar
 
