@@ -150,7 +150,6 @@ def to_tp():
              'mfp':                  'mean_free_path',
              'mk':                   'mode_kappa',
              'pf':                   'power_factor',
-             'ave_pp':               'ph_ph_strength',
              'temperatures':         'temperature',
              'thermal_conductivity': 'electronic_thermal_conductivity'}
 
@@ -198,7 +197,6 @@ def to_phono3py():
              'kl':                           'kappa',
              'lattice_thermal_conductivity': 'kappa',
              'mfp':                          'mean_free_path',
-             'ph_ph_strength':               'ave_pp',
              'mk':                           'mode_kappa',
              'temperatures':                 'temperature'}
 
@@ -299,7 +297,6 @@ def units():
              'mode_kappa':                      'W m-1 K-1',
              'mu_bounds':                       'eV',
              'occupation':                      'phonons',
-             'ph_ph_strength':                 'eV2',
              'power_factor':                    'W m-1 K-2',
              'scattering_rates':                's-1',
              'seebeck':                         'muV K-1',
@@ -401,8 +398,6 @@ def long_labels():
                   'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
               'mode_kappa':
                   'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
-              'ph_ph_strength':
-                  'Avg. Phonon Interaction Strengths (eV$\mathregular{^2}$)',
               'power_factor':
                   'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':
@@ -471,8 +466,6 @@ def medium_labels():
                   'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
               'mode_kappa':
                   'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
-              'ph_ph_strength':
-                  'Avg. Ph-Ph Strengths (eV$\mathregular{^2}$)',
               'power_factor':
                   'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':
@@ -541,8 +534,6 @@ def short_labels():
                   '$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$',
               'mode_kappa':
                   '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
-              'ph_ph_strength':
-                  '$\mathregular{P_\lambda\ (eV^2)}$',
               'power_factor':
                   'PF (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':
