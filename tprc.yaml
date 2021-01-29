@@ -53,6 +53,7 @@ dos_kwargs:                      null
 frequency_cum_kappa_kwargs:      null
 waterfall_kwargs:                null
 projected_waterfall_kwargs:      null
+density_kwargs:                  null
 # Heatmap:
 heatmap_kwargs:                  null
 ztmap_kwargs:                    null

@@ -288,6 +288,58 @@ class WaterfallTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(0, 999)
         self.assertEqual(mock_resolve.call_count, 2)
 
+class DensityTest(unittest.TestCase):
+    def setUp(self):
+        self.data = {'frequency':   [range(1000)],
+                     'lifetime':    [list(range(1000))],
+                     'temperature': [0],
+                     'meta':        {}}
+        self.data['lifetime'][0][500] = self.data['lifetime'][0][501]
+        self.ax = Mock() 
+ 
+    @patch.object(tp.data.resolve, 'resolve')
+    def test_default(self, mock_resolve):
+        mock_resolve.return_value = self.data
+
+        frequency.add_density(self.ax, self.data, 'lifetime',
+                                 main=True, invert=False)
+
+        self.assertEqual(self.ax.scatter.call_count, 2)
+        self.ax.set_xlabel.assert_called_once()
+        self.ax.set_ylabel.assert_called_once()
+        self.ax.set_xlim.assert_called_once_with(0, 999)
+        self.ax.set_ylim.assert_called_once_with(11, 999)
+        self.assertEqual(mock_resolve.call_count, 2)
+
+    @patch.object(tp.data.resolve, 'resolve')
+    def test_not_main(self, mock_resolve):
+        mock_resolve.return_value = self.data
+
+        frequency.add_density(self.ax, self.data, 'lifetime',
+                                 main=False, invert=False)
+
+        self.ax.scatter.assert_called_once()
+        self.ax.set_xlabel.assert_not_called()
+        self.ax.set_ylabel.assert_not_called()
+        self.ax.set_xlim.assert_not_called()
+        self.ax.set_ylim.assert_not_called()
+        mock_resolve.assert_called_once()
+
+    @patch.object(tp.data.resolve, 'resolve')
+    def test_invert(self, mock_resolve):
+        mock_resolve.return_value = self.data
+
+        frequency.add_density(self.ax, self.data, 'lifetime',
+                                 main=True, invert=True)
+
+        self.assertEqual(self.ax.scatter.call_count, 2)
+        self.ax.set_xlabel.assert_called_once()
+        self.ax.set_ylabel.assert_not_called()
+        self.ax.tick_params.assert_called_once()
+        self.ax.set_xlim.assert_called_once_with(11, 999)
+        self.ax.set_ylim.assert_called_once_with(0, 999)
+        self.assertEqual(mock_resolve.call_count, 2)
+
 class ProjectedWaterfallTest(unittest.TestCase):
     def setUp(self):
         self.data = {'frequency':   [range(1000)],

@@ -89,7 +89,7 @@ Current plotting modes are split into four areas.
   including phonon dispersions and plots which project other quantities
   onto these paths in various ways.
 * ``tp.plot.frequency`` plots frequency on the x-axis, including density
-  of states (DoS), cumulative kappa and "waterfall" plots.
+  of states (DoS), cumulative kappa, "waterfall" and density plots.
   Each function has a ``main`` argument, which can be useful when
   plotting multiple quantities on the same set of axes; and an
   ``invert`` argument, which swaps the x and y axes to let you plot
