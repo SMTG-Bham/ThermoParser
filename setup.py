@@ -64,6 +64,6 @@ setuptools.setup(
     test_suite='setup.load_test_suite',
     install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy'],
-    python_requires='>=3',
+    python_requires='>=3.6',
     cmdclass={'install': PostInstallMoveFile},
     scripts=scripts)
