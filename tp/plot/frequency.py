@@ -528,8 +528,8 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like, optional
-            colourmap or colourmap name or list of colours (one for
-            each band or one for each point) or a single colour.
+            colourmap or colourmap name. A single colour can be given
+            to generate a custom uniform colourmap.
             Default: Blues.
 
         **kwargs
