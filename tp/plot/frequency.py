@@ -539,7 +539,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             arguments passed to this function.
             Defaults:
 
-                s:          0.3
+                s:          2  
                 rasterized: True
 
     Returns
