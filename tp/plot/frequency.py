@@ -17,10 +17,11 @@ Functions
         scatter plots of various values.
     add_projected_waterfall:
         waterfall, but with a second quantity projected.
-
+    add_density:
+        density of phonon modes for a property vs frequency.
 
     format_waterfall
-        formatting for the waterfall plots
+        formatting for the waterfall and density plots
 """
 
 import matplotlib as mpl
@@ -30,6 +31,7 @@ import os
 import tp
 import warnings
 import yaml
+from scipy.stats import gaussian_kde
 from tp.data import resolve
 
 warnings.filterwarnings('ignore', module='matplotlib')
@@ -480,6 +482,129 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     if main:
         format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        if invert:
+            axlabels = tp.settings.inverted_labels()
+            ax.set_xlabel(axlabels[xquantity])
+            ax.tick_params(axis='y', labelleft=False)
+        else:
+            axlabels = tp.settings.labels()
+            ax.set_xlabel(axlabels[xquantity])
+            ax.set_ylabel(axlabels[quantity])
+
+    return
+
+def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
+                  direction='avg', main=True, invert=False, colour='Blues',
+                  **kwargs):
+    """Adds a density plot of quantities against frequency.
+
+    Has an option to change the x-quantity.
+
+    Arguments
+    ---------
+
+        ax : axes
+            axes to plot on.
+        data : dict
+            data including frequency and quantity.
+        quantity : str
+            y-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa.
+
+        xquantity : str, optional
+            x-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa. Default: frequency.
+        temperature : float, optional
+            temperature in K. Default: 300.
+        direction : str, optional
+            direction from anisotropic data, accepts x-z/ a-c or
+            average/ avg. Default: average.
+
+        main : bool, optional
+            set ticks, labels, limits. Default: True.
+        invert : bool, optional
+            invert x- and y-axes. Default: False.
+
+        colour : colourmap or str or array-like, optional
+            colourmap or colourmap name. A single colour can be given
+            to generate a custom uniform colourmap.
+            Default: Blues.
+
+        **kwargs
+            keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
+            Defaults:
+
+                s:          2  
+                rasterized: True
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
+    """
+
+    # defaults
+
+    defkwargs = {'s':      2,
+                 'rasterized': True}
+
+    if conf is None or 'density_kwargs' not in conf or \
+       conf['density_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['density_kwargs'], **kwargs}
+
+    # input checks
+
+    for name, value in zip(['main', 'invert'],
+                           [ main,   invert]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
+
+    # data formatting
+
+    if quantity == 'kappa': quantity = 'mode_kappa'
+    if xquantity == 'kappa': xquantity = 'mode_kappa'
+    tnames = tp.settings.to_tp()
+    if invert: quantity, xquantity = xquantity, quantity
+    quantity = tnames[quantity] if quantity in tnames else quantity
+    xquantity = tnames[xquantity] if xquantity in tnames else xquantity
+
+    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+                                   temperature, direction)
+    x = np.ravel(data[xquantity])
+    y = np.abs(np.ravel(data[quantity]))
+    xy = np.vstack([x,y])
+    z = gaussian_kde(xy)(xy)
+    idx = z.argsort()
+    x_dens, y_dens, z_dens = x[idx], y[idx], z[idx]
+
+    # colour
+
+    try:
+        colours = mpl.cm.get_cmap(colour)
+    except Exception:
+        if isinstance(colour, mpl.colors.ListedColormap):
+            colours = colour
+        else:
+            try:
+                colours = tp.plot.colour.uniform(colour)
+            except Exception:
+                colours = tp.plot.colour.linear(colour[1], colour[0])
+
+    # plotting
+
+    ax.scatter(x_dens, y_dens, c=z_dens, cmap=colour, **kwargs)
+
+    # axes formatting
+
+    if main:
+        format_waterfall(ax, {xquantity: x_dens, quantity: y_dens}, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
