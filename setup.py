@@ -23,6 +23,7 @@ def load_test_suite():
     return test_suite
 
 def install_style():
+    from matplotlib import get_configdir
     style = ['tp.mplstyle', 'tp-large.mplstyle']
     styledir = os.path.join(get_configdir(), 'stylelib')
     if not os.path.exists(styledir):
@@ -33,7 +34,6 @@ def install_style():
              os.path.join(styledir, plotting))
 
 class PostInstallMoveFile(install):
-    from matplotlib import get_configdir
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         install_style()
