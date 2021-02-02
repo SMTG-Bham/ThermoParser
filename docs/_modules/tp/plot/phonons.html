@@ -1,23 +1,31 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>tp.plot.phonons &mdash; ThermoPlotter 0.3.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -29,10 +37,6 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -71,6 +75,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,6 +98,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -127,11 +133,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../contents.html">Docs</a> &raquo;</li>
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -257,7 +265,7 @@
 <span class="sd">                linewidth:  axis line width</span>
 <span class="sd">                rasterized: False</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
@@ -401,7 +409,7 @@
 <span class="sd">                linewidth:  axis line width</span>
 <span class="sd">                rasterized: False</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
@@ -577,7 +585,7 @@
 <span class="sd">                linewidth:  axis line width</span>
 <span class="sd">                rasterized: False</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.plot.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
@@ -794,7 +802,7 @@
 <span class="sd">            linewidth:  axis line width</span>
 <span class="sd">            rasterized: False</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
@@ -1015,7 +1023,7 @@
 <span class="sd">            linewidth:  axis line width</span>
 <span class="sd">            rasterized: False</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
@@ -1214,7 +1222,7 @@
 <span class="sd">                linewidth:  axis line width</span>
 <span class="sd">                rasterized: False</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
@@ -1308,6 +1316,9 @@
     <span class="n">cnorm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">area</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">area</span><span class="p">))</span>
 
     <span class="c1"># colours</span>
+    <span class="c1"># Tries colourmap name or colourmap object, then tries a single</span>
+    <span class="c1"># colour as the max of a linear colourmap, then tries two colours as</span>
+    <span class="c1"># the min and max values.</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
@@ -1402,7 +1413,7 @@
 <span class="sd">        log : bool, optional</span>
 <span class="sd">            log the y scale. Default: False.</span>
 
-<span class="sd">        **kwargs</span>
+<span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.axvline.</span>
 <span class="sd">            Set color to None to turn off.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
@@ -1501,20 +1512,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Scanlon Materials Theory Group
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1522,7 +1538,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

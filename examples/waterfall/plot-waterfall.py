@@ -2,11 +2,15 @@
 
 from matplotlib import cm
 import matplotlib.pyplot as plt
+import os
 import tp
 
 kappafile = '../data/basno3/kappa-m363636.hdf5'
 dosfile = '../data/basno3/projected_dos.dat'
 poscar = '../data/basno3/POSCAR'
+if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
+    raise Exception('File not found, please use get-data.sh')
+
 direction = 'avg'
 temperature = 300
 waterfall = 'mean_free_path'

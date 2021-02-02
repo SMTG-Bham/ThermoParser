@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
+import os
 import tp
 
 phile = '../data/zno/band.yaml'
 kappafile = '../data/zno/kappa-m404021.hdf5'
 poscar = '../data/zno/POSCAR'
+if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
+    raise Exception('File not found, please use get-data.sh')
 
 projected = 'lifetime'
 quantities = ['frequency', projected, 'dispersion']
@@ -14,7 +17,7 @@ colour = 'viridis'
 
 # Axes
 
-fig, ax = tp.axes.one.colourbar()
+fig, ax = tp.axes.one_large.colourbar()
 
 # Load
 

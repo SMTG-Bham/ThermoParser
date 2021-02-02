@@ -3,13 +3,12 @@
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Scanlon Materials Theory Group (2020)'
-__version__ =    '0.4.0'
+__version__ =    '0.4.1'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
-__date__ =       'January 19 2021'
+__date__ =       'February 1st 2021'
 
 from glob import glob
-from matplotlib import get_configdir
 import os
 import setuptools
 from setuptools.command.install import install
@@ -34,6 +33,7 @@ def install_style():
              os.path.join(styledir, plotting))
 
 class PostInstallMoveFile(install):
+    from matplotlib import get_configdir
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         install_style()

@@ -131,6 +131,9 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         del data['total']
 
     # colours
+    # Tries to read the colour as a colourmap name, then colourmap
+    # object, then list of colours, then dictionary, and converts it
+    # into a dictionary if necessary.
 
     if not isinstance(colour, dict):
         if not isinstance(colour, list):
@@ -249,7 +252,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         line : bool, optional
             plot lines. Default: True.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
             Defaults are defined below, which are overridden by those in
@@ -305,6 +308,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale, axis=axis)
 
     # colour
+    # Tries to read the colour as an rgb code, then alpha value.
 
     if fill:
         try:
@@ -396,7 +400,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             each band or one for each point) or a single colour.
             Default: viridis.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -451,6 +455,10 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     y = np.abs(np.ravel(data[quantity]))
 
     # colour
+    # Tries to read as a colourmap name or colourmap object or list of
+    # colours (of varying formats), one per band, and assigns
+    # appropriately. Otherwise leaves as is, which is appropriate for 
+    # a single colour or colour per point.
 
     s = np.shape(data[xquantity])
     try:
@@ -528,11 +536,11 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like, optional
-            colourmap or colourmap name. A single colour can be given
-            to generate a custom uniform colourmap.
+            colourmap or colourmap name. A single #rrggbb colour can be
+            given to generate a custom uniform colourmap.
             Default: Blues.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -585,6 +593,8 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     x_dens, y_dens, z_dens = x[idx], y[idx], z[idx]
 
     # colour
+    # Tries to read as a colourmap or colourmap name, or uses a single
+    # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
 
     try:
         colours = mpl.cm.get_cmap(colour)
@@ -595,7 +605,8 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             try:
                 colours = tp.plot.colour.uniform(colour)
             except Exception:
-                colours = tp.plot.colour.linear(colour[1], colour[0])
+                raise Exception('colour must be a colourmap, colourmap'
+                                'name or single #rrggbb colour.')
 
     # plotting
 
@@ -668,7 +679,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
             coloured in this colour. If set to None, or cmin is set,
             this feature is turned off. Default: grey.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -729,6 +740,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     c = np.abs(np.ravel(data[projected]))
 
     # colour
+    # Reads a colourmap or colourmap name.
 
     try:
         cmap = copy(mpl.cm.get_cmap(colour))

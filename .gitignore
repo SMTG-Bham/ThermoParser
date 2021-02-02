@@ -1,5 +1,5 @@
-examples/data/archive/
-examples/data/*/kappa-m*.hdf5
+*/archive/
+*/kappa-m*.hdf5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

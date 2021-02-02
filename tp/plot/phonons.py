@@ -104,7 +104,7 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
                 linewidth:  axis line width
                 rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -248,7 +248,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
                 linewidth:  axis line width
                 rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -424,7 +424,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
                 linewidth:  axis line width
                 rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -641,7 +641,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
             linewidth:  axis line width
             rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -862,7 +862,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
             linewidth:  axis line width
             rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -1061,7 +1061,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
                 linewidth:  axis line width
                 rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -1155,6 +1155,9 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     cnorm = mpl.colors.LogNorm(vmin=np.nanmin(area), vmax=np.nanmax(area))
 
     # colours
+    # Tries colourmap name or colourmap object, then tries a single
+    # colour as the max of a linear colourmap, then tries two colours as
+    # the min and max values.
 
     try:
         colours = mpl.cm.get_cmap(colour)
@@ -1249,7 +1252,7 @@ def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
         log : bool, optional
             log the y scale. Default: False.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.axvline.
             Set color to None to turn off.
             Defaults are defined below, which are overridden by those in
