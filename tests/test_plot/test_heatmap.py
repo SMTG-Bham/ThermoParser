@@ -143,22 +143,6 @@ class HeatmapTest(unittest.TestCase):
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
 
-    @patch.object(plt, 'colorbar')
-    def test_colours(self, mock_colourbar):
-        colours = ['#ff0000', '#00ff00']
-        cbar = heatmap.add_heatmap(self.ax, self.x, self.y, self.c,
-                                   xinterp=None, yinterp=None, xscale='linear',
-                                   yscale='linear', cscale='linear',
-                                   colour=colours)
-
-        self.ax.pcolormesh.assert_called_once()
-        self.ax.set_xscale.assert_called_once_with('linear')
-        self.ax.set_yscale.assert_called_once_with('linear')
-        self.ax.set_xlim.assert_called_once_with(1, 4)
-        self.ax.set_ylim.assert_called_once_with(2, 8)
-        mock_colourbar.assert_called_once()
-        cbar.ax.set_yscale.assert_called_once_with('linear')
-
 class ZTMapTest(unittest.TestCase):
     def setUp(self):
         c =   [[1, 1],
