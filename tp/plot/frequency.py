@@ -371,13 +371,13 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             data including frequency and quantity.
         quantity : str
             y-axis quantity. Accepts frequency, gamma, group_velocity,
-            gv_by_gv, heat_capacity, lifetime, mean_free_path or
-            mode_kappa.
+            gv_by_gv, heat_capacity, lifetime, mean_free_path,
+            mode_kappa or ph_ph_strength.
 
         xquantity : str, optional
             x-axis quantity. Accepts frequency, gamma, group_velocity,
-            gv_by_gv, heat_capacity, lifetime, mean_free_path or
-            mode_kappa. Default: frequency.
+            gv_by_gv, heat_capacity, lifetime, mean_free_path,
+            mode_kappa or ph_ph_strength. Default: frequency.
         temperature : float, optional
             temperature in K. Default: 300.
         direction : str, optional
@@ -509,16 +509,17 @@ def add_projected_waterfall(ax, data, quantity, projected,
             data including frequency and quantity.
         quantity : str
             y-axis quantity. Accepts gamma, group_velocity, gv_by_gv,
-            heat_capacity, lifetime, mean_free_path or mode_kappa.
+            heat_capacity, lifetime, mean_free_path, 
+            mode_kappa or ph_ph_strength.
         projected : str
             colour-axis quantity. Accepts gamma, group_velocity,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
-            mode_kappa or occupation.
+            mode_kappa or ph_ph_strength.
 
         xquantity : str, optional
             x-axis quantity. Accepts frequency, gamma, group_velocity,
-            gv_by_gv, heat_capacity, lifetime, mean_free_path or
-            mode_kappa. Default: frequency.
+            gv_by_gv, heat_capacity, lifetime, mean_free_path,
+            mode_kappa or ph_ph_strength. Default: frequency.
         temperature : float, optional
             temperature in K. Default: 300.
         direction : str, optional
@@ -701,4 +702,4 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
     ax.scatter(lim['x'], lim['y'], alpha=0)
     tp.plot.utilities.set_locators(ax, x=loc['x'], y=loc['y'])
 
-    return
+    
