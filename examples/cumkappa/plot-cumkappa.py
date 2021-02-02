@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
+from os import path
 import tp
 
 kappafile = '../data/zno/kappa-m404021.hdf5'
 temperature = 300
 direction = ['x', 'z']
 quantities = 'frequency mode_kappa mfp'
+if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
+    raise Exception('File not found, please use get-data.sh')
 
 dosfile = '../data/zno/projected_dos.dat'
 poscar = '../data/zno/POSCAR'

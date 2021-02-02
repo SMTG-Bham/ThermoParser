@@ -97,7 +97,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                 color:      black
                 rasterized: False
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
             Defaults are defined below, which are overridden by those in
@@ -158,6 +158,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         k, _ = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale)
 
     # colour
+    # Tries to read the colour as an rgb code, then alpha value.
 
     if fill:
         try:
@@ -224,7 +225,7 @@ def add_markers(ax, x, y, xmarkers=None, ymarkers=None, add_xticks=False,
             add y_ticks for each marker. Doesn't work on log axes.
             Default: False.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.plot.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by

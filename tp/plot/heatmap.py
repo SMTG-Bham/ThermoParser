@@ -79,10 +79,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             override colour scale maximum. Default: None.
 
         colour : colourmap or str or array-like, optional
-            colourmap or colourmap name; or key colour or min and max
-            RGB colours to generate a colour map. Default: viridis.
+            colourmap or colourmap name; or key RGB colour to generate a
+            uniform colour map. Default: viridis.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -128,6 +128,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         c = c[np.ix_(xi[:-1], yi[:-1])]
 
     # colour
+    # Sets colourbar extension.
 
     extend = 'neither'
     if cmin is None:
@@ -147,6 +148,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     elif cscale == 'log':
         cnorm = mpl.colors.LogNorm(vmin=cmin, vmax=cmax)
 
+    # Tries to read as a colourmap or colourmap name, or uses a single
+    # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
+
     try:
         colours = mpl.cm.get_cmap(colour)
     except Exception:
@@ -156,7 +160,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             try:
                 colours = tp.plot.colour.uniform(colour)
             except Exception:
-                colours = tp.plot.colour.linear(colour[1], colour[0])
+                raise Exception('colour must be a colourmap, colourmap'
+                                'name or single #rrggbb colour.')
 
     # data interpolation
 
@@ -252,7 +257,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             loaded with h5py.File to put back into this function.
             Default: zt.hdf5.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
@@ -396,7 +401,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
             output filename to write to. Set to None to not write.
             Default: target-kl.hdf5.
 
-        **kwargs
+        kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by

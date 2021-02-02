@@ -8,7 +8,7 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.4.0\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.4.1\
     |_________________________________:______________________________________:_____/
 
 
@@ -38,7 +38,7 @@ ThermoPlotter can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone https://github.com/smtg-ucl/ThermoPlotter
+    git clone git@github.com:SMTG-UCL/ThermoPlotter.git
     cd ThermoPlotter
     python3 -m pip install --user .
 
@@ -139,8 +139,8 @@ Many thanks to all those who contributed code or ideas to ThermoPlotter!
 Roughly chronologically, they are so far:
 
 * Kieran B. Spooner
-* David O. Scanlon
 * Maud Einhorn
+* David O. Scanlon
 * Daniel W. Davies
 * Bonan Zhu
 * Sean R. Kavanagh
