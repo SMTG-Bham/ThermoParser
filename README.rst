@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master)](https://travis-ci.com/SMTG-UCL/ThermoPlotter)
+
 .. code-block::
 
      ________
