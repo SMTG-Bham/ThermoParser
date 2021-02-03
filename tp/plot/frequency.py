@@ -61,7 +61,7 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         main : bool, optional
             set ticks, labels, limits. Default: True.
         invert : bool, optional
-            plot on y axis. Default: False.
+            plot frequency on y axis. Default: False.
         scale : bool, optional
             if main, scale to percent. If not main, scale to axis
             limits. Default: False.
@@ -237,7 +237,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         main : bool, optional
             set ticks, labels, limits. Default: True.
         invert : bool, optional
-            plot on y axis. Default: False.
+            plot frequency on y axis. Default: False.
         scale : bool, optional
             if main, scale to percent. If not main, scale to axis
             limits. Default: True.
@@ -544,7 +544,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
         main : bool, optional
             set ticks, labels, limits. Default: True.
         invert : bool, optional
-            plot frequency on y-axis. Default: False.
+            invert x- and y-axes. Default: False.
 
         colour : colormap or str, optional
             colourmap or colourmap name. Default: viridis.
@@ -789,8 +789,6 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             ax.set_ylabel(axlabels[quantity])
 
     return
-
-
 
 def format_waterfall(ax, data, yquantity, xquantity='frequency',
                      temperature=None, direction=None):
