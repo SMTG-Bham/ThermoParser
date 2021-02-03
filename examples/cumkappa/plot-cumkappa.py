@@ -15,10 +15,9 @@ dosfile = '../data/zno/projected_dos.dat'
 poscar = '../data/zno/POSCAR'
 
 main = [False, True]
-colour = ['#ff8000', '#0000ff']
-colours = {'Zn': '#ffff00',
-           'O':  '#00ffff'}
-
+colour = ['#59c605', '#ffcf06']
+colours = {'Zn': '#d46ef9',
+           'O':  '#7b8eff'}
 # Axes
 
 fig, ax, add_legend = tp.axes.two.h_small_legend()
@@ -38,6 +37,7 @@ for i in [0, 1]:
                               direction=direction[i], colour=colour[i],
                               xmarkers=1e-6, main=main[i], label=direction[i])
 tp.plot.frequency.add_dos(ax[0], dos, colour=colours, scale=True, main=False)
+
 add_legend()
 
 # Save

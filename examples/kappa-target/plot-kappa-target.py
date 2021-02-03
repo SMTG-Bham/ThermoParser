@@ -8,7 +8,7 @@ target = 2
 direction = 'x'
 
 colour = tp.plot.colour.uniform('#008080')
-colour = tp.plot.colour.highlight(colour, 'grey')
+colour = tp.plot.colour.highlight(colour, '#d3d3d3')
 
 # Axes
 

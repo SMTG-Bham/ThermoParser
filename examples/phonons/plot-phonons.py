@@ -7,9 +7,9 @@ phile = '../data/zno/band.yaml'
 dosfile = '../data/zno/projected_dos.dat'
 poscar = '../data/zno/POSCAR'
 
-colour = '#ff8000'
-colours = {'Zn': '#ffff00',
-           'O':  '#00ffff'}
+colour = '#f0901f'
+colours = {'Zn': '#d46ef9',
+           'O':  '#7b8eff'}
 
 # Axes
 

@@ -1,31 +1,23 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>tp.plot.frequency &mdash; ThermoPlotter 0.3.1 documentation</title>
   
 
   
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-
+  
   
   
 
   
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -37,6 +29,10 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -75,7 +71,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -98,7 +93,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -133,13 +127,11 @@
 
 
 
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../../../contents.html">Docs</a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -205,7 +197,7 @@
     <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="add_dos"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_dos">[docs]</a><span class="k">def</span> <span class="nf">add_dos</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;tab10&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fillalpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;tab10&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fillalpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a phonon density of states (DoS) to a set of axes.</span>
 
 <span class="sd">    Arguments</span>
@@ -324,17 +316,17 @@
     <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span>
-                                <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                                <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span>
-                                <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                                <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -342,16 +334,14 @@
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
-                                <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
-                                <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
-                                <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
-                                <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -490,11 +480,11 @@
         <span class="c1"># plotting</span>
 
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-                            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-                            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plor</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -569,6 +559,7 @@
 <span class="sd">            Defaults:</span>
 
 <span class="sd">                alpha:      0.3</span>
+<span class="sd">                s:          3</span>
 <span class="sd">                edgecolors: black</span>
 <span class="sd">                linewidth:  0</span>
 <span class="sd">                marker:     &#39;.&#39;</span>
@@ -584,6 +575,7 @@
     <span class="c1"># defaults</span>
 
     <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span>      <span class="mf">0.3</span><span class="p">,</span>
+                 <span class="s1">&#39;s&#39;</span><span class="p">:</span>          <span class="mi">3</span><span class="p">,</span>
                  <span class="s1">&#39;edgecolors&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
                  <span class="s1">&#39;marker&#39;</span><span class="p">:</span>     <span class="s1">&#39;.&#39;</span><span class="p">,</span>
@@ -662,132 +654,6 @@
 
     <span class="k">return</span></div>
 
-<div class="viewcode-block" id="add_density"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_density">[docs]</a><span class="k">def</span> <span class="nf">add_density</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-                  <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
-                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adds a density plot of quantities against frequency.</span>
-
-<span class="sd">    Has an option to change the x-quantity.</span>
-
-<span class="sd">    Arguments</span>
-<span class="sd">    ---------</span>
-
-<span class="sd">        ax : axes</span>
-<span class="sd">            axes to plot on.</span>
-<span class="sd">        data : dict</span>
-<span class="sd">            data including frequency and quantity.</span>
-<span class="sd">        quantity : str</span>
-<span class="sd">            y-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa.</span>
-
-<span class="sd">        xquantity : str, optional</span>
-<span class="sd">            x-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa. Default: frequency.</span>
-<span class="sd">        temperature : float, optional</span>
-<span class="sd">            temperature in K. Default: 300.</span>
-<span class="sd">        direction : str, optional</span>
-<span class="sd">            direction from anisotropic data, accepts x-z/ a-c or</span>
-<span class="sd">            average/ avg. Default: average.</span>
-
-<span class="sd">        main : bool, optional</span>
-<span class="sd">            set ticks, labels, limits. Default: True.</span>
-<span class="sd">        invert : bool, optional</span>
-<span class="sd">            invert x- and y-axes. Default: False.</span>
-
-<span class="sd">        colour : colourmap or str or array-like, optional</span>
-<span class="sd">            colourmap or colourmap name. A single #rrggbb colour can be</span>
-<span class="sd">            given to generate a custom uniform colourmap.</span>
-<span class="sd">            Default: Blues.</span>
-
-<span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
-
-<span class="sd">                s:          2  </span>
-<span class="sd">                rasterized: True</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">        None</span>
-<span class="sd">            adds plot directly to ax.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># defaults</span>
-
-    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span>      <span class="mi">2</span><span class="p">,</span>
-                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-
-    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;density_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
-       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;density_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;density_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
-
-    <span class="c1"># input checks</span>
-
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;invert&#39;</span><span class="p">],</span>
-                           <span class="p">[</span> <span class="n">main</span><span class="p">,</span>   <span class="n">invert</span><span class="p">]):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-
-    <span class="c1"># data formatting</span>
-
-    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
-    <span class="k">if</span> <span class="n">xquantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
-    <span class="n">tnames</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">invert</span><span class="p">:</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="n">xquantity</span><span class="p">,</span> <span class="n">quantity</span>
-    <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">quantity</span>
-    <span class="n">xquantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">xquantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">xquantity</span>
-
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">],</span>
-                                   <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]))</span>
-    <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">xy</span><span class="p">)(</span><span class="n">xy</span><span class="p">)</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
-    <span class="n">x_dens</span><span class="p">,</span> <span class="n">y_dens</span><span class="p">,</span> <span class="n">z_dens</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-
-    <span class="c1"># colour</span>
-    <span class="c1"># Tries to read as a colourmap or colourmap name, or uses a single</span>
-    <span class="c1"># #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
-            <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">colours</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;colour must be a colourmap, colourmap&#39;</span>
-                                <span class="s1">&#39;name or single #rrggbb colour.&#39;</span><span class="p">)</span>
-
-    <span class="c1"># plotting</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_dens</span><span class="p">,</span> <span class="n">y_dens</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z_dens</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="c1"># axes formatting</span>
-
-    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
-        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">{</span><span class="n">xquantity</span><span class="p">:</span> <span class="n">x_dens</span><span class="p">,</span> <span class="n">quantity</span><span class="p">:</span> <span class="n">y_dens</span><span class="p">},</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
-            <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">inverted_labels</span><span class="p">()</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelleft</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">quantity</span><span class="p">])</span>
-
-    <span class="k">return</span></div>
-
 <div class="viewcode-block" id="add_projected_waterfall"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_projected_waterfall">[docs]</a><span class="k">def</span> <span class="nf">add_projected_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span>
                             <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                             <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -848,6 +714,7 @@
 <span class="sd">            Defaults:</span>
 
 <span class="sd">                alpha:      0.3</span>
+<span class="sd">                s:          3</span>
 <span class="sd">                edgecolors: black</span>
 <span class="sd">                linewidth:  0</span>
 <span class="sd">                marker:     .</span>
@@ -865,6 +732,7 @@
     <span class="c1"># defaults</span>
 
     <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span>      <span class="mf">0.3</span><span class="p">,</span>
+                 <span class="s1">&#39;s&#39;</span><span class="p">:</span>          <span class="mi">3</span><span class="p">,</span>
                  <span class="s1">&#39;edgecolors&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
                  <span class="s1">&#39;marker&#39;</span><span class="p">:</span>     <span class="s1">&#39;.&#39;</span><span class="p">,</span>
@@ -942,6 +810,134 @@
 
     <span class="k">return</span> <span class="n">cbar</span></div>
 
+<div class="viewcode-block" id="add_density"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_density">[docs]</a><span class="k">def</span> <span class="nf">add_density</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+                  <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
+                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adds a density plot of quantities against frequency.</span>
+
+<span class="sd">    Has an option to change the x-quantity.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            data including frequency and quantity.</span>
+<span class="sd">        quantity : str</span>
+<span class="sd">            y-axis quantity. Accepts frequency, gamma, group_velocity,</span>
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
+<span class="sd">            mode_kappa.</span>
+
+<span class="sd">        xquantity : str, optional</span>
+<span class="sd">            x-axis quantity. Accepts frequency, gamma, group_velocity,</span>
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
+<span class="sd">            mode_kappa. Default: frequency.</span>
+<span class="sd">        temperature : float, optional</span>
+<span class="sd">            temperature in K. Default: 300.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            direction from anisotropic data, accepts x-z/ a-c or</span>
+<span class="sd">            average/ avg. Default: average.</span>
+
+<span class="sd">        main : bool, optional</span>
+<span class="sd">            set ticks, labels, limits. Default: True.</span>
+<span class="sd">        invert : bool, optional</span>
+<span class="sd">            invert x- and y-axes. Default: False.</span>
+
+<span class="sd">        colour : colourmap or str or array-like, optional</span>
+<span class="sd">            colourmap or colourmap name. A single #rrggbb colour can be</span>
+<span class="sd">            given to generate a custom uniform colourmap.</span>
+<span class="sd">            Default: Blues.</span>
+
+<span class="sd">        kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                s:          1  </span>
+<span class="sd">                rasterized: True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            adds plot directly to ax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span>      <span class="mi">1</span><span class="p">,</span>
+                 <span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;density_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;density_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;density_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="c1"># input checks</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="s1">&#39;invert&#39;</span><span class="p">],</span>
+                           <span class="p">[</span> <span class="n">main</span><span class="p">,</span>   <span class="n">invert</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># data formatting</span>
+
+    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+    <span class="k">if</span> <span class="n">xquantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+    <span class="n">tnames</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">invert</span><span class="p">:</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="n">xquantity</span><span class="p">,</span> <span class="n">quantity</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">quantity</span>
+    <span class="n">xquantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">xquantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">xquantity</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">],</span>
+                                   <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]))</span>
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">xy</span><span class="p">)(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="n">x_dens</span><span class="p">,</span> <span class="n">y_dens</span><span class="p">,</span> <span class="n">z_dens</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="c1"># colour</span>
+    <span class="c1"># Tries to read as a colourmap or colourmap name, or uses a single</span>
+    <span class="c1"># #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">colours</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;colour must be a colourmap, colourmap&#39;</span>
+                                <span class="s1">&#39;name or single #rrggbb colour.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_dens</span><span class="p">,</span> <span class="n">y_dens</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z_dens</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
+        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">{</span><span class="n">xquantity</span><span class="p">:</span> <span class="n">x_dens</span><span class="p">,</span> <span class="n">quantity</span><span class="p">:</span> <span class="n">y_dens</span><span class="p">},</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
+            <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">inverted_labels</span><span class="p">()</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelleft</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">quantity</span><span class="p">])</span>
+
+    <span class="k">return</span></div>
+
+
+
 <div class="viewcode-block" id="format_waterfall"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.format_waterfall">[docs]</a><span class="k">def</span> <span class="nf">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">yquantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span>
                      <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Formats axes for waterfall plots.</span>
@@ -1006,25 +1002,20 @@
            
           </div>
           <footer>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, Scanlon Materials Theory Group.
+        &copy; Copyright 2020, Scanlon Materials Theory Group
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
+
         </div>
       </div>
 
@@ -1032,6 +1023,7 @@
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

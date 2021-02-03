@@ -1299,6 +1299,7 @@ def formatting(ax, data, yquantity='frequency', log=False, **kwargs):
     ax.set_xticklabels(data['tick_label'])
     ax.tick_params(axis='x', which='minor', top=False, bottom=False)
     ax.set_xlim(data['x'][0], data['x'][-1])
+    plt.axhline(linestyle=':', linewidth=ax.spines['bottom'].get_linewidth())
     scale = 'log' if log else 'linear'
     tp.plot.utilities.set_locators(ax, y=scale)
 
