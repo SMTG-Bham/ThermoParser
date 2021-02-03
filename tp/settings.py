@@ -365,7 +365,7 @@ def long_labels():
               'cumulative_kappa':
                   'Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'doping':
-                  'Carrier Concentration (cm$\mathregular{^{-1}}$)',
+                  'Carrier Concentration (cm$\mathregular{^{-3}}$)',
               'dos':
                   'Density of States',
               'efermi':
@@ -433,7 +433,7 @@ def medium_labels():
               'cumulative_kappa':
                   'Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'doping':
-                  'Carrier Concentration (cm$\mathregular{^{-1}}$)',
+                  'Carrier Concentration (cm$\mathregular{^{-3}}$)',
               'dos':
                   'Density of States',
               'efermi':
@@ -503,7 +503,7 @@ def short_labels():
               'doping':
                   'n (cm$\mathregular{^{-1}}$)',
               'dos':
-                  'Density\nof States',
+                  'DoS',
               'efermi':
                   'E$\mathregular{_{F}}$ (eV)',
               'effective_mass':

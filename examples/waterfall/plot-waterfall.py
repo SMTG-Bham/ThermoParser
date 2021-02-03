@@ -2,7 +2,7 @@
 
 from matplotlib import cm
 import matplotlib.pyplot as plt
-import os
+from os import path
 import tp
 
 kappafile = '../data/basno3/kappa-m363636.hdf5'
@@ -17,9 +17,9 @@ waterfall = 'mean_free_path'
 projected = 'mode_kappa'
 quantities = ['waterfall', waterfall, projected]
 
-colours = {'Ba': '#800080',
-           'Sn': '#ff8080',
-           'O':  '#00ffff'}
+colours = {'Ba': '#ffcf06',
+           'Sn': '#59c605',
+           'O':  '#00b1f7'}
 colour = cm.get_cmap('viridis')
 
 # Axes
@@ -46,11 +46,11 @@ waterfall colour.
 """
 tp.plot.frequency.format_waterfall(ax, data, waterfall, direction=direction,
                                    temperature=temperature)
-tp.plot.frequency.add_dos(ax, dos, colour=colours, scale=True, main=False)
+tp.plot.frequency.add_dos(ax, dos, colour=colours, scale=True, main=False, alpha=0.6)
 cbar = tp.plot.frequency.add_projected_waterfall(ax, data, waterfall,
                                                  projected, colour=colour,
                                                  temperature=temperature,
-                                                 direction=direction)
+                                                 direction=direction, s=50)
 add_legend()
 
 """

@@ -44,7 +44,7 @@ except Exception:
     conf = None
 
 def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
-            colour='tab10', fill=True, fillalpha=0.2, line=False, **kwargs):
+            colour='tab10', fill=True, fillalpha=0.2, line=True, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments
@@ -163,17 +163,17 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     if total:
         if invert:
             if fill:
-                ax.fill_between(totaldata, f, label='Total',
-                                facecolor=fillcolour['total'],
-                                edgecolor=colour['total'], **kwargs)
+                ax.plot(totaldata, f, label='Total', color=colour['total'],
+                        **kwargs)
+                ax.fill_between(totaldata, f, facecolor=fillcolour['total'])
             else:
                 ax.plot(totaldata, f, label='Total', color=colour['total'],
                         **kwargs)
         else:
             if fill:
-                ax.fill_between(f, totaldata, label='Total',
-                                facecolor=fillcolour['total'],
-                                edgecolor=colour['total'], **kwargs)
+                ax.plot(f, totaldata, label='Total', color=colour['total'],
+                        **kwargs)
+                ax.fill_between(f, totaldata, facecolor=fillcolour['total'])
             else:
                 ax.plot(f, totaldata, label='Total', color=colour['total'],
                         **kwargs)
@@ -181,16 +181,14 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     for key in data:
         if invert:
             if fill:
-                ax.fill_between(data[key], f, label=key,
-                                facecolor=fillcolour[key],
-                                edgecolor=colour[key], **kwargs)
+                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
+                ax.fill_between(data[key], f, facecolor=fillcolour[key])
             else:
                 ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
         else:
             if fill:
-                ax.fill_between(f, data[key], label=key,
-                                facecolor=fillcolour[key],
-                                edgecolor=colour[key], **kwargs)
+                ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
+                ax.fill_between(f, data[key], facecolor=fillcolour[key])
             else:
                 ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
 
@@ -329,11 +327,11 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
         # plotting
 
         if invert:
-            ax.fill_between(k, f, facecolor=fillcolour2, edgecolor=colour,
-                            **kwargs)
+            ax.plot(k, f, color=colour, **kwargs)
+            ax.fill_between(k, f, facecolor=fillcolour2)
         else:
-            ax.fill_between(f, k, facecolor=fillcolour2, edgecolor=colour,
-                            **kwargs)
+            ax.plor(f, k, color=colour, **kwargs)
+            ax.fill_between(f, k, facecolor=fillcolour2)
     else:
         if invert:
             ax.plot(k, f, color=colour, **kwargs)
@@ -408,6 +406,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             Defaults:
 
                 alpha:      0.3
+                s:          3
                 edgecolors: black
                 linewidth:  0
                 marker:     '.'
@@ -423,6 +422,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # defaults
 
     defkwargs = {'alpha':      0.3,
+                 's':          3,
                  'edgecolors': 'black',
                  'linewidth':  0,
                  'marker':     '.',
@@ -501,132 +501,6 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     return
 
-def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
-                  direction='avg', main=True, invert=False, colour='Blues',
-                  **kwargs):
-    """Adds a density plot of quantities against frequency.
-
-    Has an option to change the x-quantity.
-
-    Arguments
-    ---------
-
-        ax : axes
-            axes to plot on.
-        data : dict
-            data including frequency and quantity.
-        quantity : str
-            y-axis quantity. Accepts frequency, gamma, group_velocity,
-            gv_by_gv, heat_capacity, lifetime, mean_free_path or
-            mode_kappa.
-
-        xquantity : str, optional
-            x-axis quantity. Accepts frequency, gamma, group_velocity,
-            gv_by_gv, heat_capacity, lifetime, mean_free_path or
-            mode_kappa. Default: frequency.
-        temperature : float, optional
-            temperature in K. Default: 300.
-        direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
-
-        main : bool, optional
-            set ticks, labels, limits. Default: True.
-        invert : bool, optional
-            invert x- and y-axes. Default: False.
-
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name. A single #rrggbb colour can be
-            given to generate a custom uniform colourmap.
-            Default: Blues.
-
-        kwargs
-            keyword arguments passed to matplotlib.pyplot.scatter.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
-
-                s:          2  
-                rasterized: True
-
-    Returns
-    -------
-
-        None
-            adds plot directly to ax.
-    """
-
-    # defaults
-
-    defkwargs = {'s':      2,
-                 'rasterized': True}
-
-    if conf is None or 'density_kwargs' not in conf or \
-       conf['density_kwargs'] is None:
-        kwargs = {**defkwargs, **kwargs}
-    else:
-        kwargs = {**defkwargs, **conf['density_kwargs'], **kwargs}
-
-    # input checks
-
-    for name, value in zip(['main', 'invert'],
-                           [ main,   invert]):
-        assert isinstance(value, bool), '{} must be True or False.'.format(name)
-
-    # data formatting
-
-    if quantity == 'kappa': quantity = 'mode_kappa'
-    if xquantity == 'kappa': xquantity = 'mode_kappa'
-    tnames = tp.settings.to_tp()
-    if invert: quantity, xquantity = xquantity, quantity
-    quantity = tnames[quantity] if quantity in tnames else quantity
-    xquantity = tnames[xquantity] if xquantity in tnames else xquantity
-
-    data = tp.data.resolve.resolve(data, [quantity, xquantity],
-                                   temperature, direction)
-    x = np.ravel(data[xquantity])
-    y = np.abs(np.ravel(data[quantity]))
-    xy = np.vstack([x,y])
-    z = gaussian_kde(xy)(xy)
-    idx = z.argsort()
-    x_dens, y_dens, z_dens = x[idx], y[idx], z[idx]
-
-    # colour
-    # Tries to read as a colourmap or colourmap name, or uses a single
-    # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
-
-    try:
-        colours = mpl.cm.get_cmap(colour)
-    except Exception:
-        if isinstance(colour, mpl.colors.ListedColormap):
-            colours = colour
-        else:
-            try:
-                colours = tp.plot.colour.uniform(colour)
-            except Exception:
-                raise Exception('colour must be a colourmap, colourmap'
-                                'name or single #rrggbb colour.')
-
-    # plotting
-
-    ax.scatter(x_dens, y_dens, c=z_dens, cmap=colour, **kwargs)
-
-    # axes formatting
-
-    if main:
-        format_waterfall(ax, {xquantity: x_dens, quantity: y_dens}, quantity, xquantity)
-        if invert:
-            axlabels = tp.settings.inverted_labels()
-            ax.set_xlabel(axlabels[xquantity])
-            ax.tick_params(axis='y', labelleft=False)
-        else:
-            axlabels = tp.settings.labels()
-            ax.set_xlabel(axlabels[xquantity])
-            ax.set_ylabel(axlabels[quantity])
-
-    return
-
 def add_projected_waterfall(ax, data, quantity, projected,
                             xquantity='frequency', temperature=300,
                             direction='avg', main=True, invert=False,
@@ -687,6 +561,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
             Defaults:
 
                 alpha:      0.3
+                s:          3
                 edgecolors: black
                 linewidth:  0
                 marker:     .
@@ -704,6 +579,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     # defaults
 
     defkwargs = {'alpha':      0.3,
+                 's':          3,
                  'edgecolors': 'black',
                  'linewidth':  0,
                  'marker':     '.',
@@ -780,6 +656,134 @@ def add_projected_waterfall(ax, data, quantity, projected,
             ax.set_ylabel(axlabels[quantity])
 
     return cbar
+
+def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
+                  direction='avg', main=True, invert=False, colour='Blues',
+                  **kwargs):
+    """Adds a density plot of quantities against frequency.
+
+    Has an option to change the x-quantity.
+
+    Arguments
+    ---------
+
+        ax : axes
+            axes to plot on.
+        data : dict
+            data including frequency and quantity.
+        quantity : str
+            y-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa.
+
+        xquantity : str, optional
+            x-axis quantity. Accepts frequency, gamma, group_velocity,
+            gv_by_gv, heat_capacity, lifetime, mean_free_path or
+            mode_kappa. Default: frequency.
+        temperature : float, optional
+            temperature in K. Default: 300.
+        direction : str, optional
+            direction from anisotropic data, accepts x-z/ a-c or
+            average/ avg. Default: average.
+
+        main : bool, optional
+            set ticks, labels, limits. Default: True.
+        invert : bool, optional
+            invert x- and y-axes. Default: False.
+
+        colour : colourmap or str or array-like, optional
+            colourmap or colourmap name. A single #rrggbb colour can be
+            given to generate a custom uniform colourmap.
+            Default: Blues.
+
+        kwargs
+            keyword arguments passed to matplotlib.pyplot.scatter.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
+            Defaults:
+
+                s:          1  
+                rasterized: True
+
+    Returns
+    -------
+
+        None
+            adds plot directly to ax.
+    """
+
+    # defaults
+
+    defkwargs = {'s':      1,
+                 'rasterized': True}
+
+    if conf is None or 'density_kwargs' not in conf or \
+       conf['density_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['density_kwargs'], **kwargs}
+
+    # input checks
+
+    for name, value in zip(['main', 'invert'],
+                           [ main,   invert]):
+        assert isinstance(value, bool), '{} must be True or False.'.format(name)
+
+    # data formatting
+
+    if quantity == 'kappa': quantity = 'mode_kappa'
+    if xquantity == 'kappa': xquantity = 'mode_kappa'
+    tnames = tp.settings.to_tp()
+    if invert: quantity, xquantity = xquantity, quantity
+    quantity = tnames[quantity] if quantity in tnames else quantity
+    xquantity = tnames[xquantity] if xquantity in tnames else xquantity
+
+    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+                                   temperature, direction)
+    x = np.ravel(data[xquantity])
+    y = np.abs(np.ravel(data[quantity]))
+    xy = np.vstack([x,y])
+    z = gaussian_kde(xy)(xy)
+    idx = z.argsort()
+    x_dens, y_dens, z_dens = x[idx], y[idx], z[idx]
+
+    # colour
+    # Tries to read as a colourmap or colourmap name, or uses a single
+    # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
+
+    try:
+        colours = mpl.cm.get_cmap(colour)
+    except Exception:
+        if isinstance(colour, mpl.colors.ListedColormap):
+            colours = colour
+        else:
+            try:
+                colours = tp.plot.colour.uniform(colour)
+            except Exception:
+                raise Exception('colour must be a colourmap, colourmap'
+                                'name or single #rrggbb colour.')
+
+    # plotting
+
+    ax.scatter(x_dens, y_dens, c=z_dens, cmap=colour, **kwargs)
+
+    # axes formatting
+
+    if main:
+        format_waterfall(ax, {xquantity: x_dens, quantity: y_dens}, quantity, xquantity)
+        if invert:
+            axlabels = tp.settings.inverted_labels()
+            ax.set_xlabel(axlabels[xquantity])
+            ax.tick_params(axis='y', labelleft=False)
+        else:
+            axlabels = tp.settings.labels()
+            ax.set_xlabel(axlabels[xquantity])
+            ax.set_ylabel(axlabels[quantity])
+
+    return
+
+
 
 def format_waterfall(ax, data, yquantity, xquantity='frequency',
                      temperature=None, direction=None):
