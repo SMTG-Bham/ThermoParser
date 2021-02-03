@@ -161,27 +161,39 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
 
     if total:
         if invert:
-            if fill:
+            if fill and line:
                 ax.fill_between(totaldata, f, facecolor=fillcolour['total'], linewidth=0)
-            if line:
+                ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
+            elif fill and not line:
+                ax.fill_between(totaldata, f, label='Total', facecolor=fillcolour['total'],
+                                linewidth=0)
+            else:
                 ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
         else:
             if fill:
-                ax.fill_between(f, totaldata, facecolor=fillcolour['total'], linewidth=0)
+                ax.fill_between(f, totaldata, label='Total', facecolor=fillcolour['total'],
+                               linewidth=0)
             if line:
                 ax.plot(f, totaldata, label='Total', color=colour['total'], **kwargs)
 
     for key in data:
         if invert:
-            if fill:
+            if fill and line:
                 ax.fill_between(data[key], f, facecolor=fillcolour[key], linewidth=0)
-            if line:
+                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
+            elif fill and not line:
+                ax.fill_between(data[key], f, label=key, facecolor=fillcolour[key], linewidth=0)
+            else:
                 ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
         else:
-            if fill:
+            if fill and line:
                 ax.fill_between(f, data[key], facecolor=fillcolour[key], linewidth=0)
-            if line:
+                ax.plot(f, data[key], color=colour[key], label=key, **kwargs)
+            elif fill and not line:
+                ax.fill_between(f, data[key], label=key, facecolor=fillcolour[key], linewidth=0)
+            else:
                 ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
+         
 
     # axes formatting
 
