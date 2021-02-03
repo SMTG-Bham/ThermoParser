@@ -15,10 +15,9 @@ dosfile = '../data/zno/projected_dos.dat'
 poscar = '../data/zno/POSCAR'
 
 main = [False, True]
-colour = ['#ff8000', '#0000ff']
-colours = {'Zn': '#ffff00',
-           'O':  '#00ffff'}
-
+colour = ['#59c605', '#ffcf06']
+colours = {'Zn': '#d46ef9',
+           'O':  '#7b8eff'}
 # Axes
 
 fig, ax, add_legend = tp.axes.two.h_small_legend()
