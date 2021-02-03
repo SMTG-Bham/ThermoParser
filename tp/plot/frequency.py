@@ -75,7 +75,7 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         fillalpha : float, optional
             fill alpha scaled to 0-1. Default: 0.2.
         line : bool, optional
-            plot lines. Default: False.
+            plot lines. Default: True.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between.
@@ -156,40 +156,31 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         if fill:
             fillcolour[c] = list(colour[c])
             fillcolour[c][3] = fillalpha
-        if not line: colour[c] = fillcolour[c]
 
     # plotting
 
     if total:
         if invert:
             if fill:
-                ax.plot(totaldata, f, label='Total', color=colour['total'],
-                        **kwargs)
-                ax.fill_between(totaldata, f, facecolor=fillcolour['total'])
-            else:
-                ax.plot(totaldata, f, label='Total', color=colour['total'],
-                        **kwargs)
+                ax.fill_between(totaldata, f, facecolor=fillcolour['total'], linewidth=0)
+            if line:
+                ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
         else:
             if fill:
-                ax.plot(f, totaldata, label='Total', color=colour['total'],
-                        **kwargs)
-                ax.fill_between(f, totaldata, facecolor=fillcolour['total'])
-            else:
-                ax.plot(f, totaldata, label='Total', color=colour['total'],
-                        **kwargs)
+                ax.fill_between(f, totaldata, facecolor=fillcolour['total'], linewidth=0)
+            if line:
+                ax.plot(f, totaldata, label='Total', color=colour['total'], **kwargs)
 
     for key in data:
         if invert:
             if fill:
-                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
-                ax.fill_between(data[key], f, facecolor=fillcolour[key])
-            else:
+                ax.fill_between(data[key], f, facecolor=fillcolour[key], linewidth=0)
+            if line:
                 ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
         else:
             if fill:
-                ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
-                ax.fill_between(f, data[key], facecolor=fillcolour[key])
-            else:
+                ax.fill_between(f, data[key], facecolor=fillcolour[key], linewidth=0)
+            if line:
                 ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
 
     # axes formatting
@@ -330,7 +321,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
             ax.plot(k, f, color=colour, **kwargs)
             ax.fill_between(k, f, facecolor=fillcolour2)
         else:
-            ax.plor(f, k, color=colour, **kwargs)
+            ax.plot(f, k, color=colour, **kwargs)
             ax.fill_between(f, k, facecolor=fillcolour2)
     else:
         if invert:

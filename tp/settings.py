@@ -501,7 +501,7 @@ def short_labels():
               'cumulative_kappa':
                   '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
               'doping':
-                  'n (cm$\mathregular{^{-1}}$)',
+                  'n (cm$\mathregular{^{-3}}$)',
               'dos':
                   'DoS',
               'efermi':

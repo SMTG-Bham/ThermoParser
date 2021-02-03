@@ -37,6 +37,7 @@ for i in [0, 1]:
                               direction=direction[i], colour=colour[i],
                               xmarkers=1e-6, main=main[i], label=direction[i])
 tp.plot.frequency.add_dos(ax[0], dos, colour=colours, scale=True, main=False)
+
 add_legend()
 
 # Save
