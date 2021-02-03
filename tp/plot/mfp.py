@@ -159,44 +159,29 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     # colour
     # Tries to read the colour as an rgb code, then alpha value.
+    
+    try:
+        fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
+    except Exception:
+        if isinstance(colour, list) and \
+           isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
+           fillcolour <= 1:
+            fillcolour2 = list(colour)
+            if len(colour) == 3:
+                fillcolour2.append(fillcolour)
+            elif len(colour) == 4:
+                fillcolour2[3] = fillcolour
+        else:
+            fillcolour2 = colour
+    if not line: colour = fillcolour2
+   
+    # plotting
 
     if fill and line:
-        try:
-            fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
-        except Exception:
-            if isinstance(colour, list) and \
-               isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
-               fillcolour <= 1:
-                fillcolour2 = list(colour)
-                if len(colour) == 3:
-                    fillcolour2.append(fillcolour)
-                elif len(colour) == 4:
-                    fillcolour2[3] = fillcolour
-            else:
-                fillcolour2 = colour
-        if not line: colour = fillcolour2
-
-        # plotting
         ax.plot(mfp, k, color=colour, **kwargs)
         ax.fill_between(mfp, k, facecolor=fillcolour2, edgecolor=colour)
 
     elif fill and not line:
-        try:
-            fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
-        except Exception:
-            if isinstance(colour, list) and \
-               isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
-               fillcolour <= 1:
-                fillcolour2 = list(colour)
-                if len(colour) == 3:
-                    fillcolour2.append(fillcolour)
-                elif len(colour) == 4:
-                    fillcolour2[3] = fillcolour
-            else:
-                fillcolour2 = colour
-
-        # plotting
-
         ax.fill_between(mfp, k, facecolor=fillcolour2, **kwargs)
 
     else:
