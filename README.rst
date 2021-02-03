@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
+    :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
+
 .. code-block::
 
      ________
