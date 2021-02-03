@@ -364,6 +364,24 @@ class Phono3pyTest(unittest.TestCase):
         mock_data.close.assert_called_once()
 
     @patch.object(h5py, 'File')
+    def test_ph_ph_strength(self, mock_h5py):
+        q = 'ave_pp'
+        data = {q:             np.zeros((2, 3)),
+                'temperature': np.array([0, 1]),
+                'qpoint':      np.array([0, 1])}
+        mock_data = MagicMock()
+        mock_data.__getitem__.side_effect = data.__getitem__
+        mock_data.__iter__.side_effect = data.__iter__
+        mock_data.__contains__.side_effect = data.__contains__
+        mock_h5py.return_value = mock_data
+
+        data2 = load.phono3py('mock', q)
+        mock_h5py.assert_called_once()
+        for q2 in ['ph_ph_strength', 'meta']:
+            self.assertIn(q2, data2)
+        mock_data.close.assert_called_once()
+
+    @patch.object(h5py, 'File')
     def test_wideband(self, mock_h5py):
         q = 'wideband'
         data = {'frequency':   np.zeros((2, 3)),
