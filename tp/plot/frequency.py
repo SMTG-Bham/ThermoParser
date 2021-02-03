@@ -311,7 +311,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
     # colour
     # Tries to read the colour as an rgb code, then alpha value.
 
-    if fill:
+    if fill and line:
         try:
             fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
         except Exception:
@@ -325,16 +325,36 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
                     fillcolour2[3] = fillcolour
             else:
                 fillcolour2 = fillcolour
-        if not line: colour = fillcolour2
 
         # plotting
 
         if invert:
             ax.plot(k, f, color=colour, **kwargs)
-            ax.fill_between(k, f, facecolor=fillcolour2)
+            ax.fill_between(k, f, facecolor=fillcolour2, linewidth=0)
         else:
             ax.plot(f, k, color=colour, **kwargs)
             ax.fill_between(f, k, facecolor=fillcolour2)
+
+    elif fill and not line:
+            try:
+                fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
+            except Exception:
+                if isinstance(colour, list) and \
+                   isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
+                   fillcolour <= 1:
+                    fillcolour2 = list(colour)
+                    if len(colour) == 3:
+                        fillcolour2.append(fillcolour)
+                    elif len(colour) == 4:
+                        fillcolour2[3] = fillcolour
+                else:
+                    fillcolour2 = fillcolour
+    
+            if invert:
+                ax.fill_between(k, f, facecolor=fillcolour2, **kwargs)
+            else:
+                ax.fill_between(f, k, facecolor=fillcolour2, **kwargs)
+
     else:
         if invert:
             ax.plot(k, f, color=colour, **kwargs)
