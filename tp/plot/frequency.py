@@ -664,8 +664,8 @@ def add_projected_waterfall(ax, data, quantity, projected,
     return cbar
 
 def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
-                  direction='avg', main=True, invert=False, colour='Blues',
-                  **kwargs):
+                direction='avg', main=True, invert=False, colour='Blues',
+                **kwargs):
     """Adds a density plot of quantities against frequency.
 
     Has an option to change the x-quantity.
@@ -681,10 +681,6 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             y-axis quantity. Accepts frequency, gamma, group_velocity,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
             mode_kappa, occupation or ph_ph_strength.
-        projected : str
-            colour-axis quantity. Accepts frequency, gamma,
-            group_velocity, gv_by_gv, heat_capacity, lifetime,
-            mean_free_path, mode_kappa, occupation or ph_ph_strength.
 
         xquantity : str, optional
             x-axis quantity. Accepts frequency, gamma, group_velocity,
@@ -853,4 +849,4 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
     ax.scatter(lim['x'], lim['y'], alpha=0)
     tp.plot.utilities.set_locators(ax, x=loc['x'], y=loc['y'])
 
-    
+    return
