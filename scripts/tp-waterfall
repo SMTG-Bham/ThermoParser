@@ -10,17 +10,18 @@ parser.add_argument('file',
 parser.add_argument('-y', metavar='y', default='kappa',
                     help='y-axis quantity. Options include frequency, '
                          'kappa, group_velocity, lifetime, '
-                         'mean_free_path and occupation. '
+                         'mean_free_path, occupation and ph_ph_strength. '
                          'Default: kappa.')
 parser.add_argument('-x', metavar='x', default='frequency',
                     help='x-axis quantity. Options include frequency, '
                          'kappa, group_velocity, lifetime, '
-                         'mean_free_path and occupation. '
+                         'mean_free_path, occupation and ph_ph_strength. '
                          'Default: frequency.')
 parser.add_argument('-p', '--projected', metavar='projected',
                     help='optional colour quantity. Options include '
                          'frequency, kappa, group_velocity, lifetime, '
-                         'mean_free_path and occupation. Default: None.')
+                         'mean_free_path, occupation and ph_ph_strength. '
+                         'Default: None.')
 parser.add_argument('-a', '--alpha', metavar='alpha', type=float, default=0.3,
                     help='marker opacity (0-1). Default: 0.3.')
 parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
