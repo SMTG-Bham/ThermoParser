@@ -3,10 +3,10 @@
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Scanlon Materials Theory Group (2020)'
-__version__ =    '0.4.1'
+__version__ =    '1.0.0'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
-__date__ =       'February 1st 2021'
+__date__ =       'February 4th 2021'
 
 from glob import glob
 import os
@@ -50,7 +50,7 @@ setuptools.setup(
     url='https://smtg-ucl.github.io/ThermoPlotter/',
     packages=setuptools.find_packages(),
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Natural Language :: English',
