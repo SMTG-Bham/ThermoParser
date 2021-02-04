@@ -123,19 +123,14 @@ Bugs and feature requests can be submitted to the `issue tracker`_,
 while contributions can be made using the `fork and pull`_ approach.
 Contributions should include comprehensive docstrings, and where
 appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
-appreciated.
+appreciated. Documentation uses the `sphinx`_ package, and can be built from the docs
+directory with ``sphinx-build -b html src/ .``.
 
 .. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
 .. _fork and pull: https://guides.github.com/activities/forking
 .. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
-
-Documentation
--------------
-
-Documentation uses the `sphinx`_ package, and can be built from the docs
-directory with ``sphinx-build -b html src/ .``.
 
 Testing
 -------
