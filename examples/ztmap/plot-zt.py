@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from matplotlib import pyplot as plt
-import os
+from os import path
 import tp
 
 bfile = '../data/zno/boltztrap.hdf5'
