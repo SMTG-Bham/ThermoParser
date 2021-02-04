@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
     :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
 
+.. image:: figures/tp-logo.png
+    :target: https://smtg-ucl.github.io/ThermoPlotter/
+
 .. code-block::
 
      ________
@@ -11,7 +14,7 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :0.4.1\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :1.0.0\
     |_________________________________:______________________________________:_____/
 
 
@@ -126,6 +129,12 @@ appreciated.
 .. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
+
+Documentation
+-------------
+
+Documentation uses the `sphinx`_ package, and can be built from the docs
+directory with ``sphinx-build -b html src/ .``.
 
 Testing
 -------

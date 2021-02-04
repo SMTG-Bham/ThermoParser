@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
-import os
+from os import path
 import tp
 
 phile = '../data/zno/band.yaml'

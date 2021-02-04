@@ -8,8 +8,8 @@ lines.markersize            : 2.5
 ## Writing
 
 # Font
-pdf.fonttype : 42
-ps.fonttype : 42
+pdf.fonttype                : 42
+ps.fonttype                 : 42
 font.family                 : sans-serif
 font.size                   : 40.0
 font.sans-serif             : Whitney Pro, Whitney Book Extended, Whitney Book, Helvetica, Arial, Liberation Sans, Andale Sans

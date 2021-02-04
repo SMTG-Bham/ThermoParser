@@ -417,7 +417,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             Defaults:
 
                 alpha:      0.3
-                s:          3
+                s:          2
                 edgecolors: black
                 linewidth:  0
                 marker:     '.'
@@ -433,7 +433,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # defaults
 
     defkwargs = {'alpha':      0.3,
-                 's':          3,
+                 's':          2,
                  'edgecolors': 'black',
                  'linewidth':  0,
                  'marker':     '.',
@@ -574,7 +574,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
             Defaults:
 
                 alpha:      0.3
-                s:          3
+                s:          2
                 edgecolors: black
                 linewidth:  0
                 marker:     .
@@ -592,7 +592,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     # defaults
 
     defkwargs = {'alpha':      0.3,
-                 's':          3,
+                 's':          2,
                  'edgecolors': 'black',
                  'linewidth':  0,
                  'marker':     '.',

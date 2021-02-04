@@ -29,7 +29,7 @@ Plots with legends return an add_legend function, which will place the
 legend nicely and still accepts arguments like title. This doesn't stop
 you using plt.legend instead (see line 50).
 """
-fig, ax, add_legend = tp.axes.one_large.colourbar_small_legend()
+fig, ax, add_legend = tp.axes.one.colourbar_small_legend()
 
 # Load
 
@@ -46,22 +46,13 @@ waterfall colour.
 """
 tp.plot.frequency.format_waterfall(ax, data, waterfall, direction=direction,
                                    temperature=temperature)
-tp.plot.frequency.add_dos(ax, dos, colour=colours, scale=True, main=False, alpha=0.6)
+tp.plot.frequency.add_dos(ax, dos, colour=colours, scale=True, main=False,
+                          alpha=0.6)
 cbar = tp.plot.frequency.add_projected_waterfall(ax, data, waterfall,
                                                  projected, colour=colour,
                                                  temperature=temperature,
-                                                 direction=direction, s=50)
+                                                 direction=direction)
 add_legend()
-
-"""
-Some of the longer names don't fit on presentation style plots, but it's
-easy to switch. Here large_labels have been used (for large axes), which
-points to mid-length labels in the settings file by default, but
-short_labels could also be used, which uses a symbol (e.g. kappa). The
-default can be changed in the settings file.
-"""
-labels = tp.settings.large_labels()
-cbar.set_label(labels[projected])
 
 # Save
 
