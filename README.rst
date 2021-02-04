@@ -1,4 +1,4 @@
-.. image:: figures/tp-logo.png
+.. image:: figures/tp-logo-header.png
     :target: https://smtg-ucl.github.io/ThermoPlotter/
     :align: center
 
