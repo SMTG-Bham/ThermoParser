@@ -10,7 +10,7 @@ from either a python script or the command line.
 
 .. image:: figures/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-zt.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/ztmap/plot-zt.py
 
 Click on the plot to see the script, or one could use
 
@@ -24,7 +24,7 @@ ZT, in this case 2.
 
 .. image:: figures/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-kappa-target.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/kappa-target/plot-kappa-target.py
 
 .. code-block:: bash
 
@@ -35,7 +35,7 @@ phonon dispersions:
 
 .. image:: figures/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-multiphon.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/multiphon/plot-multiphon.py
 
 .. code-block:: bash
 
@@ -43,7 +43,7 @@ phonon dispersions:
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-phonons.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-phonons.py
 
 .. code-block:: bash
 
@@ -61,14 +61,14 @@ plotting, to enable nicely formatted multi-axes plots
 
 .. image:: figures/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-cumkappa.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/cumkappa/plot-cumkappa.py
 
 and ones where multiple plots are on the same axes, to highlight
 particular interactions.
 
 .. image:: figures/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-waterfall.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/waterfall/plot-waterfall.py
 
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
@@ -78,7 +78,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-wideband.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/wideband/plot-wideband.py
 
 .. code-block:: bash
 
@@ -86,7 +86,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/plot-projected-phonons.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-projected-phonons.py
 
 Through the python interface it is also possible to use individual parts
 of the code in ones own packages, for example the custom colourmaps,

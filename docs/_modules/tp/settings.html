@@ -1,23 +1,31 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>tp.settings &mdash; ThermoPlotter 0.3.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -29,10 +37,6 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -71,6 +75,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,6 +98,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -127,11 +133,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../contents.html">Docs</a> &raquo;</li>
+      <li><a href="../../contents.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -238,7 +246,7 @@
 
    <span class="k">return</span> <span class="n">names</span>
 
-<div class="viewcode-block" id="style"><a class="viewcode-back" href="../../tp.html#tp.settings.style">[docs]</a><span class="k">def</span> <span class="nf">style</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">style</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get paper-style style sheet.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;style&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -248,9 +256,9 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">style</span> <span class="o">=</span> <span class="p">[</span><span class="n">style</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">style</span></div>
+    <span class="k">return</span> <span class="n">style</span>
 
-<div class="viewcode-block" id="large_style"><a class="viewcode-back" href="../../tp.html#tp.settings.large_style">[docs]</a><span class="k">def</span> <span class="nf">large_style</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">large_style</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get presentation-style style sheet.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;large_style&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
@@ -261,7 +269,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">style</span> <span class="o">=</span> <span class="p">[</span><span class="n">style</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">style</span></div>
+    <span class="k">return</span> <span class="n">style</span>
 
 <div class="viewcode-block" id="locator"><a class="viewcode-back" href="../../tp.html#tp.settings.locator">[docs]</a><span class="k">def</span> <span class="nf">locator</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get default locators.&quot;&quot;&quot;</span>
@@ -292,7 +300,8 @@
 <div class="viewcode-block" id="to_tp"><a class="viewcode-back" href="../../tp.html#tp.settings.to_tp">[docs]</a><span class="k">def</span> <span class="nf">to_tp</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary to translate to tp.&quot;&quot;&quot;</span>
 
-    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;energies&#39;</span><span class="p">:</span>             <span class="s1">&#39;energy&#39;</span><span class="p">,</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ave_pp&#39;</span><span class="p">:</span>               <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;energies&#39;</span><span class="p">:</span>             <span class="s1">&#39;energy&#39;</span><span class="p">,</span>
              <span class="s1">&#39;fermi_levels&#39;</span><span class="p">:</span>         <span class="s1">&#39;fermi_level&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gv&#39;</span><span class="p">:</span>                   <span class="s1">&#39;group_velocity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kappa&#39;</span><span class="p">:</span>                <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">,</span> <span class="c1"># because p3p</span>
@@ -351,6 +360,7 @@
              <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mfp&#39;</span><span class="p">:</span>                          <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mk&#39;</span><span class="p">:</span>                           <span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>               <span class="s1">&#39;ave_pp&#39;</span><span class="p">,</span>
              <span class="s1">&#39;temperatures&#39;</span><span class="p">:</span>                 <span class="s1">&#39;temperature&#39;</span><span class="p">}</span>
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;to_phono3py&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
@@ -450,6 +460,7 @@
              <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>                      <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mu_bounds&#39;</span><span class="p">:</span>                       <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
              <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>                      <span class="s1">&#39;phonons&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>                  <span class="s1">&#39;eV2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>                <span class="s1">&#39;s-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
@@ -491,7 +502,7 @@
 
     <span class="k">return</span> <span class="n">labels</span><span class="p">[</span><span class="n">length</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="large_labels"><a class="viewcode-back" href="../../tp.html#tp.settings.large_labels">[docs]</a><span class="k">def</span> <span class="nf">large_labels</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">large_labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get the default labels for large axes (command-line only).&quot;&quot;&quot;</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;short&#39;</span><span class="p">:</span>  <span class="n">short_labels</span><span class="p">,</span>
@@ -504,7 +515,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">length</span> <span class="o">=</span> <span class="s1">&#39;medium&#39;</span>
 
-    <span class="k">return</span> <span class="n">labels</span><span class="p">[</span><span class="n">length</span><span class="p">]()</span></div>
+    <span class="k">return</span> <span class="n">labels</span><span class="p">[</span><span class="n">length</span><span class="p">]()</span>
 
 <div class="viewcode-block" id="long_labels"><a class="viewcode-back" href="../../tp.html#tp.settings.long_labels">[docs]</a><span class="k">def</span> <span class="nf">long_labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get a dictionary of long-form axis labels.&quot;&quot;&quot;</span>
@@ -551,6 +562,8 @@
                   <span class="s1">&#39;Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Average Phonon-Phonon Interaction Strengths (eV$\mathregular{^2}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
@@ -574,7 +587,7 @@
 
     <span class="k">return</span> <span class="n">labels</span></div>
 
-<div class="viewcode-block" id="medium_labels"><a class="viewcode-back" href="../../tp.html#tp.settings.medium_labels">[docs]</a><span class="k">def</span> <span class="nf">medium_labels</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">medium_labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get a dictionary of medium-length axis labels.&quot;&quot;&quot;</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chemical_potential&#39;</span><span class="p">:</span>
@@ -619,6 +632,8 @@
                   <span class="s1">&#39;Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Avg. Ph-Ph Strengths (eV$\mathregular{^2}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
@@ -640,7 +655,7 @@
        <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;medium_labels&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">labels</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;medium_labels&#39;</span><span class="p">]}</span>
 
-    <span class="k">return</span> <span class="n">labels</span></div>
+    <span class="k">return</span> <span class="n">labels</span>
 
 <div class="viewcode-block" id="short_labels"><a class="viewcode-back" href="../../tp.html#tp.settings.short_labels">[docs]</a><span class="k">def</span> <span class="nf">short_labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of short-form axis labels.&quot;&quot;&quot;</span>
@@ -654,7 +669,7 @@
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;n (cm$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;n (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;DoS&#39;</span><span class="p">,</span>
               <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>
@@ -687,6 +702,8 @@
                   <span class="s1">&#39;$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;$\mathregular{P_\lambda\ (eV^2)}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;PF (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
@@ -715,20 +732,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Scanlon Materials Theory Group
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -736,7 +758,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

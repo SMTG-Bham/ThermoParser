@@ -1,23 +1,31 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>tp.plot.frequency &mdash; ThermoPlotter 0.3.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -29,10 +37,6 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -71,6 +75,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,6 +98,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -127,11 +133,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../contents.html">Docs</a> &raquo;</li>
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -214,7 +222,7 @@
 <span class="sd">        main : bool, optional</span>
 <span class="sd">            set ticks, labels, limits. Default: True.</span>
 <span class="sd">        invert : bool, optional</span>
-<span class="sd">            plot on y axis. Default: False.</span>
+<span class="sd">            plot frequency on y axis. Default: False.</span>
 <span class="sd">        scale : bool, optional</span>
 <span class="sd">            if main, scale to percent. If not main, scale to axis</span>
 <span class="sd">            limits. Default: False.</span>
@@ -228,7 +236,7 @@
 <span class="sd">        fillalpha : float, optional</span>
 <span class="sd">            fill alpha scaled to 0-1. Default: 0.2.</span>
 <span class="sd">        line : bool, optional</span>
-<span class="sd">            plot lines. Default: False.</span>
+<span class="sd">            plot lines. Default: True.</span>
 
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.fill_between.</span>
@@ -309,41 +317,44 @@
         <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
             <span class="n">fillcolour</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">colour</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
             <span class="n">fillcolour</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">fillalpha</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="n">colour</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">fillcolour</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
 
     <span class="c1"># plotting</span>
 
     <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">fill</span> <span class="ow">and</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fill</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
+                               <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fill</span> <span class="ow">and</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">fill</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">fill</span> <span class="ow">and</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fill</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+         
 
     <span class="c1"># axes formatting</span>
 
@@ -387,7 +398,7 @@
 <span class="sd">        main : bool, optional</span>
 <span class="sd">            set ticks, labels, limits. Default: True.</span>
 <span class="sd">        invert : bool, optional</span>
-<span class="sd">            plot on y axis. Default: False.</span>
+<span class="sd">            plot frequency on y axis. Default: False.</span>
 <span class="sd">        scale : bool, optional</span>
 <span class="sd">            if main, scale to percent. If not main, scale to axis</span>
 <span class="sd">            limits. Default: True.</span>
@@ -460,7 +471,7 @@
 
     <span class="c1"># colour</span>
     <span class="c1"># Tries to read the colour as an rgb code, then alpha value.</span>
-
+    
     <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fillcolour2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">rgb2array</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">fillcolour</span><span class="p">)</span>
@@ -475,16 +486,23 @@
                     <span class="n">fillcolour2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">fillcolour</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fillcolour2</span> <span class="o">=</span> <span class="n">fillcolour</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="n">colour</span> <span class="o">=</span> <span class="n">fillcolour2</span>
 
-        <span class="c1"># plotting</span>
+     <span class="c1"># plotting</span>
 
+    <span class="k">if</span> <span class="n">fill</span> <span class="ow">and</span> <span class="n">line</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plor</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">fill</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">fillcolour2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -528,13 +546,14 @@
 <span class="sd">            data including frequency and quantity.</span>
 <span class="sd">        quantity : str</span>
 <span class="sd">            y-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa.</span>
-
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path,</span>
+<span class="sd">            mode_kappa, occupation or ph_ph_strength.</span>
+<span class="sd">            </span>
 <span class="sd">        xquantity : str, optional</span>
 <span class="sd">            x-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa. Default: frequency.</span>
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path,</span>
+<span class="sd">            mode_kappa, occupation or ph_ph_strength.</span>
+<span class="sd">            Default: frequency.</span>
 <span class="sd">        temperature : float, optional</span>
 <span class="sd">            temperature in K. Default: 300.</span>
 <span class="sd">        direction : str, optional</span>
@@ -671,17 +690,19 @@
 <span class="sd">        data : dict</span>
 <span class="sd">            data including frequency and quantity.</span>
 <span class="sd">        quantity : str</span>
-<span class="sd">            y-axis quantity. Accepts gamma, group_velocity, gv_by_gv,</span>
-<span class="sd">            heat_capacity, lifetime, mean_free_path or mode_kappa.</span>
-<span class="sd">        projected : str</span>
-<span class="sd">            colour-axis quantity. Accepts gamma, group_velocity,</span>
+<span class="sd">            y-axis quantity. Accepts frequency, gamma, group_velocity,</span>
 <span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path,</span>
-<span class="sd">            mode_kappa or occupation.</span>
+<span class="sd">            mode_kappa, occupation or ph_ph_strength.</span>
+<span class="sd">        projected : str</span>
+<span class="sd">            colour-axis quantity. Accepts frequency, gamma,</span>
+<span class="sd">            group_velocity, gv_by_gv, heat_capacity, lifetime,</span>
+<span class="sd">            mean_free_path, mode_kappa, occupation or ph_ph_strength.</span>
 
 <span class="sd">        xquantity : str, optional</span>
 <span class="sd">            x-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa. Default: frequency.</span>
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path,</span>
+<span class="sd">            mode_kappa, occupation or ph_ph_strength.</span>
+<span class="sd">            Default: frequency.</span>
 <span class="sd">        temperature : float, optional</span>
 <span class="sd">            temperature in K. Default: 300.</span>
 <span class="sd">        direction : str, optional</span>
@@ -691,7 +712,7 @@
 <span class="sd">        main : bool, optional</span>
 <span class="sd">            set ticks, labels, limits. Default: True.</span>
 <span class="sd">        invert : bool, optional</span>
-<span class="sd">            plot frequency on y-axis. Default: False.</span>
+<span class="sd">            invert x- and y-axes. Default: False.</span>
 
 <span class="sd">        colour : colormap or str, optional</span>
 <span class="sd">            colourmap or colourmap name. Default: viridis.</span>
@@ -811,8 +832,8 @@
     <span class="k">return</span> <span class="n">cbar</span></div>
 
 <div class="viewcode-block" id="add_density"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_density">[docs]</a><span class="k">def</span> <span class="nf">add_density</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-                  <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
-                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a density plot of quantities against frequency.</span>
 
 <span class="sd">    Has an option to change the x-quantity.</span>
@@ -826,13 +847,14 @@
 <span class="sd">            data including frequency and quantity.</span>
 <span class="sd">        quantity : str</span>
 <span class="sd">            y-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa.</span>
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path,</span>
+<span class="sd">            mode_kappa, occupation or ph_ph_strength.</span>
 
 <span class="sd">        xquantity : str, optional</span>
 <span class="sd">            x-axis quantity. Accepts frequency, gamma, group_velocity,</span>
-<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path or</span>
-<span class="sd">            mode_kappa. Default: frequency.</span>
+<span class="sd">            gv_by_gv, heat_capacity, lifetime, mean_free_path,</span>
+<span class="sd">            mode_kappa, occupation or ph_ph_strength.</span>
+<span class="sd">            Default: frequency.</span>
 <span class="sd">        temperature : float, optional</span>
 <span class="sd">            temperature in K. Default: 300.</span>
 <span class="sd">        direction : str, optional</span>
@@ -936,8 +958,6 @@
 
     <span class="k">return</span></div>
 
-
-
 <div class="viewcode-block" id="format_waterfall"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.format_waterfall">[docs]</a><span class="k">def</span> <span class="nf">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">yquantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span>
                      <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Formats axes for waterfall plots.</span>
@@ -1002,20 +1022,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Scanlon Materials Theory Group
+        &#169; Copyright 2020, Scanlon Materials Theory Group.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1023,7 +1048,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
