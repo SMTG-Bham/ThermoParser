@@ -79,12 +79,12 @@ Different environments for the same atom type can be specified, if desired, and 
 \autoref{fig:phonon}b shows the same dispersion with lifetime projected on the colour axis. Data from both Phono3py and Phonopy is parsed, and ThermoPlotter internally calculates mean free path and phonon lifetime.
 Several other ways of projecting a range of properties onto a phonon dispersion are implemented, including the broadened bands plot (`tp.plot.frequency.add_wideband`), which is more commonly seen in the literature.
 
-![Phonon dispersions for ZnO with a) DoS and b) phonon lifetime projected on the colour axis. \label{fig:phonon}](figures/phonons-subfigs.png)
+![Phonon dispersions for ZnO with a) DoS and b) phonon lifetime projected on the colour axis. \label{fig:phonon}](joss_figures/phonons-subfigs.png)
 
 \autoref{fig:waterfall} is a waterfall plot of mean free path against frequency overlaying a DoS plot, clearly showing the relationship between elemental composition and scattering.
 Scaling the linear-scaled DoS data to the log-scaled waterfall axes would be time-consuming on a case-by-case basis, whereas the `tp.plot.frequency.add_dos` function wil autodetect the data range and rescale appropriately if the `scale` argument is set to `True`. 
 
-![Waterfall plot overlaid on a DoS for BaSnO$_3$. \label{fig:waterfall}](figures/waterfall.png)
+![Waterfall plot overlaid on a DoS for BaSnO$_3$. \label{fig:waterfall}](joss_figures/waterfall.png)
 
 # Author Contributions
 
