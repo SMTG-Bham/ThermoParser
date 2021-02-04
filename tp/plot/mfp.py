@@ -174,7 +174,6 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                     fillcolour2[3] = fillcolour
             else:
                 fillcolour2 = colour
-        if not line: colour = fillcolour2
    
     # plotting
 
