@@ -1,8 +1,6 @@
-.. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
-    :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
-
 .. image:: figures/tp-logo.png
     :target: https://smtg-ucl.github.io/ThermoPlotter/
+    :align: center
 
 .. code-block::
 
@@ -17,6 +15,9 @@
     | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :1.0.0\
     |_________________________________:______________________________________:_____/
 
+
+.. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
+    :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
 
 ThermoPlotter is a toolkit used to simplify the production of
 high-quality plots from the outputs of specialised analytical codes. It
