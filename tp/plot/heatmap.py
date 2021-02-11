@@ -205,11 +205,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
 def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
               yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
-              ymax=None, cmin=None, cmax=None, colour='viridis',
-              output='zt.hdf5', **kwargs):
+              ymax=None, cmin=None, cmax=None, colour='viridis', **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
 
-    Calculates ZT and writes to hdf5, plots and formats labels etc.
+    Calculates ZT, plots and formats labels etc.
 
     Arguments
     ---------
@@ -225,8 +224,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             temperature. Ignored if zt in data, if not ignored and None,
             defaults to 1 at all temperatures.
         direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
 
         xinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
@@ -250,12 +249,6 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
-
-        output : str, optional
-            output filename to write to. Only writes if ZT has been
-            within this function. Set to None to not write. Can be
-            loaded with h5py.File to put back into this function.
-            Default: zt.hdf5.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -330,9 +323,6 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
         data = tp.calculate.zt_fromdict(data)
 
-        if output is not None:
-            tp.data.save.hdf5(data, output)
-
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
@@ -353,7 +343,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                      yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
-                     output='target-kl.hdf5', **kwargs):
+                     **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels
@@ -371,8 +361,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         zt : float, optional
             target ZT. Default: 2.
         direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
 
         xinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
@@ -396,10 +386,6 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
-
-        output : str, optional
-            output filename to write to. Set to None to not write.
-            Default: target-kl.hdf5.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -435,9 +421,6 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     data['zt'] = zt
 
     data = tp.calculate.kl_fromdict(data)
-
-    if output is not None:
-        tp.data.save.hdf5(data, output)
 
     # plotting
 
