@@ -38,7 +38,7 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         filename : str
             filepath.
 
-        quantites : dict, optional
+        quantites : str or list, optional
             values to extract. Default: temperature, doping, seebeck,
             conductivity, electronic_thermal_conductivity.
 
@@ -131,7 +131,7 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
         filename : str
             filepath.
 
-        quantites : dict, optional
+        quantites : str or list, optional
             values to extract. Accepts AMSET keys, without spin
             channels, which are dealt with in the spin variable.
             Default: temperature, doping, scattering_rates,
@@ -236,7 +236,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
         filename : str
             filepath.
 
-        quantites : dict, optional
+        quantites : str or list, optional
             values to extract. Accepts boltztrap.hdf5 keys.
             Default: temperature, doping, seebeck, conductivity,
             electronic_thermal_conductivity.
@@ -304,12 +304,10 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     return data2
 
-def phono3py(filename, quantities=['kappa', 'temperature'],
-             write_lifetime=False, write_mfp=False, write_occupation=False):
+def phono3py(filename, quantities=['kappa', 'temperature']):
     """Loads Phono3py data.
 
-    Can also calculate lifetimes, mean free paths and occupations, which
-    can be written to a file.
+    Can also calculate lifetimes, mean free paths and occupations.
     Includes unit conversions and outputs units for all the data (see
     tp.settings). Also corrects mode_kappa for different phono3py
     versions.
@@ -320,18 +318,9 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
         filename : str
             filepath.
 
-        quantities : list, optional
+        quantities : str or list, optional
             values to extract. Accepts Phono3py keys, lifetime,
             mean_free_path and occupation. Default: kappa, temperature.
-        write_lifetime : bool, optional
-            write lifetimes to a new hdf5 file if in quantites.
-            Default: False.
-        write_mfp : bool, optional
-            write mean free paths to a new hdf5 file if in quantities.
-            Default: False.
-        write_occupation : bool, optional
-            write occupations to a new hdf5 file if in quantities.
-            Default: False.
 
     Returns
     -------
@@ -365,7 +354,7 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
 
     if 'temperature' not in quantities:
         for q in quantities:
-            if q in hast:
+            if q in hast or (q in tnames and tnames[q] in hast):
                 quantities.append('temperature')
                 break
 
@@ -397,15 +386,6 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
                         for t in data['temperature'][()]]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
-
-    # write calculated data (loath to mess with original file)
-    for write, q in zip([write_lifetime, write_mfp, write_occupation],
-                        ['lifetime', 'mean_free_path', 'occupation']):
-        if write and q in quantities:
-            data3 = h5py.File('{}-{}'.format(q, filename), 'w')
-            for q2 in [q, 'temperature', 'qpoint']:
-                data3.create_dataset(q2, np.shape(data2[q2]), data=data2[q2])
-            data3.close()
 
     # check mode_kappa and correct for certain phono3py versions
     if 'mode_kappa' in data2:
@@ -584,7 +564,7 @@ def get_path(yamldata):
     Arguments
     ---------
 
-        yamldata : str
+        yamldata : dict
             raw phonopy dispersion data (i.e. from yaml.safe_load).
 
     Returns
