@@ -26,7 +26,7 @@ parser.add_argument('--large', action='store_true',
 parser.add_argument('-m', '--mfp', action='store_true',
                     help='plot mean free path on the x axis instead of '
                          'frequency.')
-parser.add_argument('--minkappa', metavar='minkappa', type=float,
+parser.add_argument('--minkappa', metavar='minkappa', type=float, default=1,
                     help='minimum kappa to plot for --mfp in percent. '
                          'Default: 1.')
 parser.add_argument('--noline', action='store_false',
