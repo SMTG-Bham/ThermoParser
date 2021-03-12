@@ -117,9 +117,9 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         if q in hasdope:
             # temperature index first for consistency with other codes
             if q in hastype:
-                data2[q2][t] = np.array(data2[q2][t])[di]
-                if q in hastemp:
-                    for t in data2[q2]:
+                for t in data2[q2]:
+                    data2[q2][t] = np.array(data2[q2][t])[di]
+                    if q in hastemp:
                         data2[q2][t] = np.swapaxes(data2[q2][t],0,1)
             else:
                 data2[q2] = np.array(data2[q2])[di]
@@ -256,13 +256,17 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
         if q in hasdope:
             # temperature in first index for consistency with other codes
             if q in hastype:
-                data2[q2] = np.array(data2[q2])[:,di]
                 if q in hastemp:
                     data2[q2] = np.swapaxes(data2[q2],1,2)
+                    data2[q2] = np.array(data2[q2])[:,:,di]
+                else:
+                    data2[q2] = np.array(data2[q2])[:,di]
             else:
-                data2[q2] = np.array(data2[q2])[di]
                 if q in hastemp:
                     data2[q2] = np.swapaxes(data2[q2],0,1)
+                    data2[q2] = np.array(data2[q2])[:,di]
+                else:
+                    data2[q2] = np.array(data2[q2])[di]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 
