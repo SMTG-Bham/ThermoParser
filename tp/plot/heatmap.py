@@ -173,7 +173,11 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         if yinterp is not None:
             if yscale == 'linear': y = np.linspace(y[0], y[-1], yinterp)
             if yscale == 'log': y = np.geomspace(y[0], y[-1], yinterp)
+        x = np.array(x)
+        y = np.array(y)
         c = cinterp(x, y)
+    else:
+        c = np.transpose(c)
 
     # ensure all data is shown
     if len(x) == len(c[0]):
@@ -190,7 +194,6 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             y.append(y[-1] ** 2 / y[-2])
 
     # plotting
-
     heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
     cbar = plt.colorbar(heat, extend=extend)
 

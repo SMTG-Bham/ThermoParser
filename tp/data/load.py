@@ -23,7 +23,7 @@ import tp
 from tp import settings
 
 def amset(filename, quantities=['temperature', 'doping', 'seebeck',
-          'conductivity', 'electronic_thermal_conductivity']):
+          'conductivity', 'electronic_thermal_conductivity'], doping='n'):
     """Loads AMSET transport data.
 
     Includes unit conversion and outputs units (see tp.settings).
@@ -41,6 +41,10 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         quantites : str or list, optional
             values to extract. Default: temperature, doping, seebeck,
             conductivity, electronic_thermal_conductivity.
+
+        doping : str, optional
+            doing type (n or p). If there is more than one, defaults to
+            n, else this is ignored.
 
     Returns
     -------
@@ -84,7 +88,21 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
     with open(filename) as f:
         data = json.load(f)
 
-    data2 = {'meta': {'electronic_source': 'amset',
+    if 'doping' in quantities:
+        data['doping'] = np.array(data['doping'])
+        if (data['doping'] < 0).all():
+            doping = 'n'
+            di = np.where(data['doping'] < 0)
+        elif (data['doping'] > 0).all():
+            doping = 'p'
+            di = np.where(data['doping'] > 0)
+        elif doping == 'n':
+            di = np.where(data['doping'] < 0)
+        elif doping == 'p':
+            di = np.where(data['doping'] > 0)
+
+    data2 = {'meta': {'doping_type':       doping,
+                      'electronic_source': 'amset',
                       'units':             {}}}
     for q in quantities:
         assert q in data, \
@@ -96,13 +114,17 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
             data2[q2] = data[q]['data']
         else:
             data2[q2] = data[q]
-        if q in hasdope and q in hastemp:
+        if q in hasdope:
             # temperature index first for consistency with other codes
             if q in hastype:
-                for t in data2[q2]:
-                    data2[q2][t] = np.swapaxes(data2[q2][t],0,1)
+                data2[q2][t] = np.array(data2[q2][t])[di]
+                if q in hastemp:
+                    for t in data2[q2]:
+                        data2[q2][t] = np.swapaxes(data2[q2][t],0,1)
             else:
-                data2[q2] = np.swapaxes(data2[q2],0,1)
+                data2[q2] = np.array(data2[q2])[di]
+                if q in hastemp:
+                    data2[q2] = np.swapaxes(data2[q2],0,1)
         if q in hastype:
             if 'scattering_labels' not in data2:
                 data2['scattering_labels'] = data[q].keys()
@@ -111,6 +133,9 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
 
+    if 'doping' in data2:
+        data2['doping'] = np.array(data2['doping'])[di]
+
     for c in conversions:
         if c in data2:
             data2[c] = np.multiply(data2[c], conversions[c])
@@ -118,7 +143,8 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
     return data2
 
 def amset_mesh(filename, quantities=['temperature', 'doping',
-               'scattering_rates', 'scattering_labels'], spin='avg'):
+               'scattering_rates', 'scattering_labels'], doping='n',
+               spin='avg'):
     """Loads AMSET mesh data.
 
     Includes unit conversion and outputs units (see tp.settings).
@@ -136,6 +162,10 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
             channels, which are dealt with in the spin variable.
             Default: temperature, doping, scattering_rates,
             scattering_labels.
+
+        doping : str, optional
+            doing type (n or p). If there is more than one, defaults to
+            n, else this is ignored.
 
         spin : str, optional
             spin. Accepts up, down or avg. If avg and there is only one
@@ -187,6 +217,19 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
 
     data = h5py.File(filename, 'r')
 
+    if 'doping' in quantities:
+        data['doping'] = np.array(data['doping'])
+        if (data['doping'] < 0).all():
+            doping = 'n'
+            di = np.where(data['doping'] < 0)
+        elif (data['doping'] > 0).all():
+            doping = 'p'
+            di = np.where(data['doping'] > 0)
+        elif doping == 'n':
+            di = np.where(data['doping'] < 0)
+        elif doping == 'p':
+            di = np.where(data['doping'] > 0)
+
     if spin in ['avg', 'average']:
         if 'energies_up' in data and 'energies_down' in data:
             spin = 'avg'
@@ -194,7 +237,8 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
             spin = 'up'
         elif 'energies_down' in data:
             spin = 'down'
-    data2 = {'meta': {'electronic_source': 'amset',
+    data2 = {'meta': {'doping_type':       doping,
+                      'electronic_source': 'amset',
                       'spin':              spin,
                       'units':             {}}}
     for q in quantities:
@@ -209,14 +253,21 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
                 raise Exception('spin must be up or down or avg')
         else:
             data2[q2] = data[q]
-        if q in hasdope and q in hastemp:
+        if q in hasdope:
             # temperature in first index for consistency with other codes
             if q in hastype:
-                data2[q2] = np.swapaxes(data2[q2],1,2)
+                data2[q2] = np.array(data2[q2])[:,di]
+                if q in hastemp:
+                    data2[q2] = np.swapaxes(data2[q2],1,2)
             else:
-                data2[q2] = np.swapaxes(data2[q2],0,1)
+                data2[q2] = np.array(data2[q2])[di]
+                if q in hastemp:
+                    data2[q2] = np.swapaxes(data2[q2],0,1)
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
+
+    if 'doping' in data2:
+        data2['doping'] = np.array(data2['doping'])[di]
 
     for c in conversions:
         if c in data2:

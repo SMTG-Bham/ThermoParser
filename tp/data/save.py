@@ -65,7 +65,8 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
             crystal direction, accepts x-z/ a-c or average/ avg.
             Default: average.
         doping : str, optional
-            doping type for BoltzTraP. Must be n or p. Default: n.
+            doping type. Must be n or p. If both present default to n,
+            else ignored.
 
         tinterp : int, optional
             density of interpolation for temperature. None turns it off.
@@ -93,7 +94,7 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
             prompt(f, ['{}.hdf5'.format(output), '{}.yaml'.format(output)])
 
     try:
-        edata = tp.data.load.amset(efile)
+        edata = tp.data.load.amset(efile, doping=doping)
     except Exception:
         edata = tp.data.load.boltztrap(efile, doping=doping)
     edata = tp.data.resolve.resolve(edata, ['conductivity', 'seebeck',
@@ -126,13 +127,13 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
         edata['meta']['kappa_source'] = kdata['meta']['kappa_source']
     else: # if lattice thermal conductivity not supplied, set to 1 W m-1 K-1
         edata['lattice_thermal_conductivity'] = np.ones(
-                                                      len(data['temperature']))
+                                                     len(edata['temperature']))
         edata['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
     edata = tp.calculate.zt_fromdict(edata)
 
     ztdata = {'meta': {**edata['meta'],
-                       'original_temperature': edata['temperature'][()].tolist(),
-                       'original_doping':      edata['doping'][()].tolist()}}
+               'original_temperature': np.array(edata['temperature']).tolist(),
+               'original_doping':      np.array(edata['doping']).tolist()}}
     # interpolation of zt (if applicable)
     if tinterp is not None or dinterp is not None:
         if tinterp is None:
@@ -142,7 +143,7 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
                                                 edata['temperature'][-1],
                                                 tinterp)
         if dinterp is None:
-            ztdata['doping'] = edata['doping'][()]
+            ztdata['doping'] = edata['doping']
         else:
             ztdata['doping'] = np.geomspace(edata['doping'][0],
                                             edata['doping'][-1], dinterp)
@@ -152,8 +153,8 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
         ztdata['zt'] = ztinterp(ztdata['doping'], ztdata['temperature'])
     else:
         ztdata['zt'] = edata['zt'][()]
-        ztdata['temperature'] = edata['temperature'][()]
-        ztdata['doping'] = edata['doping'][()]
+        ztdata['temperature'] = np.array(edata['temperature']).tolist()
+        ztdata['doping'] = np.array(edata['doping']).tolist()
 
     hdf5(ztdata, '{}.hdf5'.format(output))
 
@@ -165,16 +166,16 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
     maxindex = np.where(np.round(ztdata['zt'], 10) \
                      == np.round(np.amax(ztdata['zt']), 10))
     ydata['max']['zt'] = ztdata['zt'].tolist()[maxindex[0][0]][maxindex[1][0]]
-    ydata['max']['temperature'] = ztdata['temperature'].tolist()[maxindex[0][0]]
-    ydata['max']['doping'] = ztdata['doping'].tolist()[maxindex[1][0]]
+    ydata['max']['temperature'] = ztdata['temperature'][maxindex[0][0]]
+    ydata['max']['doping'] = ztdata['doping'][maxindex[1][0]]
 
     # max zt per temperature and corresponding doping
     maxindices = [(i, np.where(np.round(zt, 10) \
                             == np.round(np.amax(zt),10))[0][0]) \
                   for i, zt in enumerate(ztdata['zt'])]
     ydata['zt'] = [ztdata['zt'].tolist()[i][j] for i, j in maxindices]
-    ydata['temperature'] = ztdata['temperature'].tolist()
-    ydata['doping'] = [ztdata['doping'].tolist()[i] for _, i in maxindices]
+    ydata['temperature'] = ztdata['temperature']
+    ydata['doping'] = [ztdata['doping'][i] for _, i in maxindices]
 
     with open('{}.yaml'.format(output), 'w') as f:
         yaml.dump(ydata, f, default_flow_style=False)
@@ -183,8 +184,6 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
                                                    ydata['max']['zt'],
                                                    ydata['max']['temperature'],
                                                    ydata['max']['doping']))
-
-
 
     return
 
@@ -207,7 +206,8 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
             crystal direction, accepts x-z/ a-c or average/ avg.
             Default: average.
         doping : str, optional
-            doping type for BoltzTraP. Must be n or p. Default: n.
+            doping type. Must be n or p. If both present default to n,
+            else ignored.
 
         tinterp : int, optional
             density of interpolation for temperature. None turns it off.
@@ -234,7 +234,7 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
         prompt(filename, '{}.hdf5'.format(output))
 
     try:
-        data = tp.data.load.amset(filename)
+        data = tp.data.load.amset(filename, doping=doping)
     except Exception:
         data = tp.data.load.boltztrap(filename, doping=doping)
     data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
@@ -245,18 +245,20 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
     data = tp.calculate.kl_fromdict(data)
 
     kdata = {'meta': {**data['meta'],
-                     'original_temperature': data['temperature'][()],
-                     'original_doping':      data['doping'][()]}}
+                     'original_temperature':
+                                        np.array(data['temperature']).tolist(),
+                     'original_doping':
+                                        np.array(data['doping']).tolist()}}
     # interpolation of kl (if applicable)
     if tinterp is not None or dinterp is not None:
         if tinterp is None:
-            kdata['temperature'] = data['temperature'][()]
+            kdata['temperature'] = data['temperature']
         else:
             kdata['temperature'] = np.linspace(data['temperature'][0],
                                                data['temperature'][-1],
                                                tinterp)
         if dinterp is None:
-            kdata['doping'] = data['doping'][()]
+            kdata['doping'] = data['doping']
         else:
             kdata['doping'] = np.geomspace(data['doping'][0],
                                            data['doping'][-1], dinterp)
@@ -267,9 +269,9 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
                                                         kdata['temperature'])
     else:
         kdata['lattice_thermal_conductivity'] = \
-                                       data['lattice_thermal_conductivity'][()]
-        kdata['temperature'] = data['temperature'][()]
-        kdata['doping'] = data['doping'][()]
+                                           data['lattice_thermal_conductivity']
+        kdata['temperature'] = data['temperature']
+        kdata['doping'] = data['doping']
 
     hdf5(kdata, '{}.hdf5'.format(output))
 
