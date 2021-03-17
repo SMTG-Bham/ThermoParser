@@ -441,7 +441,7 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
             if q2 in units:
                 data['meta']['units'][q2] = units[q2]
 
-    # check mode_kappa and correct for certain phono3py versions
+        # check mode_kappa and correct for certain phono3py versions
         if 'mode_kappa' in data:
             try:
                 k = round(f['kappa'][()][-1][0], 3)

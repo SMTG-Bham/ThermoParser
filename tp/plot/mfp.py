@@ -155,7 +155,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     if scale:
         axscale = [0, 100] if main else None
-        k, _ = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale)
+        k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale)
 
     # colour
     # Tries to read the colour as an rgb code, then alpha value.

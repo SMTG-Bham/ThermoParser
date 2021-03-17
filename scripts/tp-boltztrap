@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Runs boltzTraP and outputs to hdf5.')
+parser.add_argument('--dmin', metavar='doping', type=float, default=1e18,
+                    help='minimum doping in cm^-3. Default: 1e18.')
+parser.add_argument('--dmax', metavar='doping', type=float, default=1e21,
+                    help='maximum doping in cm^-3. Default: 1e21.')
+parser.add_argument('-k', '--kmode', default='boltzmann',
+                    help='kappa calculation method. Options: '
+                         'boltzmann: boltztrap method (default); '
+                         'wiedemann: Wiedemann-Franz law with constant L; '
+                         'snyder:    Wiedemann-Franz law with L dependant on '
+                                    'Seebeck coefficient.')
+parser.add_argument('--kpoints', metavar='kpoints', default='KPOINTS',
+                    help='path to KPOINTS if there are zero-weighted kpoints. '
+                         'Default: KPOINTS.')
+parser.add_argument('-l', '--lpfac', metavar='factor', type=int, default=10,
+                    help='factor to interpolate the DoS density by. '
+                         'Default: 10.')
+parser.add_argument('--ndope', metavar='number', type=int, default=17,
+                    help='number of doping concetrations to calculate. '
+                         'Default: 17.')
+parser.add_argument('--no_analyse', action='store_false',
+                    help='don\'t analyse boltztrap.')
+parser.add_argument('--no_run', action='store_false',
+                    help='don\'t run boltztrap.')
+parser.add_argument('-o', '--output', metavar='name', default='boltztrap.hdf5',
+                    help='output filename. Default: boltztrap.hdf5.')
+parser.add_argument('-r', '--relaxation_time', metavar='time', type=float,
+                    default=1e-14,
+                    help='charge carrier relaxation time in s. '
+                         'Default: 1e-14.')
+parser.add_argument('--tmin', metavar='temp', type=float,
+                    help='set minimum temperature in K. Does not speed up '
+                         'calculation, just discards data.')
+parser.add_argument('--tmax', metavar='temp', type=float, default=1000,
+                    help='maximum temperature in K. Default: 1000.')
+parser.add_argument('--tstep', metavar='temp', type=float, default=50,
+                    help='temperature step size in K. Default: 50.')
+parser.add_argument('-v', '--vasprun', metavar='vasprun',
+                    default='vasprun.xml',
+                    help='path to vasprun.xml. Default: vasprun.xml.')
+
+args=parser.parse_args()
+
+import numpy as np
+import tp
+
+doping = np.geomspace(args.dmin, args.dmax, args.ndope)
+
+tp.data.run.boltztrap(tmax=args.tmax, tstep=args.tstep, tmin=args.tmin,
+                      doping=doping, ke_mode=args.kmode, vasprun=args.vasprun,
+                      kpoints=args.kpoints, lpfac=args.lpfac,
+                      relaxation_time=args.relaxation_time, run=args.no_run,
+                      analyse=args.no_analyse, output=args.output)
