@@ -126,34 +126,38 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
         edata['meta']['kappa_source'] = kdata['meta']['kappa_source']
     else: # if lattice thermal conductivity not supplied, set to 1 W m-1 K-1
         edata['lattice_thermal_conductivity'] = np.ones(
-                                                      len(data['temperature']))
+                                                     len(edata['temperature']))
         edata['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
     edata = tp.calculate.zt_fromdict(edata)
 
     ztdata = {'meta': {**edata['meta'],
-                       'original_temperature': edata['temperature'].tolist(),
-                       'original_doping':      edata['doping']}}
+                       'original_temperature': np.array(
+                                                edata['temperature']).tolist(),
+                       'original_doping':      np.array(
+                                                edata['doping']).tolist()}}
     # interpolation of zt (if applicable)
     if tinterp is not None or dinterp is not None:
         if tinterp is None:
-            ztdata['temperature'] = edata['temperature']
+            ztdata['temperature'] = np.array(edata['temperature']).tolist()
         else:
             ztdata['temperature'] = np.linspace(edata['temperature'][0],
                                                 edata['temperature'][-1],
-                                                tinterp)
+                                                tinterp).tolist()
         if dinterp is None:
-            ztdata['doping'] = edata['doping']
+            ztdata['doping'] = np.array(edata['doping']).tolist()
         else:
             ztdata['doping'] = np.geomspace(edata['doping'][0],
-                                            edata['doping'][-1], dinterp)
+                                            edata['doping'][-1],
+                                            dinterp).tolist()
 
         ztinterp = interp2d(edata['doping'], edata['temperature'], edata['zt'],
                             kind=kind)
-        ztdata['zt'] = ztinterp(ztdata['doping'], ztdata['temperature'])
+        ztdata['zt'] = ztinterp(ztdata['doping'],
+                                ztdata['temperature']).tolist()
     else:
-        ztdata['zt'] = edata['zt']
-        ztdata['temperature'] = edata['temperature']
-        ztdata['doping'] = edata['doping']
+        ztdata['zt'] = np.array(edata['zt']).tolist()
+        ztdata['temperature'] = np.array(edata['temperature']).tolist()
+        ztdata['doping'] = np.array(edata['doping']).tolist()
 
     hdf5(ztdata, '{}.hdf5'.format(output))
 
@@ -164,16 +168,16 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
     # max zt and corresponding temperature and doping
     maxindex = np.where(np.round(ztdata['zt'], 10) \
                      == np.round(np.amax(ztdata['zt']), 10))
-    ydata['max']['zt'] = ztdata['zt'].tolist()[maxindex[0][0]][maxindex[1][0]]
-    ydata['max']['temperature'] = ztdata['temperature'].tolist()[maxindex[0][0]]
+    ydata['max']['zt'] = ztdata['zt'][maxindex[0][0]][maxindex[1][0]]
+    ydata['max']['temperature'] = ztdata['temperature'][maxindex[0][0]]
     ydata['max']['doping'] = ztdata['doping'][maxindex[1][0]]
 
     # max zt per temperature and corresponding doping
     maxindices = [(i, np.where(np.round(zt, 10) \
                             == np.round(np.amax(zt),10))[0][0]) \
                   for i, zt in enumerate(ztdata['zt'])]
-    ydata['zt'] = [ztdata['zt'].tolist()[i][j] for i, j in maxindices]
-    ydata['temperature'] = ztdata['temperature'].tolist()
+    ydata['zt'] = [ztdata['zt'][i][j] for i, j in maxindices]
+    ydata['temperature'] = ztdata['temperature']
     ydata['doping'] = [ztdata['doping'][i] for _, i in maxindices]
 
     with open('{}.yaml'.format(output), 'w') as f:
@@ -183,8 +187,6 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
                                                    ydata['max']['zt'],
                                                    ydata['max']['temperature'],
                                                    ydata['max']['doping']))
-
-
 
     return
 
