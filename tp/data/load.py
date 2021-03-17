@@ -89,17 +89,17 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         data = json.load(f)
 
     if 'doping' in quantities:
-        data['doping'] = np.array(data['doping'])
-        if (data['doping'] < 0).all():
+        d = np.array(data['doping'])
+        if (d < 0).all():
             doping = 'n'
-            di = np.where(data['doping'] < 0)
-        elif (data['doping'] > 0).all():
+            di = np.where(d < 0)
+        elif (d > 0).all():
             doping = 'p'
-            di = np.where(data['doping'] > 0)
+            di = np.where(d > 0)
         elif doping == 'n':
-            di = np.where(data['doping'] < 0)
+            di = np.where(d < 0)
         elif doping == 'p':
-            di = np.where(data['doping'] > 0)
+            di = np.where(d > 0)
 
     data2 = {'meta': {'doping_type':       doping,
                       'electronic_source': 'amset',
@@ -215,69 +215,68 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
 
     # load data
 
-    data = h5py.File(filename, 'r')
+    with h5py.File(filename, 'r') as f:
+        if 'doping' in quantities:
+            d = np.array(f['doping'][()])
+            if (d < 0).all():
+                doping = 'n'
+                di = np.where(d < 0)
+            elif (d > 0).all():
+                doping = 'p'
+                di = np.where(d > 0)
+            elif doping == 'n':
+                di = np.where(d < 0)
+            elif doping == 'p':
+                di = np.where(d > 0)
 
-    if 'doping' in quantities:
-        data['doping'] = np.array(data['doping'])
-        if (data['doping'] < 0).all():
-            doping = 'n'
-            di = np.where(data['doping'] < 0)
-        elif (data['doping'] > 0).all():
-            doping = 'p'
-            di = np.where(data['doping'] > 0)
-        elif doping == 'n':
-            di = np.where(data['doping'] < 0)
-        elif doping == 'p':
-            di = np.where(data['doping'] > 0)
-
-    if spin in ['avg', 'average']:
-        if 'energies_up' in data and 'energies_down' in data:
-            spin = 'avg'
-        elif 'energies_up' in data:
-            spin = 'up'
-        elif 'energies_down' in data:
-            spin = 'down'
-    data2 = {'meta': {'doping_type':       doping,
-                      'electronic_source': 'amset',
-                      'spin':              spin,
-                      'units':             {}}}
-    for q in quantities:
-        q2 = tnames[q] if q in tnames else q
-        if q in hasspin:
-            if spin == 'avg':
-                data2[q2] = np.average([data['{}_up'.format(q)],
-                                        data['{}_down'.format(q)]], axis=0)
-            elif spin in ['up', 'down']:
-                data2[q2] = data['{}_{}'.format(q, spin)]
-            else:
-                raise Exception('spin must be up or down or avg')
-        else:
-            data2[q2] = data[q]
-        if q in hasdope:
-            # temperature in first index for consistency with other codes
-            if q in hastype:
-                if q in hastemp:
-                    data2[q2] = np.swapaxes(data2[q2],1,2)
-                    data2[q2] = np.array(data2[q2])[:,:,di]
+        if spin in ['avg', 'average']:
+            if 'energies_up' in f and 'energies_down' in f:
+                spin = 'avg'
+            elif 'energies_up' in f:
+                spin = 'up'
+            elif 'energies_down' in f:
+                spin = 'down'
+        data = {'meta': {'doping_type':       doping,
+                         'electronic_source': 'amset',
+                         'spin':              spin,
+                         'units':             {}}}
+        for q in quantities:
+            q2 = tnames[q] if q in tnames else q
+            if q in hasspin:
+                if spin == 'avg':
+                    data[q2] = np.average([f['{}_up'.format(q)][()],
+                                           f['{}_down'.format(q)][()]], axis=0)
+                elif spin in ['up', 'down']:
+                    data[q2] = f['{}_{}'.format(q, spin)][()]
                 else:
-                    data2[q2] = np.array(data2[q2])[:,di]
+                    raise Exception('spin must be up or down or avg')
             else:
-                if q in hastemp:
-                    data2[q2] = np.swapaxes(data2[q2],0,1)
-                    data2[q2] = np.array(data2[q2])[:,di]
+                data[q2] = f[q][()]
+            if q in hasdope:
+                # temperature in first index for consistency with other codes
+                if q in hastype:
+                    if q in hastemp:
+                        data[q2] = np.swapaxes(data[q2],1,2)
+                        data[q2] = np.array(data[q2])[:,:,di]
+                    else:
+                        data[q2] = np.array(data[q2])[:,di]
                 else:
-                    data2[q2] = np.array(data2[q2])[di]
-        if q2 in units:
-            data2['meta']['units'][q2] = units[q2]
+                    if q in hastemp:
+                        data[q2] = np.swapaxes(data[q2],0,1)
+                        data[q2] = np.array(data[q2])[:,di]
+                    else:
+                        data[q2] = np.array(data[q2])[di]
+            if q2 in units:
+                data['meta']['units'][q2] = units[q2]
 
-    if 'doping' in data2:
-        data2['doping'] = np.array(data2['doping'])[di]
+    if 'doping' in data:
+        data['doping'] = np.array(data['doping'])[di]
 
     for c in conversions:
-        if c in data2:
-            data2[c] = np.multiply(data2[c], conversions[c])
+        if c in data:
+            data[c] = np.multiply(data[c], conversions[c])
 
-    return data2
+    return data
 
 def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
               'conductivity', 'electronic_thermal_conductivity'], doping='n'):
@@ -340,24 +339,25 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     # load data
 
-    data = h5py.File(filename, 'r')
-
-    data2 = {'meta': {'electronic_source': 'boltztrap',
-                      'units':             {}}}
-    for q in quantities:
-        assert q in data, '{} unrecognised. Quantity must be in {} or {}.'.format(
-                q, ', '.join(list(data)[:-1]), list(data)[-1])
-        q2 = tnames[q] if q in tnames else q
-        data2[q2] = data[q]
-        if q in hasdope: data2[q2] = data2[q2][doping]
-        if q2 in units:
-            data2['meta']['units'][q2] = units[q2]
+    with h5py.File(filename, 'r') as f:
+        data = {'meta': {'electronic_source': 'boltztrap',
+                         'units':             {}}}
+        for q in quantities:
+            assert q in f, '{} unrecognised. Quantity must be in {} or {}.'.format(
+                            q, ', '.join(list(f)[:-1]), list(f)[-1])
+            q2 = tnames[q] if q in tnames else q
+            if q in hasdope:
+                data[q2] = f[q][doping][()]
+            else:
+                data[q2] = f[q][()]
+            if q2 in units:
+                data['meta']['units'][q2] = units[q2]
 
     for c in conversions:
-        if c in data2:
-            data2[c] = np.multiply(data2[c], conversions[c])
+        if c in data:
+            data[c] = np.multiply(data[c], conversions[c])
 
-    return data2
+    return data
 
 def phono3py(filename, quantities=['kappa', 'temperature']):
     """Loads Phono3py data.
@@ -415,61 +415,59 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     # load and calculate data
 
-    data = h5py.File(filename, 'r')
-
-    data2 = {'meta': {'kappa_source': 'phono3py',
-                      'units':        {}}}
-    for q in quantities:
-        assert q in data or q in ['lifetime', 'mean_free_path', 'occupation'], \
-           '{} unrecognised. Quantity must be {}, lifetime, mean_free_path ' \
-           'or occupation'.format(q, ', '.join(data))
-        q2 = tnames[q] if q in tnames else q
-        if q in data:
-            data2[q2] = data[q][()]
-        elif q in ['lifetime', 'mean_free_path']:
-            data2['lifetime'] = np.reciprocal(np.multiply(2,data['gamma'][()]))
-            data2['lifetime'] = np.where(np.isinf(data2['lifetime']), 0,
-                                         data2['lifetime'])
-            if q == 'mean_free_path':
-                data2[q] = np.multiply(np.transpose([data2['lifetime'],] * 3,
-                                                    (1, 2, 3, 0)),
-                                       data['group_velocity'][()])
-        elif q == 'occupation':
-            from tp.calculate import be_occupation as occupation
-            data2[q] = [occupation(data['frequency'][()], t)
-                        for t in data['temperature'][()]]
-        if q2 in units:
-            data2['meta']['units'][q2] = units[q2]
+    with h5py.File(filename, 'r') as f:
+        data = {'meta': {'kappa_source': 'phono3py',
+                         'units':        {}}}
+        for q in quantities:
+            assert q in f or q in ['lifetime', 'mean_free_path', 'occupation'], \
+               '{} unrecognised. Quantity must be {}, lifetime, mean_free_path ' \
+               'or occupation'.format(q, ', '.join(f))
+            q2 = tnames[q] if q in tnames else q
+            if q in f:
+                data[q2] = f[q][()]
+            elif q in ['lifetime', 'mean_free_path']:
+                data['lifetime'] = np.reciprocal(np.multiply(2 * 2 * np.pi,
+                                                             f['gamma'][()]))
+                data['lifetime'] = np.where(np.isinf(data['lifetime']), 0,
+                                            data['lifetime'])
+                if q == 'mean_free_path':
+                    data[q] = np.multiply(np.transpose([data['lifetime'],] * 3,
+                                                        (1, 2, 3, 0)),
+                                          f['group_velocity'][()])
+            elif q == 'occupation':
+                from tp.calculate import be_occupation as occupation
+                data[q] = [occupation(f['frequency'][()], t)
+                            for t in f['temperature'][()]]
+            if q2 in units:
+                data['meta']['units'][q2] = units[q2]
 
     # check mode_kappa and correct for certain phono3py versions
-    if 'mode_kappa' in data2:
-        try:
-            k = round(data['kappa'][-1][0], 3)
-            mk = round(data['mode_kappa'][-1][:,:,0].sum(axis=1).sum(), 3)
-            if k != mk:
-                raise Exception('The sum of mode_kappa does not equal kappa.\n '
-                                'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
-                                                                        k, mk))
-        except Exception:
-            mk2 = np.divide(data['mode_kappa'], np.prod(data['mesh'][:]))
-            k = round(data['kappa'][-1][0], 3)
-            mk = round(mk2[-1][:,:,0].sum(axis=1).sum(), 3)
-            if k != mk:
-                raise Exception('Mode kappa has been divided by the mesh, but '
-                                'the sum of mode_kappa does not equal kappa.\n '
-                                'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
-                                                                        k, mk))
-            else:
-                data2['mode_kappa'] = np.divide(data2['mode_kappa'],
-                                                np.prod(data['mesh'][()][:]))
-
-    data.close()
+        if 'mode_kappa' in data:
+            try:
+                k = round(f['kappa'][()][-1][0], 3)
+                mk = round(f['mode_kappa'][()][-1][:,:,0].sum(axis=1).sum(), 3)
+                if k != mk:
+                    raise Exception('The sum of mode_kappa does not equal kappa.\n '
+                                    'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
+                                                                            k, mk))
+            except Exception:
+                mk2 = np.divide(f['mode_kappa'][()], np.prod(f['mesh'][()][:]))
+                k = round(f['kappa'][()][-1][0], 3)
+                mk = round(mk2[-1][:,:,0].sum(axis=1).sum(), 3)
+                if k != mk:
+                    raise Exception('Mode kappa has been divided by the mesh, but '
+                                    'the sum of mode_kappa does not equal kappa.\n '
+                                    'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
+                                                                            k, mk))
+                else:
+                    data['mode_kappa'] = np.divide(data['mode_kappa'],
+                                                   np.prod(f['mesh'][()][:]))
 
     for c in conversions:
-        if c in data2:
-            data2[c] = np.multiply(data2[c], conversions[c])
+        if c in data:
+            data[c] = np.multiply(data[c], conversions[c])
 
-    return data2
+    return data
 
 def phonopy_dispersion(filename, xdata=None):
     """Loads phonopy dispersion, and can scale the x values.
