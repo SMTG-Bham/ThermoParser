@@ -340,7 +340,8 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     # load data
 
     with h5py.File(filename, 'r') as f:
-        data = {'meta': {'electronic_source': 'boltztrap',
+        data = {'meta': {'doping_type':       doping,
+                         'electronic_source': 'boltztrap',
                          'units':             {}}}
         for q in quantities:
             assert q in f, '{} unrecognised. Quantity must be in {} or {}.'.format(

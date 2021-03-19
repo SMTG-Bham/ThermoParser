@@ -49,7 +49,7 @@ def phono3py(filename, quantities, output='tp-phono3py', force=False):
 
 def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
        dinterp=None, kind='linear', output='tp-zt', force=False):
-    """Save zt to hdf5 and highlights to yaml.
+    """Save ZT to hdf5 and highlights to yaml.
 
     Also saves temperature and doping and metadata.
 
@@ -183,7 +183,8 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
     with open('{}.yaml'.format(output), 'w') as f:
         yaml.dump(ydata, f, default_flow_style=False)
 
-    print('Max ZT of {:.2f} at {:.0f} K, {:.2e} carriers cm^-3'.format(
+    print('Max ZT in the {} direction of {:.2f} at {:.0f} K, {:.2e} carriers cm^-3'.format(
+                                                   doping,
                                                    ydata['max']['zt'],
                                                    ydata['max']['temperature'],
                                                    ydata['max']['doping']))

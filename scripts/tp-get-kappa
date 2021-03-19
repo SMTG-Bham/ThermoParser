@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Extracts kappa from Phono3py hdf5.')
+parser.add_argument('file',
+                    help='phono3py kappa-mxxx.hdf5.')
+parser.add_argument('-d', '--direction', metavar='direction', nargs='+',
+                    default=['x', 'y', 'z'],
+                    help='direction for anisotropic data. Accepts a-c/ '
+                         'x-z or average/ avg. Default: x, y and z.')
+parser.add_argument('-o', '--output', metavar='file', default='tp-kappa',
+                    help='output filename, sans extension. '
+                         'Default: tp-kappa.')
+
+args=parser.parse_args()
+
+import numpy as np
+import tp
+
+f = tp.data.load.phono3py(args.file)
+
+header = 'T/K'
+data = [f['temperature']]
+for d in args.direction:
+    aniso = tp.data.resolve.resolve(f, 'lattice_thermal_conductivity',
+                                    direction=d)
+    header += ' kappa_{}/Wm^-1K^-1'.format(d)
+    data.append(aniso['lattice_thermal_conductivity'])
+
+np.savetxt('{}.dat'.format(args.output), np.transpose(data), header=header)
