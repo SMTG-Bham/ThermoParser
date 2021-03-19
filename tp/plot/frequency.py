@@ -193,7 +193,6 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
                 ax.fill_between(f, data[key], label=key, facecolor=fillcolour[key], linewidth=0)
             else:
                 ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
-         
 
     # axes formatting
 
@@ -215,43 +214,68 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
 
     return
 
-def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
-                  invert=False, scale=False, colour='#000000', fill=False,
-                  fillcolour=0.2, line=True, **kwargs):
+def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
+                  main=True, invert=False, scale=False, colour=None,
+                  fill=False, fillcolour=0.2, line=True, linestyle='-',
+                  marker=None, **kwargs):
     """Cumulates and plots kappa against frequency.
+
+    Can plot data from multiple data dictionaries and directions.
+    Colour, linestyle etc. are looped, so if you have two datasets and
+    two directions, but only specify two colours, the first will apply
+    to the first direction in both datasets, whereas if you want one for
+    the first dataset and one for the second, you would repeat the first
+    colour twice and the second twice too.
 
     Arguments
     ---------
 
         ax : axes
             axes to plot on.
-        data : dict
-            Phono3py data including mode_kappa and frequency.
+        data : dict or list
+            (list of sets of) Phono3py data including:
 
         temperature : float, optional
             temperature in K (finds nearest). Default: 300.
-        direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average
+
+                mode_kappa: array-like
+                    frequency and q-point decomposed lattice thermal
+                    conductivity.
+                frequency : array-like
+                    frequencies.
+                temperature : array-like
+                    temperature.
+
+        direction : str or list, optional
+            (list of) direction(s) from anisotropic data, accepts x-z/ a-c or
+            average/ avg. Default: average.
+        label : str, optional
+            (list of) legend label(s). Defaults to $\mathregular{\kappa_l}$
+            if there is only one line plotted, or direction if there are
+            more.
 
         main : bool, optional
             set ticks, labels, limits. Default: True.
         invert : bool, optional
             plot frequency on y axis. Default: False.
         scale : bool, optional
-            if main, scale to percent. If not main, scale to axis
-            limits. Default: True.
+            if main, scale to percent, else scale to axis limits.
+            Default: True.
 
-        colour : str, optional
-            RGB line colour. Default: #000000.
+        colour : str or list, optional
+            (list of) RGB line colour(s). Default: default colour cycle.
         fill : bool, optional
             fill below lines. Default: False.
-        fillcolour : int or str, optional
+        fillcolour : int or str or list, optional
             if a float from 0-1 and colour in #RRGGBB format, sets
             fill colour opacity. Otherwise treats it as a colour.
             Default: 0.2.
         line : bool, optional
             plot lines. Default: True.
+        linestyle : str or list, optional
+            (list of) linestyle(s). Default: "-".
+        marker : str or list, optional
+            (list of) markers. Default: None.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
@@ -259,9 +283,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
             arguments passed to this function.
-            Defaults:
+            Default:
 
-                label:      $\mathregular{\kappa_l}$
                 rasterized: False
 
     Returns
@@ -273,8 +296,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
     # defaults
 
-    defkwargs = {'label':      '$\mathregular{\kappa_l}$',
-                 'rasterized': False}
+    defkwargs = {'rasterized': False}
 
     if conf is None or 'frequency_cum_kappa_kwargs' not in conf or \
        conf['frequency_cum_kappa_kwargs'] is None:
@@ -291,79 +313,132 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
     # data formatting and calculation
 
-    data = tp.resolve.resolve(data, 'mode_kappa', temperature=temperature,
-                                                  direction=direction)
-    k = np.ravel(data['mode_kappa'])
-    f = np.ravel(data['frequency'])
-
-    f, k = tp.calculate.cumulate(f, k)
-    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
-               data['meta']['temperature'], direction),
-               np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
-    f = np.append(f, 100*f[-1])
-    k = np.append(k, k[-1])
-
-    if scale:
-        axscale = [0, 100] if main else None
-        axis = 'x' if invert else 'y'
-        k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale, axis=axis)
-
-    # colour
-    # Tries to read the colour as an rgb code, then alpha value.
-    
-    if fill:
-        try:
-            fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
-        except Exception:
-            if isinstance(colour, list) and \
-               isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
-               fillcolour <= 1:
-                fillcolour2 = list(colour)
-                if len(colour) == 3:
-                    fillcolour2.append(fillcolour)
-                elif len(colour) == 4:
-                    fillcolour2[3] = fillcolour
-            else:
-                fillcolour2 = fillcolour
-
-     # plotting
-
-    if fill and line:
-        if invert:
-            ax.plot(k, f, color=colour, **kwargs)
-            ax.fill_between(k, f, facecolor=fillcolour2, linewidth=0)
+    if isinstance(direction, str):
+        direction = [direction]
+    if isinstance(data, dict):
+        data = [data]
+    if colour is None:
+        colour = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    elif isinstance(colour, str):
+        colour = [colour]
+    if fillcolour is None:
+        fillcolour = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    elif isinstance(fillcolour, (str, float, int)):
+        fillcolour = [fillcolour]
+    if isinstance(linestyle, str):
+        linestyle = [linestyle]
+    if marker is None or isinstance(marker, str):
+        marker = [marker]
+    if label is None:
+        if len(data) == 1 and len(direction) == 1:
+            label = ['$\mathregular{\kappa_l}$']
         else:
-            ax.plot(f, k, color=colour, **kwargs)
-            ax.fill_between(f, k, facecolor=fillcolour2)
+            label = direction
+    elif isinstance(label, str):
+        label = [label]
 
-    elif fill and not line: 
-            if invert:
-                ax.fill_between(k, f, facecolor=fillcolour2, **kwargs)
+    fmax, kmax = None, None
+    i = 0
+
+    for dat in data:
+        for d in direction:
+            data2 = tp.resolve.resolve(dat, 'mode_kappa',
+                                       temperature=temperature, direction=d)
+            k = np.ravel(data2['mode_kappa'])
+            f = np.ravel(data2['frequency'])
+
+            f, k = tp.calculate.cumulate(f, k)
+            np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
+                       dat['meta']['temperature'], d), np.transpose([f, k]),
+                       header='Frequency(THz) k_l(Wm-1K-1)')
+
+            if fmax is None or fmax < f[-1]:
+                fmax = f[-1]
+            if kmax is None or kmax < k[-1]:
+                kmax = 100 if main and scale else k[-1]
+
+            f = np.append(f, 100*f[-1])
+            k = np.append(k, k[-1])
+
+            if scale:
+                axscale = [0, 100] if main else None
+                axis = 'x' if invert else 'y'
+                k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale, axis=axis)
+
+            colour1 = colour[i % len(colour)]
+            fillcolour1 = fillcolour[i % len(fillcolour)]
+            linestyle1 = linestyle[i % len(linestyle)]
+            marker1 = marker[i % len(marker)]
+            label1 = "${}$".format(label[i % len(label)])
+
+            # colour
+            # Tries to read the colour as an rgb code, then alpha value.
+
+            if fill:
+                try:
+                    fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
+                except Exception:
+                    if isinstance(colour1, list) and \
+                       isinstance(fillcolour1, (float, int)) and \
+                       fillcolour1 >= 0 and fillcolour1 <= 1:
+                        fillcolour2 = colour1
+                        if len(colour1) == 3:
+                            fillcolour2.append(fillcolour1)
+                        elif len(colour1) == 4:
+                            fillcolour2[3] = fillcolour1
+                    else:
+                        fillcolour2 = fillcolour1
+
+             # plotting
+
+            if fill and line:
+                if invert:
+                    ax.plot(k, f, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
+                    ax.fill_between(k, f, facecolor=fillcolour2, linewidth=0)
+                else:
+                    ax.plot(f, k, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
+                    ax.fill_between(f, k, facecolor=fillcolour2)
+
+            elif fill and not line:
+                    if invert:
+                        ax.fill_between(k, f, facecolor=fillcolour2, **kwargs)
+                    else:
+                        ax.fill_between(f, k, facecolor=fillcolour2, **kwargs)
+
             else:
-                ax.fill_between(f, k, facecolor=fillcolour2, **kwargs)
+                if invert:
+                    ax.plot(k, f, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
+                else:
+                    ax.plot(f, k, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
 
-    else:
-        if invert:
-            ax.plot(k, f, color=colour, **kwargs)
-        else:
-            ax.plot(f, k, color=colour, **kwargs)
+            i += 1
 
     # axes formatting
 
     if main:
         if invert:
             axlabels = tp.settings.inverted_labels()
-            ax.set_xlabel(axlabels['cumulative_kappa'])
+            if scale:
+                ax.set_xlabel(axlabels['cumulative_percent'])
+            else:
+                ax.set_xlabel(axlabels['cumulative_kappa'])
             ax.tick_params(axis='y', labelleft=False)
-            ax.set_xlim(0, k[-2])
-            ax.set_ylim(0, f[-2])
+            ax.set_xlim(0, kmax)
+            ax.set_ylim(0, fmax)
 
         else:
             axlabels = tp.settings.labels()
-            ax.set_ylabel(axlabels['cumulative_kappa'])
+            if scale:
+                ax.set_ylabel(axlabels['cumulative_percent'])
+            else:
+                ax.set_ylabel(axlabels['cumulative_kappa'])
             ax.set_xlabel(axlabels['frequency'])
-            ax.set_ylim(0, k[-2])
-            ax.set_xlim(0, f[-2])
+            ax.set_ylim(0, kmax)
+            ax.set_xlim(0, fmax)
 
         tp.plot.utilities.set_locators(ax, x='linear', y='linear')
 
