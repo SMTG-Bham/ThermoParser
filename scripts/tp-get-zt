@@ -10,10 +10,9 @@ parser.add_argument('file',
                          'transport_xxx.json or boltztrap.hdf5.')
 parser.add_argument('-k', '--kappa', metavar='file',
                     help='phono3py kappa-mxxx.hdf5.')
-parser.add_argument('-d', '--direction', metavar='direction', nargs='+',
-                    default=['x', 'y', 'z'],
+parser.add_argument('-d', '--direction', metavar='direction', default='avg',
                     help='direction for anisotropic data. Accepts a-c/ '
-                         'x-z or average/ avg. Default: x, y and z.')
+                         'x-z or average/ avg. Default: average.')
 parser.add_argument('-i', '--interpolate', metavar='interpolate', type=int,
                     help='number of points to interpolate to on each '
                          'axis. Default: None.')
@@ -29,7 +28,6 @@ args=parser.parse_args()
 
 import tp
 
-for d in args.direction:
-    tp.data.save.zt(args.file, args.kappa, direction=d, doping=args.type,
-                    tinterp=args.interpolate, dinterp=args.interpolate,
-                    kind=args.kind, output=args.output)
+tp.data.save.zt(args.file, args.kappa, direction=args.direction,
+                doping=args.type, tinterp=args.interpolate,
+                dinterp=args.interpolate, kind=args.kind, output=args.output)

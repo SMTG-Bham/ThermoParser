@@ -3,8 +3,6 @@
 import unittest
 import tp
 import numpy as np
-from glob import glob
-from os import remove
 from unittest.mock import Mock, patch
 from tp.plot import heatmap
 import matplotlib as mpl
@@ -166,10 +164,6 @@ class ZTMapTest(unittest.TestCase):
                             [4, 8]]
         self.ax = Mock()
 
-    def tearDown(self):
-        dat = glob("zt.hdf5")
-        for f in dat: remove(f)
-
     @patch.object(tp.calculate, 'zt_fromdict')
     @patch.object(tp.data.resolve, 'resolve')
     @patch.object(plt, 'colorbar')
@@ -226,10 +220,6 @@ class TargetKLTest(unittest.TestCase):
         self.data2['lattice_thermal_conductivity'] = [[1, 2],
                                                       [4, 8]]
         self.ax = Mock()
-
-    def tearDown(self):
-        dat = glob("target-kl.hdf5")
-        for f in dat: remove(f)
 
     @patch.object(tp.calculate, 'kl_fromdict')
     @patch.object(tp.data.resolve, 'resolve')

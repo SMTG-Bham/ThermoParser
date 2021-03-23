@@ -21,12 +21,13 @@ import tp
 
 f = tp.data.load.phono3py(args.file)
 
-header = 'T/K'
+units = tp.settings.units()
+header = 'T({})'.format(units['temperature'])
 data = [f['temperature']]
 for d in args.direction:
     aniso = tp.data.resolve.resolve(f, 'lattice_thermal_conductivity',
                                     direction=d)
-    header += ' kappa_{}/Wm^-1K^-1'.format(d)
+    header += ' kappa_{}({})'.format(d, units['lattice_thermal_conductivity'])
     data.append(aniso['lattice_thermal_conductivity'])
 
 np.savetxt('{}.dat'.format(args.output), np.transpose(data), header=header)

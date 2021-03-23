@@ -92,14 +92,14 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         d = np.array(data['doping'])
         if (d < 0).all():
             doping = 'n'
-            di = np.where(d < 0)
+            di = np.where(d < 0)[0]
         elif (d > 0).all():
             doping = 'p'
-            di = np.where(d > 0)
+            di = np.where(d > 0)[0]
         elif doping == 'n':
-            di = np.where(d < 0)
+            di = np.where(d < 0)[0]
         elif doping == 'p':
-            di = np.where(d > 0)
+            di = np.where(d > 0)[0]
 
     data2 = {'meta': {'doping_type':       doping,
                       'electronic_source': 'amset',
@@ -220,14 +220,14 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
             d = np.array(f['doping'][()])
             if (d < 0).all():
                 doping = 'n'
-                di = np.where(d < 0)
+                di = np.where(d < 0)[0]
             elif (d > 0).all():
                 doping = 'p'
-                di = np.where(d > 0)
+                di = np.where(d > 0)[0]
             elif doping == 'n':
-                di = np.where(d < 0)
+                di = np.where(d < 0)[0]
             elif doping == 'p':
-                di = np.where(d > 0)
+                di = np.where(d > 0)[0]
 
         if spin in ['avg', 'average']:
             if 'energies_up' in f and 'energies_down' in f:

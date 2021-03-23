@@ -113,10 +113,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     x = np.array(x)
     y = np.array(y)
     c = np.array(c)
-    if xmin is None: xmin = x[0]
-    if xmax is None: xmax = x[-1]
-    if ymin is None: ymin = y[0]
-    if ymax is None: ymax = y[-1]
+    if xmin is None: xmin = np.nanmin(x)
+    if xmax is None: xmax = np.nanmax(x)
+    if ymin is None: ymin = np.nanmin(y)
+    if ymax is None: ymax = np.nanmax(y)
     xi = np.where((x >= xmin) & (x <= xmax))[0]
     yi = np.where((y >= ymin) & (y <= ymax))[0]
     x = x[xi]
@@ -132,12 +132,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     extend = 'neither'
     if cmin is None:
-        cmin = np.amin(c)
-    elif cmin > np.amin(c):
+        cmin = np.nanmin(c)
+    elif cmin > np.nanmin(c):
         extend = 'min'
     if cmax is None:
-        cmax = np.amax(c)
-    elif cmax < np.amax(c):
+        cmax = np.nanmax(c)
+    elif cmax < np.nanmax(c):
         if extend == 'min':
             extend = 'both'
         else:
