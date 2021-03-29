@@ -186,7 +186,7 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
         yaml.dump(ydata, f, default_flow_style=False)
 
     print('Max ZT in the {} direction of {:.2f} at {:.0f} K, {:.2e} carriers cm^-3'.format(
-                                                   doping,
+                                                   direction,
                                                    ydata['max']['zt'],
                                                    ydata['max']['temperature'],
                                                    ydata['max']['doping']))
