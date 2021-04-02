@@ -9,6 +9,8 @@ Functions
         lorentzian curve.
     be_occupation:
         boson occupation.
+    dfdde:
+        derivative of thhe Fermi-Dirac distribution.
     power_factor:
         power factor.
     zt:
@@ -26,6 +28,7 @@ Functions
 
 import numpy as np
 import tp
+from scipy.constants import physical_constants
 
 def cumulate(x, y):
     """Sorts by x and cumulates y.
@@ -99,15 +102,50 @@ def be_occupation(frequency, temperature=300.):
             occupations.
     """
 
-    import scipy.constants as con
-
-    hbar = con.physical_constants['Planck constant over 2 pi in eV s'][0]
-    kb = con.physical_constants['Boltzmann constant in eV/K'][0]
+    hbar = physical_constants['Planck constant over 2 pi in eV s'][0]
+    kb = physical_constants['Boltzmann constant in eV/K'][0]
 
     frequency = np.array(frequency)
     occupation = np.expm1((frequency * 1e12 * hbar) / (kb * temperature)) ** -1
 
     return occupation
+
+def dfdde(energy, fermi_levels, temperature, doping, amset_order=False):
+    """Derivative of the Fermi-Dirac distribution.
+
+    Arguments
+    ---------
+
+        energy : array-like
+            energies per band and k-point.
+        fermi_levels : array-like
+            fermi levels per temperature and dopant.
+        temperature : array-like
+            temperatures.
+        doping : array-like
+            doping concentrations.
+
+        amset_order : bool, optional
+            doping index before temperature index. Default: False.
+
+    Returns
+    -------
+
+        array
+            derivative of the Fermi-Dirac distribution.
+    """
+
+    kb = physical_constants['Boltzmann constant in eV/K'][0]
+    kbt = np.multiply(kb, temperature)
+    de = -np.subtract.outer(fermi_levels, energy)
+    if amset_order:
+        weights = -0.25 / np.cosh(0.5 * de / kbt[None, :, None, None]) ** 2
+        weights = weights / kbt[None, :, None, None]
+    else:
+        weights = -0.25 / np.cosh(0.5 * de / kbt[:, None, None, None]) ** 2
+        weights = weights / kbt[:, None, None, None]
+
+    return weights
 
 def power_factor(conductivity, seebeck):
     """Calculates power factor.

@@ -40,6 +40,8 @@ Functions
 
     units:
         default units used.
+    dimensions:
+        dimensions of each variable.
     labels:
         default axis labels.
     inverted_labels:
@@ -305,10 +307,49 @@ def units():
              'seebeck':                         'muV K-1',
              'seebeck_effective_mass':          'm_e',
              'temperature':                     'K',
+             'weighted_rates':                  's-1',
              'zt':                              ''}
 
     if conf is not None and 'units' in conf and conf['units'] is not None:
         units = {**units, **conf['units']}
+
+    return units
+
+def dimensions():
+    """Get dictionary of dimensions of quantities used in tp."""
+
+    units = {'average_eff_mass':                ['temperature', 'doping', 3, 3],
+             'chemical_potential':              [],
+             'conductivity':                    ['temperature', 'doping', 3, 3],
+             'doping':                          [],
+             'efermi':                          [],
+             'effective_mass':                  ['temperature', 'doping', 3, 3],
+             'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
+             'energy':                          ['temperature', 'band', 'kpoints'],
+             'fermi_level':                     ['temperature', 'doping'],
+             'frequency':                       ['qpoint', 'band'],
+             'gamma':                           ['temperature', 'qpoint', 'band'],
+             'group_velocity':                  ['qpoint', 'band', 3],
+             'gv_by_gv':                        ['qpoint', 'band', 6],
+             'hall_carrier_concentration':      [],
+             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
+             'lattice_thermal_conductivity':    ['temperature', 6],
+             'lifetime':                        ['temperature', 'qpoint', 'band'],
+             'mean_free_path':                  ['temperature', 'qpoint', 'band', 3],
+             'mobility':                        ['temperature', 'doping', 3, 3],
+             'mode_kappa':                      ['temperature', 'qpoint', 'band', 6],
+             'mu_bounds':                       [],
+             'occupation':                      ['temperature', 'qpoint', 'band'],
+             'ph_ph_strength':                  ['qpoint', 'band'],
+             'power_factor':                    ['temperature', 'doping', 3, 3],
+             'scattering_rates':
+                 ['scattering_labels', 'doping', 'temperature', 'band', 'kpoints'],
+             'seebeck':                         ['temperature', 'doping', 3, 3],
+             'seebeck_effective_mass':          [],
+             'temperature':                     [],
+             'weighted_rates':
+                 ['scattering_type', 'temperature', 'doping'],
+             'zt':                              ['temperature', 'doping', 3, 3]}
 
     return units
 
@@ -417,6 +458,8 @@ def long_labels():
                   'Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'wavevector':
                   'Wavevector',
+              'weighted_rates':
+                  'Scattering Rates (s$\mathregular{^{-1}}$)',
               'zt':
                   'ZT'}
 
@@ -487,6 +530,8 @@ def medium_labels():
                   'Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'wavevector':
                   'Wavevector',
+              'weighted_rates':
+                  'Scattering Rates (s$\mathregular{^{-1}}$)',
               'zt':
                   'ZT'}
 
@@ -557,6 +602,8 @@ def short_labels():
                   '$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)',
               'wavevector':
                   'q',
+              'weighted_rates':
+                  '$\mathregular{\\tau^{-1}\ (s^{-1})}$',
               'zt':
                   'ZT'}
 
