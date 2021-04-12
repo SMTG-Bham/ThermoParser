@@ -291,8 +291,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
     # data formatting and calculation
 
-    data = tp.resolve.resolve(data, 'mode_kappa', temperature=temperature,
-                                                  direction=direction)
+    data = tp.data.resolve.resolve(data, 'mode_kappa', temperature=temperature,
+                                   direction=direction)
     k = np.ravel(data['mode_kappa'])
     f = np.ravel(data['frequency'])
 
