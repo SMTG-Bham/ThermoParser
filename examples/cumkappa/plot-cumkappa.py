@@ -35,7 +35,7 @@ for i in [0, 1]:
                                     main=main[i], label=direction[i])
     tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
                               direction=direction[i], colour=colour[i],
-                              xmarkers=1e-6, main=main[i], label=direction[i])
+                              xmarkers=1e-7, main=main[i], label=direction[i])
 tp.plot.frequency.add_dos(ax[0], dos, colour=colours, scale=True, main=False)
 
 add_legend()

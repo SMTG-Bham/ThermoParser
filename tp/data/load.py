@@ -383,7 +383,8 @@ def phono3py(filename, quantities=['kappa', 'temperature'],
         if q in data:
             data2[q2] = data[q][()]
         elif q in ['lifetime', 'mean_free_path']:
-            data2['lifetime'] = np.reciprocal(np.multiply(2,data['gamma'][()]))
+            data2['lifetime'] = np.reciprocal(np.multiply(2 * 2 * np.pi,
+                                              data['gamma'][()]))
             data2['lifetime'] = np.where(np.isinf(data2['lifetime']), 0,
                                          data2['lifetime'])
             if q == 'mean_free_path':
