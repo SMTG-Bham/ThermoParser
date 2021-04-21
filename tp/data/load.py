@@ -314,10 +314,13 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
                                                          amset_order=True)
             if q == 'weighted_rates':
                 rates = resolve_spin(f, 'scattering_rates', spin)
-                weights = np.multiply(data['fd_weights'],
-                                      np.divide(data['ibz_weights'],
-                                                np.sum(data['ibz_weights'])))
-                data[q2] = np.multiply(rates, weights).sum(axis=(3, 4))
+                rates[rates > 1e20] = 1e15
+                data['total_weights'] = data['fd_weights'] * data['ibz_weights']
+                data['normalised_weights'] = data['total_weights'] / \
+                                             np.sum(data['total_weights'],
+                                                    axis=(2,3))[:,:,None,None]
+                data[q2] = rates * data['normalised_weights']
+                data[q2] = data[q2].sum(axis=(3,4))
 
         for q2 in data:
             q = anames[q2] if q2 in anames else q2
