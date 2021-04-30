@@ -201,10 +201,10 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
 
     # list of abbriviations and dependant quantites
     subs = {'weights': ['ibz_weights', 'fd_weights']}
-    hasdope = ['fd_weights', 'fermi_levels', 'scattering_rates',
-               'weighted_rates']
-    hastemp = ['fd_weights', 'energies', 'fermi_levels', 'scattering_rates',
-               'weighted_rates']
+    hasdope = ['fd_weights', 'fermi_levels', 'normalised_weights',
+               'scattering_rates', 'weighted_rates']
+    hastemp = ['fd_weights', 'energies', 'fermi_levels', 'normalised_weights',
+               'scattering_rates', 'weighted_rates']
     hastype = ['scattering_rates', 'weighted_rates']
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
