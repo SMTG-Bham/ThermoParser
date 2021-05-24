@@ -210,59 +210,40 @@ def to_phono3py():
 
     return names
 
-def amset_conversions():
-    """Get dictionary of unit conversions for amset.
-
-    If modified, you will probably want to change tp.settings.units,
-    tp.settings.long_labels, tp.settings.short_labels and maybe
-    tp.settings.boltztrap_conversions.
-    """
+def conversions():
+    """Get dictionary of custom unit conversions from tprc.yaml."""
 
     conversions = {}
 
-    if conf is not None and 'amset_conversions' in conf and \
-       conf['amset_conversions'] is not None:
-        conversions = {**conversions, **conf['amset_conversions']}
+    if conf is not None and 'conversions' in conf and \
+       conf['conversions'] is not None:
+        conversions = conf['conversions']
+
+    return conversions
+
+def amset_conversions():
+    """Get dictionary of unit conversions for amset to tp."""
+
+    conversions = {}
 
     return conversions
 
 def boltztrap_conversions():
-    """Get dictionary of unit conversions for boltztrap.
-
-    If modified, you will probably want to change tp.settings.units,
-    tp.settings.long_labels, tp.settings.short_labels and maybe
-    tp.settings.amset_conversions.
-    """
+    """Get dictionary of unit conversions for boltztrap to tp."""
 
     conversions = {}
-
-    if conf is not None and 'boltztrap_conversions' in conf and \
-       conf['boltztrap_conversions'] is not None:
-        conversions = {**conversions, **conf['boltztrap_conversions']}
 
     return conversions
 
 def phonopy_conversions():
-    """Get dictionary of unit conversions for phonopy.
-
-    If modified, you will probably want to change tp.settings.units,
-    tp.settings.long_labels and tp.settings.short_labels.
-    """
+    """Get dictionary of unit conversions for phonopy to tp."""
 
     conversions = {}
-
-    if conf is not None and 'phonopy_conversions' in conf and \
-       conf['phonopy_conversions'] is not None:
-        conversions = {**conversions, **conf['phonopy_conversions']}
 
     return conversions
 
 def phono3py_conversions():
-    """Get dictionary of unit conversions for phono3py.
-
-    If modified, you will probably want to change tp.settings.units,
-    tp.settings.long_labels and tp.settings.short_labels.
-    """
+    """Get dictionary of unit conversions for phono3py to tp."""
 
     conversions = {'group_velocity': 1e2,         # THz AA to m s-1
                    'gv_by_gv':       1e4,         # THz2 AA2 to m2 s-2
@@ -270,14 +251,17 @@ def phono3py_conversions():
                    'lifetime':       1e-12,       # THz-1 to s
                    'mean_free_path': 1e-10}       # AA to m
 
-    if conf is not None and 'phono3py_conversions' in conf and \
-       conf['phono3py_conversions'] is not None:
-        conversions = {**conversions, **conf['phono3py_conversions']}
-
     return conversions
 
-def units():
-    """Get dictionary of units of quantities used in tp."""
+def units(use_tprc=True):
+    """Get dictionary of units of quantities used in tp.
+
+    Arguments
+    ---------
+
+        use_tprc : bool, optional
+            read custom units from tprc.yaml if present. Default: True.
+    """
 
     units = {'average_eff_mass':                'm_e',
              'chemical_potential':              'eV',
@@ -310,7 +294,8 @@ def units():
              'weighted_rates':                  's-1',
              'zt':                              ''}
 
-    if conf is not None and 'units' in conf and conf['units'] is not None:
+    if use_tprc and conf is not None and 'units' in conf and \
+       conf['units'] is not None:
         units = {**units, **conf['units']}
 
     return units

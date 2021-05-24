@@ -324,7 +324,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
                                                    len(data['temperature']))
             data['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
 
-        data = tp.calculate.zt_fromdict(data)
+        data = tp.calculate.zt_fromdict(data, use_tprc=True)
 
     # plotting
 
@@ -423,7 +423,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                                    direction=direction)
     data['zt'] = zt
 
-    data = tp.calculate.kl_fromdict(data)
+    data = tp.calculate.kl_fromdict(data, use_tprc=True)
 
     # plotting
 

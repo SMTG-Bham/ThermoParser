@@ -239,7 +239,8 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
             data['seebeck'][d] = np.multiply(s[d], 1e6)
             data['power_factor'][d] = tp.calculate.power_factor(
                                                    data['conductivity'][d],
-                                                   data['seebeck'][d])
+                                                   data['seebeck'][d],
+                                                   use_tprc=False)
             if ke_mode == 'boltztrap':
                 data['electronic_thermal_conductivity'][d] = \
                       k[d] * relaxation_time \
