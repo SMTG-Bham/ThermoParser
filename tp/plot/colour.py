@@ -92,7 +92,7 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
     cmax2 = np.array(rgb2array(cmax, alpha))
     cnorm = (cmid2[:3] - cmin2[:3]) / (cmax2[:3] - cmin2[:3])
     # pythagoras
-    midpoint = np.sqrt(((1-cnorm[0])**2 + (1-cnorm[1])**2 + (1-cnorm[2])**2)/3)
+    midpoint = np.sqrt((cnorm[0]**2 + cnorm[1]**2 + cnorm[2]**2)/3)
     x = [0, midpoint, 1]
     y = [cmin2, cmid2, cmax2]
     colours = []

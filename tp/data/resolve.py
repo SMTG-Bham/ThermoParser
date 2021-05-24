@@ -1,7 +1,7 @@
 """Resolves quantities by temperature and/ or direction.
 
 Reads specfic named variables. May need to be split by data origin in
-future.
+future, e.g. mobility is currently not resolved by temperature.
 
 Functions
 ---------
@@ -54,6 +54,7 @@ def resolve(data, quantities, temperature=None, direction=None):
            'lattice_thermal_conductivity':    aniso.two,
            'mean_free_path':                  aniso.four,
            'mesh':                            aniso.one,
+           'mobility':                        aniso.matrix_four,
            'mode_kappa':                      aniso.four,
            'power_factor':                    aniso.matrix_three,
            'qpoint':                          aniso.two,

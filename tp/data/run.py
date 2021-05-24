@@ -7,12 +7,14 @@ Functions
 """
 
 import numpy as np
+import os
+import shutil
 import tp
 
 def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
               ke_mode='boltzmann', vasprun='vasprun.xml', kpoints=None,
               relaxation_time=1e-14, lpfac=10, run=True, analyse=True,
-              output='boltztrap.hdf5', **kwargs):
+              output='boltztrap.hdf5', run_dir='.', clean=False, **kwargs):
     """Runs BoltzTraP from a VASP density of states (DoS).
 
     Runs quicker and more robustly than the pymatgen from_files version,
@@ -64,6 +66,10 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
             analyse BoltzTraP. Default: True.
         output : str, optional
             output hdf5 filename. Default: boltztrap.hdf5.
+        run_dir : str, optional
+            path to run boltztrap in. Default: current directory.
+        clean : bool, optional
+            remove boltztrap directory post-run. Default: False.
 
         kwargs
             passed to pymatgen.electronic.structure.boltztrap.BoltztrapRunner.
@@ -131,14 +137,16 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
 
     # check inputs
 
-    for name, value in zip(['run', 'analyse'],
-                           [ run,   analyse]):
+    for name, value in zip(['run', 'analyse', 'clean'],
+                           [ run,   analyse,   clean]):
         assert isinstance(value, bool), '{} must be True or False'.format(name)
 
     ke_mode = ke_mode.lower()
     ke_modes =  ['boltzmann', 'wiedemann', 'snyder']
     assert ke_mode in ke_modes, 'ke_mode must be {} or {}.'.format(
                                 ', '.join(ke_modes[:-1]), ke_modes[-1])
+
+    run_dir = os.path.abspath(run_dir)
 
     tmax += tstep
     tmin = tstep if tmin is None else tmin
@@ -154,31 +162,29 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
             btr = BoltztrapRunner(bs, nelect, doping=list(doping), tmax=tmax,
                                   tgrid=tstep, soc=soc, lpfac=lpfac, **kwargs)
             print('Running Boltztrap...', end='')
-            btr_dir = btr.run(path_dir='.')
+            btr_dir = btr.run(path_dir=run_dir)
             print('Done.')
         except BoltztrapError:
             bs = vr.get_band_structure(line_mode=True,kpoints_filename=kpoints)
             nelect = vr.parameters['NELECT']
             btr = BoltztrapRunner(bs, nelect, doping=list(doping), tmax=tmax,
                                   tgrid=tstep, soc=soc, lpfac=lpfac, **kwargs)
-            btr_dir = btr.run(path_dir='.')
+            btr_dir = btr.run(path_dir=run_dir)
             print('Done.')
-
 
         """
         Detects whether the BoltzTraP build on this computer writes the
         doping concentrations correctly, and if it doesn't, writes them.
         """
-        with open('boltztrap/boltztrap.outputtrans', 'r') as f:
+        with open(os.path.join(btr_dir, 'boltztrap.outputtrans'), 'r') as f:
             line = f.readlines()[-2]
         if len(line) >= 23 and line[:23] == ' Calling FermiIntegrals':
             with open(os.path.join(btr_dir, 'boltztrap.outputtrans'),'a') as f:
                 for i, x in enumerate(np.concatenate((doping, -doping))):
                     f.write(
                    'Doping level number {} n = {} carriers/cm3\n'.format(i, x))
-
     else:
-        btr_dir = 'boltztrap'
+        btr_dir = os.path.join(run_dir, 'boltztrap')
 
     if analyse: # run boltztrap from boltztrap directory -> hdf5 file
         print('Analysing Boltztrap...', end='')
@@ -233,7 +239,8 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
             data['seebeck'][d] = np.multiply(s[d], 1e6)
             data['power_factor'][d] = tp.calculate.power_factor(
                                                    data['conductivity'][d],
-                                                   data['seebeck'][d])
+                                                   data['seebeck'][d],
+                                                   use_tprc=False)
             if ke_mode == 'boltztrap':
                 data['electronic_thermal_conductivity'][d] = \
                       k[d] * relaxation_time \
@@ -250,5 +257,9 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
         print('Done.')
 
         tp.data.save.hdf5(data, output)
+
+        if clean:
+            shutil.rmtree(btr_dir)
+            os.remove(os.path.join(run_dir, 'boltztrap.out'))
 
     return

@@ -145,9 +145,6 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     mfp = np.abs(np.ravel(data['mean_free_path']))
 
     mfp, k = cumulate(mfp, k)
-    np.savetxt('cumkappa-mfp-{:.0f}K-{}.dat'.format(
-               data['meta']['temperature'], direction),
-               np.transpose([mfp, k]), header='mfp(m) k_l(Wm-1K-1)')
     mfp = np.append(mfp, 100*mfp[-1])
     k = np.append(k, k[-1])
 

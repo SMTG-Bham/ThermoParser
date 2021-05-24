@@ -113,10 +113,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     x = np.array(x)
     y = np.array(y)
     c = np.array(c)
-    if xmin is None: xmin = x[0]
-    if xmax is None: xmax = x[-1]
-    if ymin is None: ymin = y[0]
-    if ymax is None: ymax = y[-1]
+    if xmin is None: xmin = np.nanmin(x)
+    if xmax is None: xmax = np.nanmax(x)
+    if ymin is None: ymin = np.nanmin(y)
+    if ymax is None: ymax = np.nanmax(y)
     xi = np.where((x >= xmin) & (x <= xmax))[0]
     yi = np.where((y >= ymin) & (y <= ymax))[0]
     x = x[xi]
@@ -132,12 +132,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     extend = 'neither'
     if cmin is None:
-        cmin = np.amin(c)
-    elif cmin > np.amin(c):
+        cmin = np.nanmin(c)
+    elif cmin > np.nanmin(c):
         extend = 'min'
     if cmax is None:
-        cmax = np.amax(c)
-    elif cmax < np.amax(c):
+        cmax = np.nanmax(c)
+    elif cmax < np.nanmax(c):
         if extend == 'min':
             extend = 'both'
         else:
@@ -173,7 +173,11 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         if yinterp is not None:
             if yscale == 'linear': y = np.linspace(y[0], y[-1], yinterp)
             if yscale == 'log': y = np.geomspace(y[0], y[-1], yinterp)
+        x = np.array(x)
+        y = np.array(y)
         c = cinterp(x, y)
+    else:
+        c = np.transpose(c)
 
     # ensure all data is shown
     if len(x) == len(c[0]):
@@ -190,7 +194,6 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             y.append(y[-1] ** 2 / y[-2])
 
     # plotting
-
     heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
     cbar = plt.colorbar(heat, extend=extend)
 
@@ -321,7 +324,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
                                                    len(data['temperature']))
             data['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
 
-        data = tp.calculate.zt_fromdict(data)
+        data = tp.calculate.zt_fromdict(data, use_tprc=True)
 
     # plotting
 
@@ -420,7 +423,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                                    direction=direction)
     data['zt'] = zt
 
-    data = tp.calculate.kl_fromdict(data)
+    data = tp.calculate.kl_fromdict(data, use_tprc=True)
 
     # plotting
 

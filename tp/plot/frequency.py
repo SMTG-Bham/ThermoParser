@@ -297,9 +297,6 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
     f = np.ravel(data['frequency'])
 
     f, k = tp.calculate.cumulate(f, k)
-    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
-               data['meta']['temperature'], direction),
-               np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
     f = np.append(f, 100*f[-1])
     k = np.append(k, k[-1])
 
@@ -310,7 +307,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
     # colour
     # Tries to read the colour as an rgb code, then alpha value.
-    
+
     if fill:
         try:
             fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)

@@ -8,6 +8,7 @@
 style:       null # default style sheet
 large_style: null # large style sheet
 
+# Locator settings
 locator:
     # Unlike other parts of this file, rather than whole arguments, this
     # should give integers to pass to MaxNLocator and AutoMinorLocator,
@@ -15,35 +16,35 @@ locator:
     major: null
     minor: null
 
-# The to_xxx, xxx_conversions, units and long_, medium_ and short_labels
+# The to_xxx, conversions, units and long_, medium_ and short_labels
 # functions should contain dictionaries, e.g.
 # to_xxx:
 #     energies: 'energy'
-# and if you change a conversion, remember to change the units as well
-# and vice versa!
+# and if you change a conversion, remember to change the units and
+# labels as well and vice versa!
+
+# aliases for quantities
 to_tp:                null
 to_amset:             null
 to_boltztrap:         null
 to_phono3py:          null
 
-# These conversions REPLACE the ones in settings.py.
-# They DO NOT stack!
-amset_conversions:     null
-boltztrap_conversions: null
-phonopy_conversions:   null
-phono3py_conversions:  null
+# unit conversions from the tp standards (see settings.py for reference)
+conversions:          null
 
+# updated units
 units:                null
 
+# updated axis labels
 long_labels:          null
 medium_labels:        null
 short_labels:         null
 
 # The following should contain either long, medium or short, to point to
 # the dictionaries of long_, medium_ or short_labels.
-labels:          null # overall default
+labels:          null # for paper-style (small) axes
 inverted_labels: null # for dos-style axes
-large_labels:    null # for large axes
+large_labels:    null # for presentation-style (large) axes
 
 # The following are default kwargs for each plot type. These will
 # override those specified in the module, but will be overridden by
