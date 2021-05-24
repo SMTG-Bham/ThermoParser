@@ -3,6 +3,8 @@
 Functions:
     phono3py: save calculated properties to hdf5.
     zt: save zt to hdf5 and highlights to yaml.
+    kappa_target: save kappa to hdf5.
+    cumkappa: save cumkappa to text.
 
     hdf5: save nested dictionaries to hdf5 (up to depth 3).
     prompt: prompt before overwriting input
@@ -49,7 +51,7 @@ def phono3py(filename, quantities, output='tp-phono3py', force=False):
 
 def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
        dinterp=None, kind='linear', output='tp-zt', force=False):
-    """Save zt to hdf5 and highlights to yaml.
+    """Save ZT to hdf5 and highlights to yaml.
 
     Also saves temperature and doping and metadata.
 
@@ -183,7 +185,8 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
     with open('{}.yaml'.format(output), 'w') as f:
         yaml.dump(ydata, f, default_flow_style=False)
 
-    print('Max ZT of {:.2f} at {:.0f} K, {:.2e} carriers cm^-3'.format(
+    print('Max ZT in the {} direction of {:.2f} at {:.0f} K, {:.2e} carriers cm^-3'.format(
+                                                   direction,
                                                    ydata['max']['zt'],
                                                    ydata['max']['temperature'],
                                                    ydata['max']['doping']))
@@ -274,6 +277,54 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
         kdata['doping'] = data['doping']
 
     hdf5(kdata, '{}.hdf5'.format(output))
+
+    return
+
+def cumkappa(filename, mfp=False, temperature=300, direction='avg',
+             output='tp-cumkappa', force=False):
+    """Saves cumulated lattice thermal conductivity against frequency or mfp.
+
+    Saves in normal units and percent to a dat file.
+
+    Arguments
+    ---------
+
+        filename : str
+            data filepath
+
+        mfp : bool, optional
+            calculate against mean free path not frequency. Default: False.
+        temperature : float or int, optional
+            temperature in K. Default: 300.
+        direction : str, optional
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
+
+        output : str, optional
+            output filename (no extension). Default: tp-kappa-target.
+        force : bool, optional
+            force overwrite input file. Default: False.
+
+    Returns
+    -------
+
+        none
+            instead writes to dat.
+    """
+
+    quantity = 'mean_free_path' if mfp else 'frequency'
+    data = tp.data.load.phono3py(filename, ['mode_kappa', quantity])
+    data = tp.data.resolve.resolve(data, ['mode_kappa', quantity],
+                                   temperature=temperature, direction=direction)
+    k = np.ravel(data['mode_kappa'])
+    q = np.ravel(data[quantity])
+    q, k = tp.calculate.cumulate(q, k)
+    p = k / np.nanmax(k) * 100
+
+    units = tp.settings.units()
+    header = '{}({}) cum_kappa_{d}({}) cum_kappa_{d}(%)'.format(quantity,
+                             units[quantity], units['mode_kappa'], d=direction)
+    np.savetxt('{}.dat'.format(output), np.transpose([q, k, p]), header=header)
 
     return
 

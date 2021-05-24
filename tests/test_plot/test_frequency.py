@@ -1,7 +1,5 @@
 """Tests the tp.plot.frequency module."""
 
-from glob import glob
-from os import remove
 import numpy as np
 import unittest
 import tp
@@ -128,10 +126,6 @@ class CumKappaTest(unittest.TestCase):
                      'temperature': [0],
                      'meta':        {'temperature': 0}}
         self.ax = Mock()
-
-    def tearDown(self):
-        dat = glob("cumkappa-frequency-*.dat")
-        for f in dat: remove(f)
 
     @patch.object(tp.data.resolve, 'resolve')
     def test_default(self, mock_resolve):

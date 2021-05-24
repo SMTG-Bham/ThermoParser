@@ -1,8 +1,8 @@
 """Data loading tools.
 
 Loads data from codes into a dictionary, with units and array structures
-standardised. Also adds a ``meta`` subdictionary, which contains units
-and the data source.
+standardised. Also adds a ``meta`` subdictionary, which contains units,
+array dimensions and the data source.
 
 Functions
 ---------
@@ -22,8 +22,8 @@ import numpy as np
 import tp
 from tp import settings
 
-def amset(filename, quantities=['temperature', 'doping', 'seebeck',
-          'conductivity', 'electronic_thermal_conductivity'], doping='n'):
+def amset(filename, quantities=['seebeck', 'conductivity',
+          'electronic_thermal_conductivity'], doping='n'):
     """Loads AMSET transport data.
 
     Includes unit conversion and outputs units (see tp.settings).
@@ -39,8 +39,9 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
             filepath.
 
         quantites : str or list, optional
-            values to extract. Default: temperature, doping, seebeck,
-            conductivity, electronic_thermal_conductivity.
+            values to extract. Accepts AMSET keys and power_factor.
+            Loads dependant properties. Default: seebeck, conductivity,
+            electronic_thermal_conductivity.
 
         doping : str, optional
             doing type (n or p). If there is more than one, defaults to
@@ -57,10 +58,12 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
 
     # name conversions and abbreviations
 
-    conversions = settings.amset_conversions()
+    aconversions = settings.amset_conversions()
+    conversions = settings.conversions()
     anames = settings.to_amset()
     tnames = settings.to_tp()
     units = settings.units()
+    dimensions = settings.dimensions()
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [anames[q] if q in anames else q for q in quantities]
 
@@ -70,6 +73,9 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
     hastemp = ['fermi_levels', 'conductivity', 'seebeck',
                'electronic_thermal_conductivity', 'mobility']
     hastype = ['mobility']
+
+    # quantities derived from those in the file
+    derived = {'power_factor': ['conductivity', 'seebeck']}
 
     # add dependant variables
     if 'doping' not in quantities:
@@ -82,6 +88,11 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
             if q in hastemp:
                 quantities.append('temperatures')
                 break
+    for q in derived:
+        if q in quantities:
+            for q2 in derived[q]:
+                if q2 not in quantities:
+                    quantities.append(q2)
 
     # load data
 
@@ -92,22 +103,26 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
         d = np.array(data['doping'])
         if (d < 0).all():
             doping = 'n'
-            di = np.where(d < 0)
+            di = np.where(d < 0)[0]
         elif (d > 0).all():
             doping = 'p'
-            di = np.where(d > 0)
+            di = np.where(d > 0)[0]
         elif doping == 'n':
-            di = np.where(d < 0)
+            di = np.where(d < 0)[0]
         elif doping == 'p':
-            di = np.where(d > 0)
+            di = np.where(d > 0)[0]
 
     data2 = {'meta': {'doping_type':       doping,
                       'electronic_source': 'amset',
-                      'units':             {}}}
+                      'units':             {},
+                      'dimensions':        {}}}
     for q in quantities:
+        if q in derived:
+            continue
+        qs = [*list(data), *list(derived)]
         assert q in data, \
                '{} unrecognised. Quantity must be in {} or {}.'.format(q,
-               ', '.join(list(data)[:-1]), list(data)[-1])
+               ', '.join(qs[:-1]), qs[-1])
         q2 = tnames[q] if q in tnames else q
         # compatibility with previous version
         if isinstance(data[q], dict) and 'data' in data[q]:
@@ -132,9 +147,18 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
             data2[q2] = [data2[q2][l] for l in data2['scattering_labels']]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
+        if q2 in dimensions:
+            data2['meta']['dimensions'][q2] = dimensions[q2]
 
     if 'doping' in data2:
         data2['doping'] = np.array(data2['doping'])[di]
+
+    for c in aconversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], aconversions[c])
+
+    if 'power_factor' in quantities:
+        data2 = tp.calculate.power_factor_fromdict(data2)
 
     for c in conversions:
         if c in data2:
@@ -142,14 +166,13 @@ def amset(filename, quantities=['temperature', 'doping', 'seebeck',
 
     return data2
 
-def amset_mesh(filename, quantities=['temperature', 'doping',
-               'scattering_rates', 'scattering_labels'], doping='n',
+def amset_mesh(filename, quantities='scattering_rates', doping='n',
                spin='avg'):
     """Loads AMSET mesh data.
 
-    Includes unit conversion and outputs units (see tp.settings).
-    Swaps temperature and doping indices so temperature is first, for
-    consistency with other codes.
+    Can also weight rates. Includes unit conversion and outputs units
+    (see tp.settings). Swaps temperature and doping indices so
+    temperature is first, for consistency with other codes.
 
     Arguments
     ---------
@@ -160,8 +183,12 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
         quantites : str or list, optional
             values to extract. Accepts AMSET keys, without spin
             channels, which are dealt with in the spin variable.
-            Default: temperature, doping, scattering_rates,
-            scattering_labels.
+            Also accepts ibz_weights, the weights of the irreducible
+            k-points, fd_weights, the weights of the energies wrt the
+            derivative of the Fermi-Dirac distribution, and
+            weighted_rates, scattering_rates weighted by fd_weights
+            and averaged over kpoints. Loads dependant properties.
+            Default: scattering_rates.
 
         doping : str, optional
             doing type (n or p). If there is more than one, defaults to
@@ -182,18 +209,29 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
 
     # name conversions and abbreviations
 
-    conversions = settings.amset_conversions()
+    aconversions = settings.amset_conversions()
+    conversions = settings.conversions()
     anames = settings.to_amset()
     tnames = settings.to_tp()
     units = settings.units()
+    dimensions = settings.dimensions()
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [anames[q] if q in anames else q for q in quantities]
 
-    # list of quantities dependant on doping and temperature
-    hasdope = ['fermi_levels', 'scattering_rates']
-    hastemp = ['fermi_levels', 'scattering_rates']
-    hastype = ['scattering_rates']
+    # list of abbriviations and dependant quantites
+    subs = {'weights': ['ibz_weights', 'fd_weights']}
+    hasdope = ['fd_weights', 'fermi_levels', 'normalised_weights',
+               'scattering_rates', 'weighted_rates']
+    hastemp = ['fd_weights', 'energies', 'fermi_levels', 'normalised_weights',
+               'scattering_rates', 'weighted_rates']
+    hastype = ['scattering_rates', 'weighted_rates']
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
+
+    for i in range(len(quantities)):
+        if quantities[i] in subs:
+            quantities[i] = subs[quantities[i]]
+
+    quantities = list(np.ravel(quantities))
 
     # add dependant variables
 
@@ -215,19 +253,51 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
 
     # load data
 
+    def resolve_spin(data, q, spin):
+        """Resolves spin in AMSET.
+
+        Either returns the up or down value, or averages them.
+
+        Arguments
+        ---------
+
+        data : dict
+            data dictionary from AMSET.
+        q : str
+            quantity to resolve
+        spin : str
+            spin to use. Must be up, down or average.
+
+        Returns
+        -------
+
+        array
+            resolved data
+        """
+
+        if spin in ['avg', 'average']:
+            resolved = np.average([data['{}_up'.format(q)][()],
+                                   data['{}_down'.format(q)][()]], axis=0)
+        elif spin in ['up', 'down']:
+            resolved = data['{}_{}'.format(q, spin)][()]
+        else:
+            raise Exception('spin must be up or down or average')
+
+        return resolved
+
     with h5py.File(filename, 'r') as f:
         if 'doping' in quantities:
             d = np.array(f['doping'][()])
             if (d < 0).all():
                 doping = 'n'
-                di = np.where(d < 0)
+                di = np.where(d < 0)[0]
             elif (d > 0).all():
                 doping = 'p'
-                di = np.where(d > 0)
+                di = np.where(d > 0)[0]
             elif doping == 'n':
-                di = np.where(d < 0)
+                di = np.where(d < 0)[0]
             elif doping == 'p':
-                di = np.where(d > 0)
+                di = np.where(d > 0)[0]
 
         if spin in ['avg', 'average']:
             if 'energies_up' in f and 'energies_down' in f:
@@ -236,22 +306,43 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
                 spin = 'up'
             elif 'energies_down' in f:
                 spin = 'down'
+
         data = {'meta': {'doping_type':       doping,
                          'electronic_source': 'amset',
                          'spin':              spin,
-                         'units':             {}}}
+                         'units':             {},
+                         'dimensions':        {}}}
         for q in quantities:
             q2 = tnames[q] if q in tnames else q
             if q in hasspin:
-                if spin == 'avg':
-                    data[q2] = np.average([f['{}_up'.format(q)][()],
-                                           f['{}_down'.format(q)][()]], axis=0)
-                elif spin in ['up', 'down']:
-                    data[q2] = f['{}_{}'.format(q, spin)][()]
-                else:
-                    raise Exception('spin must be up or down or avg')
-            else:
+                data[q2] = resolve_spin(f, q, spin)
+            elif q in f:
                 data[q2] = f[q][()]
+            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates']:
+                raise Exception('{} unrecognised. Quantity must be {}, '
+                                'ibz_weights, fd_weights weighted_rates'
+                                ''.format(q, ', '.join(f)))
+            if q in ['ibz_weights', 'weighted_rates']:
+                _, data['ibz_weights'] = np.unique(f['ir_to_full_kpoint_mapping'],
+                                                   return_counts=True)
+            if q in ['fd_weights', 'weighted_rates']:
+                e = resolve_spin(f, 'energies', spin)
+                data['fd_weights'] = -tp.calculate.dfdde(e, f['fermi_levels'],
+                                                         f['temperatures'],
+                                                         f['doping'],
+                                                         amset_order=True)
+            if q == 'weighted_rates':
+                rates = resolve_spin(f, 'scattering_rates', spin)
+                rates[rates > 1e20] = 1e15
+                data['total_weights'] = data['fd_weights'] * data['ibz_weights']
+                data['normalised_weights'] = data['total_weights'] / \
+                                             np.sum(data['total_weights'],
+                                                    axis=(2,3))[:,:,None,None]
+                data[q2] = rates * data['normalised_weights']
+                data[q2] = data[q2].sum(axis=(3,4))
+
+        for q2 in data:
+            q = anames[q2] if q2 in anames else q2
             if q in hasdope:
                 # temperature in first index for consistency with other codes
                 if q in hastype:
@@ -268,9 +359,19 @@ def amset_mesh(filename, quantities=['temperature', 'doping',
                         data[q2] = np.array(data[q2])[di]
             if q2 in units:
                 data['meta']['units'][q2] = units[q2]
+            if q2 in dimensions:
+                data['meta']['dimensions'][q2] = dimensions[q2]
 
     if 'doping' in data:
         data['doping'] = np.array(data['doping'])[di]
+
+    if 'scattering_labels' in data:
+        data['scattering_labels'] = \
+                         [l.decode('UTF-8') for l in data['scattering_labels']]
+
+    for c in aconversions:
+        if c in data:
+            data[c] = np.multiply(data[c], aconversions[c])
 
     for c in conversions:
         if c in data:
@@ -311,10 +412,12 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     assert doping in ['n', 'p'], 'doping must be n or p'
 
-    conversions = settings.boltztrap_conversions()
+    bconversions = settings.boltztrap_conversions()
+    conversions = settings.conversions()
     bnames = settings.to_boltztrap()
     tnames = settings.to_tp()
     units = settings.units()
+    dimensions = settings.dimensions()
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [bnames[q] if q in bnames else q for q in quantities]
 
@@ -340,8 +443,10 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     # load data
 
     with h5py.File(filename, 'r') as f:
-        data = {'meta': {'electronic_source': 'boltztrap',
-                         'units':             {}}}
+        data = {'meta': {'doping_type':       doping,
+                         'electronic_source': 'boltztrap',
+                         'units':             {},
+                         'dimensions':        {}}}
         for q in quantities:
             assert q in f, '{} unrecognised. Quantity must be in {} or {}.'.format(
                             q, ', '.join(list(f)[:-1]), list(f)[-1])
@@ -352,6 +457,12 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
                 data[q2] = f[q][()]
             if q2 in units:
                 data['meta']['units'][q2] = units[q2]
+            if q2 in dimensions:
+                data['meta']['dimensions'][q2] = dimensions[q2]
+
+    for c in bconversions:
+        if c in data:
+            data[c] = np.multiply(data[c], bconversions[c])
 
     for c in conversions:
         if c in data:
@@ -388,20 +499,33 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     # name conversions and abbreviations
 
-    conversions = settings.phono3py_conversions()
+    pconversions = settings.phono3py_conversions()
+    conversions = settings.conversions()
     pnames = settings.to_phono3py()
     tnames = settings.to_tp()
     units = settings.units()
+    dimensions = settings.dimensions()
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [pnames[q] if q in pnames else q for q in quantities]
-    subs = {'dispersion': 'qpoint',
-            'waterfall':  'frequency',
+    subs = {'dispersion': ['qpoint'],
+            'waterfall':  ['frequency'],
             'wideband':   ['frequency', 'gamma', 'qpoint']}
     hast = ['gamma', 'heat_capacity', 'kappa', 'lifetime',
             'mean_free_path','mode_kappa', 'occupation']
+
+    # quantities derived from those in the file
+    derived = {'lifetime': ['gamma'],
+               'mean_free_path': ['gamma', 'group_velocity'],
+               'occupation': ['frequency']}
+
     for i in range(len(quantities)):
         if quantities[i] in subs:
             quantities[i] = subs[quantities[i]]
+    for q in derived:
+        if q in quantities:
+            for q2 in derived[q]:
+                if q2 not in quantities:
+                    quantities.append(q2)
 
     quantities = list(np.ravel(quantities))
 
@@ -417,29 +541,21 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     with h5py.File(filename, 'r') as f:
         data = {'meta': {'kappa_source': 'phono3py',
-                         'units':        {}}}
+                         'units':        {},
+                         'dimensions':   {}}}
         for q in quantities:
-            assert q in f or q in ['lifetime', 'mean_free_path', 'occupation'], \
-               '{} unrecognised. Quantity must be {}, lifetime, mean_free_path ' \
-               'or occupation'.format(q, ', '.join(f))
+            if q in derived:
+                continue
+            qs = [*list(f), *list(derived)]
+            assert q in f, \
+                   '{} unrecognised. Quantity must be in {} or {}.'.format(q,
+                   ', '.join(qs[:-1]), qs[-1])
             q2 = tnames[q] if q in tnames else q
-            if q in f:
-                data[q2] = f[q][()]
-            elif q in ['lifetime', 'mean_free_path']:
-                data['lifetime'] = np.reciprocal(np.multiply(2 * 2 * np.pi,
-                                                             f['gamma'][()]))
-                data['lifetime'] = np.where(np.isinf(data['lifetime']), 0,
-                                            data['lifetime'])
-                if q == 'mean_free_path':
-                    data[q] = np.multiply(np.transpose([data['lifetime'],] * 3,
-                                                        (1, 2, 3, 0)),
-                                          f['group_velocity'][()])
-            elif q == 'occupation':
-                from tp.calculate import be_occupation as occupation
-                data[q] = [occupation(f['frequency'][()], t)
-                            for t in f['temperature'][()]]
+            data[q2] = f[q][()]
             if q2 in units:
                 data['meta']['units'][q2] = units[q2]
+            if q2 in dimensions:
+                data['meta']['dimensions'][q2] = dimensions[q2]
 
         # check mode_kappa and correct for certain phono3py versions
         if 'mode_kappa' in data:
@@ -462,6 +578,19 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
                 else:
                     data['mode_kappa'] = np.divide(data['mode_kappa'],
                                                    np.prod(f['mesh'][()][:]))
+
+    for c in pconversions:
+        if c in data:
+            data[c] = np.multiply(data[c], pconversions[c])
+
+    if 'lifetime' in quantities or 'mean_free_path' in quantities:
+        data['lifetime'] = tp.calculate.lifetime(data['gamma'])
+        if 'mean_free_path' in quantities:
+            data['mean_free_path'] = tp.calculate.mfp(data['gamma'],
+                                                      data['group_velocity'])
+    if 'occupation' in quantities:
+        data['occupation'] = tp.calculate.be_occupation(data['frequency'],
+                                                        data['temperature'])
 
     for c in conversions:
         if c in data:
@@ -495,6 +624,9 @@ def phonopy_dispersion(filename, xdata=None):
 
     import yaml
 
+    pconversions = settings.phonopy_conversions()
+    conversions = settings.conversions()
+
     # load data
 
     with open(filename, 'r') as f:
@@ -518,11 +650,8 @@ def phonopy_dispersion(filename, xdata=None):
     else:
         d1 = d2
 
-    conversions = settings.phonopy_conversions()
-    if 'frequency' in conversions:
-        eigs *= conversions['frequency']
-
     units = tp.settings.units()
+    dimensions = settings.dimensions()
     data2 = {'x':             x,
              'qpoint':        qp,
              'frequency':     eigs,
@@ -530,7 +659,16 @@ def phonopy_dispersion(filename, xdata=None):
              'tick_label':    ticks,
              'meta':
                  {'phonon_dispersion_source': 'phonopy',
-                     'units': {'frequency': units['frequency']}}}
+                     'units':      {'frequency': units['frequency']},
+                     'dimensions': {'frequency': dimensions['frequency']}}}
+
+    for c in pconversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], pconversions[c])
+
+    for c in conversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], conversions[c])
 
     return data2
 
@@ -566,14 +704,14 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
     # load data
 
     data = np.transpose(np.loadtxt(filename))
+    pconversions = settings.phonopy_conversions()
+    conversions = settings.conversions()
     units = tp.settings.units()
+    dimensions = settings.dimensions()
     data2 = {'frequency': data[0],
              'meta':      {'phonon_dos_source': 'phonopy',
-                           'units': {'frequency': units['frequency']}}}
-
-    conversions = settings.phonopy_conversions()
-    if 'frequency' in conversions:
-        data2['frequency'] *= conversions['frequency']
+                           'units':      {'frequency': units['frequency']},
+                           'dimensions': {'frequency': dimensions['frequency']}}}
 
     if atoms is None:
         from pymatgen.io.vasp.inputs import Poscar
@@ -605,6 +743,14 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
             i += 1
 
     data2['total'] = np.sum(data[1:], axis=0)
+
+    for c in pconversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], pconversions[c])
+
+    for c in conversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], conversions[c])
 
     return data2
 
