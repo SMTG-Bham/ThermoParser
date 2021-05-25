@@ -405,3 +405,45 @@ def prompt(filename, output):
                     exit()
 
     return
+
+def prompt(filename, output):
+    """Prompts before overwrite.
+
+    Arguments
+    ---------
+
+        filename : str
+            input filename.
+        output : str or list
+            output filename(s).
+
+    Returns
+    -------
+
+        none
+    """
+
+    if isinstance(output, str):
+        output = [output]
+    if filename in output:
+        tries = 3
+        while True:
+            print('Warning: this will overwrite {}. Continue?'.format(filename))
+            cont = input('[y/n]').lower()
+            if cont in ['y', 'ye', 'yes']:
+                print('Continuing...')
+                break
+            elif cont in ['n', 'no']:
+                print('Aborting!')
+                exit()
+            else:
+                tries -= 1
+                if tries == 2:
+                    print('Invalid response. 2 tries remain.')
+                elif tries == 1:
+                    print('Invalid response. 1 try remains.')
+                else:
+                    print('Invalid response. Aborting!')
+                    exit()
+
+    return
