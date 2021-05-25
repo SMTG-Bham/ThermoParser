@@ -393,6 +393,8 @@ def long_labels():
                   'Conductivity (S m$\mathregular{^{-1}}$)',
               'cumulative_kappa':
                   'Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'cumulative_percent':
+                  'Cumulative Lattice Thermal Conductivity (%)',
               'doping':
                   'Carrier Concentration (cm$\mathregular{^{-3}}$)',
               'dos':
@@ -465,6 +467,8 @@ def medium_labels():
                   'Conductivity (S m$\mathregular{^{-1}}$)',
               'cumulative_kappa':
                   'Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'cumulative_percent':
+                  'Cum. LTC (%)',
               'doping':
                   'Carrier Concentration (cm$\mathregular{^{-3}}$)',
               'dos':
@@ -537,6 +541,8 @@ def short_labels():
                   '$\mathregular{\sigma\ (S\ m^{-1})}$',
               'cumulative_kappa':
                   '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+              'cumulative_percent':
+                  '$\mathregular{\kappa_l}$ (%)',
               'doping':
                   'n (cm$\mathregular{^{-3}}$)',
               'dos':
