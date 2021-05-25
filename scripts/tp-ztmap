@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('file',
                     help='Electronic transport data, e.g. amset '
                          'transport_xxx.json or boltztrap.hdf5 or '
-                         'zt.hdf5 written by this script.')
+                         'zt.hdf5 from tp.')
 parser.add_argument('-k', '--kappa', metavar='file',
                     help='phono3py kappa-mxxx.hdf5. Ignored if ZT is '
                          'in the electronic data file.')
@@ -20,8 +20,6 @@ parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
 parser.add_argument('-d', '--direction', metavar='direction', default='avg',
                     help='direction for anisotropic data. Accepts a-c/ '
                          'x-z or average/ avg. Default: avg.')
-parser.add_argument('--nodata', action='store_true',
-                    help='do not print data file.')
 parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
                     default=['pdf'],
                     help='output extension(s). Default: pdf.')
@@ -40,8 +38,7 @@ parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
                     help='style sheet to overlay. Later ones override '
                          'earlier ones.')
 parser.add_argument('-t', '--type', metavar='doping', default='n',
-                    help='type of doping in BoltzTraP. Must be n or p. '
-                         'Default: n.')
+                    help='type of doping. Must be n or p. Default: n.')
 parser.add_argument('--xmin', metavar='xmin', type=float,
                     help='override minimum temperature. Default: None.')
 parser.add_argument('--xmax', metavar='xmax', type=float,
@@ -64,10 +61,6 @@ import tp
 axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.colour) == 1:
     args.colour = args.colour[0]
-if args.nodata:
-    ztdata = None
-else:
-    ztdata = 'zt-{}-{}.hdf5'.format(args.type, args.direction)
 
 try:
     edata = tp.data.load.amset(args.file)
@@ -92,7 +85,7 @@ tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=args.direction,
                           xinterp=args.interpolate, yinterp=args.interpolate,
                           kind=args.kind, colour=args.colour, xmin=args.xmin,
                           xmax=args.xmax, ymin=args.ymin, ymax=args.ymax,
-                          cmin=args.cmin, cmax=args.cmax, output=ztdata)
+                          cmin=args.cmin, cmax=args.cmax)
 
 for ext in args.extension:
     plt.savefig('{}.{}'.format(args.output, ext))

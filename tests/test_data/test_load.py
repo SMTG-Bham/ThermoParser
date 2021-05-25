@@ -5,6 +5,8 @@ import json
 import unittest
 import numpy as np
 import yaml
+from glob import glob
+from os import remove
 from pymatgen.io.vasp.inputs import Poscar
 from unittest.mock import call, MagicMock, mock_open, patch
 from tp.data import load
@@ -98,307 +100,239 @@ class AmsetTest(unittest.TestCase):
         self.assertEqual(list(data2['scattering_labels']), ['test'])
 
 class AmsetMeshTest(unittest.TestCase):
-    @patch.object(h5py, 'File')
-    def test_scattering(self, mock_h5py):
-        data = {'scattering_rates_up':   np.zeros((1, 2, 2, 3, 1)),
-                'scattering_rates_down': np.zeros((1, 2, 2, 3, 1)),
-                'scattering_labels':     ['test'],
-                'temperatures':        [0, 1],
-                'doping':              [1, 2]}
-        data['scattering_rates_up'][0,0,1,0,0] = 1
-        data['scattering_rates_down'][0,0,1,0,0] = 3
-        mock_h5py.return_value = data
 
-        data2 = load.amset_mesh('mock', 'scattering_rates', spin='up')
-        mock_h5py.assert_called_once()
+    def tearDown(self):
+        remove('test.hdf5')
+
+    def test_scattering(self):
+        with h5py.File('test.hdf5', 'w') as f:
+            f['scattering_rates_up']   = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_rates_down'] = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_labels']     = ['test'.encode('ascii', 'ignore')]
+            f['temperatures']          = [0, 1]
+            f['doping']                = [1, 2]
+            f['scattering_rates_up'][0,0,1,0,0] = 1
+            f['scattering_rates_down'][0,0,1,0,0] = 3
+
+        data = load.amset_mesh('test.hdf5', 'scattering_rates', spin='up')
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
-        self.assertEqual(np.array(data2['scattering_rates'])[0,1,0,0,0], 1)
+            self.assertIn(q2, data)
+        self.assertEqual(np.array(data['scattering_rates'])[0,1,0,0,0], 1)
 
-    @patch.object(h5py, 'File')
-    def test_spin(self, mock_h5py):
-        data = {'scattering_rates_up':   np.zeros((1, 2, 2, 3, 1)),
-                'scattering_rates_down': np.zeros((1, 2, 2, 3, 1)),
-                'scattering_labels':     ['test'],
-                'temperatures':        [0, 1],
-                'doping':              [1, 2]}
-        data['scattering_rates_up'][0,0,1,0,0] = 1
-        data['scattering_rates_down'][0,0,1,0,0] = 3
-        mock_h5py.return_value = data
+    def test_spin(self):
+        with h5py.File('test.hdf5', 'w') as f:
+            f['scattering_rates_up']   = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_rates_down'] = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_labels']     = ['test'.encode('ascii', 'ignore')]
+            f['temperatures']          = [0, 1]
+            f['doping']                = [1, 2]
+            f['scattering_rates_up'][0,0,1,0,0] = 1
+            f['scattering_rates_down'][0,0,1,0,0] = 3
 
-        data2 = load.amset_mesh('mock', 'scattering_rates', spin='avg')
-        mock_h5py.assert_called_once()
+        data = load.amset_mesh('test.hdf5', 'scattering_rates', spin='avg')
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
-        self.assertEqual(np.array(data2['scattering_rates'])[0,1,0,0,0], 2)
+            self.assertIn(q2, data)
+        self.assertEqual(np.array(data['scattering_rates'])[0,1,0,0,0], 2)
 
 class BoltzTraPTest(unittest.TestCase):
-    @patch.object(h5py, 'File')
-    def test_conductivity(self, mock_h5py):
+
+    def tearDown(self):
+        remove('test.hdf5')
+
+    def test_conductivity(self):
         q = 'conductivity'
-        data = {q:             {'n': np.zeros((2, 2, 3, 3))},
-                'temperature': [0, 1],
-                'doping':      [1, 2]}
-        mock_h5py.return_value = data
+        with h5py.File('test.hdf5', 'w') as f:
+            g = f.create_group(q)
+            g['n']        = np.zeros((2, 2, 3, 3))
+            f['temperature'] = [0, 1]
+            f['doping']      = [1, 2]
 
-        data2 = load.boltztrap('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.boltztrap('test.hdf5', q)
         for q2 in [q, 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_effective_mass(self, mock_h5py):
+    def test_effective_mass(self):
         q = 'average_eff_mass'
-        data = {q:             {'n': np.zeros((2, 2, 3, 3))},
-                'temperature': [0, 1],
-                'doping':      [1, 2]}
-        mock_h5py.return_value = data
+        with h5py.File('test.hdf5', 'w') as f:
+            g = f.create_group(q)
+            g['n']        = np.zeros((2, 2, 3, 3))
+            f['temperature'] = [0, 1]
+            f['doping']      = [1, 2]
 
-        data2 = load.boltztrap('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.boltztrap('test.hdf5', q)
         for q2 in [q, 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_fermi_level(self, mock_h5py):
+    def test_fermi_level(self):
         q = 'fermi_level'
-        data = {q:             {'n': np.zeros((2, 2, 3, 3))},
-                'temperature': [0, 1],
-                'doping':      [1, 2]}
-        mock_h5py.return_value = data
+        with h5py.File('test.hdf5', 'w') as f:
+            g = f.create_group(q)
+            g['n']        = np.zeros((2, 2, 3, 3))
+            f['temperature'] = [0, 1]
+            f['doping']      = [1, 2]
 
-        data2 = load.boltztrap('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.boltztrap('test.hdf5', q)
         for q2 in [q, 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_power_factor(self, mock_h5py):
+    def test_power_factor(self):
         q = 'power_factor'
-        data = {q:             {'n': np.zeros((2, 2, 3, 3))},
-                'temperature': [0, 1],
-                'doping':      [1, 2]}
-        mock_h5py.return_value = data
+        with h5py.File('test.hdf5', 'w') as f:
+            g = f.create_group(q)
+            g['n']        = np.zeros((2, 2, 3, 3))
+            f['temperature'] = [0, 1]
+            f['doping']      = [1, 2]
 
-        data2 = load.boltztrap('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.boltztrap('test.hdf5', q)
         for q2 in [q, 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_seebeck(self, mock_h5py):
+    def test_seebeck(self):
         q = 'seebeck'
-        data = {q:             {'n': np.zeros((2, 2, 3, 3))},
-                'temperature': [0, 1],
-                'doping':      [1, 2]}
-        mock_h5py.return_value = data
+        with h5py.File('test.hdf5', 'w') as f:
+            g = f.create_group(q)
+            g['n']        = np.zeros((2, 2, 3, 3))
+            f['temperature'] = [0, 1]
+            f['doping']      = [1, 2]
 
-        data2 = load.boltztrap('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.boltztrap('test.hdf5', q)
         for q2 in [q, 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_thermal_conductivity(self, mock_h5py):
+    def test_thermal_conductivity(self):
         q = 'electronic_thermal_conductivity'
-        data = {'electronic_thermal_conductivity': {'n': np.zeros((2, 2, 3, 3))},
-                'temperature':                     [0, 1],
-                'doping':                          [1, 2]}
-        mock_h5py.return_value = data
+        with h5py.File('test.hdf5', 'w') as f:
+            g = f.create_group(q)
+            g['n']        = np.zeros((2, 2, 3, 3))
+            f['temperature'] = [0, 1]
+            f['doping']      = [1, 2]
 
-        data2 = load.boltztrap('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.boltztrap('test.hdf5', q)
         for q2 in [q, 'temperature', 'doping', 'meta']:
-            self.assertIn(q2, data2)
+            self.assertIn(q2, data)
 
 class Phono3pyTest(unittest.TestCase):
-    @patch.object(h5py, 'File')
-    def test_frequency(self, mock_h5py):
+
+    def tearDown(self):
+        remove('test.hdf5')
+
+    def test_frequency(self):
         q = 'frequency'
-        data = {q:             np.zeros((2, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_gamma(self, mock_h5py):
+    def test_gamma(self):
         q = 'gamma'
-        data = {q:             np.zeros((2, 2, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'temperature', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_group_velocity(self, mock_h5py):
+    def test_group_velocity(self):
         q = 'group_velocity'
-        data = {q:             np.zeros((2, 3, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_gv_by_gv(self, mock_h5py):
+    def test_gv_by_gv(self):
         q = 'gv_by_gv'
-        data = {q:             np.zeros((2, 3, 6)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3, 6))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_heat_capacity(self, mock_h5py):
+    def test_heat_capacity(self):
         q = 'heat_capacity'
-        data = {q:             np.zeros((2, 2, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'temperature', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_kappa(self, mock_h5py):
+    def test_kappa(self):
         q = 'kappa'
-        data = {q:             np.zeros((2, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in ['lattice_thermal_conductivity', 'temperature', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_mode_kappa(self, mock_h5py):
+    def test_mode_kappa(self):
         q = 'mode_kappa'
-        data = {q:             np.ones((2, 2, 3, 3)),
-                'kappa':       np.full((2, 3), 6),
-                'weight':      np.ones(2),
-                'mesh':        np.full(3, 2),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.ones((2, 2, 3, 3))
+            f['kappa']       = np.full((2, 3), 6)
+            f['weight']      = np.ones(2)
+            f['mesh']        = np.array([2, 1, 1])
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'temperature', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_old_mode_kappa(self, mock_h5py):
+    def test_old_mode_kappa(self):
         # in old phono3py versions, mode_kappa is multiplied by the mesh
         q = 'mode_kappa'
-        data = {q:             np.ones((2, 2, 3, 3)),
-                'kappa':       np.full((2, 3), 3),
-                'weight':      np.ones(2),
-                'mesh':        np.array([2, 1, 1]),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.ones((2, 2, 3, 3))
+            f['kappa']       = np.full((2, 3), 3)
+            f['weight']      = np.ones(2)
+            f['mesh']        = np.array([2, 1, 1])
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in [q, 'temperature', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_ph_ph_strength(self, mock_h5py):
+    def test_ph_ph_strength(self):
         q = 'ave_pp'
-        data = {q:             np.zeros((2, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f[q]             = np.zeros((2, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in ['ph_ph_strength', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
-    @patch.object(h5py, 'File')
-    def test_wideband(self, mock_h5py):
+    def test_wideband(self):
         q = 'wideband'
-        data = {'frequency':   np.zeros((2, 3)),
-                'gamma':       np.zeros((2, 2, 3)),
-                'temperature': np.array([0, 1]),
-                'qpoint':      np.array([0, 1])}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data.__getitem__
-        mock_data.__iter__.side_effect = data.__iter__
-        mock_data.__contains__.side_effect = data.__contains__
-        mock_h5py.return_value = mock_data
+        with h5py.File('test.hdf5', 'w') as f:
+            f['frequency']   = np.zeros((2, 3))
+            f['gamma']       = np.zeros((2, 2, 3))
+            f['temperature'] = np.array([0, 1])
+            f['qpoint']      = np.array([0, 1])
 
-        data2 = load.phono3py('mock', q)
-        mock_h5py.assert_called_once()
+        data = load.phono3py('test.hdf5', q)
         for q2 in ['frequency', 'gamma', 'temperature', 'qpoint', 'meta']:
-            self.assertIn(q2, data2)
-        mock_data.close.assert_called_once()
+            self.assertIn(q2, data)
 
 class PhonopyDispersionTest(unittest.TestCase):
     @patch.object(yaml, 'safe_load')

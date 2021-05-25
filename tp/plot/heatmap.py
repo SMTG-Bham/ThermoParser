@@ -113,10 +113,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     x = np.array(x)
     y = np.array(y)
     c = np.array(c)
-    if xmin is None: xmin = x[0]
-    if xmax is None: xmax = x[-1]
-    if ymin is None: ymin = y[0]
-    if ymax is None: ymax = y[-1]
+    if xmin is None: xmin = np.nanmin(x)
+    if xmax is None: xmax = np.nanmax(x)
+    if ymin is None: ymin = np.nanmin(y)
+    if ymax is None: ymax = np.nanmax(y)
     xi = np.where((x >= xmin) & (x <= xmax))[0]
     yi = np.where((y >= ymin) & (y <= ymax))[0]
     x = x[xi]
@@ -132,12 +132,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     extend = 'neither'
     if cmin is None:
-        cmin = np.amin(c)
-    elif cmin > np.amin(c):
+        cmin = np.nanmin(c)
+    elif cmin > np.nanmin(c):
         extend = 'min'
     if cmax is None:
-        cmax = np.amax(c)
-    elif cmax < np.amax(c):
+        cmax = np.nanmax(c)
+    elif cmax < np.nanmax(c):
         if extend == 'min':
             extend = 'both'
         else:
@@ -173,7 +173,11 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         if yinterp is not None:
             if yscale == 'linear': y = np.linspace(y[0], y[-1], yinterp)
             if yscale == 'log': y = np.geomspace(y[0], y[-1], yinterp)
+        x = np.array(x)
+        y = np.array(y)
         c = cinterp(x, y)
+    else:
+        c = np.transpose(c)
 
     # ensure all data is shown
     if len(x) == len(c[0]):
@@ -190,7 +194,6 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             y.append(y[-1] ** 2 / y[-2])
 
     # plotting
-
     heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
     cbar = plt.colorbar(heat, extend=extend)
 
@@ -205,11 +208,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
 def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
               yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
-              ymax=None, cmin=None, cmax=None, colour='viridis',
-              output='zt.hdf5', **kwargs):
+              ymax=None, cmin=None, cmax=None, colour='viridis', **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
 
-    Calculates ZT and writes to hdf5, plots and formats labels etc.
+    Calculates ZT, plots and formats labels etc.
 
     Arguments
     ---------
@@ -225,8 +227,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             temperature. Ignored if zt in data, if not ignored and None,
             defaults to 1 at all temperatures.
         direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
 
         xinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
@@ -250,12 +252,6 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
-
-        output : str, optional
-            output filename to write to. Only writes if ZT has been
-            within this function. Set to None to not write. Can be
-            loaded with h5py.File to put back into this function.
-            Default: zt.hdf5.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -328,10 +324,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
                                                    len(data['temperature']))
             data['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
 
-        data = tp.calculate.zt_fromdict(data)
-
-        if output is not None:
-            tp.data.save.hdf5(data, output)
+        data = tp.calculate.zt_fromdict(data, use_tprc=True)
 
     # plotting
 
@@ -353,7 +346,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                      yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
-                     output='target-kl.hdf5', **kwargs):
+                     **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels
@@ -371,8 +364,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         zt : float, optional
             target ZT. Default: 2.
         direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
 
         xinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
@@ -396,10 +389,6 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
-
-        output : str, optional
-            output filename to write to. Set to None to not write.
-            Default: target-kl.hdf5.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -434,10 +423,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                                    direction=direction)
     data['zt'] = zt
 
-    data = tp.calculate.kl_fromdict(data)
-
-    if output is not None:
-        tp.data.save.hdf5(data, output)
+    data = tp.calculate.kl_fromdict(data, use_tprc=True)
 
     # plotting
 

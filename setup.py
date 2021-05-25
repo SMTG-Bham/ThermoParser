@@ -41,7 +41,7 @@ class PostInstallMoveFile(install):
 scripts = glob("scripts/tp-*")
 
 setuptools.setup(
-    name=__name__,
+    name='tp',
     version=__version__,
     author=__author__,
     description='streamlined analysis of thermoelectric properties',

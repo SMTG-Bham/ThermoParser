@@ -14,7 +14,6 @@ if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
 dosfile = '../data/zno/projected_dos.dat'
 poscar = '../data/zno/POSCAR'
 
-main = [False, True]
 colour = ['#59c605', '#ffcf06']
 colours = {'Zn': '#d46ef9',
            'O':  '#7b8eff'}
@@ -29,13 +28,10 @@ dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 
 # Add
 
-for i in [0, 1]:
-    tp.plot.frequency.add_cum_kappa(ax[0], data, temperature=temperature,
-                                    direction=direction[i], colour=colour[i],
-                                    main=main[i], label=direction[i])
-    tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
-                              direction=direction[i], colour=colour[i],
-                              xmarkers=1e-7, main=main[i], label=direction[i])
+tp.plot.frequency.add_cum_kappa(ax[0], data, temperature=temperature,
+                                direction=direction, colour=colour)
+tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
+                          direction=direction, colour=colour, xmarkers=1e-7)
 tp.plot.frequency.add_dos(ax[0], dos, colour=colours, scale=True, main=False)
 
 add_legend()

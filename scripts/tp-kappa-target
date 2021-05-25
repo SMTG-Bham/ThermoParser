@@ -19,8 +19,6 @@ parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
 parser.add_argument('-d', '--direction', metavar='direction', default='avg',
                     help='direction for anisotropic data. Accepts a-c/ '
                          'x-z or average/ avg. Default: avg.')
-parser.add_argument('--nodata', action='store_true',
-                    help='do not print data file.')
 parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
                     default=['pdf'],
                     help='output extension(s). Default: pdf.')
@@ -60,10 +58,6 @@ import tp
 axes = tp.axes.one_large if args.large else tp.axes.one
 if len(args.colour) == 1:
     args.colour = args.colour[0]
-if args.nodata:
-    ztdata = None
-else:
-    ztdata = 'kl-{}.hdf5'.format(args.direction)
 
 try:
     edata = tp.data.load.amset(args.file)
@@ -79,8 +73,7 @@ cbar = tp.plot.heatmap.add_kappa_target(ax, edata, zt=args.zt,
                                         kind=args.kind, colour=args.colour,
                                         xmin=args.xmin, xmax=args.xmax,
                                         ymin=args.ymin, ymax=args.ymax,
-                                        cmin=args.cmin, cmax=args.cmax,
-                                        output=ztdata)
+                                        cmin=args.cmin, cmax=args.cmax)
 
 if args.large:
     cbar.set_label(tp.settings.large_labels()['lattice_thermal_conductivity'])
