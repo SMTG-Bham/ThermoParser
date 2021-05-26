@@ -7,7 +7,6 @@ Functions
 """
 
 import numpy as np
-import os
 import shutil
 import tp
 
@@ -17,8 +16,8 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
               output='boltztrap.hdf5', run_dir='.', clean=False, **kwargs):
     """Runs BoltzTraP from a VASP density of states (DoS).
 
-    Runs quicker and more robustly than the pymatgen from_files version,
-    and outputs an hdf5 file.
+    Wrapper for pymatgen.electronic_structure.boltztrap but runs faster than 
+    using the built in from_files method and outputs an hdf5 file.
     Note: BoltzTraP can be a fickle friend, so if you're getting errors,
     it may be worth reinstalling or trying on a different machine.
 
@@ -128,7 +127,6 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
                     units of each property above.
     """
 
-    import h5py
     import os
     from pymatgen.electronic_structure.boltztrap \
          import BoltztrapRunner, BoltztrapAnalyzer, BoltztrapError

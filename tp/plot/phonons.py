@@ -315,6 +315,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             bandmin = 0
         else:
             bandmin = np.amax([0, bandmin])
+        
         if bandmax is None:
             bandmax = len(data[0]['frequency'][0])
         else:
@@ -444,7 +445,6 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from scipy.interpolate import interp1d
 
     # defaults
@@ -662,7 +662,6 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from copy import copy
     from scipy.interpolate import interp1d
 
@@ -883,7 +882,6 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from copy import copy
     from scipy.interpolate import interp1d
 
@@ -1082,7 +1080,6 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from scipy.interpolate import interp1d
     from tp.calculate import lorentzian
 

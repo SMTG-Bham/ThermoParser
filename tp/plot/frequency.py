@@ -32,7 +32,6 @@ import tp
 import warnings
 import yaml
 from scipy.stats import gaussian_kde
-from tp.data import resolve
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
