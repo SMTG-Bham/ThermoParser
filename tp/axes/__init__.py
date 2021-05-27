@@ -27,4 +27,4 @@ Modules
     legend
 """
 
-from . import one, two, three, four, one_large, two_large, three_large, four_large
+from . import one, two, three, four, one_large, two_large, three_large, four_large, legend
