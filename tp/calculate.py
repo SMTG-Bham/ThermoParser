@@ -195,7 +195,7 @@ def be_occupation(frequency, temperature, use_tprc=True):
 
     return occupation
 
-def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
+def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
           use_tprc=True):
     """Derivative of the Fermi-Dirac distribution.
 
@@ -204,8 +204,8 @@ def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
 
         energy : array-like
             energies per band and k-point (by default in eV).
-        fermi_levels : array-like
-            fermi levels per temperature and dopant (by default in eV).
+        fermi_level : array-like
+            fermi level per temperature and dopant (by default in eV).
         temperature : array-like
             temperatures (by default in K).
         doping : array-like
@@ -232,7 +232,7 @@ def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
         doping = to_tp('doping', doping)
 
     kbt = np.multiply(kb, temperature)
-    de = -np.subtract.outer(fermi_levels, energy)
+    de = -np.subtract.outer(fermi_level, energy)
     if amset_order:
         weights = -0.25 / np.cosh(0.5 * de / kbt[None, :, None, None]) ** 2
         weights = weights / kbt[None, :, None, None]
