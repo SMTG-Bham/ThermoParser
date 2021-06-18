@@ -1,1 +1,1 @@
-from . import calculate, settings, axes, data, plot
+from . import calculate, settings, axes, data, plot, setup
