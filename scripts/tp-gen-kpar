@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Suggests KPAR values for VASP.')
+parser.add_argument('-k', '--kpoints', nargs='+', default='KPOINTS',
+                    help='Non-automatic KPOINTS filepath or mesh. '
+                         'Default: KPOINTS')
+parser.add_argument('-p', '--poscar', default='POSCAR',
+                    help='POSCAR path. Default: POSCAR.')
+
+args=parser.parse_args()
+
+import tp
+
+if len(args.kpoints) == 1:
+    args.kpoints = args.kpoints[0]
+k = tp.setup.vasp.get_kpar(args.kpoints, poscar=args.poscar)
+ks = [str(int(kp)) for kp in k]
+print('KPAR = {} or {}'.format(','.join(ks[:-1]), ks[-1]))

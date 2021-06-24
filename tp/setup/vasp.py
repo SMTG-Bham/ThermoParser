@@ -74,20 +74,20 @@ def get_kpar(kpoints, poscar='POSCAR'):
 
     from pymatgen.io.vasp.inputs import Kpoints
 
-    if isinstance(kpoints, str):
-        try:
+    if isinstance(kpoints, str): # read from file
+        try: # weighted
             weights = Kpoints.from_file(kpoints).kpts_weights
-            weighted = len(weights.nonzero()[0])
-        except Exception:
+            weighted = len(np.array(weights).nonzero()[0])
+        except Exception: # unweighted
             weighted = len(Kpoints.from_file(kpoints).kpts)
-    elif len(np.shape(kpoints)) == 1:
+    elif len(np.shape(kpoints)) == 1: # mesh
         kpoints, weights = gen_ibz(kpoints, poscar)
         weighted = len(weights.nonzero()[0])
-    elif len(np.shape(kpoints)) == 2:
-        if len(kpoints[0]) == 3:
+    elif len(np.shape(kpoints)) == 2: # list...
+        if len(kpoints[0]) == 3: # ...of kpoints
             weighted = len(kpoints)
-        else:
-            weighted = len(kpoints.nonzero()[0])
+        else: # ...of weights
+            weighted = len(np.array(kpoints).nonzero()[0])
 
     # finds the factors of the number of kpoints
     kpar = []
@@ -129,6 +129,7 @@ def get_kpoints(mesh, zero_weighted=None, poscar='POSCAR', output='KPOINTS'):
     kpts, weights = gen_ibz(mesh, poscar)
     labels = list(np.full(len(kpts), ' '))
     labels[0] = '{} x {} x {} mesh'.format(mesh[0], mesh[1], mesh[2])
+
     if zero_weighted is not None:
         zkpts, _ = gen_ibz(zero_weighted, poscar)
         kpts = np.concatenate((kpts, zkpts))

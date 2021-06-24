@@ -20,7 +20,6 @@ parser.add_argument('-t', '--temperature', metavar='temperature', type=float,
 
 args=parser.parse_args()
 
-import numpy as np
 import tp
 
 tp.data.save.cumkappa(args.file, mfp=args.mfp, direction=args.direction,
