@@ -12,6 +12,8 @@ Functions
 """
 
 import numpy as np
+from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
+from pymatgen.io.vasp.inputs import Kpoints, Poscar
 
 def gen_ibz(mesh, poscar='POSCAR'):
     """Generates the irreducible kpoints and weights for a mesh and
@@ -35,9 +37,6 @@ def gen_ibz(mesh, poscar='POSCAR'):
             weights.
     """
 
-    from pymatgen.io.vasp.inputs import Poscar
-    from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
-
     sg = SpacegroupAnalyzer(Poscar.from_file(poscar).structure)
     ibz = sg.get_ir_reciprocal_mesh(mesh=mesh)
 
@@ -59,8 +58,7 @@ def get_kpar(kpoints, poscar='POSCAR'):
             kpoint weights or list of kpoints. Lists of kpoints or
             weights should be 2D, and zero-weighted kpoints cannot be
             ignored in the case of lists of kpoints or KPOINTS files
-            without weights. Does not work for KPOINTS files with
-            automatic meshes, specify the mesh instead.
+            without weights.
 
         poscar : str, optional
             path to POSCAR file. Default: POSCAR.
@@ -72,14 +70,18 @@ def get_kpar(kpoints, poscar='POSCAR'):
             potential KPARs in ascending order.
     """
 
-    from pymatgen.io.vasp.inputs import Kpoints
-
     if isinstance(kpoints, str): # read from file
-        try: # weighted
-            weights = Kpoints.from_file(kpoints).kpts_weights
+        weights = Kpoints.from_file(kpoints).kpts_weights
+        if weights is not None: # weighted kpoints
             weighted = len(np.array(weights).nonzero()[0])
-        except Exception: # unweighted
-            weighted = len(Kpoints.from_file(kpoints).kpts)
+        else:
+            mesh = Kpoints.from_file(kpoints).kpts
+            if np.shape(mesh) == (1, 3): # automatic mesh
+                sg = SpacegroupAnalyzer(Poscar.from_file(poscar).structure)
+                ibz = sg.get_ir_reciprocal_mesh(mesh=mesh)
+                weighted = len(ibz)
+            else: # unweighted kpoints
+                weighted = len(Kpoints.from_file(kpoints).kpts)
     elif len(np.shape(kpoints)) == 1: # mesh
         kpoints, weights = gen_ibz(kpoints, poscar)
         weighted = len(weights.nonzero()[0])
@@ -91,10 +93,8 @@ def get_kpar(kpoints, poscar='POSCAR'):
 
     # finds the factors of the number of kpoints
     kpar = []
-    for n in range(1, int(np.ceil(weighted/2)) + 1):
-        if n > weighted / n:
-            break
-        elif weighted % n == 0:
+    for n in range(1, int(np.ceil(np.sqrt(weighted))) + 1):
+        if weighted % n == 0:
             kpar.append(n)
             kpar.append(weighted / n)
 
@@ -123,8 +123,6 @@ def get_kpoints(mesh, zero_weighted=None, poscar='POSCAR', output='KPOINTS'):
         None
             writes to file
     """
-
-    from pymatgen.io.vasp.inputs import Kpoints
 
     kpts, weights = gen_ibz(mesh, poscar)
     labels = list(np.full(len(kpts), ' '))
