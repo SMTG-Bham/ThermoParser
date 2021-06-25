@@ -17,5 +17,5 @@ import tp
 if len(args.kpoints) == 1:
     args.kpoints = args.kpoints[0]
 k = tp.setup.vasp.get_kpar(args.kpoints, poscar=args.poscar)
-ks = [str(int(kp)) for kp in k]
+ks = [str(kp) for kp in k]
 print('KPAR = {} or {}'.format(','.join(ks[:-1]), ks[-1]))

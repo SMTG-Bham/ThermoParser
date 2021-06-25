@@ -4,12 +4,14 @@ import argparse
 
 parser = argparse.ArgumentParser(
          description='Generated KPOINTS file for VASP with 0-weighted '
-                     'KPOINTS.')
-parser.add_argument('mesh', nargs=3, type=int,
-                    help='weighted k-point mesh.')
-parser.add_argument('-z', '--zero', nargs=3, type=int,
-                    help='0-weighted k-point mesh. Default: no 0-weighted '
-                         'k-points.')
+                     'KPOINTS. Accepts either meshes, which are not '
+                     'preferred as they may not be the same as VASP '
+                     'would choose, or IBZKPT files.')
+parser.add_argument('kpoints', nargs='+',
+                    help='IBZKPT file path or weighted k-point mesh.')
+parser.add_argument('-z', '--zero', nargs='+',
+                    help='IBZKPT file path or 0-weighted k-point mesh. '
+                         'Default: no 0-weighted k-points.')
 parser.add_argument('-p', '--poscar', default='POSCAR',
                     help='POSCAR path. Default: POSCAR.')
 parser.add_argument('-o', '--output', default='KPOINTS',
@@ -19,5 +21,14 @@ args=parser.parse_args()
 
 import tp
 
-tp.setup.vasp.get_kpoints(args.mesh, args.zero, poscar=args.poscar,
+if len(args.kpoints) == 1:
+    args.kpoints = args.kpoints[0]
+else:
+    args.kpoints = [int(k) for k in args.kpoints]
+if args.zero is not None:
+    if len(args.zero) == 1:
+        args.zero = args.zero[0]
+    else:
+        args.zero = [int(k) for k in args.zero]
+tp.setup.vasp.get_kpoints(args.kpoints, args.zero, poscar=args.poscar,
                           output=args.output)
