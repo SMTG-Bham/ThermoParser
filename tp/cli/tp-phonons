@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import argparse
+
+parser = argparse.ArgumentParser(
+         description='Plots a phonon dispersion, optionally with DoS.')
+parser.add_argument('file',
+                    help='band.yaml from Phonopy or sumo.')
+parser.add_argument('--bandmin', metavar='bandmin', type=int,
+                    help='minimum band index. Default: None.')
+parser.add_argument('--bandmax', metavar='bandmax', type=int,
+                    help='maximum band index. Default: None.')
+parser.add_argument('-c', '--colour', metavar='colour', nargs='+',
+                    default=['#800080'],
+                    help='colour or colourmap name or list of colours. '
+                         'Default: #800080.')
+parser.add_argument('-e', '--extension', metavar='extension', nargs='+',
+                    default=['pdf'],
+                    help='output extension(s). Default: pdf.')
+parser.add_argument('--large', action='store_true',
+                    help='use large axes.')
+parser.add_argument('--linestyle', metavar='linestyle', nargs='+',
+                    default=['solid'],
+                    help='linestyle or list of linestyles. '
+                         'Default: solid.')
+parser.add_argument('-o', '--output', metavar='file', default='tp-phonons',
+                    help='output filename, sans extension. '
+                         'Default: tp-phonons.')
+parser.add_argument('-s', '--style', metavar='style', nargs='+', default=[],
+                    help='style sheet to overlay. Later ones override '
+                         'earlier ones.')
+parser.add_argument('-t', '--title', metavar='title',
+                    help='legend title. Default: None.')
+parser.add_argument('-d', '--dos', metavar='dos.dat', default=None,
+                    help='projected_dos.dat')
+parser.add_argument('-a', '--atoms', metavar='atom', nargs='+',
+                    help='List of atoms in POSCAR order for the DoS. '
+                         'Overrides POSCAR reading, useful if you want '
+                         'to split atoms into different environments. '
+                         'Can be written like a chemical formula, '
+                         'e.g. Ba Sn O 3, or repeated, e.g. Sn O O. '
+                         'Default: None.')
+parser.add_argument('--doscolour', metavar='colour', nargs='+',
+                    default=['tab10'],
+                    help='Colourmap or list of colours for the DoS. '
+                         'Colour lists must be at least the length of '
+                         'the number of atom types. Default: tab10.')
+parser.add_argument('-f', '--fillalpha', metavar='alpha', type=float,
+                    default=0.2,
+                    help='DoS fill opacity (0-1). Default: 0.2.')
+parser.add_argument('--nofill', action='store_false',
+                    help='remove coloured DoS fill')
+parser.add_argument('--noline', action='store_false',
+                    help='remove DoS line.')
+parser.add_argument('-p', '--poscar', metavar='POSCAR', default='POSCAR',
+                    help='Path to POSCAR file for DoS. Overridden by '
+                         '--atoms. Default: POSCAR.')
+parser.add_argument('--total', action='store_true',
+                    help='show total DoS')
+
+args=parser.parse_args()
+
+import matplotlib.pyplot as plt
+import tp
+
+axes = tp.axes.one_large if args.large else tp.axes.one
+if len(args.doscolour) == 1:
+    args.doscolour = args.doscolour[0]
+if len(args.colour) == 1:
+    args.colour = args.colour[0]
+
+dispersion = tp.data.load.phonopy_dispersion(args.file)
+
+if args.dos is not None:
+    fig, ax, add_legend = axes.dos_small_legend(args.style)
+    dispax = ax[0]
+    dosax = ax[1]
+else:
+    fig, dispax = axes.plain(args.style)
+
+tp.plot.phonons.add_dispersion(dispax, dispersion, colour=args.colour,
+                               bandmin=args.bandmin, bandmax=args.bandmax,
+                               linestyle=args.linestyle)
+
+if args.dos is not None:
+    dos = tp.data.load.phonopy_dos(args.dos, poscar=args.poscar,
+                                   atoms=args.atoms)
+    tp.plot.frequency.add_dos(dosax, dos, colour=args.doscolour, invert=True,
+                              total=args.total, line=args.noline,
+                              fill=args.nofill, fillalpha=args.fillalpha)
+    dosax.set_ylim(dispax.get_ylim())
+    tp.plot.utilities.set_locators(dosax, dos=True)
+    add_legend(title=args.title)
+
+for ext in args.extension:
+    plt.savefig('{}.{}'.format(args.output, ext))

@@ -62,8 +62,13 @@ setuptools.setup(
     keywords='chemistry materials thermoelectric dft phonopy phono3py '
              'amset boltztrap tp te matplotlib',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
+    install_requires=['click', 'h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy'],
     python_requires='>=3.6',
     cmdclass={'install': PostInstallMoveFile},
-    scripts=scripts)
+    entry_points={'console_scripts':
+                      ['tp-boltztrap        = tp.cli.boltztrap:cli',
+                       'tp-converge-phonons = tp.cli.converge_phonons:cli',
+                       'tp-cumkappa         = tp.cli.cumkappa:cli',
+                       'tp-gen-kpar         = tp.cli.kpar:cli']})
+#    scripts=scripts)
