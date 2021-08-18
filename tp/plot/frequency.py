@@ -40,11 +40,16 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
-def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
-            colour='tab10', fill=True, fillalpha=0.2, line=True, **kwargs):
+def add_dos(ax, data, projected=True, total=False, totallabel='Total',
+            main=True, invert=False, scale=False, colour='tab10',
+            totalcolour=None, fill=True, fillalpha=0.2, line=True,
+            linestyle='-', marker=None, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments
@@ -55,8 +60,13 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         data : dict
             DoS data.
 
+        projected : bool, optional
+            plot atom-projected DoS. Default: True.
         total : bool, optional
             plot total DoS. Default: False
+        totallabel : str, optional
+            label for the total line. Other labels are taken directly
+            from the input dictionary. Default: Total.
 
         main : bool, optional
             set ticks, labels, limits. Default: True.
@@ -68,14 +78,27 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
 
         colour : dict or list or str or colourmap, optional
             RGB colours per atom as a dictionary or a list in POSCAR
-            order. Can instead provide a colourmap or colourmap name.
-            Default: tab10.
+            order, with total as the last colour. Can instead provide a
+            colourmap or colourmap name, which don't include a total
+            colour. If not projected, can specify a single total colour.
+            Total colour is overridden by totalcolour. Default: tab10.
+        totalcolour : str, optional
+            colour for the total line. Overrides specifying as part of
+            colour. Default: black.
         fill : bool, optional
             fill below lines. Default: True.
         fillalpha : float, optional
             fill alpha scaled to 0-1. Default: 0.2.
         line : bool, optional
             plot lines. Default: True.
+        linestyle : dict or list or str, optional
+            linestyle or dictionary of linestyles per atom and total, or
+            list in POSCAR order, with total as the last linestyle.
+            Default: -.
+        marker : dict or list or str or tuple, optional
+            marker or dictionary of markers per atom and total, or list
+            in POSCAR order, with total as the last marker.
+            Default: None.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between.
@@ -108,6 +131,7 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
                            [ total,   main,   invert,   scale,   fill,   line]):
         assert isinstance(value, bool), '{} must be True or False.'.format(name)
     assert fill or line, 'fill or line or both must be True.'
+    assert projected or total, 'projected or total or both must be True.'
     assert isinstance(fillalpha, (float, int)) and fillalpha >= 0 \
                                                and fillalpha <= 1, \
            'fillalpha must be a float/ integer between 0 and 1.'
@@ -115,11 +139,9 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     # data scaling
 
     data = dict(data)
-    f = data['frequency']
-    del data['frequency']
+    f = data.pop('frequency')
     if 'meta' in data: del data['meta']
-    if not total:
-        del data['total']
+    if not total: del data['total']
 
     if scale:
         axscale = [0, 100] if main else None
@@ -127,72 +149,150 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         data = tp.plot.utilities.scale_to_axis(ax, data, scale=axscale,
                                                axis=axis)
     if total:
-        totaldata = data['total']
-        del data['total']
+        totaldata = data.pop('total')
 
     # colours
-    # Tries to read the colour as a colourmap name, then colourmap
+    # If projected, tries to read the colour as a colourmap name, then colourmap
     # object, then list of colours, then dictionary, and converts it
-    # into a dictionary if necessary.
+    # into a dictionary if necessary. If not projected, colour can be a single
+    # colour for the total. The total colour is found first from totalcolour,
+    # otherwise it can be specified in the dictionary under total or as the
+    # last list item, or defaults to black.
 
-    if not isinstance(colour, dict):
-        if not isinstance(colour, list):
-            try:
-                cmap = plt.cm.get_cmap(colour)(np.linspace(0,1,len(data)))
-            except Exception:
-                cmap = colour(np.linspace(0,1,len(data)))
+    if not projected:
+        if totalcolour is not None:
+            colour = {'total': totalcolour}
+        elif isinstance(colour, dict) and 'total' in colour:
+            pass
+        elif isinstance(colour, list):
+            if len(colour) == 1:
+                colour = {'total': colour[0]}
+            elif len(colour) > len(data):
+                colour = {'total': colour[len(data)+1]}
         else:
-            cmap = colour
-        colour = {}
-        for i, c in enumerate(data):
-            colour[c] = cmap[i]
+            colour = {'total': colour}
+    else:
+        if not isinstance(colour, dict):
+            if not isinstance(colour, list):
+                try:
+                    cmap = plt.cm.get_cmap(colour)(np.linspace(0,1,len(data)))
+                except ValueError:
+                    cmap = colour(np.linspace(0,1,len(data)))
+            else:
+                cmap = colour
+            colour = {}
+            for i, c in enumerate(data):
+                colour[c] = cmap[i]
+            if len(cmap) > len(data):
+                colour['total'] = cmap[len(data)+1]
 
-    if total and 'total' not in colour:
-        colour['total'] = '#000000'
+        if total and 'total' not in colour:
+            if totalcolour is not None:
+                colour['total'] = totalcolour
+            else:
+                colour['total'] = '#000000'
+
     fillcolour = {}
     for c in colour:
-        if isinstance(colour[c], str):
-            colour[c] = tp.plot.colour.rgb2array(colour[c])
-        if fill:
-            fillcolour[c] = list(colour[c])
-            fillcolour[c][3] = fillalpha
+        try:
+            if isinstance(colour[c], str):
+                colour[c] = tp.plot.colour.rgb2array(colour[c])
+            if fill:
+                fillcolour[c] = list(colour[c])
+                fillcolour[c][3] = fillalpha
+        except ValueError:
+            if fill:
+                fillcolour[c] = colour[c]
+
+    markers = {}
+    if isinstance(marker, (str, tuple)) or marker is None:
+        if not projected:
+            markers['total'] = marker
+        else:
+            marker = [marker]
+    if isinstance(marker, list):
+        while len(marker) < len(data):
+            marker.append(marker[-1])
+        for i, c in enumerate(data):
+            markers[c] = marker[i]
+        if len(marker) > len(data):
+            markers['total'] = marker[len(data)+1]
+    elif isinstance(marker, dict):
+        markers = marker
+    else:
+        raise Exception('marker must be a dict, list, str, tuple or None')
+    if total not in markers:
+        markers['total'] = None
+
+    linestyles = {}
+    if isinstance(linestyle, str):
+        if not projected:
+            linestyles['total'] = linestyle 
+        else:
+            linestyle = [linestyle]
+    if isinstance(linestyle, list):
+        while len(linestyle) < len(data):
+            linestyle.append(linestyle[-1])
+        for i, c in enumerate(data):
+            linestyles[c] = linestyle[i]
+        if len(linestyle) > len(data):
+            linestyles['total'] = linestyle[len(data)+1]
+    if isinstance(linestyle, dict):
+        linestyles = linestyle
+    if total not in linestyles:
+        linestyles['total'] = '-'
 
     # plotting
 
     if total:
         if invert:
             if fill and line:
-                ax.fill_between(totaldata, f, facecolor=fillcolour['total'], linewidth=0)
-                ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
-            elif fill and not line:
-                ax.fill_between(totaldata, f, label='Total', facecolor=fillcolour['total'],
+                ax.fill_between(totaldata, f, facecolor=fillcolour['total'],
                                 linewidth=0)
+                ax.plot(totaldata, f, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
+            elif fill and not line:
+                ax.fill_between(totaldata, f, label=totallabel,
+                                facecolor=fillcolour['total'], linewidth=0)
             else:
-                ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
+                ax.plot(totaldata, f, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
         else:
             if fill:
-                ax.fill_between(f, totaldata, label='Total', facecolor=fillcolour['total'],
+                ax.fill_between(f, totaldata, label=totallabel, facecolor=fillcolour['total'],
                                linewidth=0)
             if line:
-                ax.plot(f, totaldata, label='Total', color=colour['total'], **kwargs)
-
-    for key in data:
-        if invert:
-            if fill and line:
-                ax.fill_between(data[key], f, facecolor=fillcolour[key], linewidth=0)
-                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
-            elif fill and not line:
-                ax.fill_between(data[key], f, label=key, facecolor=fillcolour[key], linewidth=0)
+                ax.plot(f, totaldata, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
+    if projected:
+        for key in data:
+            if invert:
+                if fill and line:
+                    ax.fill_between(data[key], f, facecolor=fillcolour[key], linewidth=0)
+                    ax.plot(data[key], f, label=key, color=colour[key],
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
+                elif fill and not line:
+                    ax.fill_between(data[key], f, label=key, facecolor=fillcolour[key], linewidth=0)
+                else:
+                    ax.plot(data[key], f, label=key, color=colour[key],
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
             else:
-                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
-        else:
-            if fill and line:
-                ax.fill_between(f, data[key], facecolor=fillcolour[key], linewidth=0)
-                ax.plot(f, data[key], color=colour[key], label=key, **kwargs)
-            elif fill and not line:
-                ax.fill_between(f, data[key], label=key, facecolor=fillcolour[key], linewidth=0)
-            else:
-                ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
+                if fill and line:
+                    ax.fill_between(f, data[key], facecolor=fillcolour[key], linewidth=0)
+                    ax.plot(f, data[key], color=colour[key], label=key,
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
+                elif fill and not line:
+                    ax.fill_between(f, data[key], label=key, facecolor=fillcolour[key], linewidth=0)
+                else:
+                    ax.plot(f, data[key], label=key, color=colour[key],
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
 
     # axes formatting
 
@@ -377,7 +477,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
             if fill:
                 try:
                     fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
-                except Exception:
+                except ValueError:
                     if isinstance(colour1, list) and \
                        isinstance(fillcolour1, (float, int)) and \
                        fillcolour1 >= 0 and fillcolour1 <= 1:
@@ -462,7 +562,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             y-axis quantity. Accepts frequency, gamma, group_velocity,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
             mode_kappa, occupation or ph_ph_strength.
-            
+
         xquantity : str, optional
             x-axis quantity. Accepts frequency, gamma, group_velocity,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
@@ -551,7 +651,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
         colour = mpl.cm.get_cmap(colour)
         colours = [colour(i) for i in np.linspace(0, 1, s[1])]
         colours = np.tile(colours, (s[0], 1))
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = [colour(i) for i in np.linspace(0, 1, s[1])]
             colours = np.tile(colours, (s[0], 1))
@@ -559,12 +659,16 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             colour = tp.plot.colour.skelton()
             colours = [colour(i) for i in np.linspace(0, 1, s[1])]
             colours = np.tile(colours, (s[0], 1))
-        elif (isinstance(colour, list) or isinstance(colour, np.ndarray) and
-              len(colour) == s[1]):
-            if np.ndim(colour) == 1:
-                colours = np.tile(colour, s[0])
-            elif np.ndim(colour) == 2:
-                colours = np.tile(colour, (s[0], 1))
+        elif isinstance(colour, list) or isinstance(colour, np.ndarray):
+            if len(colour) == s[1]:
+                if np.ndim(colour) == 1:
+                    colours = np.tile(colour, s[0])
+                elif np.ndim(colour) == 2:
+                    colours = np.tile(colour, (s[0], 1))
+            elif len(colour) == 2:
+                colour = tp.plot.colour.linear(cmin=colour[0], cmax=colour[1])
+                colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+                colours = np.tile(colours, (s[0], 1))
         else:
             colours = colour
 
@@ -628,8 +732,10 @@ def add_projected_waterfall(ax, data, quantity, projected,
         invert : bool, optional
             invert x- and y-axes. Default: False.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with mid and min and/or max keys. Default: viridis.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -708,14 +814,21 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
     try:
         cmap = copy(mpl.cm.get_cmap(colour))
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = copy(colour)
-        elif isinstance(colour, str) and colour == 'skelton':
-            cmap = tp.plot.colour.skelton()
+        elif isinstance(colour, str):
+            colours = tp.plot.colour.uniform(colour)
+        elif isinstance(colour, list):
+            colours = tp.plot.colour.uniform(*colour)
+        elif isinstance(colour, dict):
+            colours = tp.plot.colour.uniform(**colour)
         else:
-            raise Exception('Unrecognised colour argument. '
-                            'Expected a colourmap or colourmap name.')
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb highlight colour or '
+                            'highlight, min, max #rrggbb colours in '
+                            'that order, or a dictionary with mid and '
+                            'min and/or max keys.')
 
     cnorm, extend = tp.plot.utilities.colour_scale(c, projected, cmap, cmin,
                                                    cmax, cscale, unoccupied)
@@ -780,10 +893,10 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
         invert : bool, optional
             invert x- and y-axes. Default: False.
 
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name. A single #rrggbb colour can be
-            given to generate a custom uniform colourmap.
-            Default: Blues.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with mid and min and/or max keys. Default: Blues.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
@@ -843,15 +956,21 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
 
     try:
         colours = mpl.cm.get_cmap(colour)
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
+        elif isinstance(colour, str):
+            colours = tp.plot.colour.uniform(colour)
+        elif isinstance(colour, list):
+            colours = tp.plot.colour.uniform(*colour)
+        elif isinstance(colour, dict):
+            colours = tp.plot.colour.uniform(**colour)
         else:
-            try:
-                colours = tp.plot.colour.uniform(colour)
-            except Exception:
-                raise Exception('colour must be a colourmap, colourmap'
-                                'name or single #rrggbb colour.')
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb highlight colour or '
+                            'highlight, min, max #rrggbb colours in '
+                            'that order, or a dictionary with mid and '
+                            'min and/or max keys.')
 
     # plotting
 

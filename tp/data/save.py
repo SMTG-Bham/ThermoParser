@@ -96,7 +96,7 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
 
     try:
         edata = tp.data.load.amset(efile)
-    except Exception:
+    except UnicodeDecodeError:
         edata = tp.data.load.boltztrap(efile, doping=doping)
     edata = tp.data.resolve.resolve(edata, ['conductivity', 'seebeck',
                                     'electronic_thermal_conductivity'],
@@ -240,7 +240,7 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
 
     try:
         data = tp.data.load.amset(filename)
-    except Exception:
+    except UnicodeDecodeError:
         data = tp.data.load.boltztrap(filename, doping=doping)
     data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
                                    'electronic_thermal_conductivity'],
@@ -361,48 +361,6 @@ def hdf5(data, output):
                         group[k] = data[key][k]
             else:
                 f.create_dataset(key, np.shape(data[key]), data=data[key])
-
-    return
-
-def prompt(filename, output):
-    """Prompts before overwrite.
-
-    Arguments
-    ---------
-
-        filename : str
-            input filename.
-        output : str or list
-            output filename(s).
-
-    Returns
-    -------
-
-        none
-    """
-
-    if isinstance(output, str):
-        output = [output]
-    if filename in output:
-        tries = 3
-        while True:
-            print('Warning: this will overwrite {}. Continue?'.format(filename))
-            cont = input('[y/n]').lower()
-            if cont in ['y', 'ye', 'yes']:
-                print('Continuing...')
-                break
-            elif cont in ['n', 'no']:
-                print('Aborting!')
-                exit()
-            else:
-                tries -= 1
-                if tries == 2:
-                    print('Invalid response. 2 tries remain.')
-                elif tries == 1:
-                    print('Invalid response. 1 try remains.')
-                else:
-                    print('Invalid response. Aborting!')
-                    exit()
 
     return
 

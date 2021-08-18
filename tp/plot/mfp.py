@@ -25,12 +25,15 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   label=None, xmarkers=None, ymarkers=None, add_xticks=False,
-                  add_yticks=False, main=True, scale=False, colour='#000000',
+                  add_yticks=False, main=True, scale=False, colour=None,
                   fill=False, fillcolour=0.2, line=True, linestyle='-',
                   marker=None, markerkwargs={}, **kwargs):
     """Cumulates and plots kappa against mean free path.
@@ -215,7 +218,10 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             fillcolour1 = fillcolour[i % len(fillcolour)]
             linestyle1 = linestyle[i % len(linestyle)]
             marker1 = marker[i % len(marker)]
-            label1 = "${}$".format(label[i % len(label)])
+            if label is not None:
+                label1 = "${}$".format(label[i % len(label)])
+            else:
+                label1 = None
 
             # colour
             # Tries to read the colour as an rgb code, then alpha value.
@@ -223,7 +229,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             if fill:
                 try:
                     fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
-                except Exception:
+                except ValueError:
                     if isinstance(colour1, list) and \
                        isinstance(fillcolour1, (float, int)) and \
                        fillcolour1 >= 0 and fillcolour1 <= 1:

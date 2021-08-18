@@ -117,7 +117,7 @@ def lifetime(gamma, use_tprc=True):
         gamma = to_tp('gamma', gamma)
 
     lifetime = np.reciprocal(np.multiply(2 * 2 * np.pi, gamma))
-    lifetime = np.where(np.isinf(lifetime), 0, data['lifetime'])
+    lifetime = np.where(np.isinf(lifetime), 0, lifetime)
 
     if use_tprc:
         lifetime = from_tp('lifetime', lifetime)

@@ -42,12 +42,15 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
 def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
                    label=None, colour='#800080', linestyle='solid',
-                   xmarkkwargs={}, **kwargs):
+                   marker=None, xmarkkwargs={}, **kwargs):
     """Adds a phonon band structure to a set of axes.
 
     Labels, colours and linestyles can be given one for the whole
@@ -91,6 +94,8 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
             Default: #800080.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        marker : str or array-like, optional
+            marker(s). Default: None.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -150,9 +155,9 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     colour = tile_properties(colour, bandmin, bandmax)
     linestyle = tile_properties(linestyle, bandmin, bandmax)
+    marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
-
     label2 = []
     if isinstance(label, str):
         label2.extend(['$\mathregular{{{}}}$'.format(label)])
@@ -184,7 +189,7 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     for n in range(len(f[0])):
         ax.plot(x, f[:,n], color=colour[n], linestyle=linestyle[n],
-                label=label2[n], **kwargs)
+                marker=marker[n], label=label2[n], **kwargs)
 
     # axes formatting
 
@@ -197,7 +202,8 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     return
 
 def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
-              colour='winter_r', linestyle='solid', xmarkkwargs={}, **kwargs):
+              colour='winter_r', linestyle='solid', marker=None,
+              xmarkkwargs={}, **kwargs):
     """Adds multiple phonon band structures to a set of axes.
 
     Scales the x-scales to match.
@@ -235,6 +241,8 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             i.e. [[[r,g,b]],...]. Default: winter_r.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        marker : str or array-like, optional
+            marker(s). Default: None.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -283,7 +291,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     try:
         colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, len(data)))
         colours = [[c] for c in colours]
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         elif isinstance(colour, str) and colour == 'skelton':
@@ -301,12 +309,19 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         while len(linestyle) < len(data):
             linestyle.append(linestyle[-1])
 
+    if isinstance(marker, (str, tuple)) or len(marker) == 1 or marker is None:
+        marker = np.repeat(marker, len(data))
+    elif len(marker) < len(data):
+        while len(marker) < len(data):
+            marker.append(marker[-1])
+
     # plotting
 
     for i in range(len(data)):
         add_dispersion(ax, data[i], sdata=data[0], bandmin=bandmin,
                        bandmax=bandmax, main=False, label=label[i],
-                       colour=colours[i], linestyle=linestyle[i], **kwargs)
+                       colour=colours[i], linestyle=linestyle[i],
+                       marker=marker[i], **kwargs)
 
     # axes formatting
 
@@ -335,7 +350,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
                        poscar='POSCAR', main=True, log=False,
                        interpolate=10000, smoothing=5, colour=['#44ffff',
                        '#ff8044', '#ff4444', '#00000010'], linestyle='-',
-                       workers=32, xmarkkwargs={}, **kwargs):
+                       marker=None, workers=32, xmarkkwargs={}, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path.
 
     Labels, colours and linestyles can be given one for the whole
@@ -408,6 +423,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
             Default: ['#44ffff', '#ff8044', '#ff4444', '#00000010'].
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        marker : str or array-like, optional
+            marker(s). Default: None.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
@@ -522,6 +539,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     colour = tile_properties(colour, bandmin, bandmax)
     linestyle = tile_properties(linestyle, bandmin, bandmax)
+    marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
 
@@ -541,7 +559,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     for n in range(len(y2[0])):
         ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
-                label=label2[n], **kwargs)
+                label=label2[n], marker=marker[n], **kwargs)
 
     # axes formatting
 
@@ -1161,13 +1179,13 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     try:
         colours = mpl.cm.get_cmap(colour)
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
         else:
             try:
                 colours = tp.plot.colour.linear(colour)
-            except Exception:
+            except (ValueError, AttributeError):
                 colours = tp.plot.colour.linear(colour[1], colour[0])
 
     # plotting
@@ -1329,7 +1347,7 @@ def tile_properties(properties, bandmin, bandmax):
     """
 
     bdiff = bandmax - bandmin
-    if isinstance(properties, str):
+    if isinstance(properties, str) or properties is None:
         tiled = np.repeat(properties, bdiff)
     elif len(properties) == 1:
         tiled = np.tile(properties, (bdiff, 1))

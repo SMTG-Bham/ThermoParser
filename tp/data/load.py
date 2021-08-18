@@ -563,18 +563,18 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
                 k = round(f['kappa'][()][-1][0], 3)
                 mk = round(f['mode_kappa'][()][-1][:,:,0].sum(axis=1).sum(), 3)
                 if k != mk:
-                    raise Exception('The sum of mode_kappa does not equal kappa.\n '
-                                    'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
-                                                                            k, mk))
-            except Exception:
+                    raise ValueError('The sum of mode_kappa does not equal kappa.\n '
+                                     'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
+                                                                             k, mk))
+            except ValueError:
                 mk2 = np.divide(f['mode_kappa'][()], np.prod(f['mesh'][()][:]))
                 k = round(f['kappa'][()][-1][0], 3)
                 mk = round(mk2[-1][:,:,0].sum(axis=1).sum(), 3)
                 if k != mk:
-                    raise Exception('Mode kappa has been divided by the mesh, but '
-                                    'the sum of mode_kappa does not equal kappa.\n '
-                                    'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
-                                                                            k, mk))
+                    raise ValueError('Mode kappa has been divided by the mesh, but '
+                                     'the sum of mode_kappa does not equal kappa.\n '
+                                     'kappa={:.3f}; sum(mode_kappa)={:.3f}.'.format(
+                                                                             k, mk))
                 else:
                     data['mode_kappa'] = np.divide(data['mode_kappa'],
                                                    np.prod(f['mesh'][()][:]))

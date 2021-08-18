@@ -38,8 +38,6 @@ class PostInstallMoveFile(install):
         super().__init__(*args, **kwargs)
         install_style()
 
-scripts = glob("scripts/tp-*")
-
 setuptools.setup(
     name='tp',
     version=__version__,
@@ -50,7 +48,7 @@ setuptools.setup(
     url='https://smtg-ucl.github.io/ThermoPlotter/',
     packages=setuptools.find_packages(),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Natural Language :: English',
@@ -66,9 +64,4 @@ setuptools.setup(
                       'pyyaml', 'scipy'],
     python_requires='>=3.6',
     cmdclass={'install': PostInstallMoveFile},
-    entry_points={'console_scripts':
-                      ['tp-boltztrap        = tp.cli.boltztrap:cli',
-                       'tp-converge-phonons = tp.cli.converge_phonons:cli',
-                       'tp-cumkappa         = tp.cli.cumkappa:cli',
-                       'tp-gen-kpar         = tp.cli.kpar:cli']})
-#    scripts=scripts)
+    entry_points={'console_scripts': ['tp = tp.cli.cli:tp_cli']})

@@ -7,4 +7,4 @@ Modules
         currently contains KPOINTS generators
 """
 
-from . import *
+from . import vasp

@@ -15,11 +15,14 @@ Functions
         kappa_l needed to reach a given ZT.
 """
 
+from copy import copy
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import tp
 import warnings
+import yaml
 from scipy.interpolate import interp1d, interp2d
 
 warnings.filterwarnings('ignore', module='matplotlib')
@@ -28,13 +31,16 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
 def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
                 xscale='linear', yscale='linear', cscale='linear', xmin=None,
                 xmax=None, ymin=None, ymax=None, cmin=None, cmax=None,
-                colour='viridis', **kwargs):
+                colour='viridis', undercolour=None, overcolour=None, **kwargs):
     """Adds a heatmap to a set of axes.
 
     Formats limits, parses extra colourmap options, makes sure data
@@ -78,9 +84,14 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         cmax : float, optional
             override colour scale maximum. Default: None.
 
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name; or key RGB colour to generate a
-            uniform colour map. Default: viridis.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with mid and min and/or max keys. Default: Blues.
+        undercolour : str or array-like, optional
+            colour for values under cmin.
+        overcolour : str or array-like, optional
+            colour for values over cmax.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -152,16 +163,26 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
 
     try:
-        colours = mpl.cm.get_cmap(colour)
-    except Exception:
+        colours = copy(mpl.cm.get_cmap(colour))
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
+        elif isinstance(colour, str):
+            colours = tp.plot.colour.uniform(colour)
+        elif isinstance(colour, list):
+            colours = tp.plot.colour.uniform(*colour)
+        elif isinstance(colour, dict):
+            colours = tp.plot.colour.uniform(**colour)
         else:
-            try:
-                colours = tp.plot.colour.uniform(colour)
-            except Exception:
-                raise Exception('colour must be a colourmap, colourmap'
-                                'name or single #rrggbb colour.')
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb highlight colour or '
+                            'highlight, min, max #rrggbb colours in '
+                            'that order, or a dictionary with mid and '
+                            'min and/or max keys.')
+    if undercolour is not None:
+        colours.set_under(undercolour)
+    if overcolour is not None:
+        colours.set_over(overcolour)
 
     # data interpolation
 
@@ -346,7 +367,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                      yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
-                     **kwargs):
+                     negativecolour='grey', **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels
@@ -389,6 +410,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
+        negativecolour : str or array-like, optional
+            colour for values under cmin. Default: grey.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -423,7 +446,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                                    direction=direction)
     data['zt'] = zt
 
-    data = tp.calculate.kl_fromdict(data, use_tprc=True)
+    data = tp.calculate.kl_fromdict(data, use_tprc=False)
 
     # plotting
 
@@ -431,7 +454,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                        data['lattice_thermal_conductivity'],
                        xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
-                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,**kwargs)
+                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
+                       undercolour=negativecolour, **kwargs)
 
     # axes formatting
 

@@ -63,7 +63,7 @@ try:
 except yaml.parser.ParserError:
     warnings.warn('Failed to read ~/.config/tprc.yaml')
     conf = None
-except Exception:
+except FileNotFoundError:
     conf = None
 
 def __dir__():

@@ -11,4 +11,4 @@ Modules
     boltztrap
 """
 
-from . import *
+from . import options
