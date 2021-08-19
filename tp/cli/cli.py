@@ -81,7 +81,7 @@ def kpoints(kpoints, mesh, poscar, zero_kpoints, zero_mesh, output):
 
 @tp_cli.group()
 def run():
-    """Tools for transport properties postprocessing"""
+    """Tools for transport properties postprocessing."""
     return
 
 
@@ -183,7 +183,7 @@ def save():
               help='x-axis quantity.  [default: frequency]',
               default=False,
               show_default=False)
-@directions_option
+@direction_option
 @temperature_option
 @click.option('-o', '--output',
               help='Output filename, sans extension.',
@@ -232,31 +232,32 @@ def save_kappa(filename, direction, output):
     return
 
 
-#@save.command('zt')
-#@input_argument
-#@click.option('-k', '--kappa',
-#              help='Phono3py kappa-mxxx.hdf5.',
-#              type=click.Path(exists=True, file_okay=True, dir_okay=False))
-#@doping_type_option
-#@direction_option
-#@interpolate_options
-#@click.option('-o', '--output',
-#              help='Output filename, sans extension.',
-#              default='tp-zt',
-#              show_default=True)
-#def save_zt(filename, kappa, dtype, direction, interpolate, kind, output):
-#    """Extracts ZT from electronic transport data file.
-#
-#    Saves ZT to hdf5 and highlights to yaml, and prints max to stdout.
-#    Currently accepts AMSET transport json or BoltzTraP hdf5, along with
-#    Phono3py hdf5 for lattice thermal conductivity.
-#    """
-#
-#    tp.data.save.zt(filename, kappa, direction=direction, doping=dtype,
-#                    tinterp=interpolate, dinterp=interpolate, kind=kind,
-#                    output=output)
-#
-#    return
+@save.command('zt')
+@input_argument
+@click.option('-k', '--kappa',
+              help='Phono3py kappa-mxxx.hdf5.',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@doping_type_option
+@direction_option
+@interpolate_options
+@click.option('-o', '--output',
+              help='Output filename, sans extension.',
+              default='tp-zt',
+              show_default=True)
+def save_zt(filename, kappa, dtype, direction, interpolate, kind, output):
+    """Extracts ZT from electronic transport data file.
+
+    Saves ZT to hdf5 and highlights to yaml, and prints max to stdout.
+    Currently accepts AMSET transport json or BoltzTraP hdf5, along with
+    Phono3py hdf5 for lattice thermal conductivity.
+    """
+
+    tp.data.save.zt(filename, kappa, direction=direction, doping=dtype,
+                    tinterp=interpolate, dinterp=interpolate, kind=kind,
+                    output=output)
+    click.echo('{0}.yaml and {0}.hdf5 written'.format(output))
+
+    return
 
 
 
@@ -808,68 +809,68 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
     return
 
 
-#@plot.command()
-#@input_argument
-#@click.option('-k', '--kappa',
-#              help='Phono3py kappa hdf5. Ignored if ZT is in file. If '
-#                   'otherwise unspecified, set to 1 (W m-1 K-1).',
-#              type=click.Path(file_okay=True, dir_okay=False))
-#
-#@direction_option
-#@doping_type_option
-#@interpolate_options
-#
-#@click.option('-c', '--colour',
-#              help='Colourmap name or #rrggbb highlight colour or min '
-#                   'and max and highlight #rrggbb colours to generate '
-#                   'a colourmap from.',
-#              multiple=True,
-#              default=['viridis'],
-#              show_default=True)
-#
-#@xyc_limit_options
-#@plot_io_options
-#@click.option('-o', '--output',
-#              help='Output filename, sans extension.',
-#              default='tp-ztmap',
-#              show_default=True)
-#
-#def ztmap(filename, kappa, direction, dtype, interpolate, colour, xmin, xmax,
-#          ymin, ymax, cmin, cmax, style, large, extension, output):
-#    """Plots ZT against temperature and carrier concentration."""
-#
-#    axes = tp.axes.one_large if large else tp.axes.one
-#    if len(colour) == 1:
-#        colour = colour[0]
-#
-#    try:
-#        edata = tp.data.load.amset(filename)
-#    except UnicodeDecodeError:
-#        try:
-#            edata = tp.data.load.boltztrap(filename, doping=dtype)
-#        except Exception:
-#            data = h5py.File(filename, 'r')
-#            edata = dict(data)
-#            for key in edata.keys():
-#                if isinstance(edata[key], dict) and dtype in edata[key]:
-#                    edata[key] = edata[key][dtype][()]
-#
-#    if kappa is not None:
-#        kdata = tp.data.load.phono3py(kappa)
-#    else:
-#        kdata = None
-#
-#    fig, ax = axes.colourbar(style)
-#
-#    tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=direction,
-#                              xinterp=interpolate, yinterp=interpolate,
-#                              kind=kind, colour=colour, xmin=xmin, xmax=xmax,
-#                              ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
-#
-#    for ext in extension:
-#        plt.savefig('{}.{}'.format(output, ext))
-#
-#    return
+@plot.command()
+@input_argument
+@click.option('-k', '--kappa',
+              help='Phono3py kappa hdf5. Ignored if ZT is in file. If '
+                   'otherwise unspecified, set to 1 (W m-1 K-1).',
+              type=click.Path(file_okay=True, dir_okay=False))
+
+@direction_option
+@doping_type_option
+@interpolate_options
+
+@click.option('-c', '--colour',
+              help='Colourmap name or #rrggbb highlight colour or min '
+                   'and max and highlight #rrggbb colours to generate '
+                   'a colourmap from.',
+              multiple=True,
+              default=['viridis'],
+              show_default=True)
+
+@xyc_limit_options
+@plot_io_options
+@click.option('-o', '--output',
+              help='Output filename, sans extension.',
+              default='tp-ztmap',
+              show_default=True)
+
+def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
+          xmax, ymin, ymax, cmin, cmax, style, large, extension, output):
+    """Plots ZT against temperature and carrier concentration."""
+
+    axes = tp.axes.one_large if large else tp.axes.one
+    if len(colour) == 1:
+        colour = colour[0]
+
+    try:
+        edata = tp.data.load.amset(filename)
+    except UnicodeDecodeError:
+        try:
+            edata = tp.data.load.boltztrap(filename, doping=dtype)
+        except Exception:
+            data = h5py.File(filename, 'r')
+            edata = dict(data)
+            for key in edata.keys():
+                if isinstance(edata[key], dict) and dtype in edata[key]:
+                    edata[key] = edata[key][dtype][()]
+
+    if kappa is not None:
+        kdata = tp.data.load.phono3py(kappa)
+    else:
+        kdata = None
+
+    fig, ax = axes.colourbar(style)
+
+    tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=direction,
+                              xinterp=interpolate, yinterp=interpolate,
+                              kind=kind, colour=colour, xmin=xmin, xmax=xmax,
+                              ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
+
+    for ext in extension:
+        plt.savefig('{}.{}'.format(output, ext))
+
+    return
 
 
 

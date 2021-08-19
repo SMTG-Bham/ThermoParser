@@ -579,10 +579,11 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
         invert : bool, optional
             invert x- and y-axes. Default: False.
 
-        colour : colourmap or str or array-like, optional
+        colour : colourmap or str or array-like or dict, optional
             colourmap or colourmap name or list of colours (one for
-            each band or one for each point) or a single colour.
-            Default: viridis.
+            each band or one for each point) or two colours for a linear
+            colourmap or a dictionary with cmin and cmax keys or a
+            single colour. Default: viridis.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
@@ -643,8 +644,9 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # colour
     # Tries to read as a colourmap name or colourmap object or list of
     # colours (of varying formats), one per band, and assigns
-    # appropriately. Otherwise leaves as is, which is appropriate for 
-    # a single colour or colour per point.
+    # appropriately, or just two colours generate a linear colourmap, or
+    # a dictionary with cmin and cmax keys. Otherwise leaves as is,
+    # which is appropriate for a single colour or colour per point.
 
     s = np.shape(data[xquantity])
     try:
@@ -667,6 +669,10 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                     colours = np.tile(colour, (s[0], 1))
             elif len(colour) == 2:
                 colour = tp.plot.colour.linear(cmin=colour[0], cmax=colour[1])
+                colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+                colours = np.tile(colours, (s[0], 1))
+        elif isinstance(colour, dict):
+                colour = tp.plot.colour.linear(**colour)
                 colours = [colour(i) for i in np.linspace(0, 1, s[1])]
                 colours = np.tile(colours, (s[0], 1))
         else:
@@ -733,9 +739,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or highlight colour or
+            colourmap or colourmap name or #rrggbb highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with mid and min and/or max keys. Default: viridis.
+            with cmid and cmin and/or cmax keys. Default: viridis.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -809,27 +815,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     y = np.abs(np.ravel(data[quantity]))
     c = np.abs(np.ravel(data[projected]))
 
-    # colour
-    # Reads a colourmap or colourmap name.
-
-    try:
-        cmap = copy(mpl.cm.get_cmap(colour))
-    except ValueError:
-        if isinstance(colour, mpl.colors.ListedColormap):
-            cmap = copy(colour)
-        elif isinstance(colour, str):
-            colours = tp.plot.colour.uniform(colour)
-        elif isinstance(colour, list):
-            colours = tp.plot.colour.uniform(*colour)
-        elif isinstance(colour, dict):
-            colours = tp.plot.colour.uniform(**colour)
-        else:
-            raise Exception('colour must be a colourmap, colourmap '
-                            'name, single #rrggbb highlight colour or '
-                            'highlight, min, max #rrggbb colours in '
-                            'that order, or a dictionary with mid and '
-                            'min and/or max keys.')
-
+    cmap = tp.plot.utilities.parse_colours(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c, projected, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -894,9 +880,9 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or highlight colour or
+            colourmap or colourmap name or #rrggbb highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with mid and min and/or max keys. Default: Blues.
+            with cmid and cmin and/or cmax keys. Default: Blues.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
@@ -950,31 +936,11 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     idx = z.argsort()
     x_dens, y_dens, z_dens = x[idx], y[idx], z[idx]
 
-    # colour
-    # Tries to read as a colourmap or colourmap name, or uses a single
-    # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
-
-    try:
-        colours = mpl.cm.get_cmap(colour)
-    except ValueError:
-        if isinstance(colour, mpl.colors.ListedColormap):
-            colours = colour
-        elif isinstance(colour, str):
-            colours = tp.plot.colour.uniform(colour)
-        elif isinstance(colour, list):
-            colours = tp.plot.colour.uniform(*colour)
-        elif isinstance(colour, dict):
-            colours = tp.plot.colour.uniform(**colour)
-        else:
-            raise Exception('colour must be a colourmap, colourmap '
-                            'name, single #rrggbb highlight colour or '
-                            'highlight, min, max #rrggbb colours in '
-                            'that order, or a dictionary with mid and '
-                            'min and/or max keys.')
+    cmap = tp.plot.utilities.parse_colours(colour)
 
     # plotting
 
-    ax.scatter(x_dens, y_dens, c=z_dens, cmap=colour, **kwargs)
+    ax.scatter(x_dens, y_dens, c=z_dens, cmap=cmap, **kwargs)
 
     # axes formatting
 

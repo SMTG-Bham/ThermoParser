@@ -52,7 +52,7 @@ def doping_type_option(f):
                      default='n',
                      show_default=True)(f)
 
-    return
+    return f
 
 def input_argument(f):
     """Option for an input file."""
@@ -81,7 +81,7 @@ def interpolate_options(f):
                      type=click.IntRange(1),
                      default=200,
                      show_default=True)(f)
-    f = click.option('--kind', metavar='kind',
+    f = click.option('--kind',
                      help='Interpolation kind.',
                      default='linear',
                      show_default=True)(f)

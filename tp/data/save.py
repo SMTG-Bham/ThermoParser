@@ -356,7 +356,14 @@ def hdf5(data, output):
                     if isinstance(data[key][k], dict):
                         group2 = group.create_group(k)
                         for k2 in data[key][k].keys():
-                            group2[k2] = data[key][k][k2]
+                            if isinstance(data[key][k][k2], list) and \
+                               len(data[key][k][k2]) != 0 and \
+                               isinstance(data[key][k][k2][0], str):
+                                ds = group2.create_dataset(k2, (len(data[key][k][k2]),),
+                                                           dtype=h5py.string_dtype())
+                                ds = data[key][k][k2]
+                            else:
+                                group2[k2] = data[key][k][k2]
                     else:
                         group[k] = data[key][k]
             else:

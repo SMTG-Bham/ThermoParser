@@ -235,10 +235,13 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         label : array-like, optional
             legend labels. Default: None
 
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name or list of colours. Note [r,g,b]
-            format colours should be enclosed in and additional [],
-            i.e. [[[r,g,b]],...]. Default: winter_r.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or list of colours, one for each
+                dispersion or a min and max colour to generate a linear
+                colourmap between or a dictionary with cmin and cmax
+                keys. Note [r,g,b] format colours should be enclosed in
+                and additional [], i.e. [[[r,g,b]],...].
+                Default: winter_r.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
         marker : str or array-like, optional
@@ -296,6 +299,12 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         elif isinstance(colour, str) and colour == 'skelton':
             colour = tp.plot.colour.skelton()
+            colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isinstance(colour, list) and len(colour) == 2 and len(data) != 2:
+            colours = tp.plot.colour.linear(*colour)
+            colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isintance(colour, dict):
+            colours = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         else:
             colours = colour
@@ -631,8 +640,10 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
             number of points per path (e.g. gamma -> X) per line.
             Default: 500.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis_r.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys. Default: viridis_r.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -755,10 +766,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
                            kind='cubic', axis=0, fill_value='extrapolate')
         c2.append(np.abs(cinterp(xtemp)))
 
-    if isinstance(colour, str):
-        cmap = copy(plt.cm.get_cmap(colour))
-    else:
-        cmap = copy(colour)
+    cmap = tp.plot.utilities.parse_colours(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c2, quantity, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -789,7 +797,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  bandmin=None, bandmax=None, temperature=300,
                                  direction='avg', poscar='POSCAR', main=True,
                                  log=False, interpolate=10000, smoothing=10,
-                                 colour='viridis', cmin=None, cmax=None,
+                                 colour='viridis_r', cmin=None, cmax=None,
                                  cscale=None, unoccupied='grey', workers=32,
                                  xmarkkwargs={}, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path and projection.
@@ -852,8 +860,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
         smoothing : int, optional
             every n points to sample. Default: 10.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys. Default: viridis_r.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -985,10 +995,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     cinterp = interp1d(x, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
-    if isinstance(colour, str):
-        cmap = copy(plt.cm.get_cmap(colour))
-    else:
-        cmap = copy(colour)
+    cmap = tp.plot.utilities.parse_colours(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c2, projected, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -1062,7 +1069,8 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
         colour : colormap or str or list, optional
             colourmap or colourmap name or max #RRGGBB colour (fades to
-            white) or min and max #RRGGBB colours. Default: viridis.
+            white) or min and max #RRGGBB colours or dictionary with
+            cmin and cmax keys. Default: viridis.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
@@ -1178,15 +1186,21 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     # the min and max values.
 
     try:
-        colours = mpl.cm.get_cmap(colour)
+        cmap = mpl.cm.get_cmap(colour)
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
+        elif isinstace(colour, str):
+            cmap = tp.plot.colour.linear(colour)
+        elif isinstace(colour, list):
+            cmap = tp.plot.colour.linear(colour[1], colour[0])
+        elif isinstace(colour, dict):
+            cmap = tp.plot.colour.linear(**colour)
         else:
-            try:
-                colours = tp.plot.colour.linear(colour)
-            except (ValueError, AttributeError):
-                colours = tp.plot.colour.linear(colour[1], colour[0])
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb max colour or min '
+                            'and max #rrggbb colours, or a dictionary '
+                            'with cmin and cmax keys.')
 
     # plotting
 
