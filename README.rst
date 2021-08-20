@@ -45,9 +45,9 @@ ThermoPlotter can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone git@github.com:SMTG-UCL/ThermoPlotter.git
+    git clone https://github.com/SMTG-UCL/ThermoPlotter.git
     cd ThermoPlotter
-    python3 -m pip install --user .
+    pip install .
 
 After installing, you may want to copy ``ThermoPlotter/tprc.yaml`` to
 ``~/.config/tprc.yaml``, if you want to set your own default axis
