@@ -700,7 +700,10 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
         quantities.append(projected)
     data = tp.data.load.phono3py(filename, quantities)
 
-    fig, ax = axes.plain(style)
+    if projected is None or projected == 'density':
+        fig, ax = axes.plain(style)
+    else:
+        fig, ax = axes.colourbar(style)
 
     if projected == 'density':
         cbar = tp.plot.frequency.add_density(ax, data, y, xquantity=x,

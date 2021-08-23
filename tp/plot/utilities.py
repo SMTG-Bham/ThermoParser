@@ -138,6 +138,8 @@ def parse_colours(colour):
             colourmap
     """
 
+    from copy import copy
+
     try:
         cmap = copy(mpl.cm.get_cmap(colour))
     except ValueError:
