@@ -18,7 +18,7 @@ Plots with legends return an add_legend function, which will place the
 legend nicely and still accepts arguments like title. This doesn't stop
 you using plt.legend instead (see line 41).
 """
-fig, ax, add_legend = tp.axes.one_large.dos_small_legend()
+fig, ax, add_legend = tp.axes.one.dos_small_legend()
 
 # Load
 

@@ -102,7 +102,7 @@ def colourbar_small_legend(style=[]):
         axes
             axes.
         function
-            function to add a pre-posistioned legend.
+            function to add a pre-positioned legend.
     """
 
     if isinstance(style, str): style=[style]
@@ -217,7 +217,7 @@ def dos_colourbar_small_legend(style=[]):
         axes
             axes.
         function
-            function to add a pre-posistioned legend.
+            function to add a pre-positioned legend.
     """
 
     if isinstance(style, str): style=[style]
@@ -282,7 +282,7 @@ def dos_small_legend(style=[]):
         axes
             axes.
         function
-            function to add a pre-posistioned legend.
+            function to add a pre-positioned legend.
     """
 
     if isinstance(style, str): style=[style]
@@ -347,7 +347,7 @@ def small_legend(style=[]):
         axes
             axes.
         function
-            function to add a pre-posistioned legend.
+            function to add a pre-positioned legend.
     """
 
     if isinstance(style, str): style=[style]
@@ -400,7 +400,7 @@ def medium_legend(style=[]):
         axes
             axes.
         function
-            function to add a pre-posistioned legend.
+            function to add a pre-positioned legend.
     """
 
     if isinstance(style, str): style=[style]
@@ -481,7 +481,7 @@ def wide_large_legend(style=[]):
         axes
             axes.
         function
-            function to add a pre-posistioned legend.
+            function to add a pre-positioned legend.
     """
 
     if isinstance(style, str): style=[style]
