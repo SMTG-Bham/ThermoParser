@@ -449,7 +449,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
 
             f, k = tp.calculate.cumulate(f, k)
             np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
-                       dat['meta']['temperature'], d), np.transpose([f, k]),
+                       data2['meta']['temperature'], d), np.transpose([f, k]),
                        header='Frequency(THz) k_l(Wm-1K-1)')
 
             if fmax is None or fmax < f[-1]:

@@ -194,16 +194,16 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
             mfp, k = cumulate(mfp, k)
             np.savetxt('cumkappa-mfp-{:.0f}K-{}.dat'.format(
-                       dat['meta']['temperature'], d), np.transpose([mfp, k]),
+                       data2['meta']['temperature'], d), np.transpose([mfp, k]),
                        header='mfp(m) k_l(Wm-1K-1)')
 
-            mindex = next(x[0] for x in enumerate(k) if x[1] > kmin*k[-1]/100)
+            mindex = next(x[0] for x in enumerate(np.ma.masked_invalid(k).compressed()) if x[1] > kmin*k[-1]/100)
             if mfpmin is None or mfpmin > mfp[mindex]:
                 mfpmin = mfp[mindex]
             if mfpmax is None or mfpmax < mfp[-1]:
-                mfpmax = mfp[-1]
+                mfpmax = np.nanmax(mfp)
             if kmax is None or kmax < k[-1]:
-                kmax = 100 if main and scale else k[-1]
+                kmax = 100 if main and scale else np.nanmax(k[-1])
 
             mfp = np.append(mfp, 100*mfp[-1])
             k = np.append(k, k[-1])

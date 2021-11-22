@@ -301,10 +301,10 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             colour = tp.plot.colour.skelton()
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         elif isinstance(colour, list) and len(colour) == 2 and len(data) != 2:
-            colours = tp.plot.colour.linear(*colour)
+            colour = tp.plot.colour.linear(*colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         elif isintance(colour, dict):
-            colours = tp.plot.colour.linear(**colour)
+            colour = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         else:
             colours = colour
@@ -318,7 +318,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         while len(linestyle) < len(data):
             linestyle.append(linestyle[-1])
 
-    if isinstance(marker, (str, tuple)) or len(marker) == 1 or marker is None:
+    if marker is None or isinstance(marker, (str, tuple)) or len(marker) == 1:
         marker = np.repeat(marker, len(data))
     elif len(marker) < len(data):
         while len(marker) < len(data):
@@ -1204,8 +1204,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # plotting
 
-    ax.pcolormesh(x2, f2, np.transpose(area), cmap=colours, norm=cnorm,
-                  **kwargs)
+    ax.pcolormesh(x2, f2, np.transpose(area), cmap=cmap, norm=cnorm, **kwargs)
 
     # axes formatting
 

@@ -5,9 +5,19 @@ Functions
 
     direction_option
     directions_option
+    doping_type_option
+    dopings_option
+    input_argument
+    inputs_argument
+    interpolate_options
     kpoints_options
+    legend_options
+    line_options
     line_fill_options
     plot_io_options
+    temperature_option
+    xy_limit_options
+    xyc_limit_options
 """
 
 import click
@@ -50,6 +60,17 @@ def doping_type_option(f):
                      help='Type of doping.',
                      type=click.Choice(['n', 'p']),
                      default='n',
+                     show_default=True)(f)
+
+    return f
+
+def dopings_option(f):
+    """Option for doping concentrations."""
+
+    f = click.option('--n', '--concentration', 'doping',
+                     help='Doping concentration (will be rounded).',
+                     multiple=True,
+                     default=[1.e19],
                      show_default=True)(f)
 
     return f

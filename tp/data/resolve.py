@@ -1,35 +1,46 @@
 """Resolves quantities by temperature and/ or direction.
 
-Reads specfic named variables. May need to be split by data origin in
-future, e.g. mobility is currently not resolved by temperature.
+Reads variables and selects specific conditions. Requires
+['meta']['dimensions'] subdictionaries provided by tp load modules.
 
 Functions
 ---------
 
-    resolve:
-        currently for Phono3py, AMSET and BoltzTraP.
+    resolve
 """
 
 import numpy as np
 import tp.settings
-from tp.data import aniso
+import warnings
+from copy import deepcopy
 
-def resolve(data, quantities, temperature=None, direction=None):
-    """Selects temperature and/or direction.
+def resolve(data, quantities, **kwargs):
+    """Selects particular values of arbitrary quantities.
+
+    Requires the meta/dimensions dictionaries found in later versions
+    of tp. Currently cannot accept dictionary keys (e.g. dtype='n') if
+    they are not in the 0th index.
 
     Arguments
     ---------
 
         data : dict
-            data.
+            data with meta/dimensions dictionaries and quantities.
         quantities : array-like or str
             quantities to resolve
 
-        temperature : float, optional
-            temperature to select. Default: None.
-        direction : str, optional
-            direction to resolve, accepts x-z/, a-c, average/ avg or
-            normal/ norm. Default: None.
+        kwargs
+            dimesions to resolve. Rounds to nearest available value.
+            Common options include:
+
+                direction
+                    direction to resolve, accepts x-z/, a-c,
+                    average/ avg or normal/ norm.
+                dtype
+                    n or p
+                stype
+                    codes from amset, e.g. IMP, or overall
+                temperature
 
     Returns
     -------
@@ -38,63 +49,78 @@ def resolve(data, quantities, temperature=None, direction=None):
             resolved data.
     """
 
-    data = dict(data) # sever the link to enable the original data to be reused
-
-    # variables resolved by temperature and direction
-    hast = ['average_eff_mass', 'conductivity',
-            'electronic_thermal_conductivity', 'fermi_level', 'gamma',
-            'heat_capacity', 'lattice_thermal_conductivity', 'lifetime',
-            'mean_free_path', 'mode_kappa', 'occupation', 'power_factor',
-            'seebeck', 'velocities_product', 'zt']
-    iso = {'average_eff_mass':                aniso.matrix_three,
-           'conductivity':                    aniso.matrix_three,
-           'electronic_thermal_conductivity': aniso.matrix_three,
-           'group_velocity':                  aniso.three,
-           'gv_by_gv':                        aniso.three,
-           'lattice_thermal_conductivity':    aniso.two,
-           'mean_free_path':                  aniso.four,
-           'mesh':                            aniso.one,
-           'mobility':                        aniso.matrix_four,
-           'mode_kappa':                      aniso.four,
-           'power_factor':                    aniso.matrix_three,
-           'qpoint':                          aniso.two,
-           'seebeck':                         aniso.matrix_three,
-           'velocities_product':              aniso.matrix_two,
-           'zt':                              aniso.matrix_three}
-
-    # temperature resolution
-
-    if temperature is not None and 'temperature' in data:
-        ti = np.abs(np.array(data['temperature']) - temperature).argmin()
-        data['meta']['temperature'] = data['temperature'][ti]
-
-        iso['average_eff_mass'] = aniso.matrix_two
-        iso['conductivity'] = aniso.matrix_two
-        iso['electronic_thermal_conductivity'] = aniso.matrix_two
-        iso['lattice_thermal_conductivity'] = aniso.one
-        iso['mean_free_path'] = aniso.three
-        iso['mode_kappa'] = aniso.three
-        iso['power_factor'] = aniso.matrix_two
-        iso['seebeck'] = aniso.matrix_two
-        iso['velocities_product'] = aniso.matrix_one
-        iso['zt'] = aniso.matrix_two
-    if direction is not None:
-        data['meta']['direction'] = direction
-
-    # direction resolution
-
-    tnames = tp.settings.to_tp()
+    data = deepcopy(data) # sever the link to enable the original data to be reused
+    if 'meta' not in data or 'dimensions' not in data['meta']:
+        raise Exception('data must have a meta subdictionary with a '
+                        'dimensions subdictionary.')
     if isinstance(quantities, str):
         quantities = quantities.split()
-    quantities2 = []
-    for i in quantities:
-        if i not in quantities2:
-            quantities2.append(i)
-    for q in quantities2:
-        q2 = tnames[q] if q in tnames else q
-        if temperature is not None and q2 in hast:
-            data[q] = data[q][ti]
-        if direction is not None and q2 in iso:
-            data[q] = iso[q2](data[q], direction)
+    direction = {'a': 0, 'b': 1, 'c': 2,
+                 'x': 0, 'y': 1, 'z': 2}
+
+    # make sure dictionaries are dealt with first
+    keys, vals = [], []
+    for key, val in kwargs.items():
+        if isinstance(val, str) and key != 'direction':
+            keys.insert(0, key)
+            vals.insert(0, val)
+        else:
+            keys.append(key)
+            vals.append(val)
+
+    for q in quantities:
+        if q not in data['meta']['dimensions']:
+            warnings.warn('{} not in dimensions. Skipping.'.format(q))
+            continue
+        for key, val in zip(keys, vals):
+            if key != 'direction':
+                if key not in data and key not in ['dtype', 'stype']:
+                    warnings.warn('{} not in data. Skipping.'.format(key))
+                    continue
+                if key not in data['meta']['dimensions'][q]:
+                    continue
+                if isinstance(val, str):
+                    data['meta'][key] = val
+                    for i, d in enumerate(data['meta']['dimensions'][q]):
+                        if d == key:
+                            if i == 0:
+                                del data['meta']['dimensions'][q][i]
+                                data[q] = data[q][val]
+                                data['meta'][key] = val
+                                break
+                            else:
+                                warnings.warn('Does not currently work '
+                                              'unless strings are in '
+                                              'the 0th index.')
+                                break
+                elif isinstance(val, (int, float)):
+                    index = np.abs(np.subtract(data[key], val)).argmin()
+                    data['meta'][key] = data[key][index]
+                    for i, d in enumerate(data['meta']['dimensions'][q]):
+                        if d == key:
+                            del data['meta']['dimensions'][q][i]
+                            data[q] = np.moveaxis(data[q], i, 0)
+                            data[q] = data[q][index]
+                            data['meta'][key] = val
+                            break
+            else: # if key == 'direction'
+                while True:
+                    for i, d in enumerate(data['meta']['dimensions'][q]):
+                        if d in [3, 6]:
+                            del data['meta']['dimensions'][q][i]
+                            data[q] = np.moveaxis(data[q], i, 0)
+                            if val in direction:
+                                data[q] = data[q][direction[val]]
+                            elif val in ['avg', 'average']:
+                                data[q] = np.average(data[q][:3], axis=0)
+                            elif val in ['norm', 'normal']:
+                                data[q] = np.square(data[q][0]) \
+                                        + np.square(data[q][1]) \
+                                        + np.square(data[q][2])
+                                data[q] = np.sqrt(data[q])
+                            data['meta'][key] = val
+                            break
+                    else:
+                        break
 
     return data

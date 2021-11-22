@@ -42,6 +42,8 @@ Functions
         default units used.
     dimensions:
         dimensions of each variable.
+    boltztrap_dimensions:
+        updated dimensions for BoltzTraP.
     labels:
         default axis labels.
     inverted_labels:
@@ -303,40 +305,53 @@ def units(use_tprc=True):
 def dimensions():
     """Get dictionary of dimensions of quantities used in tp."""
 
-    units = {'average_eff_mass':                ['temperature', 'doping', 3, 3],
-             'chemical_potential':              [],
-             'conductivity':                    ['temperature', 'doping', 3, 3],
-             'doping':                          [],
-             'efermi':                          [],
-             'effective_mass':                  ['temperature', 'doping', 3, 3],
-             'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
-             'energy':                          ['temperature', 'band', 'kpoints'],
-             'fermi_level':                     ['temperature', 'doping'],
-             'frequency':                       ['qpoint', 'band'],
-             'gamma':                           ['temperature', 'qpoint', 'band'],
-             'group_velocity':                  ['qpoint', 'band', 3],
-             'gv_by_gv':                        ['qpoint', 'band', 6],
-             'hall_carrier_concentration':      [],
-             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
-             'lattice_thermal_conductivity':    ['temperature', 6],
-             'lifetime':                        ['temperature', 'qpoint', 'band'],
-             'mean_free_path':                  ['temperature', 'qpoint', 'band', 3],
-             'mobility':                        ['temperature', 'doping', 3, 3],
-             'mode_kappa':                      ['temperature', 'qpoint', 'band', 6],
-             'mu_bounds':                       [],
-             'occupation':                      ['temperature', 'qpoint', 'band'],
-             'ph_ph_strength':                  ['qpoint', 'band'],
-             'power_factor':                    ['temperature', 'doping', 3, 3],
-             'scattering_rates':
-                 ['scattering_labels', 'doping', 'temperature', 'band', 'kpoints'],
-             'seebeck':                         ['temperature', 'doping', 3, 3],
-             'seebeck_effective_mass':          [],
-             'temperature':                     [],
-             'weighted_rates':
-                 ['scattering_type', 'temperature', 'doping'],
-             'zt':                              ['temperature', 'doping', 3, 3]}
+    dims = {'average_eff_mass':                ['dtype', 'temperature', 'doping', 3, 3],
+            'chemical_potential':              [],
+            'conductivity':                    ['temperature', 'doping', 3, 3],
+            'doping':                          ['doping'],
+            'efermi':                          [],
+            'effective_mass':                  ['temperature', 'doping', 3, 3],
+            'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
+            'energy':                          ['temperature', 'band', 'kpoints'],
+            'fermi_level':                     ['temperature', 'doping'],
+            'frequency':                       ['qpoint', 'band'],
+            'gamma':                           ['temperature', 'qpoint', 'band'],
+            'group_velocity':                  ['qpoint', 'band', 3],
+            'gv_by_gv':                        ['qpoint', 'band', 6],
+            'hall_carrier_concentration':      [],
+            'heat_capacity':                   ['temperature', 'qpoint', 'band'],
+            'lattice_thermal_conductivity':    ['temperature', 6],
+            'lifetime':                        ['temperature', 'qpoint', 'band'],
+            'mean_free_path':                  ['temperature', 'qpoint', 'band', 3],
+            'mesh':                            [3],
+            'mobility':                        ['stype', 'temperature', 'doping', 3, 3],
+            'mode_kappa':                      ['temperature', 'qpoint', 'band', 6],
+            'mu_bounds':                       [],
+            'occupation':                      ['temperature', 'qpoint', 'band'],
+            'ph_ph_strength':                  ['qpoint', 'band'],
+            'power_factor':                    ['temperature', 'doping', 3, 3],
+            'qpoint':                          ['qpoint', 3],
+            'scattering_rates':
+                ['stype', 'doping', 'temperature', 'band', 'kpoints'],
+            'seebeck':                         ['temperature', 'doping', 3, 3],
+            'seebeck_effective_mass':          [],
+            'temperature':                     ['temperature'],
+            'weighted_rates':                  ['stype', 'temperature', 'doping'],
+            'zt':                              ['temperature', 'doping', 3, 3]}
 
-    return units
+    return dims
+
+def boltztrap_dimensions():
+    """Get dictionary of dimensions of quantities updated for BoltzTraP."""
+
+    dims = dimensions()
+    dims['conductivity'] =                    ['dtype', 'temperature', 'doping', 3, 3]
+    dims['electronic_thermal_conductivity'] = ['dtype', 'temperature', 'doping', 3, 3]
+    dims['mobility'] =                        ['temperature', 'doping', 3, 3],
+    dims['power_factor'] =                    ['dtype', 'temperature', 'doping', 3, 3]
+    dims['seebeck'] =                         ['dtype', 'temperature', 'doping', 3, 3]
+
+    return dims
 
 def labels():
     """Get the default labels for use in tp."""

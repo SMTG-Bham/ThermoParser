@@ -116,8 +116,9 @@ def lifetime(gamma, use_tprc=True):
     if use_tprc:
         gamma = to_tp('gamma', gamma)
 
-    lifetime = np.reciprocal(np.multiply(2 * 2 * np.pi, gamma))
-    lifetime = np.where(np.isinf(lifetime), 0, lifetime)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        lifetime = np.reciprocal(np.multiply(2e12 * 2 * np.pi, gamma))
+    lifetime = np.where(np.isinf(lifetime), np.nan, lifetime)
 
     if use_tprc:
         lifetime = from_tp('lifetime', lifetime)
@@ -524,3 +525,56 @@ def from_tp(name, value):
         value = np.multiply(value, conversions[name])
 
     return value
+
+def interpolate(data1, data2, dependant, keys1, keys2, axis1=0, axis2=0,
+                kind='linear'):
+    """Shrinks datasets to smallest common size and interpolates.
+
+    Arguments
+    ---------
+
+        data(1,2) : dict
+            input data.
+        dependant : str
+            variable to interpolate against.
+        keys(1,2) : array-like or str
+            data keys to interpolate
+        axis(1,2) : int, optional
+            axis of the dependant variable wrt the keys. Default: 0.
+        kind : str, optional
+            interpolation kind
+
+    Returns
+    -------
+
+        dict
+            shrunk data1
+        dict
+            shrunk and interpolated data2
+    """
+
+    if isinstance(keys1, str):
+        keys1 = [keys1]
+    if isinstance(keys2, str):
+        keys2 = [keys2]
+
+    dmin = np.amax([data1[dependant][0], kdata[dependant][0]])
+    dmax = np.amin([data1[dependant][-1], kdata[dependant][-1]])
+    index1 = np.where((data1[dependant]<=dmax) & (data1[dependant]>=dmin))[0]
+    index2 = np.where((data2[dependant]<=dmax) & (data2[dependant]>=dmin))[0]
+
+    data1[dependant] = np.array(data1[dependant])[index1]
+    for key in keys1:
+        data1[key] = np.swapaxis(data1[key], 0, axis1)
+        data1[key] = np.array(data1[key])[index1]
+        data1[key] = np.swapaxis(data1[key], 0, axis1)
+
+    data2[dependant] = np.array(data2[dependant])[index2]
+    for key in keys2:
+        data2[key] = np.swapaxis(data2[key], 0, axis2)
+        data2[key] = np.array(data2[key])[index2]
+        interp = interp1d(data2[dependant], data2[key], kind=kind)
+        data2[key] = interp(data1[dependant])
+        data2[key] = np.swapaxis(data2[key], 0, axis2)
+
+    return data1, data2

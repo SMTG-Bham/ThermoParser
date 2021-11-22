@@ -6,6 +6,7 @@ test_data/test_aniso.
 """
 
 import unittest
+import tp
 from tp.data import resolve
 
 class ResolveTest(unittest.TestCase):
@@ -34,87 +35,87 @@ class ResolveTest(unittest.TestCase):
 
     def test_average_eff_mass_direction(self):
         q = 'average_eff_mass'
-        d = {q:              self.three_m,
+        d = {q:              {'n': self.three_m},
              'temperature':  self.t,
-             'meta':         {}}
-        d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+             'meta':         {'dimensions': {q: tp.settings.dimensions()[q]}}}
+        d = resolve.resolve(d, q, direction='z', dtype='n')
+        self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_average_eff_mass_temperature(self):
         q = 'average_eff_mass'
-        d = {q:              self.three_m,
+        d = {q:              {'n': self.three_m},
              'temperature':  self.t,
-             'meta':         {}}
-        d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.],
-                                 [14., 15., 16.],
-                                 [17., 18., 19.]]])
+             'meta':         {'dimensions': {q: tp.settings.dimensions()[q]}}}
+        d = resolve.resolve(d, q, temperature=23., dtype='n')
+        self.assertTrue((d[q] ==  [[11., 12., 13.],
+                                   [14., 15., 16.],
+                                   [17., 18., 19.]]).all())
 
     def test_average_eff_mass_both(self):
         q = 'average_eff_mass'
-        d = {q:             self.three_m,
+        d = {q:             {'n': self.three_m},
              'temperature': self.t,
-             'meta':        {}}
-        d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [[19.]]).all())
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
+        d = resolve.resolve(d, q, direction='z', temperature=23., dtype='n')
+        self.assertTrue((d[q] == 19.).all())
 
     def test_conductivity_direction(self):
         q = 'conductivity'
         d = {q:              self.three_m,
              'temperature':  self.t,
-             'meta':         {}}
+             'meta':         {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+        self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_conductivity_temperature(self):
         q = 'conductivity'
         d = {q:              self.three_m,
              'temperature':  self.t,
-             'meta':         {}}
+             'meta':         {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.],
-                                 [14., 15., 16.],
-                                 [17., 18., 19.]]])
+        self.assertTrue((d[q] == [[11., 12., 13.],
+                                  [14., 15., 16.],
+                                  [17., 18., 19.]]).all())
 
     def test_conductivity_both(self):
         q = 'conductivity'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [[19.]]).all())
+        self.assertTrue((d[q] == 19.).all())
 
     def test_electronic_thermal_conductivity_direction(self):
         q = 'electronic_thermal_conductivity'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+        self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_electronic_thermal_conductivity_temperature(self):
         q = 'electronic_thermal_conductivity'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.],
-                                 [14., 15., 16.],
-                                 [17., 18., 19.]]])
+        self.assertTrue((d[q] == [[11., 12., 13.],
+                                  [14., 15., 16.],
+                                  [17., 18., 19.]]).all())
 
     def test_electronic_thermal_conductivity_both(self):
         q = 'electronic_thermal_conductivity'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [[19.]]).all())
+        self.assertTrue((d[q] == 19.).all())
 
     def test_fermi_level_direction(self):
         q = 'fermi_level'
         d = {q:             self.two,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertEqual(d[q], self.two)
 
@@ -122,15 +123,15 @@ class ResolveTest(unittest.TestCase):
         q = 'fermi_level'
         d = {q      :       self.two,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [11., 12., 13.])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_gamma_direction(self):
         q = 'gamma'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertEqual(d[q], self.three)
 
@@ -138,23 +139,23 @@ class ResolveTest(unittest.TestCase):
         q = 'gamma'
         d = {q      :       self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[11., 12., 13.]])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_group_velocity_direction(self):
         q = 'group_velocity'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[3.], [13.], [23.]]]).all())
+        self.assertTrue((d[q] == [[3.], [13.], [23.]]).all())
 
     def test_group_velocity_temperature(self):
         q = 'group_velocity'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
         self.assertEqual(d[q], self.three)
 
@@ -162,15 +163,15 @@ class ResolveTest(unittest.TestCase):
         q = 'gv_by_gv'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[3.], [13.], [23.]]]).all())
+        self.assertTrue((d[q] == [[3.], [13.], [23.]]).all())
 
     def test_gv_by_gv_temperature(self):
         q = 'gv_by_gv'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
         self.assertEqual(d[q], self.three)
 
@@ -178,7 +179,7 @@ class ResolveTest(unittest.TestCase):
         q = 'heat_capacity'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertEqual(d[q], self.three)
 
@@ -186,15 +187,15 @@ class ResolveTest(unittest.TestCase):
         q = 'heat_capacity'
         d = {q      :       self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[11., 12., 13.]])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_lattice_thermal_conductivity_direction(self):
         q = 'lattice_thermal_conductivity'
         d = {q:             self.two,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertTrue((d[q] == [3., 13., 23.]).all())
 
@@ -202,15 +203,15 @@ class ResolveTest(unittest.TestCase):
         q = 'lattice_thermal_conductivity'
         d = {q      :       self.two,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [11., 12., 13.])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_lattice_thermal_conductivity_both(self):
         q = 'lattice_thermal_conductivity'
         d = {q      :       self.two,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23., direction='z')
         self.assertEqual(d[q], 13.)
 
@@ -218,7 +219,7 @@ class ResolveTest(unittest.TestCase):
         q = 'lifetime'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertEqual(d[q], self.three)
 
@@ -226,31 +227,31 @@ class ResolveTest(unittest.TestCase):
         q = 'lifetime'
         d = {q      :       self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[11., 12., 13.]])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_mean_free_path_direction(self):
         q = 'mean_free_path'
         d = {q:             self.four,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[[3.]], [[13.]], [[23.]]]]).all())
+        self.assertTrue((d[q] == [[[3.]], [[13.]], [[23.]]]).all())
 
     def test_mean_free_path_temperature(self):
         q = 'mean_free_path'
         d = {q      :       self.four,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.]]])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_mesh_direction(self):
         q = 'mesh'
         d = {q:             self.one,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertEqual(d[q], 3)
 
@@ -258,7 +259,7 @@ class ResolveTest(unittest.TestCase):
         q = 'mesh'
         d = {q:             self.one,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
         self.assertEqual(d[q], self.one)
 
@@ -266,31 +267,31 @@ class ResolveTest(unittest.TestCase):
         q = 'mode_kappa'
         d = {q:             self.four,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[[3.]], [[13.]], [[23.]]]]).all())
+        self.assertTrue((d[q] == [[[3.]], [[13.]], [[23.]]]).all())
 
     def test_mode_kappa_temperature(self):
         q = 'mode_kappa'
         d = {q      :       self.four,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.]]])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_mode_kappa_both(self):
         q = 'mode_kappa'
         d = {q      :       self.four,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23., direction='z')
-        self.assertEqual(d[q], [[[13.]]])
+        self.assertEqual(d[q], [13.])
 
     def test_occupation_direction(self):
         q = 'occupation'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertEqual(d[q], self.three)
 
@@ -298,41 +299,41 @@ class ResolveTest(unittest.TestCase):
         q = 'occupation'
         d = {q      :       self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[11., 12., 13.]])
+        self.assertTrue((d[q] == [11., 12., 13.]).all())
 
     def test_power_factor_direction(self):
         q = 'power_factor'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+        self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_power_factor_temperature(self):
         q = 'power_factor'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.],
-                                 [14., 15., 16.],
-                                 [17., 18., 19.]]])
+        self.assertTrue((d[q] == [[11., 12., 13.],
+                                  [14., 15., 16.],
+                                  [17., 18., 19.]]).all())
 
     def test_power_factor_both(self):
         q = 'power_factor'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [[19.]]).all())
+        self.assertTrue((d[q] == [19.]).all())
 
     def test_qpoint_direction(self):
         q = 'qpoint'
         d = {q:             self.two,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
         self.assertTrue((d[q] == [3., 13., 23.]).all())
 
@@ -340,7 +341,7 @@ class ResolveTest(unittest.TestCase):
         q = 'qpoint'
         d = {q:             self.three,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
         self.assertEqual(d[q], self.three)
 
@@ -348,79 +349,53 @@ class ResolveTest(unittest.TestCase):
         q = 'seebeck'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+        self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_seebeck_temperature(self):
         q = 'seebeck'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.],
-                                 [14., 15., 16.],
-                                 [17., 18., 19.]]])
+        self.assertTrue((d[q] == [[11., 12., 13.],
+                                  [14., 15., 16.],
+                                  [17., 18., 19.]]).all())
 
     def test_seebeck_both(self):
         q = 'seebeck'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [[19.]]).all())
-
-    def test_velocities_product_direction(self):
-        q = 'velocities_product'
-        d = {q:              self.two_m,
-             'temperature':  self.t,
-             'meta':         {}}
-        d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [9., 19., 29.]).all())
-
-    def test_velocities_product_temperature(self):
-        q = 'velocities_product'
-        d = {q:              self.two_m,
-             'temperature':  self.t,
-             'meta':         {}}
-        d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[11., 12., 13.],
-                                [14., 15., 16.],
-                                [17., 18., 19.]])
-
-    def test_velocities_product_both(self):
-        q = 'velocities_product'
-        d = {q:             self.two_m,
-             'temperature': self.t,
-             'meta':        {}}
-        d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [19.]).all())
+        self.assertTrue((d[q] == 19.).all())
 
     def test_zt_direction(self):
         q = 'zt'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z')
-        self.assertTrue((d[q] == [[[9.], [19.], [29.]]]).all())
+        self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_zt_temperature(self):
         q = 'zt'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, temperature=23.)
-        self.assertEqual(d[q], [[[11., 12., 13.],
-                                 [14., 15., 16.],
-                                 [17., 18., 19.]]])
+        self.assertTrue((d[q] == [[11., 12., 13.],
+                                  [14., 15., 16.],
+                                  [17., 18., 19.]]).all())
 
     def test_zt_both(self):
         q = 'zt'
         d = {q:             self.three_m,
              'temperature': self.t,
-             'meta':        {}}
+             'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
         d = resolve.resolve(d, q, direction='z', temperature=23.)
-        self.assertTrue((d[q] == [[19.]]).all())
+        self.assertTrue((d[q] == 19.).all())
 
 if __name__ == '__main__':
     unittest.main()

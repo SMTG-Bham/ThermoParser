@@ -131,6 +131,8 @@ def amset(filename, quantities=['seebeck', 'conductivity',
             data2[q2] = data[q]
         if q in hasdope:
             # temperature index first for consistency with other codes
+            # With the latest version of resolve, this is unneccessary 
+            # Should it be removed?
             if q in hastype:
                 for t in data2[q2]:
                     data2[q2][t] = np.array(data2[q2][t])[di]
@@ -142,9 +144,9 @@ def amset(filename, quantities=['seebeck', 'conductivity',
                     data2[q2] = np.swapaxes(data2[q2],0,1)
         if q in hastype:
             if 'scattering_labels' not in data2:
-                data2['scattering_labels'] = data[q].keys()
+                data2['scattering_labels'] = list(data[q].keys())
             # for consistency with the format in the mesh data
-            data2[q2] = [data2[q2][l] for l in data2['scattering_labels']]
+            # data2[q2] = [data2[q2][l] for l in data2['scattering_labels']]
         if q2 in units:
             data2['meta']['units'][q2] = units[q2]
         if q2 in dimensions:
@@ -368,6 +370,12 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
     if 'scattering_labels' in data:
         data['scattering_labels'] = \
                          [l.decode('UTF-8') for l in data['scattering_labels']]
+        for q in hastype:
+            if q in data:
+                data2 = {}
+                for i, l in enumerate(data['scattering_labels']):
+                    data2[l] = data[q][i]
+                data[q] = data2
 
     for c in aconversions:
         if c in data:
@@ -417,7 +425,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     bnames = settings.to_boltztrap()
     tnames = settings.to_tp()
     units = settings.units()
-    dimensions = settings.dimensions()
+    dimensions = settings.boltztrap_dimensions()
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [bnames[q] if q in bnames else q for q in quantities]
 
@@ -544,18 +552,18 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
                          'units':        {},
                          'dimensions':   {}}}
         for q in quantities:
+            q2 = tnames[q] if q in tnames else q
+            if q2 in units:
+                data['meta']['units'][q2] = units[q2]
+            if q2 in dimensions:
+                data['meta']['dimensions'][q2] = dimensions[q2]
             if q in derived:
                 continue
             qs = [*list(f), *list(derived)]
             assert q in f, \
                    '{} unrecognised. Quantity must be in {} or {}.'.format(q,
                    ', '.join(qs[:-1]), qs[-1])
-            q2 = tnames[q] if q in tnames else q
             data[q2] = f[q][()]
-            if q2 in units:
-                data['meta']['units'][q2] = units[q2]
-            if q2 in dimensions:
-                data['meta']['dimensions'][q2] = dimensions[q2]
 
         # check mode_kappa and correct for certain phono3py versions
         if 'mode_kappa' in data:
@@ -581,19 +589,23 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     for c in pconversions:
         if c in data:
+            print(c, pconversions[c])
             data[c] = np.multiply(data[c], pconversions[c])
 
     if 'lifetime' in quantities or 'mean_free_path' in quantities:
-        data['lifetime'] = tp.calculate.lifetime(data['gamma'])
+        data['lifetime'] = tp.calculate.lifetime(data['gamma'], use_tprc=False)
         if 'mean_free_path' in quantities:
             data['mean_free_path'] = tp.calculate.mfp(data['gamma'],
-                                                      data['group_velocity'])
+                                                      data['group_velocity'],
+                                                      use_tprc=False)
     if 'occupation' in quantities:
         data['occupation'] = tp.calculate.be_occupation(data['frequency'],
-                                                        data['temperature'])
+                                                        data['temperature'],
+                                                        use_tprc=False)
 
     for c in conversions:
         if c in data:
+            print(c, conversions[c])
             data[c] = np.multiply(data[c], conversions[c])
 
     return data

@@ -98,37 +98,20 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
         edata = tp.data.load.amset(efile)
     except UnicodeDecodeError:
         edata = tp.data.load.boltztrap(efile, doping=doping)
-    edata = tp.data.resolve.resolve(edata, ['conductivity', 'seebeck',
-                                    'electronic_thermal_conductivity'],
-                                    direction=direction)
+
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+    ltc = 'lattice_thermal_conductivity'
+    edata = tp.data.resolve.resolve(edata, equants, direction=direction)
 
     if kfile is not None:
         kdata = tp.data.load.phono3py(kfile)
-        kdata = tp.data.resolve.resolve(kdata, 'lattice_thermal_conductivity',
-                                        direction=direction)
-        # shrink to smallest temperature
-        tmin = np.amax([edata['temperature'][0], kdata['temperature'][0]])
-        tmax = np.amin([edata['temperature'][-1], kdata['temperature'][-1]])
-        etindex = np.where((edata['temperature'] <= tmax)
-                         & (edata['temperature'] >= tmin))
-        edata['temperature'] = np.array(edata['temperature'])[etindex[0]]
-        edata['conductivity'] = np.array(edata['conductivity'])[etindex[0]]
-        edata['electronic_thermal_conductivity'] = \
-                 np.array(edata['electronic_thermal_conductivity'])[etindex[0]]
-        edata['seebeck'] = np.array(edata['seebeck'])[etindex[0]]
-        ktindex = np.where((kdata['temperature'] <= tmax)
-                         & (kdata['temperature'] >= tmin))
-        kdata['temperature'] = np.array(kdata['temperature'])[ktindex[0]]
-        kdata['lattice_thermal_conductivity'] = \
-                    np.array(kdata['lattice_thermal_conductivity'])[ktindex[0]]
-        # interpolate lattice thermal conductivity to fit electronic data
-        kinterp = interp1d(kdata['temperature'],
-                           kdata['lattice_thermal_conductivity'], kind='cubic')
-        edata['lattice_thermal_conductivity'] = kinterp(edata['temperature'])
+        kdata = tp.data.resolve.resolve(kdata, ltc, direction=direction)
+        edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
+                                                equants, ltc, kind='cubic')
+        edata[ltc] = kdata[ltc]
         edata['meta']['kappa_source'] = kdata['meta']['kappa_source']
     else: # if lattice thermal conductivity not supplied, set to 1 W m-1 K-1
-        edata['lattice_thermal_conductivity'] = np.ones(
-                                                     len(edata['temperature']))
+        edata[ltc] = np.ones(len(edata['temperature']))
         edata['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
     edata = tp.calculate.zt_fromdict(edata)
 
