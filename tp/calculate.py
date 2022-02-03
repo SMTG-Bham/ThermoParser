@@ -313,9 +313,25 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
                                               lattice_thermal_conductivity)
         temperature = to_tp('temperature', temperature)
 
-    zt = np.multiply(pf, np.array(temperature)[:, None]) / \
-                     np.add(electronic_thermal_conductivity,
-                            np.array(lattice_thermal_conductivity)[:, None])
+    if np.ndim(pf) == 1:
+        zt = np.multiply(pf, np.array(temperature)) / \
+                         np.add(electronic_thermal_conductivity,
+                                np.array(lattice_thermal_conductivity))
+    elif np.ndim(pf) == 2:
+        zt = np.multiply(pf, np.array(temperature)[:, None]) / \
+                         np.add(electronic_thermal_conductivity,
+                                np.array(lattice_thermal_conductivity)[:, None])
+    elif np.ndim(pf) == 3:
+        zt = np.multiply(pf, np.array(temperature)[:, None, None]) / \
+                         np.add(electronic_thermal_conductivity,
+                                 np.array(lattice_thermal_conductivity)[:, :3, :3])
+    elif np.ndim(pf) == 4:
+        zt = np.multiply(pf, np.array(temperature)[:, None, None, None]) / \
+                         np.add(electronic_thermal_conductivity,
+                                np.array(lattice_thermal_conductivity)[:, None, :3, :3])
+    else:
+        raise Exception('Unexpectedly dimensionous electrical properties!\n'
+                        'Abort!')
 
     if use_tprc:
         zt = from_tp('zt', zt)
@@ -395,6 +411,8 @@ def power_factor_fromdict(data, use_tprc=True):
                                         data['seebeck'], use_tprc=use_tprc)
     data['meta']['units']['power_factor'] = \
                            tp.settings.units(use_tprc=use_tprc)['power_factor']
+    data['meta']['dimensions']['power_factor'] = \
+                                       tp.settings.dimensions()['power_factor']
 
     return data
 
@@ -435,6 +453,7 @@ def zt_fromdict(data, use_tprc=True):
                  data['lattice_thermal_conductivity'],
                  data['temperature'], use_tprc=use_tprc)
     data['meta']['units']['zt'] = tp.settings.units(use_tprc=use_tprc)['zt']
+    data['meta']['dimensions']['zt'] = tp.settings.dimensions()['zt']
 
     return data
 
@@ -475,6 +494,7 @@ def kl_fromdict(data, use_tprc=True):
                  data['electronic_thermal_conductivity'], data['zt'],
                  data['temperature'], use_tprc=use_tprc)
     data['meta']['units'][q] = tp.settings.units(use_tprc=use_tprc)[q]
+    data['meta']['dimensions'][q] = tp.settings.dimensions()[q]
 
     return data
 
@@ -552,29 +572,36 @@ def interpolate(data1, data2, dependant, keys1, keys2, axis1=0, axis2=0,
         dict
             shrunk and interpolated data2
     """
+    # Future: could be rewritten to auto-detect axis like resolve
+
+    from copy import deepcopy
+    from scipy.interpolate import interp1d
+
+    data1 = deepcopy(data1)
+    data2 = deepcopy(data2)
 
     if isinstance(keys1, str):
         keys1 = [keys1]
     if isinstance(keys2, str):
         keys2 = [keys2]
 
-    dmin = np.amax([data1[dependant][0], kdata[dependant][0]])
-    dmax = np.amin([data1[dependant][-1], kdata[dependant][-1]])
+    dmin = np.nanmax([data1[dependant][0], data2[dependant][0]])
+    dmax = np.nanmin([data1[dependant][-1], data2[dependant][-1]])
     index1 = np.where((data1[dependant]<=dmax) & (data1[dependant]>=dmin))[0]
     index2 = np.where((data2[dependant]<=dmax) & (data2[dependant]>=dmin))[0]
 
     data1[dependant] = np.array(data1[dependant])[index1]
     for key in keys1:
-        data1[key] = np.swapaxis(data1[key], 0, axis1)
+        data1[key] = np.swapaxes(data1[key], 0, axis1)
         data1[key] = np.array(data1[key])[index1]
-        data1[key] = np.swapaxis(data1[key], 0, axis1)
+        data1[key] = np.swapaxes(data1[key], 0, axis1)
 
     data2[dependant] = np.array(data2[dependant])[index2]
     for key in keys2:
-        data2[key] = np.swapaxis(data2[key], 0, axis2)
+        data2[key] = np.swapaxes(data2[key], 0, axis2)
         data2[key] = np.array(data2[key])[index2]
-        interp = interp1d(data2[dependant], data2[key], kind=kind)
+        interp = interp1d(data2[dependant], data2[key], kind=kind, axis=0)
         data2[key] = interp(data1[dependant])
-        data2[key] = np.swapaxis(data2[key], 0, axis2)
+        data2[key] = np.swapaxes(data2[key], 0, axis2)
 
     return data1, data2

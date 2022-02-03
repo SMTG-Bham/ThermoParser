@@ -40,6 +40,8 @@ def resolve(data, quantities, **kwargs):
                     n or p
                 stype
                     codes from amset, e.g. IMP, or overall
+                doping
+                    concentration, not to be confused with dtype
                 temperature
 
     Returns
@@ -73,6 +75,8 @@ def resolve(data, quantities, **kwargs):
             warnings.warn('{} not in dimensions. Skipping.'.format(q))
             continue
         for key, val in zip(keys, vals):
+            if val is None:
+                continue
             if key != 'direction':
                 if key not in data and key not in ['dtype', 'stype']:
                     warnings.warn('{} not in data. Skipping.'.format(key))
@@ -93,17 +97,21 @@ def resolve(data, quantities, **kwargs):
                                               'unless strings are in '
                                               'the 0th index.')
                                 break
-                elif isinstance(val, (int, float)):
-                    index = np.abs(np.subtract(data[key], val)).argmin()
+                elif isinstance(val, (int, float, list, np.ndarray)):
+                    if isinstance(val, (int, float)):
+                        index = np.abs(np.subtract(data[key], val)).argmin()
+                    else:
+                        index = np.sqrt(np.sum(np.square(
+                                np.subtract(data[key], val)), axis=1)).argmin()
                     data['meta'][key] = data[key][index]
                     for i, d in enumerate(data['meta']['dimensions'][q]):
                         if d == key:
                             del data['meta']['dimensions'][q][i]
                             data[q] = np.moveaxis(data[q], i, 0)
                             data[q] = data[q][index]
-                            data['meta'][key] = val
+                            data['meta'][key] = data[key][index]
                             break
-            else: # if key == 'direction'
+            else: # if key == 'direction':
                 while True:
                     for i, d in enumerate(data['meta']['dimensions'][q]):
                         if d in [3, 6]:
@@ -112,12 +120,33 @@ def resolve(data, quantities, **kwargs):
                             if val in direction:
                                 data[q] = data[q][direction[val]]
                             elif val in ['avg', 'average']:
-                                data[q] = np.average(data[q][:3], axis=0)
+                                if len(data['meta']['dimensions'][q]) > i and \
+                                   data['meta']['dimensions'][q][i] == 3:
+                                    # if this is a 3x3 array
+                                    del data['meta']['dimensions'][q][i]
+                                    data[q] = np.moveaxis(data[q], i+1, 1)
+                                    data[q] = np.average([data[q][0][0],
+                                                          data[q][1][1],
+                                                          data[q][2][2]],
+                                                         axis=0)
+                                else:
+                                    # if this is a 3x1 or 6x1 array
+                                    data[q] = np.average(data[q][:3], axis=0)
                             elif val in ['norm', 'normal']:
-                                data[q] = np.square(data[q][0]) \
-                                        + np.square(data[q][1]) \
-                                        + np.square(data[q][2])
-                                data[q] = np.sqrt(data[q])
+                                if data['meta']['dimensions'][q][i] == 3:
+                                    # if this is a 3x3 array
+                                    del data['meta']['dimensions'][q][i]
+                                    data[q] = np.moveaxis(data[q], i+1, 1)
+                                    data[q] = np.square(data[q][0][0]) \
+                                            + np.square(data[q][1][1]) \
+                                            + np.square(data[q][2][2])
+                                    data[q] = np.sqrt(data[q])
+                                else:
+                                    # if this is a 3x1 or 6x1 array
+                                    data[q] = np.square(data[q][0]) \
+                                            + np.square(data[q][1]) \
+                                            + np.square(data[q][2])
+                                    data[q] = np.sqrt(data[q])
                             data['meta'][key] = val
                             break
                     else:

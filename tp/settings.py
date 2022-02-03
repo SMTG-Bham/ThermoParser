@@ -147,6 +147,8 @@ def to_tp():
              'energies':             'energy',
              'fermi_levels':         'fermi_level',
              'gv':                   'group_velocity',
+             'ir_kpoints':           'kpoint',
+             'kpoints':              'kpoint',
              'kappa':                'lattice_thermal_conductivity', # because p3p
              'kappae':               'electronic_thermal_conductivity',
              'kappal':               'lattice_thermal_conductivity',
@@ -155,8 +157,10 @@ def to_tp():
              'mfp':                  'mean_free_path',
              'mk':                   'mode_kappa',
              'pf':                   'power_factor',
+             'qpoints':              'qpoint',
              'temperatures':         'temperature',
-             'thermal_conductivity': 'electronic_thermal_conductivity'}
+             'thermal_conductivity': 'electronic_thermal_conductivity',
+             'scattering_labels':    'stype'}
 
     if conf is not None and 'to_tp' in conf and conf['to_tp'] is not None:
         names = {**names, **conf['to_tp']}
@@ -171,8 +175,11 @@ def to_amset():
              'kappa':                'electronic_thermal_conductivity',
              'kappae':               'electronic_thermal_conductivity',
              'ke':                   'electronic_thermal_conductivity',
+             'kpoint':               'ir_kpoints',
+             'kpoints':              'ir_kpoints',
              'temperature':          'temperatures',
-             'thermal_conductivity': 'electronic_thermal_conductivity'}
+             'thermal_conductivity': 'electronic_thermal_conductivity',
+             'stype':                'scattering_labels'}
 
     if conf is not None and 'to_amset' in conf and \
        conf['to_amset'] is not None:
@@ -204,6 +211,7 @@ def to_phono3py():
              'mfp':                          'mean_free_path',
              'mk':                           'mode_kappa',
              'ph_ph_strength':               'ave_pp',
+             'qpoint':                       'qpoint',
              'temperatures':                 'temperature'}
 
     if conf is not None and 'to_phono3py' in conf and \
@@ -280,6 +288,7 @@ def units(use_tprc=True):
              'gv_by_gv':                        'm2 s-2',
              'hall_carrier_concentration':      'cm-3',
              'heat_capacity':                   'J K-1',
+             'kpoint':                          '',
              'lattice_thermal_conductivity':    'W m-1 K-1',
              'lifetime':                        's',
              'mean_free_path':                  'm',
@@ -289,6 +298,7 @@ def units(use_tprc=True):
              'occupation':                      'phonons',
              'ph_ph_strength':                  'eV2',
              'power_factor':                    'W m-1 K-2',
+             'qpoint':                          '',
              'scattering_rates':                's-1',
              'seebeck':                         'muV K-1',
              'seebeck_effective_mass':          'm_e',
@@ -305,14 +315,14 @@ def units(use_tprc=True):
 def dimensions():
     """Get dictionary of dimensions of quantities used in tp."""
 
-    dims = {'average_eff_mass':                ['dtype', 'temperature', 'doping', 3, 3],
+    dims = {'average_eff_mass':                ['temperature', 'doping', 3, 3],
             'chemical_potential':              [],
             'conductivity':                    ['temperature', 'doping', 3, 3],
             'doping':                          ['doping'],
             'efermi':                          [],
             'effective_mass':                  ['temperature', 'doping', 3, 3],
             'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
-            'energy':                          ['temperature', 'band', 'kpoints'],
+            'energy':                          ['band', 'kpoint'],
             'fermi_level':                     ['temperature', 'doping'],
             'frequency':                       ['qpoint', 'band'],
             'gamma':                           ['temperature', 'qpoint', 'band'],
@@ -320,6 +330,7 @@ def dimensions():
             'gv_by_gv':                        ['qpoint', 'band', 6],
             'hall_carrier_concentration':      [],
             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
+            'kpoint':                          ['kpoint', 3],
             'lattice_thermal_conductivity':    ['temperature', 6],
             'lifetime':                        ['temperature', 'qpoint', 'band'],
             'mean_free_path':                  ['temperature', 'qpoint', 'band', 3],
@@ -332,7 +343,7 @@ def dimensions():
             'power_factor':                    ['temperature', 'doping', 3, 3],
             'qpoint':                          ['qpoint', 3],
             'scattering_rates':
-                ['stype', 'doping', 'temperature', 'band', 'kpoints'],
+                ['stype', 'doping', 'temperature', 'band', 'kpoint'],
             'seebeck':                         ['temperature', 'doping', 3, 3],
             'seebeck_effective_mass':          [],
             'temperature':                     ['temperature'],
@@ -345,9 +356,11 @@ def boltztrap_dimensions():
     """Get dictionary of dimensions of quantities updated for BoltzTraP."""
 
     dims = dimensions()
+    dims['average_eff_mass'] =                ['dtype', 'temperature', 'doping', 3, 3],
     dims['conductivity'] =                    ['dtype', 'temperature', 'doping', 3, 3]
     dims['electronic_thermal_conductivity'] = ['dtype', 'temperature', 'doping', 3, 3]
-    dims['mobility'] =                        ['temperature', 'doping', 3, 3],
+    dims['fermi_level'] =                     ['dtype', 'temperature', 'doping'],
+    dims['mobility'] =                        ['dtype', 'temperature', 'doping', 3, 3],
     dims['power_factor'] =                    ['dtype', 'temperature', 'doping', 3, 3]
     dims['seebeck'] =                         ['dtype', 'temperature', 'doping', 3, 3]
 

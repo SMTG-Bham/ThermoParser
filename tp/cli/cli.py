@@ -5,6 +5,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import tp
+import warnings
+from copy import deepcopy
 from tp.cli.options import *
 
 @click.group()
@@ -78,6 +80,351 @@ def kpoints(kpoints, mesh, poscar, zero_kpoints, zero_mesh, output):
 
     return
 
+
+
+@tp_cli.group()
+def get():
+    """Tools for accessing data."""
+    return
+
+@get.command('zt')
+@input_argument
+@click.option('-k', '--kappa',
+              help='Phono3py kappa-mxxx.hdf5.',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@doping_type_option
+@doping_option
+@direction_option
+@temperature_option
+def get_zt(filename, kappa, dtype, doping, direction, temperature):
+    """Calculates and prints the ZT at given conditions.
+
+    Requires electronic input file, and preferably phononic input, else
+    lattice thermal conductivity defaults to 1.
+    """
+
+    try:
+        edata = tp.data.load.amset(filename)
+    except UnicodeDecodeError:
+        try:
+            edata = tp.data.load.boltztrap(filename, doping=dtype)
+        except Exception:
+            data = h5py.File(filename, 'r')
+            edata = dict(data)
+            for key in edata.keys():
+                if isinstance(edata[key], dict) and dtype in edata[key]:
+                    edata[key] = edata[key][dtype][()]
+
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+    ltc = 'lattice_thermal_conductivity'
+
+    if 'zt' in edata:
+        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
+                                        doping=doping, temperature=temperature)
+    elif kappa is not None:
+        kdata = tp.data.load.phono3py(kappa)
+        edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
+                                                equants, ltc, kind='cubic')
+        edata[ltc] = kdata[ltc]
+        edata['meta']['dimensions'][ltc] = kdata['meta']['dimensions'][ltc]
+        edata = tp.calculate.zt_fromdict(edata)
+        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
+                                        doping=doping, temperature=temperature)
+    else:
+        warnings.warn('Lattice thermal conductivity set to 1. For a more '
+                      'accurate calculation, pass a phono3py kappa file to -k.')
+        edata[ltc] = np.ones((len(edata['temperature']), 3, 3))
+
+        edata['meta']['dimensions'][ltc] = ['temperature']
+        edata = tp.calculate.zt_fromdict(edata)
+        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
+                                        doping=doping, temperature=temperature)
+
+    zt = edata['zt']
+    n = edata['meta']['doping']
+    t = int(edata['meta']['temperature'])
+
+    print('The ZT in the {} direction at {:d} K and {:.3e} carriers cm^-3 '
+            'is {:.3f}'.format(direction, t, n, zt))
+
+    return
+
+@get.command('amset')
+@input_argument
+@click.option('-q', '--quantity',
+              help='Quantity to read.',
+              default='conductivity',
+              show_default=True)
+@doping_type_option
+@doping_option
+@direction_option
+@temperature_option
+@click.option('--spin',
+              help='Spin direction.',
+              type=click.Choice(['up', 'down', 'avg'], case_sensitive=False),
+              default='avg',
+              show_default=True)
+@click.option('-s', '--scattering',
+              help='Scattering mechanism.',
+              type=click.Choice(['ADP', 'IMP', 'PIE', 'POP', 'total'],
+                                case_sensitive=False),
+              default='total',
+              show_default=True)
+@click.option('-b', '--band',
+              help='AMSET band index (1-indexed). Only for bands used in '
+                   'AMSET postprocessing, not for the original calculation.',
+              type=int,
+              default=1,
+              show_default=True)
+@click.option('--kpoint',
+              help='k-point coordinates.',
+              type=click.FloatRange(0, 1),
+              nargs=3,
+              default=[0., 0., 0.],
+              show_default=True)
+@click.option('-p', '--poscar',
+              help='POSCAR path. Required for --qpoint.',
+              type=click.Path(file_okay=True, dir_okay=False),
+              default='POSCAR',
+              show_default=True)
+
+def get_amset(filename, quantity, dtype, doping, direction, temperature, spin,
+              scattering, band, kpoint, poscar):
+    """Prints AMSET values at given conditions.
+
+    Requires an AMSET transport or mesh file.
+    """
+    # I'm making a few of these for different inputs so it doesn't get
+    # too unwieldly checking which source they're from, but they could
+    # also be combined.
+
+    if quantity == 'scattering_rates':
+        quantity = 'weighted_rates'
+
+    try:
+        data = tp.data.load.amset(filename, quantity, doping=dtype)
+    except UnicodeDecodeError:
+        data = tp.data.load.amset_mesh(filename, quantity, spin=spin,
+                                       doping=dtype)
+
+    dims = data['meta']['dimensions'][quantity]
+    if 'kpoint' in dims:
+        from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
+        from pymatgen.io.vasp.inputs import Poscar
+
+        struct = Poscar.from_file(poscar).structure
+        sg = SpacegroupAnalyzer(struct)
+        symops = sg.get_point_group_operations(cartesian=False)
+        ki = tp.plot.phonons.get_equivalent_qpoint(data['kpoint'], symops,
+                                                   kpoint)
+        kpt = data['kpoint'][ki]
+    else:
+        kpt = None
+    if 'temperature' not in dims:
+        temperature = None
+    if 'doping' not in dims:
+        doping = None
+
+    data = tp.data.resolve.resolve(data, quantity, direction=direction,
+                                   temperature=temperature, stype=scattering,
+                                   dtype=dtype, doping=doping, kpoint=kpt)
+    if 'band' in dims:
+        data[quantity] = data[quantity][band-1]
+        if len(str(band)) > 1 and str(band)[-2:] in ['11', '12', '13']:
+            suffix = 'th'
+        elif str(band)[-1] == '1':
+            suffix = 'st'
+        elif str(band)[-1] == '2':
+            suffix = 'nd'
+        elif str(band)[-1] == '3':
+            suffix = 'rd'
+        else:
+            suffix = 'th'
+
+    printq = ''
+    for i, l in enumerate(quantity):
+        if l == '_':
+            printq += ' '
+        else:
+            printq += l
+    if printq[-1] == 's':
+        printq = printq[:-1]
+
+    print('The {}'.format(printq), end=' ')
+    end = ' '
+    if 'band' in dims:
+        print('of the {}{} band in AMSET'.format(band, suffix), end=end)
+    if 'kpoint' in dims:
+        k = data['kpoint'][ki]
+        print('at ({:.3f}, {:.3f}, {:.3f})'.format(k[0], k[1], k[2]), end=end)
+    if 3 in dims:
+        print('in the {} direction'.format(direction), end=end)
+        dims.remove(3)
+        if 3 in dims:
+            dims.remove(3)
+    if 'stype' in dims:
+        print('due to {} scattering'.format(scattering), end=end)
+        dims.remove('stype')
+    if 'temperature' in dims:
+        if len(dims) == 2:
+            end = ' and '
+        print('at {:d} K'.format(int(data['meta']['temperature'])), end=end)
+        dims.remove('temperature')
+    if 'doping' in dims:
+        print('{:.3e} carriers cm^-3'.format(data['meta']['doping']), end=' ')
+    print('is {:.3} {}.'.format(data[quantity], tp.settings.units()[quantity]))
+
+    return
+
+@get.command('boltztrap')
+@input_argument
+@click.option('-q', '--quantity',
+              help='Quantity to read.',
+              default='conductivity',
+              show_default=True)
+@doping_type_option
+@doping_option
+@direction_option
+@temperature_option
+
+def get_boltztrap(filename, quantity, dtype, doping, direction, temperature):
+    """Prints BoltzTraP values at given conditions.
+
+    Requires a tp boltztrap.hdf5 file.
+    """
+    # I'm making a few of these for different inputs so it doesn't get
+    # too unwieldly checking which source they're from, but they could
+    # also be combined.
+
+    data = tp.data.load.boltztrap(filename, quantity, doping=dtype)
+
+    dims = data['meta']['dimensions'][quantity]
+    if 'temperature' not in dims:
+        temperature = None
+    if 'doping' not in dims:
+        doping = None
+
+    data = tp.data.resolve.resolve(data, quantity, direction=direction,
+                                   temperature=temperature, dtype=dtype,
+                                   doping=doping)
+    printq = ''
+    for i, l in enumerate(quantity):
+        if l == '_':
+            printq += ' '
+        else:
+            printq += l
+    if printq[-1] == 's':
+        printq = printq[:-1]
+
+    end = ' '
+    print('The {}-type {}'.format(data['meta']['doping_type'], printq), end=' ')
+    if 3 in dims:
+        print('in the {} direction'.format(direction), end=end)
+        dims.remove(3)
+        if 3 in dims:
+            dims.remove(3)
+    if 'temperature' in dims:
+        if len(dims) == 2:
+            end = ' and '
+        print('at {:d} K'.format(int(data['meta']['temperature'])), end=end)
+        dims.remove('temperature')
+    if 'doping' in dims:
+        print('{:.3e} carriers cm^-3'.format(data['meta']['doping']), end=' ')
+    print('is {:.3} {}.'.format(data[quantity], tp.settings.units()[quantity]))
+
+    return
+
+@get.command('phono3py')
+@input_argument
+@click.option('-q', '--quantity',
+              help='Quantity to read.',
+              default='lattice_thermal_conductivity',
+              show_default=True)
+@direction_option
+@temperature_option
+@click.option('-b', '--band',
+              help='Phonon band index (1-indexed).',
+              type=int,
+              default=1,
+              show_default=True)
+@click.option('--qpoint',
+              help='q-point coordinates.',
+              type=click.FloatRange(0, 1),
+              nargs=3,
+              default=[0., 0., 0.],
+              show_default=True)
+@click.option('-p', '--poscar',
+              help='POSCAR path. Required for --qpoint.',
+              type=click.Path(file_okay=True, dir_okay=False),
+              default='POSCAR',
+              show_default=True)
+
+def get_phono3py(filename, quantity, direction, temperature, band, qpoint,
+                 poscar):
+    """Prints Phono3py values at given conditions.
+
+    Requires a Phono3py kappa file.
+    """
+    # I'm making a few of these for different inputs so it doesn't get
+    # too unwieldly checking which source they're from, but they could
+    # also be combined.
+
+    data = tp.data.load.phono3py(filename, quantity)
+
+    dims = data['meta']['dimensions'][quantity]
+    if 'qpoint' in dims:
+        from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
+        from pymatgen.io.vasp.inputs import Poscar
+
+        struct = Poscar.from_file(poscar).structure
+        sg = SpacegroupAnalyzer(struct)
+        symops = sg.get_point_group_operations(cartesian=False)
+        qi = tp.plot.phonons.get_equivalent_qpoint(data['qpoint'], symops,
+                                                   qpoint)
+        qpt = data['qpoint'][qi]
+    else:
+        qpt = None
+    if 'temperature' not in dims:
+        temperature = None
+
+    data = tp.data.resolve.resolve(data, quantity, direction=direction,
+                                   temperature=temperature, qpoint=qpt)
+    if 'band' in dims:
+        data[quantity] = data[quantity][band-1]
+        if len(str(band)) > 1 and str(band)[-2:] in ['11', '12', '13']:
+            suffix = 'th'
+        elif str(band)[-1] == '1':
+            suffix = 'st'
+        elif str(band)[-1] == '2':
+            suffix = 'nd'
+        elif str(band)[-1] == '3':
+            suffix = 'rd'
+        else:
+            suffix = 'th'
+
+    printq = ''
+    for i, l in enumerate(quantity):
+        if l == '_':
+            printq += ' '
+        else:
+            printq += l
+    if printq[-1] == 's':
+        printq = printq[:-1]
+
+    end = ' '
+    print('The {}'.format(printq), end=end)
+    if 'band' in dims:
+        print('of the {}{} band'.format(band, suffix), end=end)
+    if 'qpoint' in dims:
+        q = data['qpoint'][qi]
+        print('at ({:.3f}, {:.3f}, {:.3f})'.format(q[0], q[1], q[2]), end=end)
+    if 3 in dims:
+        print('in the {} direction'.format(direction), end=end)
+    if 'temperature' in dims:
+        print('at {:d} K'.format(int(data['meta']['temperature'])), end=end)
+    print('is {:.3} {}.'.format(data[quantity], tp.settings.units()[quantity]))
+
+    return
 
 
 @tp_cli.group()
@@ -269,6 +616,161 @@ def plot():
 
 
 @plot.command()
+@input_argument
+@click.option('--total/--nototal',
+              help='Plot total scattering rate  [default: total]',
+              default=True,
+              show_default=False)
+@click.option('-x', '--x',
+              help='x-axis variable.',
+              type=click.Choice(['temperature', 'doping', 'both'],
+                   case_sensitive=False),
+              default='both',
+              show_default=True)
+@click.option('--crt',
+        help='Constant relaxation time value.  [default: off]',
+              type=float)
+@doping_option
+@temperature_option
+
+@click.option('-c', '--colour',
+              help='Colourmap name or list of colours in the order '
+                   'plotted. Total and CRT are plotted last.',
+              multiple=True,
+              default=['tab10'],
+              show_default=True)
+@line_options
+
+@xy_limit_options
+@plot_io_options
+@click.option('-o', '--output',
+              help='Output filename, sans extension.',
+              default='tp-avg-rates',
+              show_default=True)
+
+def avg_rates(filename, total, x, crt, doping, temperature, colour, linestyle,
+              marker, xmin, xmax, ymin, ymax, style, large, extension, output):
+    """Plots averaged scattering rates.
+
+    Requires an AMSET mesh file. Plots scattering rates averaged over
+    kpoints and weighted by the derivative of the Fermi-Dirac
+    distribution against tempearture or carrier concentration or both.
+    """
+
+    if x == 'both':
+        axes = tp.axes.two_large if large else tp.axes.two
+        fig, ax, add_legend = axes.h_medium_legend(style)
+    else:
+        axes = tp.axes.one_large if large else tp.axes.one
+        fig, ax, add_legend = axes.medium_legend(style)
+    tax = ax[0] if x == 'both' else ax
+    dax = ax[1] if x == 'both' else ax
+
+    data = tp.data.load.amset_mesh(filename, 'weighted_rates')
+    nlines = len(data['stype'])
+    if total:
+        nlines += 1
+    if crt is not None:
+        nlines += 1
+
+    linestyle = list(linestyle)
+    colour = list(colour)
+    marker = list(marker)
+    if len(colour) == 1:
+        colour = colour[0]
+
+    try:
+        colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, nlines))
+        colours = [c for c in colours]
+    except ValueError:
+        if isinstance(colour, str) and colour == 'skelton':
+            colour = tp.plot.colour.skelton()
+            colours = [colour(i) for i in np.linspace(0, 1, nlines)]
+        else:
+            colours = colour
+
+    while len(colours) < nlines:
+        colours.append(colours[-1])
+    while len(linestyle) < nlines:
+        linestyle.append('solid')
+    while len(marker) < nlines:
+        marker.append(None)
+
+    labels = tp.settings.large_labels() if large else tp.settings.labels()
+    if x == 'temperature' or x == 'both':
+        tdata = tp.data.resolve.resolve(data, 'weighted_rates', doping=doping)
+        print('Using {} {}.'.format(tdata['meta']['doping'],
+                                    tdata['meta']['units']['doping']))
+        for i, rate in enumerate(data['stype']):
+            tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
+                       color=colours[i], linestyle=linestyle[i],
+                       marker=marker[i], label=rate)
+        if total:
+            i += 1
+            totrate = np.sum(tdata['weighted_rates'], axis=0)
+            tax.plot(tdata['temperature'], totrate, color=colours[i],
+                     linestyle=linestyle[i], marker=marker[i], label='Total')
+        if crt is not None:
+            i += 1
+            crtrate = np.full(len(tdata['temperature']), crt)
+            tax.plot(tdata['temperature'], crtrate, color=colours[i],
+                     linestyle=linestyle[i], marker=marker[i], label='CRT')
+        tax.set_xlabel(labels['temperature'])
+        tax.set_ylabel(labels['scattering_rates'])
+        tp.plot.utilities.set_locators(tax, x='linear', y='log')
+
+    if x == 'doping' or x == 'both':
+        ddata = tp.data.resolve.resolve(data, 'weighted_rates',
+                                        temperature=temperature)
+        print('Using {} {}.'.format(ddata['meta']['temperature'],
+                                    ddata['meta']['units']['temperature']))
+        for i, rate in enumerate(data['stype']):
+            dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
+                     color=colours[i], linestyle=linestyle[i],
+                     marker=marker[i], label=rate)
+        if total:
+            i += 1
+            totrate = np.sum(ddata['weighted_rates'], axis=0)
+            dax.plot(np.abs(ddata['doping']), totrate, color=colours[i],
+                     linestyle=linestyle[i], marker=marker[i], label='Total')
+        if crt is not None:
+            i += 1
+            crtrate = np.full(len(ddata['doping']), crt)
+            dax.plot(np.abs(ddata['doping']), crtrate, color=colours[i],
+                     linestyle=linestyle[i], marker=marker[i], label='CRT')
+        dax.set_xlabel(labels['doping'])
+        dax.set_ylabel(labels['scattering_rates'])
+        tp.plot.utilities.set_locators(dax, x='log', y='log')
+
+    add_legend(title='Rate')
+
+    if x != 'both':
+        if xmin is not None:
+            if xmax is not None:
+                ax.set_xlim(xmin, xmax)
+            else:
+                ax.set_xlim(left=xmin)
+        elif xmax is not None:
+            ax.set_xlim(right=xmax)
+
+    if ymin is not None:
+        if ymax is not None:
+            for a in ax:
+                a.set_ylim(ymin, ymax)
+        else:
+            for a in ax:
+                ax.set_ylim(bottom=ymin)
+    elif ymax is not None:
+        for a in ax:
+            ax.set_ylim(top=ymax)
+
+    for ext in extension:
+        plt.savefig('{}.{}'.format(output, ext))
+
+    return
+
+
+@plot.command()
 @inputs_argument
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -373,6 +875,7 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
         plt.savefig('{}.{}'.format(output, ext))
 
     return
+
 
 @plot.command()
 @input_argument
@@ -535,6 +1038,7 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
         plt.savefig('{}.{}'.format(output, ext))
 
     return
+
 
 @plot.command('phonons')
 @inputs_argument
@@ -877,6 +1381,7 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
 
     return
 
+
 @plot.command()
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a '
@@ -886,13 +1391,13 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
               help='Electronic data filename(s). Required for a '
                    '--component of electronic or total.',
               multiple=True)
-@click.option('-c', '--component',
+@click.option('--component',
               help='Thermal conductivity component.',
               default='lattice',
               type=click.Choice(['lattice', 'electronic', 'total'],
                                 case_sensitive=False),
               show_default=True)
-@direction_option
+@directions_option
 @click.option('--tmin',
               help='Minimum temperature to plot, by default in K.',
               default=300.,
@@ -902,6 +1407,7 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
               default=np.inf,
               show_default=False)
 @doping_type_option
+@doping_option
 
 @click.option('-c', '--colour',
               help='Colourmap name or min and max colours or list of '
@@ -912,22 +1418,24 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
 @line_options
 
 @xy_limit_options
-@legend_options
+@auto_legend_options
 @plot_io_options
 @click.option('-o', '--output',
               help='Output filename, sans extension.',
               default='tp-kappa',
               show_default=True)
 
-def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
-          linestyle, marker, xmin, xmax, ymin, ymax, label, legend_title,
-          style, large, extension, output):
+def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
+          colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
+          legend_title, legend, style, large, extension, output):
     """Plots line graphs of thermal conductivity against temperature.
 
-    Currently not all combinations of inputs work. If --component is
-    total and multiple sets of files are specified, either there must be
-    the same number of each, or only one of one file, in which case it
-    is used for all instances of the other.
+    Currently not all combinations of inputs work. If multiple --direction
+    are specified, only the first file will be read. If --component is
+    total and one --direction but multiple sets of files are specified,
+    either there must be the same number of each, or only one file of
+    one type (electronic or phononic), in which case it is used for all
+    instances of the other.
     """
     # Future: If multiple components are specified, only one set of
     # input files are accepted.?
@@ -942,12 +1450,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
     ltc = 'lattice_thermal_conductivity'
 
     axes = tp.axes.one_large if large else tp.axes.one
-    if label == []:
-        l = False
-        fig, ax = axes.plain(style)
-    else:
-        l = True
+    if legend:
         fig, ax, add_legend = axes.medium_legend(style)
+    else:
+        fig, ax = axes.plain(style)
 
     if component in ['electronic', 'total']:
         if len(efile) != 0:
@@ -978,13 +1484,28 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
                             '--component of lattice or total.')
 
     data = []
+    defleg = {'labels': [], 'title': None} # default legend 
     if component == 'total':
         q = tc
-        if len(kdata) == len(edata): # pair each element from kdata and edata
+        if len(direction) > 1:
+            defleg['title'] = 'Direction'
+            defleg['labels'] = direction
+            for d in direction:
+                kdata2 = tp.data.resolve.resolve(kdata[0], ltc, direction=d)
+                edata2 = tp.data.resolve.resolve(edata[0], etc, doping=doping,
+                                                 direction=d)
+                kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
+                                                          'temperature', ltc,
+                                                          etc, kind='cubic')
+                data.append({'temperature': kdata2['temperature'],
+                             tc:            kdata2[ltc] + edata2[etc]})
+        elif len(kdata) == len(edata):
+            defleg['title'] = 'Phononic Data'
+            defleg['labels'] = kfile
             for i in range(len(kdata)):
                 kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
                                                    direction=direction)
-                edata[i] = tp.data.resolve.resolve(edata[i], etc,
+                edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
                                                    direction=direction)
                 kdata[i], edata[i] = tp.calculate.interpolate(kdata[i],
                                                               edata[i],
@@ -993,11 +1514,13 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
                                                               kind='cubic')
                 data.append({'temperature': kdata[i]['temperature'],
                              tc:            kdata[i][ltc] + edata[i][etc]})
-        elif len(kdata) == 1: # use one kdata for all edata
+        elif len(kdata) == 1:
+            defleg['title'] = 'Electronic Data'
+            defleg['labels'] = efile
             kdata[0] = tp.data.resolve.resolve(kdata[0], ltc,
                                                direction=direction)
             for i in range(len(edata)):
-                edata[i] = tp.data.resolve.resolve(edata[i], etc,
+                edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
                                                    direction=direction)
                 kdata2 = kdata[0] # in case of different-sized arrays
                 kdata2, edata[i] = tp.calculate.interpolate(kdata2, edata[i],
@@ -1006,8 +1529,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
                                                             kind='cubic')
                 data.append({'temperature': kdata[i]['temperature'],
                              tc:            kdata2[ltc] + edata[i][etc]})
-        elif len(edata) == 1: # use one edata for all kdata
-            edata[0] = tp.data.resolve.resolve(edata[0], etc,
+        elif len(edata) == 1:
+            defleg['title'] = 'Phononic Data'
+            defleg['labels'] = kfile
+            edata[0] = tp.data.resolve.resolve(edata[0], etc, doping=doping,
                                                direction=direction)
             for i in range(len(kdata)):
                 kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
@@ -1021,18 +1546,43 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
                              tc:            kdata[i][ltc] + edata2[etc]})
     elif component == 'lattice':
         q = ltc
-        for i in range(len(kdata)):
-            kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                               direction=direction)
-            data.append({'temperature': kdata[i]['temperature'],
-                         tc:            kdata[i][ltc]})
+        if len(direction) > 1:
+            defleg['title'] = 'Direction'
+            defleg['labels'] = direction
+            for d in direction:
+                kdata2 = tp.data.resolve.resolve(kdata[0], ltc, direction=d)
+                data.append({'temperature': kdata2['temperature'],
+                             tc:            kdata2[ltc]})
+        else:
+            defleg['title'] = 'Phononic Data'
+            defleg['labels'] = kfile
+            for i in range(len(kdata)):
+                kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
+                                                   direction=direction)
+                data.append({'temperature': kdata[i]['temperature'],
+                             tc:            kdata[i][ltc]})
     elif component == 'electronic':
         q = etc
-        for d in edata:
-            edata[i] = tp.data.resolve.resolve(edata[i], etc,
-                                               direction=direction)
-            data.append({'temperature': edata[i]['temperature'],
-                         tc:            edata[i][etc]})
+        if len(direction) > 1:
+            defleg['title'] = 'Direction'
+            defleg['labels'] = direction
+            for d in direction:
+                edata2 = tp.data.resolve.resolve(edata[0], etc, direction=d)
+                data.append({'temperature': edata2['temperature'],
+                             tc:            edata2[etc]})
+        else:
+            defleg['title'] = 'Electronic Data'
+            defleg['labels'] = efile
+            for i in range(len(edata)):
+                edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
+                                                   direction=direction)
+                data.append({'temperature': edata[i]['temperature'],
+                             tc:            edata[i][etc]})
+
+    if label == []:
+        label = defleg['labels']
+        if legend_title is None:
+            legend_title = defleg['title']
 
     try:
         colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
@@ -1060,8 +1610,9 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
         j = np.where((data[i]['temperature'] <= tmax)
                    & (data[i]['temperature'] >= tmin))[0]
 
-        ax.plot(data[i]['temperature'][j], data[i][tc][j], label=label[i],
-                linestyle=linestyle[i], marker=marker[i], c=colours[i])
+        ax.plot(data[i]['temperature'][j], data[i][tc][j],
+                label='${}$'.format(label[i]), linestyle=linestyle[i],
+                marker=marker[i], c=colours[i])
 
     if xmin is not None:
         if xmax is not None:
@@ -1083,334 +1634,368 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, colour,
     ax.set_xlabel(axlabels['temperature'])
     ax.set_ylabel(axlabels[q])
     tp.plot.utilities.set_locators(ax, 'linear', 'linear')
-    if l:
-        add_legend(title=legend_title)
+    if legend:
+        add_legend(title="${}$".format(legend_title))
 
     for ext in extension:
         plt.savefig('{}.{}'.format(output, ext))
 
     return
 
-#@plot.command()
-#@inputs_argument
-#@click.option('-k', '--kfile',
-#              help='Thermal data filename(s). Required for a --quantity '
-#                   'of total_thermal_conductivity.',
-#              multiple=True)
-#@click.option('-q', '--quantity',
-#              help='Quantity(/ies) to plot. Max: 4.',
-#              multiple=True,
-#              default=['conductivity', 'seebeck',
-#                       'electronic_thermal_conductivity'],
-#              show_default=True)
-#@directions_option
-#@click.option('--tmin',
-#              help='Minimum temperature to plot, by default in K.',
-#              default=300.,
-#              show_default=True)
-#@click.option('--tmax',
-#              help='Maximum temperature to plot, by default in K.',
-#              default=np.inf,
-#              show_default=False)
-#@doping_type_option
-#@dopings_option
-#
-#@click.option('-c', '--colour',
-#              help='Colourmap name or min and max colours or list of '
-#                   'colours.',
-#              multiple=True,
-#              default=['tab10'],
-#              show_default=True)
-#@line_options
-#
-#@xy_limit_options
-#@legend_options
-#@plot_io_options
-#@click.option('-o', '--output',
-#              help='Output filename, sans extension.',
-#              default='tp-electronic',
-#              show_default=True)
-#
-#def electronic(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
-#               colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-#               legend_title, style, large, extension, output):
-#    """Plots line graphs of electronic_properties against temperature.
-#
-#    Currently not all combinations of inputs work. Up to four quantities
-#    can be specified. Order of precedence is direction > doping > files,
-#    i.e. if there is more than one --direction, only the first doping
-#    and file will be read. If there is only one direction and doping and
-#    kfile is needed, either there must be one kfile per filename, or
-#    only one kfile, in which case it is used for all instances of
-#    filename.
-#    """
-#    # Future: If multiple components are specified, only one set of
-#    # input files are accepted.?
-#
-#    if len(quantity) < 1 or len(quantity) > 4:
-#        raise Exception('--quantity must be between 1 and 4 items long.')
-#
-#    linestyle = list(linestyle)
-#    marker = list(marker)
-#    label = list(label)
-#    colour = list(colour)
-#
-#    tc = 'thermal_conductivity'
-#    etc = 'electronic_thermal_conductivity'
-#    ltc = 'lattice_thermal_conductivity'
-#
-#    axmod = {'large': {'legend':   [tp.axes.one_large.medium_legend,
-#                                    tp.axes.two_large.h_medium_legend,
-#                                    tp.axes.three_large.h_top_legend,
-#                                    tp.axes.four_large.square_legend],
-#                       'nolegend': [tp.axes.one_large.plain,
-#                                    tp.axes.two_large.h,
-#                                    tp.axes.three_large.h,
-#                                    tp.axes.four_large.square]},
-#             'small': {'legend':   [tp.axes.one.medium_legend,
-#                                    tp.axes.two.h_medium_legend,
-#                                    tp.axes.three.h_top_legend,
-#                                    tp.axes.four.square_legend],
-#                       'nolegend': [tp.axes.one.plain,
-#                                    tp.axes.two.h,
-#                                    tp.axes.three.h,
-#                                    tp.axes.four.square]}}
-#    size = 'large' if large else 'small'
-#    l = False if label == [] else True
-#    if not l:
-#        fig, ax =  axmod[size]['nolegend'][len(quantity)](style)
-#    else :
-#        fig, ax, add_legend =  axmod[size]['legend'][len(quantity)](style)
-#    if len(quantity) == 4:
-#        ax = [ax[0][0], ax[0][1], ax[1][0], ax[1][1]]
-#
-#    edata = []
-#    for f in filenames:
-#        try:
-#            edata.append(tp.data.load.amset(f))
-#        except UnicodeDecodeError:
-#            try:
-#                edata.append(tp.data.load.boltztrap(f, doping=dtype))
-#            except Exception:
-#                data = h5py.File(f, 'r')
-#                edata.append(dict(data))
-#                for key in edata[-1].keys():
-#                    if isinstance(edata[-1][key], dict) and \
-#                       dtype in edata[-1][key]:
-#                        edata[-1][key] = edata[-1][key][dtype][()]
-#    if tc in quantity:
-#        if len(kfile) != 0:
-#            kdata = []
-#            for f in kfile:
-#                kdata.append(tp.data.load.phono3py(f))
-#        else:
-#            raise Exception('--kfile must be specified for a '
-#                            '--quantity of {}.'.format(tc))
-#
-#    # Select plot mode
-#    if len(direction) > 1:
-#        mode = 'direction'
-#        numlines = len(direction)
-#        resolveargs = [{'doping': doping[0], 'direction': d} for d in direction]
-#    elif len(doping) > 1:
-#        mode = 'doping'
-#        numlines = len(doping)
-#        resolveargs = [{'doping': d, 'direction': direction[0]} for d in doping]
-#    elif :
-#        mode = 'files'
-#        numlines = len(filenames)
-#        resolveargs = [{'doping': doping[0], 'direction': direction[0]} for d in filenames]
-#
-#    try:
-#        colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, numlines))
-#        colours = [c for c in colours]
-#    except ValueError:
-#        if isinstance(colour[0], str) and colour[0] == 'skelton':
-#            colour = tp.plot.colour.skelton()
-#            colours = [colour(i) for i in np.linspace(0, 1, numlines)]
-#        elif len(colour) == 2 and len(data) != 2:
-#            colour = tp.plot.colour.linear(*colour)
-#            colours = [colour(i) for i in np.linspace(0, 1, numlines)]
-#        else:
-#            colours = colour
-#
-#    while len(colours) < numlines:
-#        colours.append(colours[-1])
-#    while len(linestyle) < numlines:
-#        linestyle.append('solid')
-#    while len(marker) < numlines:
-#        marker.append(None)
-#    while len(label) < numlines:
-#        label.append(None)
-#
-#    data = []
-#    for i, q in enumerate(quantity):
-#        for j in range(numlines):
-#            edata2 = tp.data.resolve.resolve(edata[0], etc, **resolveargs[j])
-#            if q == tc:
-#                kdata2 = tp.data.resolve.resolve(kdata[0], ltc,
-#                                         direction=resolveargs[j]['direction'])
-#                kdata2, data = tp.calculate.interpolate(kdata2[i],
-#                                                        edata2[i],
-#                                                        'temperature',
-#                                                        ltc, etc,
-#                                                        kind='cubic')
-#                data[tc] = kdata2[ltc] + data[etc]
-#            k = np.where((data['temperature'] <= tmax)
-#                       & (data['temperature'] >= tmin))[0]
-#            ax[i].plot(data['temperature'][k], data[q][k],
-#                       label=label[j], linestyle=linestyle[j],
-#                       marker=marker[j], c=colours[j])
-#        elif len(kdata) == 1: # plot lines for each edata
-#            kdata2 = tp.data.resolve.resolve(kdata[0], ltc,
-#                                             direction=direction[0])
-#            for j, d in enumerate(edata):
-#                edata2 = tp.data.resolve.resolve(d, etc,
-#                                                 direction=direction)
-#                kdata3, data = tp.calculate.interpolate(kdata2[i],
-#                                                        edata2[i],
-#                                                        'temperature',
-#                                                        ltc, etc,
-#                                                        kind='cubic')
-#                data[tc] = kdata3[ltc] + data[etc]
-#                k = np.where((data['temperature'] <= tmax)
-#                           & (data['temperature'] >= tmin))[0]
-#                ax[i].plot(data['temperature'][k], data[tc][k],
-#                           label=label[j], linestyle=linestyle[j],
-#                           marker=marker[j], c=colours[j])
-#        else: # pair each element of kdata and edata
-#            for j, d in enumerate(edata):
-#                edata2 = tp.data.resolve.resolve(d, etc,
-#                                                 direction=direction)
-#                kdata2 = tp.data.resolve.resolve(kdata[j], ltc,
-#                                                 direction=direction)
-#                kdata2, data = tp.calculate.interpolate(kdata2[i],
-#                                                        edata2[i],
-#                                                        'temperature',
-#                                                        ltc, etc,
-#                                                        kind='cubic')
-#                data[tc] = kdata2[ltc] + data[etc]
-#                k = np.where((data['temperature'] <= tmax)
-#                           & (data['temperature'] >= tmin))[0]
-#                ax[i].plot(data['temperature'][k], data[tc][k],
-#                           label=label[j], linestyle=linestyle[j],
-#                           marker=marker[j], c=colours[j])
-#    data = []
-#    for i, q in enumerate(quantity):
-#        if q == tc: # total thermal conductivity
-#            if mode == 'direction':
-#                for j, d in enumerate(direction):
-#                    edata2 = tp.data.resolve.resolve(edata[0], etc, direction=d,
-#                                                     doping=doping[0])
-#                    kdata2 = tp.data.resolve.resolve(kdata[0], ltc, direction=d)
-#                    kdata2, data = tp.calculate.interpolate(kdata2[i],
-#                                                            edata2[i],
-#                                                            'temperature',
-#                                                            ltc, etc,
-#                                                            kind='cubic')
-#                    data[tc] = kdata2[ltc] + data[etc]
-#                    k = np.where((data['temperature'] <= tmax)
-#                               & (data['temperature'] >= tmin))[0]
-#                    ax[i].plot(data['temperature'][k], data[ltc][k],
-#                               label=label[j], linestyle=linestyle[j],
-#                               marker=marker[j], c=colours[j])
-#            elif len(doping) > 1: # plot lines for each doping concentration
-#                for j, d in enumerate(doping):
-#                    edata2 = tp.data.resolve.resolve(edata[0], etc, doping=d,
-#                                                     direction=direction[0])
-#                    kdata2 = tp.data.resolve.resolve(kdata[0], ltc, direction=d)
-#                    kdata2, data = tp.calculate.interpolate(kdata2[i],
-#                                                            edata2[i],
-#                                                            'temperature',
-#                                                            ltc, etc,
-#                                                            kind='cubic')
-#                    data[tc] = kdata2[ltc] + data[etc]
-#                    k = np.where((data['temperature'] <= tmax)
-#                               & (data['temperature'] >= tmin))[0]
-#                    ax[i].plot(data['temperature'][k], data[ltc][k],
-#                               label=label[j], linestyle=linestyle[j],
-#                               marker=marker[j], c=colours[j])
-#            elif len(kdata) == 1: # plot lines for each edata
-#                kdata2 = tp.data.resolve.resolve(kdata[0], ltc,
-#                                                 direction=direction[0])
-#                for j, d in enumerate(edata):
-#                    edata2 = tp.data.resolve.resolve(d, etc,
-#                                                     direction=direction)
-#                    kdata3, data = tp.calculate.interpolate(kdata2[i],
-#                                                            edata2[i],
-#                                                            'temperature',
-#                                                            ltc, etc,
-#                                                            kind='cubic')
-#                    data[tc] = kdata3[ltc] + data[etc]
-#                    k = np.where((data['temperature'] <= tmax)
-#                               & (data['temperature'] >= tmin))[0]
-#                    ax[i].plot(data['temperature'][k], data[tc][k],
-#                               label=label[j], linestyle=linestyle[j],
-#                               marker=marker[j], c=colours[j])
-#            else: # pair each element of kdata and edata
-#                for j, d in enumerate(edata):
-#                    edata2 = tp.data.resolve.resolve(d, etc,
-#                                                     direction=direction)
-#                    kdata2 = tp.data.resolve.resolve(kdata[j], ltc,
-#                                                     direction=direction)
-#                    kdata2, data = tp.calculate.interpolate(kdata2[i],
-#                                                            edata2[i],
-#                                                            'temperature',
-#                                                            ltc, etc,
-#                                                            kind='cubic')
-#                    data[tc] = kdata2[ltc] + data[etc]
-#                    k = np.where((data['temperature'] <= tmax)
-#                               & (data['temperature'] >= tmin))[0]
-#                    ax[i].plot(data['temperature'][k], data[tc][k],
-#                               label=label[j], linestyle=linestyle[j],
-#                               marker=marker[j], c=colours[j])
-#        else: # electronic-only properties
-#            if len(direction) > 1:
-#                for j, d in enumerate(direction): # plot lines for each direction
-#                    data = tp.data.resolve.resolve(edata[0], ltc, direction=d)
-#                    k = np.where((data['temperature'] <= tmax)
-#                               & (data['temperature'] >= tmin))[0]
-#                    ax[i].plot(data['temperature'][k], data[q][k],
-#                               label=label[j], linestyle=linestyle[j],
-#                               marker=marker[j], c=colours[j])
-#            else:
-#                for j, d in enumerate(edata): # plot lines for each edata
-#                    data = tp.data.resolve.resolve(d, ltc, direction=direction)
-#                    k = np.where((data['temperature'] <= tmax)
-#                               & (data['temperature'] >= tmin))[0]
-#                    ax[i].plot(data['temperature'][k], data[q][k],
-#                               label=label[j], linestyle=linestyle[j],
-#                               marker=marker[j], c=colours[j])
-#
-#    if xmin is not None:
-#        if xmax is not None:
-#            ax.set_xlim(xmin, xmax)
-#        else:
-#            ax.set_xlim(left=xmin)
-#    elif xmax is not None:
-#        ax.set_xlim(right=xmax)
-#
-#    if ymin is not None:
-#        if ymax is not None:
-#            ax.set_ylim(ymin, ymax)
-#        else:
-#            ax.set_ylim(bottom=ymin)
-#    elif ymax is not None:
-#        ax.set_ylim(top=ymax)
-#
-#    axlabels = tp.settings.large_labels() if large else tp.settings.labels()
-#    for a in range(len(ax)):
-#        ax[a].set_xlabel(axlabels['temperature'])
-#        ax[a].set_ylabel(axlabels[quantity[a]])
-#        tp.plot.utilities.set_locators(ax[a], 'linear', 'linear')
-#    if l:
-#        add_legend(title=legend_title)
-#
-#    for ext in extension:
-#        plt.savefig('{}.{}'.format(output, ext))
-#
-#    return
 
+@plot.command()
+@inputs_argument
+@click.option('-k', '--kfile',
+              help='Thermal data filename(s). Required for a --quantity '
+                   'of lattice_ or total_thermal_conductivity.',
+              multiple=True)
+@click.option('-q', '--quantity',
+              help='Quantity(/ies) to plot. Max: 4.',
+              multiple=True,
+              default=['conductivity', 'seebeck',
+                       'electronic_thermal_conductivity'],
+              show_default=True)
+@directions_option
+@click.option('--tmin',
+              help='Minimum temperature to plot, by default in K.',
+              default=300.,
+              show_default=True)
+@click.option('--tmax',
+              help='Maximum temperature to plot, by default in K.',
+              default=np.inf,
+              show_default=False)
+@doping_type_option
+@dopings_option
+
+@click.option('-c', '--colour',
+              help='Colourmap name or min and max colours or list of '
+                   'colours.',
+              multiple=True,
+              default=['tab10'],
+              show_default=True)
+@line_options
+
+@xy_limit_options
+@auto_legend_options
+@plot_io_options
+@click.option('-o', '--output',
+              help='Output filename, sans extension.',
+              default='tp-transport',
+              show_default=True)
+
+def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
+              colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
+              legend_title, legend, style, large, extension, output):
+    """Plots line graphs of transport properties against temperature.
+
+    Currently not all combinations of inputs work. The order of
+    precedence is lines represent doping > direction > files.
+    If using multiple sets of files (so only one doping and direction),
+    either there must be the same number of each, or only one file of
+    one type, in which case it is used for all instances of the other.
+
+    Changing the y-axis limits is also not currently supported (we
+    recommend changing the temperatures plotted instead).
+    """
+
+    if len(quantity) < 1 or len(quantity) > 4:
+        raise Exception('--quantity must be between 1 and 4 items long.')
+
+    linestyle = list(linestyle)
+    marker = list(marker)
+    label = list(label)
+    colour = list(colour)
+
+    tc = 'thermal_conductivity'
+    etc = 'electronic_thermal_conductivity'
+    ltc = 'lattice_thermal_conductivity'
+
+    axmod = {'large': {'legend':   [tp.axes.one_large.medium_legend,
+                                    tp.axes.two_large.h_medium_legend,
+                                    tp.axes.three_large.h_top_legend,
+                                    "tp.axes.four_large.square_legend"],
+                       'nolegend': [tp.axes.one_large.plain,
+                                    tp.axes.two_large.h,
+                                    tp.axes.three_large.h,
+                                    tp.axes.four_large.square]},
+             'small': {'legend':   [tp.axes.one.medium_legend,
+                                    tp.axes.two.h_medium_legend,
+                                    tp.axes.three.h_top_legend,
+                                    "tp.axes.four.square_legend"],
+                       'nolegend': [tp.axes.one.plain,
+                                    tp.axes.two.h,
+                                    tp.axes.three.h,
+                                    tp.axes.four.square]}}
+    size = 'large' if large else 'small'
+    leg = 'legend' if legend else 'nolegend'
+    axlabels = tp.settings.large_labels() if large else tp.settings.labels()
+    if legend:
+        fig, ax, add_legend =  axmod[size][leg][len(quantity) - 1](style)
+    else:
+        fig, ax =  axmod[size][leg][len(quantity) - 1](style)
+    if len(quantity) == 4:
+        ax = [ax[0][0], ax[0][1], ax[1][0], ax[1][1]]
+
+    edata = []
+    for f in filenames:
+        try:
+            edata.append(tp.data.load.amset(f))
+        except UnicodeDecodeError:
+            try:
+                edata.append(tp.data.load.boltztrap(f, doping=dtype))
+            except Exception:
+                data = h5py.File(f, 'r')
+                edata.append(dict(data))
+                for key in edata[-1].keys():
+                    if isinstance(edata[-1][key], dict) and \
+                       dtype in edata[-1][key]:
+                        edata[-1][key] = edata[-1][key][dtype][()]
+    if ltc in quantity or tc in quantity:
+        if len(kfile) != 0:
+            kdata = []
+            if len(filenames) != len(kfile) and len(filenames) != 1 and \
+               len(kfile) != 1:
+                raise Exception('Could not match electronic and phononic data. '
+                                'either only one file should be specified for '
+                                'one, or both should be the same length.')
+            for f in kfile:
+                kdata.append(tp.data.load.phono3py(f))
+        else:
+            raise Exception('--kfile must be specified for a '
+                            '--quantity of {} or {}.'.format(ltc, tc))
+
+    data = [[], [], [], []]
+    defleg = {'labels': [], 'title': None} # default legend 
+    # The data array could get quite large and memory inefficient, but
+    # looping through the plot function at the end is more maintainable
+    # compared to putting one in every if statement :shrug:
+    lendata = 1
+    for i, q in enumerate(quantity):
+        if len(doping) > 1: # one line per doping
+            lendata = len(doping)
+            defleg['title'] = axlabels['doping']
+            if q == tc:
+                kdata2 = deepcopy(kdata[0])
+                kdata2 = tp.data.resolve.resolve(kdata2, ltc,
+                                                 direction=direction[0])
+                dopelist = []
+                for d in doping:
+                    edata2 = deepcopy(edata[0])
+                    edata2 = tp.data.resolve.resolve(edata2, etc, doping=d,
+                                                     direction=direction[0])
+                    dopelist.append(edata2['meta']['doping'])
+                    kdata3, edata2 = tp.calculate.interpolate(kdata2, edata2,
+                                                              'temperature',
+                                                              ltc, etc,
+                                                              kind='cubic')
+                    data[i].append({'temperature': kdata3['temperature'],
+                                    q:             kdata3[ltc] + edata2[etc]})
+                defleg['labels'] = dopelist
+            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+                dopelist = []
+                for d in doping:
+                    edata2 = deepcopy(edata[0])
+                    edata2 = tp.data.resolve.resolve(edata2, q, doping=d,
+                                                     direction=direction[0])
+                    dopelist.append(edata2['meta']['doping'])
+                    data[i].append({'temperature': edata2['temperature'],
+                                    q:             edata2[q]})
+                defleg['labels'] = dopelist
+            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+                kdata2 = deepcopy(kdata[0])
+                kdata2 = tp.data.resolve.resolve(kdata2, q,
+                                                 direction=direction[0])
+                data[i].append({'temperature': kdata2['temperature'],
+                                q:             kdata2[q]})
+        elif len(direction) > 1: # one line per direction
+            lendata = len(direction)
+            defleg['title'] = 'Direction'
+            defleg['labels'] = direction
+            if q == tc:
+                for d in direction:
+                    kdata2 = deepcopy(kdata[0])
+                    kdata2 = tp.data.resolve.resolve(kdata2, ltc,
+                                                     direction=d)
+                    edata2 = deepcopy(edata[0])
+                    edata2 = tp.data.resolve.resolve(edata2, etc,
+                                                     doping=doping[0],
+                                                     direction=d)
+                    kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
+                                                              'temperature',
+                                                              ltc, etc,
+                                                              kind='cubic')
+                    data[i].append({'temperature': kdata2['temperature'],
+                                    q:             kdata2[ltc] + edata2[etc]})
+            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+                for d in direction:
+                    edata2 = deepcopy(edata[0])
+                    edata2 = tp.data.resolve.resolve(edata2, q,
+                                                     doping=doping[0],
+                                                     direction=d)
+                    data[i].append({'temperature': edata2['temperature'],
+                                    q:             edata2[q]})
+            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+                for d in direction:
+                    kdata2 = deepcopy(kdata[0])
+                    kdata2 = tp.data.resolve.resolve(kdata2, q,
+                                                     direction=d)
+                    data[i].append({'temperature': kdata2['temperature'],
+                                    q:             kdata2[q]})
+        else: # one line per file/ one line
+            if q == tc:
+                lendata = len(kdata)
+                if len(kdata) == len(edata):
+                    defleg['title'] = 'Electronic\ Data'
+                    defleg['labels'] = filenames
+                    for j in range(len(kdata)):
+                        kdata2 = deepcopy(kdata[j])
+                        edata2 = deepcopy(edata[j])
+                        kdata2 = tp.data.resolve.resolve(kdata2, ltc,
+                                                         direction=direction[0])
+                        edata2 = tp.data.resolve.resolve(edata2, etc,
+                                                         doping=doping[0],
+                                                         direction=direction[0])
+                        kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
+                                                                  'temperature',
+                                                                  ltc, etc,
+                                                                  kind='cubic')
+                        data[i].append({'temperature': kdata2['temperature'],
+                                        q:             kdata2[ltc] + edata2[etc]})
+                elif len(kdata) == 1:
+                    defleg['title'] = 'Electronic\ Data'
+                    defleg['labels'] = filenames
+                    lendata = len(edata)
+                    kdata2 = deepcopy(kdata[0])
+                    kdata2 = tp.data.resolve.resolve(kdata, ltc,
+                                                     direction=direction[0])
+                    for j in range(len(edata)):
+                        edata2 = deepcopy(edata[j])
+                        edata2 = tp.data.resolve.resolve(edata2, etc,
+                                                         doping=doping[0],
+                                                         direction=direction[0])
+                        kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
+                                                                  'temperature',
+                                                                  ltc, etc,
+                                                                  kind='cubic')
+                        data[i].append({'temperature': kdata2['temperature'],
+                                        q:             kdata2[ltc] + edata2[etc]})
+                elif len(edata) == 1:
+                    defleg['title'] = 'Phononic\ Data'
+                    defleg['labels'] = kfile
+                    edata2 = deepcopy(edata[0])
+                    edata2 = tp.data.resolve.resolve(edata2, etc,
+                                                     doping=doping[0],
+                                                     direction=direction[0])
+                    for j in range(len(kdata)):
+                        kdata2 = deepcopy(kdata[j])
+                        kdata2 = tp.data.resolve.resolve(kdata2, ltc,
+                                                         direction=direction[0])
+                        kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
+                                                                  'temperature',
+                                                                  ltc, etc,
+                                                                  kind='cubic')
+                        data[i].append({'temperature': kdata2['temperature'],
+                                        q:             kdata2[ltc] + edata2[etc]})
+            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+                if len(edata) > 1:
+                    lendata = len(edata)
+                    defleg['title'] = 'Electronic\ Data'
+                    defleg['labels'] = filenames
+                elif defleg['title'] is None:
+                    defleg['title'] = 'Electronic\ Data'
+                    defleg['labels'] = filenames
+                for j in range(len(edata)):
+                    edata2 = deepcopy(edata[j])
+                    edata2 = tp.data.resolve.resolve(edata2, q,
+                                                     doping=doping[0],
+                                                     direction=direction[0])
+                    data[i].append({'temperature': edata2['temperature'],
+                                    q:             edata2[q]})
+            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+                if len(kdata) > 1:
+                    lendata = len(kdata)
+                    defleg['title'] = 'Phononic\ Data'
+                    defleg['labels'] = kfile
+                elif defleg['title'] is None:
+                    defleg['title'] = 'Phononic\ Data'
+                    defleg['labels'] = kfile
+                for j in range(len(kdata)):
+                    kdata2 = deepcopy(kdata[j])
+                    kdata2 = tp.data.resolve.resolve(kdata2, q,
+                                                     direction=direction[0])
+                    data[i].append({'temperature': kdata2['temperature'],
+                                    q:             kdata2[q]})
+
+    try:
+        colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))
+        colours = [c for c in colours]
+    except ValueError:
+        if isinstance(colour[0], str) and colour[0] == 'skelton':
+            colour = tp.plot.colour.skelton()
+            colours = [colour(i) for i in np.linspace(0, 1, lendata)]
+        elif len(colour) == 2 and len(data) != 2:
+            colour = tp.plot.colour.linear(*colour)
+            colours = [colour(i) for i in np.linspace(0, 1, lendata)]
+        else:
+            colours = colour
+
+    if label == []:
+        label = defleg['labels']
+        if legend_title is None:
+            legend_title = defleg['title']
+
+    while len(colours) < lendata:
+        colours.append(colours[-1])
+    while len(linestyle) < lendata:
+        linestyle.append('solid')
+    while len(marker) < lendata:
+        marker.append(None)
+    while len(label) < lendata:
+        label.append(None)
+
+    for i, d in enumerate(data):
+        for j, d2 in enumerate(d):
+            k = np.where((d2['temperature'] <= tmax)
+                       & (d2['temperature'] >= tmin))[0]
+
+            ax[i].plot(d2['temperature'][k], d2[quantity[i]][k],
+                       linestyle=linestyle[j], marker=marker[j], c=colours[j],
+                       label="${}$".format(label[j]))
+
+    for i, q in enumerate(quantity):
+        ax[i].set_xlabel(axlabels['temperature'])
+        ax[i].set_ylabel(axlabels[q])
+        if len(doping) > 1 and q in ['conductivity', etc]:
+            tp.plot.utilities.set_locators(ax[i], 'linear', 'log')
+        else:
+            tp.plot.utilities.set_locators(ax[i], 'linear', 'linear')
+    if legend:
+        add_legend(title="${}$".format(legend_title))
+
+    for a in ax:
+        if xmin is not None:
+            if xmax is not None:
+                a.set_xlim(xmin, xmax)
+            else:
+                a.set_xlim(left=xmin)
+        elif xmax is not None:
+            a.set_xlim(right=xmax)
+
+    #if ymin is not None:
+    #    if ymax is not None:
+    #        ax.set_ylim(ymin, ymax)
+    #    else:
+    #        ax.set_ylim(bottom=ymin)
+    #elif ymax is not None:
+    #    ax.set_ylim(top=ymax)
+
+    for ext in extension:
+        plt.savefig('{}.{}'.format(output, ext))
+
+    return
+
+
+# Welcome to the crystal ball :ghost:
 #@plot.group(chain=True)
 #def frequency():
 #    """Chainable tools for plotting."""

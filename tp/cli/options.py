@@ -6,12 +6,14 @@ Functions
     direction_option
     directions_option
     doping_type_option
+    doping_option
     dopings_option
     input_argument
     inputs_argument
     interpolate_options
     kpoints_options
     legend_options
+    auto_legend_options
     line_options
     line_fill_options
     plot_io_options
@@ -64,13 +66,25 @@ def doping_type_option(f):
 
     return f
 
+def doping_option(f):
+    """Option for a doping concentration."""
+
+    f = click.option('-n', '--concentration', 'doping',
+                     help='Doping concentration (will be rounded).',
+                     default=1.e19,
+                     type=float,
+                     show_default=True)(f)
+
+    return f
+
 def dopings_option(f):
     """Option for doping concentrations."""
 
-    f = click.option('--n', '--concentration', 'doping',
-                     help='Doping concentration (will be rounded).',
+    f = click.option('-n', '--concentration', 'doping',
+                     help='Doping concentration(s) (will be rounded).',
                      multiple=True,
                      default=[1.e19],
+                     type=float,
                      show_default=True)(f)
 
     return f
@@ -134,9 +148,27 @@ def legend_options(f):
     f = click.option('-l', '--label',
                      help='Legend label(s). Accepts maths notation.',
                      multiple=True,
+                     type=str,
                      default=None)(f)
     f = click.option('--legend_title',
                      help='Legend title. Accepts maths notation.')(f)
+
+    return f
+
+def auto_legend_options(f):
+    """Group of options for auto-generating plot legends."""
+
+    f = click.option('-l', '--label',
+                     help='Legend label(s). Accepts maths notation.',
+                     multiple=True,
+                     type=str,
+                     default=None)(f)
+    f = click.option('--legend_title',
+                     help='Legend title. Accepts maths notation.')(f)
+    f = click.option('--legend/--nolegend',
+                     help='Show legend.  [default: legend]',
+                     default=True,
+                     show_default=False)(f)
 
     return f
 
@@ -147,11 +179,13 @@ def line_options(f):
                      help='linestyle(s).',
                      multiple=True,
                      default=['solid'],
+                     type=str,
                      show_default=True)(f)
     f = click.option('-m', '--marker',
                     help='Marker(s).',
                     multiple=True,
-                    default=[None])(f)
+                    default=[None],
+                    type=str)(f)
 
     return f
 
@@ -176,11 +210,13 @@ def line_fill_options(f):
                      help='linestyle(s).',
                      multiple=True,
                      default=['solid'],
+                     type=str,
                      show_default=True)(f)
     f = click.option('-m', '--marker',
                     help='Marker(s).',
                     multiple=True,
-                    default=[None])(f)
+                    default=[None],
+                    type=str)(f)
 
     return f
 
@@ -192,15 +228,17 @@ def plot_io_options(f):
                           'earlier ones.',
                      multiple=True,
                      default=[],
+                     type=str,
                      show_default=False)(f)
     f = click.option('--large/--small',
                      help='Axes size.  [default: small]',
                      default=False,
                      show_default=False)(f)
-    f = click.option('-e', '--extension',
+    f = click.option('--extension',
                      help='Output extension(s).',
                      multiple=True,
                      default=['pdf'],
+                     type=str,
                      show_default=True)(f)
 
     return f

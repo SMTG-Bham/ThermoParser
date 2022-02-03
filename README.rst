@@ -19,16 +19,15 @@
 .. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
     :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
 
-ThermoPlotter is a toolkit used to simplify the production of
-high-quality plots from the outputs of specialised analytical codes. It
-is focused on computational materials science and particularly
-thermoelectrics materials. Traditionally, the steps required to
-transform raw data, produce appropriate plots and adjust their
-appearance are arduous and often result in long, unweildy python
-scripts. ThermoPlotter is built on top of `matplotlib`_ and greatly
-simplifies this process. It can be used to build short,
-easy-to-customise plotting scripts and there are also several basic
-command-line interface options.
+ThermoPlotter is a toolkit used to simplify the analysis of data
+produced by specialist materials science codes, centred around
+thermoelectrics, but also useful for anything pertaining to electronic
+and/ or phononic transport. ThermoPlotter is a Python library which
+contains functions for data retrieval, manipulation and plotting, which
+can be easily used with a little Python knowlege to generate a wide
+array of high-quality plots in only a few lines of code. ThermoPlotter
+also contains a suite of command-line tools which can retrieve specific
+data, save derived properties and plot graphs in a single command.
 
 Click on the image to go to the `gallery`_!
 
@@ -45,17 +44,32 @@ ThermoPlotter can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone git@github.com:SMTG-UCL/ThermoPlotter.git
+    git clone https://github.com/SMTG-UCL/ThermoPlotter.git
     cd ThermoPlotter
-    python3 -m pip install --user .
+    pip install --user .
 
 After installing, you may want to copy ``ThermoPlotter/tprc.yaml`` to
 ``~/.config/tprc.yaml``, if you want to set your own default axis
 labels, unit conversions, default style sheets (two are provided),
 other aesthetic alterations and more!
 
-Usage
------
+Mac
+^^^
+
+If installing on an m1 mac, you can't currently pip install h5py, so a
+longer process is required:
+
+0. Install brew
+1. Install hdf5 with brew
+2. `python3 -m pip install cython numpy`
+3. `brew info hdf5` to retrieve the path to your hdf5 install
+4. `HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py`
+5. `git clone https://github.com/SMTG-UCL/ThermoPlotter.git`
+6. `cd ThermoPlotter`
+7. `pip install --user -e .`
+
+Python Usage
+------------
 
 ThermoPlotter is designed to have four main stages:
 
@@ -153,6 +167,7 @@ Roughly chronologically, they are so far:
 * Bonan Zhu
 * Sean R. Kavanagh
 * Warda Rahim
+* Katarina Brlec
 
 License
 -------
@@ -165,6 +180,7 @@ Requirements
 
 ThermoPlotter uses the following open-source packages:
 
+* `click <https://click.palletsprojects.com/en/8.0.x/>`_
 * `h5py <http://docs.h5py.org/>`_
 * `json <https://docs.python.org/3/library/json.html>`_
 * `matplotlib <https://matplotlib.org>`_
