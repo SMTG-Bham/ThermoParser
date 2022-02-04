@@ -1764,6 +1764,9 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             raise Exception('--kfile must be specified for a '
                             '--quantity of {} or {}.'.format(ltc, tc))
 
+    for e in edata:
+        e['doping'] = np.abs(e['doping'])
+
     data = [[], [], [], []]
     defleg = {'labels': [], 'title': None} # default legend 
     # The data array could get quite large and memory inefficient, but
@@ -1783,7 +1786,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.resolve.resolve(edata2, etc, doping=d,
                                                      direction=direction[0])
-                    dopelist.append(edata2['meta']['doping'])
+                    dopelist.append('{:.2e}'.format(edata2['meta']['doping']))
                     kdata3, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                               'temperature',
                                                               ltc, etc,
@@ -1797,7 +1800,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.resolve.resolve(edata2, q, doping=d,
                                                      direction=direction[0])
-                    dopelist.append(edata2['meta']['doping'])
+                    dopelist.append('{:.2e}'.format(edata2['meta']['doping']))
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
                 defleg['labels'] = dopelist
@@ -1845,7 +1848,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             if q == tc:
                 lendata = len(kdata)
                 if len(kdata) == len(edata):
-                    defleg['title'] = 'Electronic\ Data'
+                    defleg['title'] = 'Electronic Data'
                     defleg['labels'] = filenames
                     for j in range(len(kdata)):
                         kdata2 = deepcopy(kdata[j])
@@ -1862,7 +1865,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                         data[i].append({'temperature': kdata2['temperature'],
                                         q:             kdata2[ltc] + edata2[etc]})
                 elif len(kdata) == 1:
-                    defleg['title'] = 'Electronic\ Data'
+                    defleg['title'] = 'Electronic Data'
                     defleg['labels'] = filenames
                     lendata = len(edata)
                     kdata2 = deepcopy(kdata[0])
@@ -1880,7 +1883,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                         data[i].append({'temperature': kdata2['temperature'],
                                         q:             kdata2[ltc] + edata2[etc]})
                 elif len(edata) == 1:
-                    defleg['title'] = 'Phononic\ Data'
+                    defleg['title'] = 'Phononic Data'
                     defleg['labels'] = kfile
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.resolve.resolve(edata2, etc,
@@ -1899,10 +1902,10 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
                 if len(edata) > 1:
                     lendata = len(edata)
-                    defleg['title'] = 'Electronic\ Data'
+                    defleg['title'] = 'Electronic Data'
                     defleg['labels'] = filenames
                 elif defleg['title'] is None:
-                    defleg['title'] = 'Electronic\ Data'
+                    defleg['title'] = 'Electronic Data'
                     defleg['labels'] = filenames
                 for j in range(len(edata)):
                     edata2 = deepcopy(edata[j])
@@ -1914,10 +1917,10 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 if len(kdata) > 1:
                     lendata = len(kdata)
-                    defleg['title'] = 'Phononic\ Data'
+                    defleg['title'] = 'Phononic Data'
                     defleg['labels'] = kfile
                 elif defleg['title'] is None:
-                    defleg['title'] = 'Phononic\ Data'
+                    defleg['title'] = 'Phononic Data'
                     defleg['labels'] = kfile
                 for j in range(len(kdata)):
                     kdata2 = deepcopy(kdata[j])
@@ -1955,6 +1958,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
 
     for i, d in enumerate(data):
         for j, d2 in enumerate(d):
+            d2['temperature'] = np.array(d2['temperature'])
             k = np.where((d2['temperature'] <= tmax)
                        & (d2['temperature'] >= tmin))[0]
 
@@ -1970,7 +1974,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
         else:
             tp.plot.utilities.set_locators(ax[i], 'linear', 'linear')
     if legend:
-        add_legend(title="${}$".format(legend_title))
+        add_legend(title="{}".format(legend_title))
 
     for a in ax:
         if xmin is not None:

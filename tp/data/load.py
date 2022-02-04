@@ -76,7 +76,8 @@ def amset(filename, quantities=['seebeck', 'conductivity',
             for q in quantities:
                 if q in tnames:
                     q = tnames[q]
-                if q in dimensions and d in dimensions[q]:
+                if q in dimensions and d in dimensions[q] or \
+                   (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
                     quantities.append(d)
                     break
     for q in derived:
@@ -127,13 +128,13 @@ def amset(filename, quantities=['seebeck', 'conductivity',
             if 'stype' in dimensions[q]:
                 for t in data2[q2]:
                     data2[q2][t] = np.array(data2[q2][t])[di]
-                    if 'tmperature' in dimensions[q]:
+                    if 'temperature' in dimensions[q]:
                         data2[q2][t] = np.swapaxes(data2[q2][t],0,1)
             else:
                 data2[q2] = np.array(data2[q2])[di]
-                if 'tmperature' in dimensions[q]:
+                if 'temperature' in dimensions[q]:
                     data2[q2] = np.swapaxes(data2[q2],0,1)
-        if 'stype' in dimensions[q]:
+        if q in dimensions and 'stype' in dimensions[q]:
             if 'stype' not in data2:
                 data2['stype'] = list(data[q].keys())
             # for consistency with the format in the mesh data
