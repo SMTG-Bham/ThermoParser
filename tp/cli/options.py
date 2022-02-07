@@ -8,6 +8,7 @@ Functions
     doping_type_option
     doping_option
     dopings_option
+    dos_options
     input_argument
     inputs_argument
     interpolate_options
@@ -15,11 +16,11 @@ Functions
     legend_options
     auto_legend_options
     line_options
-    line_fill_options
+    fill_options
     plot_io_options
     temperature_option
     xy_limit_options
-    xyc_limit_options
+    c_limit_options
 """
 
 import click
@@ -86,6 +87,48 @@ def dopings_option(f):
                      default=[1.e19],
                      type=float,
                      show_default=True)(f)
+
+    return f
+
+def dos_options(f):
+    """Options for DoS plots.
+
+    Doesn't contain colour as this must be renamed.
+    """
+
+    f = click.option('-p', '--poscar',
+                     help='POSCAR path. Ignored if --atoms specified.',
+                     type=click.Path(file_okay=True, dir_okay=False),
+                     default='POSCAR',
+                     show_default=True)(f)
+    f = click.option('-a', '--atoms',
+                     help='Atoms in POSCAR order. Repeated names have their '
+                          'contributions summed, or different names can be '
+                          'used to separate environments. E.g. "Ba 1 Sn 1 O 3", '
+                          '"Ba Sn O O O" and "Ba Sn O 3" are all valid and '
+                          'equivalent. Overrides --poscar.')(f)
+    f = click.option('--projected/--notprojected',
+                     help='Plot atom-projected DoS.  [default: projected]',
+                     default=True,
+                     show_default=False)(f)
+    f = click.option('-t', '--total/--nototal',
+                     help='Plot total DoS.  [default: nototal]',
+                     default=False,
+                     show_default=False)(f)
+    f = click.option('--total-label',
+                     help='Label for the total line.',
+                     default='Total',
+                     show_default=True)(f)
+    f = click.option('-c', '--colour',
+                     help='Colour(s) in POSCAR order with total at the end or '
+                          'colourmap name. If --notprojected, a single colour '
+                          'can be specified. Total colour is overridden by '
+                          '--total-colour.',
+                     multiple=True,
+                     default=['tab10'],
+                     show_default=True)(f)
+    f = click.option('--total-colour',
+                     help='Colour for the total line. Overrides --colour.')(f)
 
     return f
 
@@ -189,7 +232,7 @@ def line_options(f):
 
     return f
 
-def line_fill_options(f):
+def fill_options(f):
     """Group of options for fillable line plots"""
 
     f = click.option('-f', '--fill/--nofill',
@@ -206,17 +249,6 @@ def line_fill_options(f):
                      help='Plot line.  [default: line]',
                      default=True,
                      show_default=False)(f)
-    f = click.option('--linestyle',
-                     help='linestyle(s).',
-                     multiple=True,
-                     default=['solid'],
-                     type=str,
-                     show_default=True)(f)
-    f = click.option('-m', '--marker',
-                    help='Marker(s).',
-                    multiple=True,
-                    default=[None],
-                    type=str)(f)
 
     return f
 
@@ -272,21 +304,9 @@ def xy_limit_options(f):
 
     return f
 
-def xyc_limit_options(f):
-    """Options for x, y and colour axes limits."""
+def c_limit_options(f):
+    """Options for colour axes limits."""
 
-    f = click.option('--xmin',
-                     help='Override minimum x.',
-                     type=float)(f)
-    f = click.option('--xmax',
-                     help='Override maximum x.',
-                     type=float)(f)
-    f = click.option('--ymin',
-                     help='Override minimum y.',
-                     type=float)(f)
-    f = click.option('--ymax',
-                     help='Override maximum y.',
-                     type=float)(f)
     f = click.option('--cmin',
                      help='Override minimum colour value.',
                      type=float)(f)

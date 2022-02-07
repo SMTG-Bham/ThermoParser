@@ -537,15 +537,23 @@ def save():
               help='Output filename, sans extension.',
               default='tp-cumkappa',
               show_default=True)
-def save_cumkappa(filename, mfp, direction, temperature, output):
+@click.option('-e', '--extension',
+              help='File type.',
+              type=click.Choice(['dat', 'csv'], case_sensitive=False),
+              multiple=True,
+              default=['dat'],
+              show_default=True)
+def save_cumkappa(filename, mfp, direction, temperature, output, extension):
     """Extracts cumulative kappa from Phono3py hdf5.
 
-    Saves to text file.
+    Saves to dat and/ or csv.
     """
 
     tp.data.save.cumkappa(filename, mfp=mfp, direction=direction,
-                          temperature=temperature, output=output)
-    click.echo('{}.dat written'.format(output))
+                          temperature=temperature, output=output,
+                          extension=extension)
+    for e in extension:
+        click.echo('{}.{} written'.format(output, e))
 
     return
 
@@ -616,7 +624,7 @@ def plot():
 
 
 @plot.command()
-@input_argument
+@inputs_argument
 @click.option('--total/--nototal',
               help='Plot total scattering rate  [default: total]',
               default=True,
@@ -648,13 +656,18 @@ def plot():
               default='tp-avg-rates',
               show_default=True)
 
-def avg_rates(filename, total, x, crt, doping, temperature, colour, linestyle,
+def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
               marker, xmin, xmax, ymin, ymax, style, large, extension, output):
     """Plots averaged scattering rates.
 
-    Requires an AMSET mesh file. Plots scattering rates averaged over
+    Requires AMSET mesh files. Plots scattering rates averaged over
     kpoints and weighted by the derivative of the Fermi-Dirac
     distribution against tempearture or carrier concentration or both.
+    If one file is given, it will be used for both plots, or if two are
+    specified the one with the most temperatures will be used for the
+    temperature plot and the one with the most carrier concentrations
+    will be used for the doping plot. x-limits only work for individual
+    plots.
     """
 
     if x == 'both':
@@ -666,8 +679,20 @@ def avg_rates(filename, total, x, crt, doping, temperature, colour, linestyle,
     tax = ax[0] if x == 'both' else ax
     dax = ax[1] if x == 'both' else ax
 
-    data = tp.data.load.amset_mesh(filename, 'weighted_rates')
-    nlines = len(data['stype'])
+    if len(filenames) == 1:
+        data = [tp.data.load.amset_mesh(filenames, 'weighted_rates')]
+        tindex = 0
+        dindex = 0
+    elif len(filenames) == 2:
+        data = [tp.data.load.amset_mesh(f, 'weighted_rates') for f in filenames]
+        tindex = 0 if len(data[0]['temperature']) > len(data[1]['temperature']) else 1
+        dindex = 0 if len(data[0]['doping']) > len(data[1]['doping']) else 1
+        print('Using {} for the temperature data.'.format(filenames[tindex]))
+        print('Using {} for the doping data.'.format(filenames[dindex]))
+    else:
+        raise Exception('Please specify at most two filenames')
+
+    nlines = np.amax([len(d['stype']) for d in data])
     if total:
         nlines += 1
     if crt is not None:
@@ -698,13 +723,14 @@ def avg_rates(filename, total, x, crt, doping, temperature, colour, linestyle,
 
     labels = tp.settings.large_labels() if large else tp.settings.labels()
     if x == 'temperature' or x == 'both':
-        tdata = tp.data.resolve.resolve(data, 'weighted_rates', doping=doping)
+        tdata = tp.data.resolve.resolve(data[tindex], 'weighted_rates',
+                                        doping=doping)
         print('Using {} {}.'.format(tdata['meta']['doping'],
                                     tdata['meta']['units']['doping']))
-        for i, rate in enumerate(data['stype']):
+        for i, rate in enumerate(data[tindex]['stype']):
             tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
-                       color=colours[i], linestyle=linestyle[i],
-                       marker=marker[i], label=rate)
+                     color=colours[i], linestyle=linestyle[i],
+                     marker=marker[i], label=rate)
         if total:
             i += 1
             totrate = np.sum(tdata['weighted_rates'], axis=0)
@@ -720,11 +746,11 @@ def avg_rates(filename, total, x, crt, doping, temperature, colour, linestyle,
         tp.plot.utilities.set_locators(tax, x='linear', y='log')
 
     if x == 'doping' or x == 'both':
-        ddata = tp.data.resolve.resolve(data, 'weighted_rates',
+        ddata = tp.data.resolve.resolve(data[dindex], 'weighted_rates',
                                         temperature=temperature)
         print('Using {} {}.'.format(ddata['meta']['temperature'],
                                     ddata['meta']['units']['temperature']))
-        for i, rate in enumerate(data['stype']):
+        for i, rate in enumerate(data[dindex]['stype']):
             dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
                      color=colours[i], linestyle=linestyle[i],
                      marker=marker[i], label=rate)
@@ -796,7 +822,8 @@ def avg_rates(filename, total, x, crt, doping, temperature, colour, linestyle,
               help='Colour(s).',
               multiple=True,
               default=None)
-@line_fill_options
+@fill_options
+@line_options
 
 @xy_limit_options
 @legend_options
@@ -879,30 +906,7 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
 
 @plot.command()
 @input_argument
-@click.option('-p', '--poscar',
-              help='POSCAR path. Ignored if --atoms specified.',
-              type=click.Path(file_okay=True, dir_okay=False),
-              default='POSCAR',
-              show_default=True)
-@click.option('-a', '--atoms',
-              help='Atoms in POSCAR order. Repeated names have their '
-                   'contributions summed, or different names can be '
-                   'used to separate environments. E.g. "Ba 1 Sn 1 O 3", '
-                   '"Ba Sn O O O" and "Ba Sn O 3" are all valid and '
-                   'equivalent. Overrides --poscar.')
-@click.option('--projected/--notprojected',
-              help='Plot atom-projected DoS.  [default: projected]',
-              default=True,
-              show_default=False)
-@click.option('-t', '--total/--nototal',
-              help='Plot total DoS.  [default: nototal]',
-              default=False,
-              show_default=False)
-@click.option('--total-label',
-              help='Label for the total line.',
-              default='Total',
-              show_default=True)
-
+@dos_options
 @click.option('-c', '--colour',
               help='Colour(s) in POSCAR order with total at the end or '
                    'colourmap name. If --notprojected, a single colour '
@@ -911,9 +915,8 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
               multiple=True,
               default=['tab10'],
               show_default=True)
-@click.option('--total-colour',
-              help='Colour for the total line. Overrides --colour.')
-@line_fill_options
+@fill_options
+@line_options
 
 @xy_limit_options
 @click.option('--legend-title',
@@ -924,9 +927,9 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
               default='tp-dos',
               show_default=True)
 
-def dos(filename, poscar, atoms, projected, total, total_label, colour,
-        total_colour, fill, fillalpha, line, linestyle, marker, xmin, xmax,
-        ymin, ymax, legend_title, style, large, extension, output):
+def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
+        colour, fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin,
+        ymax, legend_title, style, large, extension, output):
     """Plot a phonon density of states."""
 
     axes = tp.axes.one_large if large else tp.axes.one
@@ -993,7 +996,8 @@ def dos(filename, poscar, atoms, projected, total, total_label, colour,
               default='grey',
               show_default=True)
 
-@xyc_limit_options
+@xy_limit_options
+@c_limit_options
 @plot_io_options
 @click.option('-o', '--output',
               help='Output filename, sans extension.',
@@ -1065,6 +1069,20 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
               default='solid',
               show_default=True)
 
+@click.option('-d', '--dos',
+              help='projected_dos.dat or equivalent for optional DoS plot.',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@dos_options
+@click.option('--doscolour',
+              help='Colour(s) in POSCAR order with total at the end or '
+                   'colourmap name. If --notprojected, a single colour '
+                   'can be specified. Total colour is overridden by '
+                   '--total-colour.',
+              multiple=True,
+              default=['tab10'],
+              show_default=True)
+@fill_options
+
 @legend_options
 @plot_io_options
 @click.option('-o', '--output',
@@ -1073,9 +1091,17 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
               show_default=True)
 
 def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
-                     xmarkcolour, xmarklinestyle, label, legend_title, style,
-                     large, extension, output):
-    """Plots and overlays phonon dispersions."""
+                     xmarkcolour, xmarklinestyle, dos, poscar, atoms, projected,
+                     total, total_label, total_colour, doscolour, fill,
+                     fillalpha, line, label, legend_title, style, large,
+                     extension, output):
+    """Plots and overlays phonon dispersions.
+
+    Can have optional DoS on the side.
+    """
+
+    # Really the DoS bit should be in a chained command, but I'm having
+    # trouble getting that working atm.
 
     linestyle = list(linestyle)
     if len(colour) == 1:
@@ -1090,22 +1116,42 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
         label = [None]
     else:
         label = list(label)
+    if len(doscolour) == 1:
+        doscolour = doscolour[0]
+    else:
+        doscolour = list(doscolour)
 
     data = [tp.data.load.phonopy_dispersion(f) for f in filenames]
 
     axes = tp.axes.one_large if large else tp.axes.one
-    if label != [None]:
-        fig, ax, add_legend = axes.medium_legend(style)
+    if dos is None:
+        if label != [None]:
+            fig, ax, add_legend = axes.medium_legend(style)
+        else:
+            fig, ax = axes.plain(style)
     else:
-        fig, ax = axes.plain(style)
+        fig, ax, add_legend = axes.dos_small_legend(style)
+        dosax = ax[1]
+        ax = ax[0]
 
     tp.plot.phonons.add_multi(ax, data, colour=colour, linestyle=linestyle,
                               marker=marker, label=label, bandmin=bandmin,
                               bandmax=bandmax,
                               xmarkkwargs={'color':     xmarkcolour,
                                            'linestyle': xmarklinestyle})
+    if dos is not None:
+        dosdata = tp.data.load.phonopy_dos(dos, poscar, atoms)
+        tp.plot.frequency.add_dos(dosax, dosdata, projected=projected,
+                                  total=total, totallabel=total_label,
+                                  colour=doscolour, totalcolour=total_colour,
+                                  fill=fill, fillalpha=fillalpha, line=line,
+                                  invert=True)
+        dosax.set_ylim(ax.get_ylim())
+        tp.plot.utilities.set_locators(dosax, dos=True)
 
-    if label != [None]:
+    if label != [None] or dos is not None:
+        if legend_title is not None:
+            legend_title = "${}$".format(legend_title)
         add_legend(title=legend_title)
 
     for ext in extension:
@@ -1176,7 +1222,8 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 @click.option('--cscale',
               help='Override colour-scale if projected.',
               type=click.Choice(['linear', 'log'], case_sensitive=False))
-@xyc_limit_options
+@xy_limit_options
+@c_limit_options
 
 @plot_io_options
 @click.option('-o', '--output',
@@ -1337,7 +1384,8 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
               default=['viridis'],
               show_default=True)
 
-@xyc_limit_options
+@xy_limit_options
+@c_limit_options
 @plot_io_options
 @click.option('-o', '--output',
               help='Output filename, sans extension.',

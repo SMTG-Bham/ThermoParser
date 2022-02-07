@@ -264,7 +264,7 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
     return
 
 def cumkappa(filename, mfp=False, temperature=300, direction='avg',
-             output='tp-cumkappa', force=False):
+             output='tp-cumkappa', extension='dat', force=False):
     """Saves cumulated lattice thermal conductivity against frequency or mfp.
 
     Saves in normal units and percent to a dat file.
@@ -285,6 +285,8 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
 
         output : str, optional
             output filename (no extension). Default: tp-kappa-target.
+        extension : str or list, optional
+            output filetype. Must be dat and/ or csv. Default: dat.
         force : bool, optional
             force overwrite input file. Default: False.
 
@@ -294,6 +296,23 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
         none
             instead writes to dat.
     """
+
+    if isinstance(extension, str):
+        extension = [extension]
+    csv, dat = False, False
+    for e in extension:
+        if e == 'csv':
+            if not csv:
+                csv = True
+            else:
+                print('Ignoring duplicate extension csv.')
+        elif e == 'dat':
+            if not dat:
+                dat = True
+            else:
+                print('Ignoring duplicate extension dat.')
+        else:
+            raise Exception('Extension must be dat and/ or csv.')
 
     quantity = 'mean_free_path' if mfp else 'frequency'
     data = tp.data.load.phono3py(filename, ['mode_kappa', quantity])
@@ -307,7 +326,12 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
     units = tp.settings.units()
     header = '{}({}) cum_kappa_{d}({}) cum_kappa_{d}(%)'.format(quantity,
                              units[quantity], units['mode_kappa'], d=direction)
-    np.savetxt('{}.dat'.format(output), np.transpose([q, k, p]), header=header)
+    if csv:
+        np.savetxt('{}.csv'.format(output), np.transpose([q, k, p]),
+                   header=header, delimiter=',')
+    if dat:
+        np.savetxt('{}.dat'.format(output), np.transpose([q, k, p]),
+                   header=header, delimiter=' ')
 
     return
 
