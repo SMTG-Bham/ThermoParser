@@ -8,16 +8,17 @@ Functions
 ---------
 
     square
+    square_legend
 """
 
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from tp import settings
+import tp
 import warnings
 
 warnings.filterwarnings("ignore", module="matplotlib")
 
-default_style = settings.style()
+default_style = tp.settings.style()
 
 def square(style=[]):
     """A figure with four sets of axes in a square.
@@ -73,14 +74,14 @@ def square_legend(style=[]):
     if isinstance(style, str): style=[style]
     default_style.extend(style)
     plt.style.use(default_style)
-    fig = plt.figure(figsize=(25/2.54, 16.56/2.54))
+    fig = plt.figure(figsize=(22.5/2.54, 16.56/2.54))
 
     grid = GridSpec(2,2)
     ax = [[fig.add_subplot(grid[0, 0]), fig.add_subplot(grid[0, 1])],
           [fig.add_subplot(grid[1, 0]), fig.add_subplot(grid[1, 1])]]
 
-    plt.subplots_adjust(left=0.13, right=0.8,
-                        bottom=0.08, top=0.97,
+    plt.subplots_adjust(left=0.08, right=0.8,
+                        bottom=0.05, top=0.99,
                         hspace=0.22, wspace=0.31)
 
     def add_legend(custom=False, *args, **kwargs):
@@ -105,11 +106,11 @@ def square_legend(style=[]):
         """
 
         if custom:
-            legend = ax[0].legend(loc="center left", bbox_to_anchor=(0.97, 0),
+            legend = ax[0][1].legend(loc="center left", bbox_to_anchor=(1, -0.11),
                                   *args, **kwargs)
         else:
             handles, labels = tp.axes.legend.consolidate(ax)
-            legend = ax[0].legend(loc="center left", bbox_to_anchor=(0.97, 0),
+            legend = ax[0][1].legend(loc="center left", bbox_to_anchor=(1, -0.11),
                                   handles=handles, labels=labels,
                                   *args, **kwargs)
 

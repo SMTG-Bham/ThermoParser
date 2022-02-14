@@ -193,9 +193,6 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             mfp = np.abs(np.ravel(data2['mean_free_path']))
 
             mfp, k = cumulate(mfp, k)
-            np.savetxt('cumkappa-mfp-{:.0f}K-{}.dat'.format(
-                       data2['meta']['temperature'], d), np.transpose([mfp, k]),
-                       header='mfp(m) k_l(Wm-1K-1)')
 
             mindex = next(x[0] for x in enumerate(np.ma.masked_invalid(k).compressed()) if x[1] > kmin*k[-1]/100)
             if mfpmin is None or mfpmin > mfp[mindex]:

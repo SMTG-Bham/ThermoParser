@@ -1,4 +1,5 @@
 .. image:: figures/tp-logo-header.png
+    :alt: The ThermoPlotter logo, which looks like "TP"
     :target: https://smtg-ucl.github.io/ThermoPlotter/
     :align: center
 
@@ -17,6 +18,7 @@
 
 
 .. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
+    :alt: The travis-ci badge
     :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
 
 ThermoPlotter is a toolkit used to simplify the analysis of data
@@ -61,12 +63,12 @@ longer process is required:
 
 0. Install brew
 1. Install hdf5 with brew
-2. `python3 -m pip install cython numpy`
-3. `brew info hdf5` to retrieve the path to your hdf5 install
-4. `HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py`
-5. `git clone https://github.com/SMTG-UCL/ThermoPlotter.git`
-6. `cd ThermoPlotter`
-7. `pip install --user -e .`
+2. ``python3 -m pip install cython numpy``
+3. ``brew info hdf5`` to retrieve the path to your hdf5 install
+4. ``HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py``
+5. ``git clone https://github.com/SMTG-UCL/ThermoPlotter.git``
+6. ``cd ThermoPlotter``
+7. ``pip install --user -e .``
 
 Python Usage
 ------------
@@ -189,3 +191,4 @@ ThermoPlotter uses the following open-source packages:
 * `scipy <https://www.scipy.org>`_
 * `sphinx <https://www.sphinx-doc.org>`_
 * `yaml <https://pyyaml.org/>`_
+

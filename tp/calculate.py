@@ -31,10 +31,12 @@ Functions
     kl_fromdict:
         adds lattice thermal conductivity for target ZT to dictionary.
 
-    to_tp
+    to_tp:
         converts quantities to tp defaults from tprc.yaml.
-    from_tp
+    from_tp:
         converts quantities from tp defaults from tprc.yaml.
+    interpolate:
+        shrinks to smallest data size and interpolates.
 """
 
 import numpy as np

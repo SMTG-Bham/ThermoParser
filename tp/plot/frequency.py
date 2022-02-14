@@ -20,8 +20,8 @@ Functions
     add_density:
         density of phonon modes for a property vs frequency.
 
-    format_waterfall
-        formatting for the waterfall and density plots
+    format_waterfall:
+        formatting for the waterfall and density plots.
 """
 
 import matplotlib as mpl
@@ -168,7 +168,7 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             if len(colour) == 1:
                 colour = {'total': colour[0]}
             elif len(colour) > len(data):
-                colour = {'total': colour[len(data)+1]}
+                colour = {'total': colour[len(data)]}
         else:
             colour = {'total': colour}
     else:
@@ -184,25 +184,13 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             for i, c in enumerate(data):
                 colour[c] = cmap[i]
             if len(cmap) > len(data):
-                colour['total'] = cmap[len(data)+1]
+                colour['total'] = cmap[len(data)]
 
         if total and 'total' not in colour:
             if totalcolour is not None:
                 colour['total'] = totalcolour
             else:
                 colour['total'] = '#000000'
-
-    fillcolour = {}
-    for c in colour:
-        try:
-            if isinstance(colour[c], str):
-                colour[c] = tp.plot.colour.rgb2array(colour[c])
-            if fill:
-                fillcolour[c] = list(colour[c])
-                fillcolour[c][3] = fillalpha
-        except ValueError:
-            if fill:
-                fillcolour[c] = colour[c]
 
     markers = {}
     if isinstance(marker, (str, tuple)) or marker is None:
@@ -247,23 +235,31 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
     if total:
         if invert:
             if fill and line:
-                ax.fill_between(totaldata, f, facecolor=fillcolour['total'],
-                                linewidth=0)
+                ax.fill_between(totaldata, f, facecolor=colour['total'],
+                                linewidth=0, alpha=fillalpha)
                 ax.plot(totaldata, f, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
             elif fill and not line:
                 ax.fill_between(totaldata, f, label=totallabel,
-                                facecolor=fillcolour['total'], linewidth=0)
+                                facecolor=colour['total'], linewidth=0,
+                                alpha=fillalpha)
             else:
                 ax.plot(totaldata, f, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
         else:
-            if fill:
-                ax.fill_between(f, totaldata, label=totallabel, facecolor=fillcolour['total'],
-                               linewidth=0)
-            if line:
+            if fill and line:
+                ax.fill_between(f, totaldata, facecolor=colour['total'],
+                                linewidth=0, alpha=fillalpha)
+                ax.plot(f, totaldata, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
+            elif fill and not line:
+                ax.fill_between(f, totaldata, label=totallabel,
+                                facecolor=colour['total'], linewidth=0,
+                                alpha=fillalpha)
+            else:
                 ax.plot(f, totaldata, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
@@ -271,24 +267,30 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
         for key in data:
             if invert:
                 if fill and line:
-                    ax.fill_between(data[key], f, facecolor=fillcolour[key], linewidth=0)
+                    ax.fill_between(data[key], f, facecolor=colour[key],
+                                    linewidth=0, alpha=fillalpha)
                     ax.plot(data[key], f, label=key, color=colour[key],
                             linestyle=linestyles[key], marker=markers[key],
                             **kwargs)
                 elif fill and not line:
-                    ax.fill_between(data[key], f, label=key, facecolor=fillcolour[key], linewidth=0)
+                    ax.fill_between(data[key], f, label=key,
+                                    facecolor=colour[key], linewidth=0,
+                                    alpha=fillalpha)
                 else:
                     ax.plot(data[key], f, label=key, color=colour[key],
                             linestyle=linestyles[key], marker=markers[key],
                             **kwargs)
             else:
                 if fill and line:
-                    ax.fill_between(f, data[key], facecolor=fillcolour[key], linewidth=0)
+                    ax.fill_between(f, data[key], facecolor=colour[key],
+                                    linewidth=0, alpha=fillalpha)
                     ax.plot(f, data[key], color=colour[key], label=key,
                             linestyle=linestyles[key], marker=markers[key],
                             **kwargs)
                 elif fill and not line:
-                    ax.fill_between(f, data[key], label=key, facecolor=fillcolour[key], linewidth=0)
+                    ax.fill_between(f, data[key], label=key,
+                                    facecolor=colour[key], linewidth=0,
+                                    alpha=fillalpha)
                 else:
                     ax.plot(f, data[key], label=key, color=colour[key],
                             linestyle=linestyles[key], marker=markers[key],
@@ -448,9 +450,6 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
             f = np.ravel(data2['frequency'])
 
             f, k = tp.calculate.cumulate(f, k)
-            np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
-                       data2['meta']['temperature'], d), np.transpose([f, k]),
-                       header='Frequency(THz) k_l(Wm-1K-1)')
 
             if fmax is None or fmax < f[-1]:
                 fmax = f[-1]

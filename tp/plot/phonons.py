@@ -303,7 +303,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         elif isinstance(colour, list) and len(colour) == 2 and len(data) != 2:
             colour = tp.plot.colour.linear(*colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
-        elif isintance(colour, dict):
+        elif isinstance(colour, dict):
             colour = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         else:
@@ -1190,11 +1190,11 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
-        elif isinstace(colour, str):
+        elif isinstance(colour, str):
             cmap = tp.plot.colour.linear(colour)
-        elif isinstace(colour, list):
+        elif isinstance(colour, list):
             cmap = tp.plot.colour.linear(colour[1], colour[0])
-        elif isinstace(colour, dict):
+        elif isinstance(colour, dict):
             cmap = tp.plot.colour.linear(**colour)
         else:
             raise Exception('colour must be a colourmap, colourmap '

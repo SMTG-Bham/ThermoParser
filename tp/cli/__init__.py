@@ -3,12 +3,10 @@
 Modules
 -------
 
-    kpar
-
-    converge_phonons
-    cumkappa
-
-    boltztrap
+    cli
+        Command line interface functions
+    options
+        Option groups for cli functions.
 """
 
-from . import options
+from . import cli, options

@@ -22,12 +22,14 @@ Functions
         convert names to tp conventions.
     to_amset:
         convert names to amset conventions.
-    to_amset:
+    to_boltztrap:
         convert names to boltztrap conventions.
     to_phono3py:
         convert names to phono3py conventions.
 
 
+    conversions:
+        default unit conversions.
     amset_conversions:
         unit conversions.
     boltztrap_conversions:
@@ -44,14 +46,19 @@ Functions
         dimensions of each variable.
     boltztrap_dimensions:
         updated dimensions for BoltzTraP.
+
     labels:
         default axis labels.
     inverted_labels:
-        default inverted axis labels.
+        default labels for a dos-style axis.
+    large_labels:
+        default labels for a large axis.
     long_labels:
         list of long axis labels.
+    medium_labels:
+        list of slightly abbreviated axis labels.
     short_labels:
-        list of short axis labels.
+        list of fully contracted axis labels.
 """
 
 import os
@@ -145,6 +152,7 @@ def to_tp():
 
     names = {'ave_pp':               'ph_ph_strength',
              'energies':             'energy',
+             'etc':                  'electronic_thermal_conductivity',
              'fermi_levels':         'fermi_level',
              'gv':                   'group_velocity',
              'ir_kpoints':           'kpoint',
@@ -154,6 +162,7 @@ def to_tp():
              'kappal':               'lattice_thermal_conductivity',
              'ke':                   'electronic_thermal_conductivity',
              'kl':                   'lattice_thermal_conductivity',
+             'ltc':                  'lattice_thermal_conductivity',
              'mfp':                  'mean_free_path',
              'mk':                   'mode_kappa',
              'pf':                   'power_factor',
@@ -171,6 +180,7 @@ def to_amset():
     """Get dictionary to translate to amset."""
 
     names = {'energy':               'energies',
+             'etc':                  'electronic_thermal_conductivity',
              'fermi_level':          'fermi_levels',
              'kappa':                'electronic_thermal_conductivity',
              'kappae':               'electronic_thermal_conductivity',
@@ -190,7 +200,8 @@ def to_amset():
 def to_boltztrap():
     """Get dictionary to translate to boltztrap."""
 
-    names = {'kappa':                'electronic_thermal_conductivity',
+    names = {'etc':                  'electronic_thermal_conductivity',
+             'kappa':                'electronic_thermal_conductivity',
              'kappae':               'electronic_thermal_conductivity',
              'ke':                   'electronic_thermal_conductivity',
              'thermal_conductivity': 'electronic_thermal_conductivity'}
@@ -208,6 +219,7 @@ def to_phono3py():
              'kappal':                       'kappa',
              'kl':                           'kappa',
              'lattice_thermal_conductivity': 'kappa',
+             'ltc':                          'kappa',
              'mfp':                          'mean_free_path',
              'mk':                           'mode_kappa',
              'ph_ph_strength':               'ave_pp',
@@ -356,11 +368,11 @@ def boltztrap_dimensions():
     """Get dictionary of dimensions of quantities updated for BoltzTraP."""
 
     dims = dimensions()
-    dims['average_eff_mass'] =                ['dtype', 'temperature', 'doping', 3, 3],
+    dims['average_eff_mass'] =                ['dtype', 'temperature', 'doping', 3, 3]
     dims['conductivity'] =                    ['dtype', 'temperature', 'doping', 3, 3]
     dims['electronic_thermal_conductivity'] = ['dtype', 'temperature', 'doping', 3, 3]
-    dims['fermi_level'] =                     ['dtype', 'temperature', 'doping'],
-    dims['mobility'] =                        ['dtype', 'temperature', 'doping', 3, 3],
+    dims['fermi_level'] =                     ['dtype', 'temperature', 'doping']
+    dims['mobility'] =                        ['dtype', 'temperature', 'doping', 3, 3]
     dims['power_factor'] =                    ['dtype', 'temperature', 'doping', 3, 3]
     dims['seebeck'] =                         ['dtype', 'temperature', 'doping', 3, 3]
 

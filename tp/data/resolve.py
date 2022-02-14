@@ -10,7 +10,6 @@ Functions
 """
 
 import numpy as np
-import tp.settings
 import warnings
 from copy import deepcopy
 

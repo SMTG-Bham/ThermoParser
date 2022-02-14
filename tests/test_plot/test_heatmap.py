@@ -33,9 +33,9 @@ class HeatmapTest(unittest.TestCase):
 
     @patch.object(plt, 'colorbar')
     def test_log(self, mock_colourbar):
-        self.x = np.power(10, self.x)
-        self.y = np.power(10, self.y)
-        self.c = np.power(10, self.c)
+        self.x = np.power(10., self.x)
+        self.y = np.power(10., self.y)
+        self.c = np.power(10., self.c)
         cbar = heatmap.add_heatmap(self.ax, self.x, self.y, self.c,
                                    xinterp=None, yinterp=None, xscale='log',
                                    yscale='log', cscale='log')
@@ -179,7 +179,7 @@ class ZTMapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
-        mock_resolve.assert_not_called()
+        mock_resolve.assert_called_once()
         mock_zt.assert_called_once()
 
     @patch.object(tp.calculate, 'zt_fromdict')
@@ -197,7 +197,7 @@ class ZTMapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
-        mock_resolve.assert_not_called()
+        mock_resolve.assert_called_once()
         mock_zt.assert_not_called()
 
 class TargetKLTest(unittest.TestCase):

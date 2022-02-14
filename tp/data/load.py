@@ -71,12 +71,12 @@ def amset(filename, quantities=['seebeck', 'conductivity',
     derived = {'power_factor': ['conductivity', 'seebeck']}
 
     # add dependant variables
-    for d in ['doping', 'temperatures', 'scattering_labels']:
+    for d in ['doping', 'temperatures']:
         if d not in quantities:
             for q in quantities:
                 if q in tnames:
                     q = tnames[q]
-                if q in dimensions and d in dimensions[q] or \
+                if q in dimensions and \
                    (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
                     quantities.append(d)
                     break
@@ -121,20 +121,20 @@ def amset(filename, quantities=['seebeck', 'conductivity',
             data2[q2] = data[q]['data']
         else:
             data2[q2] = data[q]
-        if q in dimensions and 'doping' in dimensions[q]:
+        if q2 in dimensions and 'doping' in dimensions[q2]:
             # temperature index first for consistency with other codes
             # With the latest version of resolve, this is unneccessary 
             # Should it be removed?
-            if 'stype' in dimensions[q]:
+            if 'stype' in dimensions[q2]:
                 for t in data2[q2]:
                     data2[q2][t] = np.array(data2[q2][t])[di]
-                    if 'temperature' in dimensions[q]:
+                    if 'temperature' in dimensions[q2]:
                         data2[q2][t] = np.swapaxes(data2[q2][t],0,1)
             else:
                 data2[q2] = np.array(data2[q2])[di]
-                if 'temperature' in dimensions[q]:
+                if 'temperature' in dimensions[q2]:
                     data2[q2] = np.swapaxes(data2[q2],0,1)
-        if q in dimensions and 'stype' in dimensions[q]:
+        if q2 in dimensions and 'stype' in dimensions[q2]:
             if 'stype' not in data2:
                 data2['stype'] = list(data[q].keys())
             # for consistency with the format in the mesh data
@@ -411,7 +411,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
             for q in quantities:
                 if q in tnames:
                     q = tnames[q]
-                if q in dimansions and \
+                if q in dimensions and \
                    (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
                     quantities.append(d)
                     break
@@ -427,9 +427,9 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
             assert q in f, '{} unrecognised. Quantity must be in {} or {}.'.format(
                             q, ', '.join(list(f)[:-1]), list(f)[-1])
             q2 = tnames[q] if q in tnames else q
-            if q in dimensions and 'dtype' in dimensions[q]:
+            if q2 in dimensions and 'dtype' in dimensions[q2]:
                 data[q2] = f[q][doping][()]
-                dimensions[q].remove('dtype')
+                dimensions[q2].remove('dtype')
             else:
                 data[q2] = f[q][()]
             if q2 in units:

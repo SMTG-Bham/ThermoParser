@@ -14,3 +14,4 @@ they appear in, i.e. ``four.square`` returns a figure and a 2x2 array of
 axes. Where there is legend space, a function is returned which will
 generate and position the legend for you, and still takes the normal
 arguments (title etc.).
+

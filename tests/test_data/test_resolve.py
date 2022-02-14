@@ -35,28 +35,28 @@ class ResolveTest(unittest.TestCase):
 
     def test_average_eff_mass_direction(self):
         q = 'average_eff_mass'
-        d = {q:              {'n': self.three_m},
+        d = {q:              self.three_m,
              'temperature':  self.t,
              'meta':         {'dimensions': {q: tp.settings.dimensions()[q]}}}
-        d = resolve.resolve(d, q, direction='z', dtype='n')
+        d = resolve.resolve(d, q, direction='z')
         self.assertTrue((d[q] == [[9.], [19.], [29.]]).all())
 
     def test_average_eff_mass_temperature(self):
         q = 'average_eff_mass'
-        d = {q:              {'n': self.three_m},
+        d = {q:              self.three_m,
              'temperature':  self.t,
              'meta':         {'dimensions': {q: tp.settings.dimensions()[q]}}}
-        d = resolve.resolve(d, q, temperature=23., dtype='n')
+        d = resolve.resolve(d, q, temperature=23.)
         self.assertTrue((d[q] ==  [[11., 12., 13.],
                                    [14., 15., 16.],
                                    [17., 18., 19.]]).all())
 
     def test_average_eff_mass_both(self):
         q = 'average_eff_mass'
-        d = {q:             {'n': self.three_m},
+        d = {q:             self.three_m,
              'temperature': self.t,
              'meta':        {'dimensions': {q: tp.settings.dimensions()[q]}}}
-        d = resolve.resolve(d, q, direction='z', temperature=23., dtype='n')
+        d = resolve.resolve(d, q, direction='z', temperature=23.)
         self.assertTrue((d[q] == 19.).all())
 
     def test_conductivity_direction(self):

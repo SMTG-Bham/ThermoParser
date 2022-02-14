@@ -21,6 +21,7 @@ Functions
         colour converter.
 """
 
+from wsgiref.simple_server import WSGIRequestHandler
 from matplotlib.colors import ListedColormap
 import matplotlib as mpl
 import matplotlib.pyplot as plt

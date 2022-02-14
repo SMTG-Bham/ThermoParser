@@ -89,9 +89,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             highlight, min, max colours in that order, or dictionary
             with mid and min and/or max keys. Default: Blues.
         undercolour : str or array-like, optional
-            colour for values under cmin.
+            colour for values under cmin. Default: None.
         overcolour : str or array-like, optional
-            colour for values over cmax.
+            colour for values over cmax. Default: None.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -100,7 +100,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             arguments passed to this function.
             Defaults:
 
-                rasterized: False
+                rasterized: True
 
     Returns
     -------
@@ -111,7 +111,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     # defaults
 
-    defkwargs = {'rasterized': False}
+    defkwargs = {'rasterized': True}
 
     if conf is None or 'heatmap_kwargs' not in conf or \
        conf['heatmap_kwargs'] is None:
@@ -130,8 +130,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     if ymax is None: ymax = np.nanmax(y)
     xi = np.where((x >= xmin) & (x <= xmax))[0]
     yi = np.where((y >= ymin) & (y <= ymax))[0]
-    x = x[xi]
     y = y[yi]
+    x = x[xi]
 
     try:
         c = c[np.ix_(xi, yi)]
@@ -281,7 +281,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             arguments passed to this function.
             Defaults:
 
-                rasterized: False
+                rasterized: True
 
     Returns
     -------
@@ -289,12 +289,10 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         colourbar
             colourbar.
     """
-
-    import h5py
-
+    
     # defaults
 
-    defkwargs = {'rasterized': False}
+    defkwargs = {'rasterized': True}
 
     if conf is None or 'ztmap_kwargs' not in conf or \
        conf['ztmap_kwargs'] is None:
@@ -302,47 +300,27 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
     else:
         kwargs = {**defkwargs, **conf['ztmap_kwargs'], **kwargs}
 
+    ltc = 'lattice_thermal_conductivity'
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+
     # data formatting
 
     if 'zt' in data:
-        if np.ndim(data['zt']) == 4:
-            data = tp.data.resolve(data, 'zt', direction)
-        else:
-            data = dict(data)
+        data = tp.data.resolve.resolve(data, 'zt', direction)
     else:
-        if np.ndim(data['conductivity']) == 4:
-            data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
-                                           'electronic_thermal_conductivity'],
-                                           direction=direction)
-        else:
-            data = dict(data)
+        data = tp.data.resolve.resolve(data, equants, direction=direction)
 
         if 'meta' not in data:
             data['meta'] = {}
 
         if kdata is not None:
-            kdata = tp.data.resolve.resolve(kdata,
-                                            'lattice_thermal_conductivity',
-                                            direction=direction)
+            kdata = tp.data.resolve.resolve(kdata, ltc, direction=direction)
+            data, kdata = tp.calculate.interpolate(data, kdata, 'temperature',
+                                                   equants, ltc, kind='cubic')
+            data[ltc] = kdata[ltc]
 
-            # scale to smallest data set (don't extrapolate)
-            # interpolation takes care of it if data is smaller than kdata
-            tindex = np.where((data['temperature'] <= kdata['temperature'][-1])
-                            & (data['temperature'] >= kdata['temperature'][0]))
-            data['temperature'] = np.array(data['temperature'])[tindex[0]]
-            data['conductivity'] = np.array(data['conductivity'])[tindex[0]]
-            data['electronic_thermal_conductivity'] = \
-                   np.array(data['electronic_thermal_conductivity'])[tindex[0]]
-            data['seebeck'] = np.array(data['seebeck'])[tindex[0]]
-
-            kinterp = interp1d(kdata['temperature'],
-                               kdata['lattice_thermal_conductivity'],
-                               kind='cubic')
-            data['lattice_thermal_conductivity'] = kinterp(data['temperature'])
-            data['meta']['kappa_source'] = kdata['meta']['kappa_source']
         else: # if no kappa_lat, set to 1
-            data['lattice_thermal_conductivity'] = np.ones(
-                                                   len(data['temperature']))
+            data[ltc] = np.ones(len(data['temperature']))
             data['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
 
         data = tp.calculate.zt_fromdict(data, use_tprc=True)
@@ -350,10 +328,10 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       data['zt'], xinterp=xinterp,
-                       yinterp=yinterp, kind=kind, yscale='log', xmin=xmin,
-                       xmax=xmax, ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax,
-                       colour=colour, **kwargs)
+                       data['zt'], xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
+                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
+                       **kwargs)
 
     # axes formatting
 
@@ -420,7 +398,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
             arguments passed to this function.
             Defaults:
 
-                rasterized: False
+                rasterized: True
 
     Returns
     -------
@@ -431,7 +409,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
 
     # defaults
 
-    defkwargs = {'rasterized': False}
+    defkwargs = {'rasterized': True}
 
     if conf is None or 'kappa_target_kwargs' not in conf or \
        conf['kappa_target_kwargs'] is None:
@@ -439,11 +417,11 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     else:
         kwargs = {**defkwargs, **conf['kappa_target_kwargs'], **kwargs}
 
+    ltc = 'lattice_thermal_conductivity'
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
     # data formatting
 
-    data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
-                                   'electronic_thermal_conductivity'],
-                                   direction=direction)
+    data = tp.data.resolve.resolve(data, equants, direction=direction)
     data['zt'] = zt
 
     data = tp.calculate.kl_fromdict(data, use_tprc=False)
@@ -451,8 +429,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       data['lattice_thermal_conductivity'],
-                       xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       data[ltc], xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
                        undercolour=negativecolour, **kwargs)
@@ -462,6 +439,6 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     labels = tp.settings.labels()
     ax.set_xlabel(labels['temperature'])
     ax.set_ylabel(labels['doping'])
-    cbar.set_label(labels['lattice_thermal_conductivity'])
+    cbar.set_label(labels[ltc])
 
     return cbar

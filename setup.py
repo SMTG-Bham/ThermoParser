@@ -13,6 +13,7 @@ import os
 import setuptools
 from setuptools.command.install import install
 from shutil import copy
+import unittest
 
 with open('README.rst', 'r') as f:
     long_description=f.read()

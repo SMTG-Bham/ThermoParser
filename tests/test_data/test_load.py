@@ -96,8 +96,8 @@ class AmsetTest(unittest.TestCase):
         mock_json.assert_called_once()
         for q2 in [q, 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data2)
-        self.assertEqual(data2[q]['test'][1,0,0,0], 1)
-        self.assertEqual(list(data2['scattering_labels']), ['test'])
+        self.assertEqual(np.array(data2[q])[0,1,0,0,0], 1)
+        self.assertEqual(list(data2['stype']), ['test'])
 
 class AmsetMeshTest(unittest.TestCase):
 
@@ -106,33 +106,37 @@ class AmsetMeshTest(unittest.TestCase):
 
     def test_scattering(self):
         with h5py.File('test.hdf5', 'w') as f:
-            f['scattering_rates_up']   = np.zeros((1, 2, 2, 3, 1))
-            f['scattering_rates_down'] = np.zeros((1, 2, 2, 3, 1))
-            f['scattering_labels']     = ['test'.encode('ascii', 'ignore')]
-            f['temperatures']          = [0, 1]
-            f['doping']                = [1, 2]
-            f['scattering_rates_up'][0,0,1,0,0] = 1
+            f['scattering_rates_up']              = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_rates_down']            = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_labels']                = ['test'.encode('ascii', 'ignore')]
+            f['temperatures']                     = [0, 1]
+            f['doping']                           = [1, 2]
+            f['ir_kpoints']                       = [[1, 2, 3]]
+            f['scattering_rates_up'][0,0,1,0,0]   = 1
             f['scattering_rates_down'][0,0,1,0,0] = 3
 
         data = load.amset_mesh('test.hdf5', 'scattering_rates', spin='up')
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data)
-        self.assertEqual(data['scattering_rates']['test'][1,0,0,0], 1)
+        self.assertEqual(data['scattering_rates'][0,1,0,0,0], 1)
+        self.assertEqual(data['stype'], ['test'])
 
     def test_spin(self):
         with h5py.File('test.hdf5', 'w') as f:
-            f['scattering_rates_up']   = np.zeros((1, 2, 2, 3, 1))
-            f['scattering_rates_down'] = np.zeros((1, 2, 2, 3, 1))
-            f['scattering_labels']     = ['test'.encode('ascii', 'ignore')]
-            f['temperatures']          = [0, 1]
-            f['doping']                = [1, 2]
-            f['scattering_rates_up'][0,0,1,0,0] = 1
+            f['scattering_rates_up']              = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_rates_down']            = np.zeros((1, 2, 2, 3, 1))
+            f['scattering_labels']                = ['test'.encode('ascii', 'ignore')]
+            f['temperatures']                     = [0, 1]
+            f['doping']                           = [1, 2]
+            f['ir_kpoints']                       = [[1, 2, 3]]
+            f['scattering_rates_up'][0,0,1,0,0]   = 1
             f['scattering_rates_down'][0,0,1,0,0] = 3
 
         data = load.amset_mesh('test.hdf5', 'scattering_rates', spin='avg')
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data)
-        self.assertEqual(data['scattering_rates']['test'][1,0,0,0], 2)
+        self.assertEqual(data['scattering_rates'][0,1,0,0,0], 2)
+        self.assertEqual(data['stype'], ['test'])
 
 class BoltzTraPTest(unittest.TestCase):
 
@@ -155,7 +159,7 @@ class BoltzTraPTest(unittest.TestCase):
         q = 'average_eff_mass'
         with h5py.File('test.hdf5', 'w') as f:
             g = f.create_group(q)
-            g['n']        = np.zeros((2, 2, 3, 3))
+            g['n']           = np.zeros((2, 2, 3, 3))
             f['temperature'] = [0, 1]
             f['doping']      = [1, 2]
 
@@ -274,7 +278,7 @@ class Phono3pyTest(unittest.TestCase):
     def test_kappa(self):
         q = 'kappa'
         with h5py.File('test.hdf5', 'w') as f:
-            f[q]             = np.zeros((2, 3))
+            f[q]             = np.zeros((2, 6))
             f['temperature'] = np.array([0, 1])
             f['qpoint']      = np.array([0, 1])
 
@@ -285,8 +289,8 @@ class Phono3pyTest(unittest.TestCase):
     def test_mode_kappa(self):
         q = 'mode_kappa'
         with h5py.File('test.hdf5', 'w') as f:
-            f[q]             = np.ones((2, 2, 3, 3))
-            f['kappa']       = np.full((2, 3), 6)
+            f[q]             = np.ones((2, 2, 3, 6))
+            f['kappa']       = np.full((2, 6), 6)
             f['weight']      = np.ones(2)
             f['mesh']        = np.array([2, 1, 1])
             f['temperature'] = np.array([0, 1])
@@ -300,8 +304,8 @@ class Phono3pyTest(unittest.TestCase):
         # in old phono3py versions, mode_kappa is multiplied by the mesh
         q = 'mode_kappa'
         with h5py.File('test.hdf5', 'w') as f:
-            f[q]             = np.ones((2, 2, 3, 3))
-            f['kappa']       = np.full((2, 3), 3)
+            f[q]             = np.ones((2, 2, 3, 6))
+            f['kappa']       = np.full((2, 6), 3)
             f['weight']      = np.ones(2)
             f['mesh']        = np.array([2, 1, 1])
             f['temperature'] = np.array([0, 1])
