@@ -31,10 +31,10 @@ Functions
             ztmap
 """
 
+from tabnanny import verbose
 import click
 import h5py
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 import numpy as np
 import tp
 import warnings
@@ -690,9 +690,11 @@ def plot():
               help='Output filename, sans extension.',
               default='tp-avg-rates',
               show_default=True)
+@verbose_option
 
 def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
-              marker, xmin, xmax, ymin, ymax, style, large, extension, output):
+              marker, xmin, xmax, ymin, ymax, style, large, extension, output,
+              verbose):
     """Plots averaged scattering rates.
 
     Requires AMSET mesh files. Plots scattering rates averaged over
@@ -715,15 +717,16 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
     dax = ax[1] if x == 'both' else ax
 
     if len(filenames) == 1:
-        data = [tp.data.load.amset_mesh(filenames, 'weighted_rates')]
+        data = [tp.data.load.amset_mesh(filenames[0], 'weighted_rates')]
         tindex = 0
         dindex = 0
     elif len(filenames) == 2:
         data = [tp.data.load.amset_mesh(f, 'weighted_rates') for f in filenames]
         tindex = 0 if len(data[0]['temperature']) > len(data[1]['temperature']) else 1
         dindex = 0 if len(data[0]['doping']) > len(data[1]['doping']) else 1
-        print('Using {} for the temperature data.'.format(filenames[tindex]))
-        print('Using {} for the doping data.'.format(filenames[dindex]))
+        if verbose:
+            print('Using {} for the temperature data.'.format(filenames[tindex]))
+            print('Using {} for the doping data.'.format(filenames[dindex]))
     else:
         raise Exception('Please specify at most two filenames')
 
@@ -760,8 +763,9 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
     if x == 'temperature' or x == 'both':
         tdata = tp.data.resolve.resolve(data[tindex], 'weighted_rates',
                                         doping=doping)
-        print('Using {} {}.'.format(tdata['meta']['doping'],
-                                    tdata['meta']['units']['doping']))
+        if verbose:
+            print('Using {} {}.'.format(tdata['meta']['doping'],
+                                        tdata['meta']['units']['doping']))
         for i, rate in enumerate(data[tindex]['stype']):
             tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
                      color=colours[i], linestyle=linestyle[i],
@@ -783,8 +787,9 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
     if x == 'doping' or x == 'both':
         ddata = tp.data.resolve.resolve(data[dindex], 'weighted_rates',
                                         temperature=temperature)
-        print('Using {} {}.'.format(ddata['meta']['temperature'],
-                                    ddata['meta']['units']['temperature']))
+        if verbose:
+            print('Using {} {}.'.format(ddata['meta']['temperature'],
+                                        ddata['meta']['units']['temperature']))
         for i, rate in enumerate(data[dindex]['stype']):
             dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
                      color=colours[i], linestyle=linestyle[i],
@@ -826,7 +831,7 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
             ax.set_ylim(top=ymax)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -867,10 +872,11 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
               help='Output filename, sans extension.',
               default='tp-cumkappa',
               show_default=True)
+@verbose_option
 
 def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
              fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin, ymax,
-             label, legend_title, style, large, extension, output):
+             label, legend_title, style, large, extension, output, verbose):
     """Plot cumulative kappa against frequency or mean free path.
 
     Reads Phono3py hdf5. Properties such as colour and linestyle loop,
@@ -897,14 +903,16 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
                                   direction=direction, colour=colour,
                                   fill=fill, fillcolour=fillalpha, line=line,
                                   kmin=minkappa, scale=percent, label=label,
-                                  linestyle=linestyle, marker=marker)
+                                  linestyle=linestyle, marker=marker,
+                                  verbose=verbose)
     else:
         data = [tp.data.load.phono3py(f, ['mode_kappa', 'frequency']) for f in filenames]
         tp.plot.frequency.add_cum_kappa(ax, data, temperature=temperature,
                                         direction=direction, colour=colour,
                                         fill=fill, fillcolour=fillalpha,
                                         line=line, scale=percent, label=label,
-                                        marker=marker, linestyle=linestyle)
+                                        marker=marker, linestyle=linestyle,
+                                        verbose=verbose)
 
     if large:
         if mfp:
@@ -934,7 +942,7 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
         ax.set_ylim(top=ymax)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1003,7 +1011,7 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
         ax.set_ylim(top=ymax)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1264,7 +1272,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         add_legend(title="${}$".format(legend_title))
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1335,7 +1343,7 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
         cbar.set_label(tp.settings.large_labels()['lattice_thermal_conductivity'])
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1451,7 +1459,7 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
         add_legend(title=legend_title)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1507,7 +1515,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
     either there must be the same number of each, or only one file of
     one type, in which case it is used for all instances of the other.
 
-    Changingithe y-axis limits is also not currently supported (we
+    Changing the y-axis limits is also not currently supported (we
     recommend changing the temperatures plotted instead).
     """
 
@@ -1809,7 +1817,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
     #    ax.set_ylim(top=ymax)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1884,11 +1892,12 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
               help='Output filename, sans extension.',
               default='tp-waterfall',
               show_default=True)
+@verbose_option
 
 def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
               linewidth, edgecolour, marker, markersize, xscale, yscale,
               cscale, xmin, xmax, ymin, ymax, cmin, cmax, style, large,
-              extension, output):
+              extension, output, verbose):
     """Plot 3rd-order phonon properties per band per q-point."""
 
     axes = tp.axes.one_large if large else tp.axes.one
@@ -1919,20 +1928,22 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
                                              colour=colour, alpha=alpha,
                                              linewidth=linewidth,
                                              edgecolors=edgecolour,
-                                             marker=marker, s=markersize)
+                                             marker=marker, s=markersize,
+                                             verbose=verbose)
     elif projected is not None:
         cbar = tp.plot.frequency.add_projected_waterfall(ax, data, y,
                   projected, xquantity=x, temperature=temperature,
                   direction=direction, colour=colour, alpha=alpha,
                   linewidth=linewidth, edgecolors=edgecolour, marker=marker,
-                  s=markersize, cmin=cmin, cmax=cmax, cscale=cscale)
+                  s=markersize, cmin=cmin, cmax=cmax, cscale=cscale,
+                  verbose=verbose)
     else:
         tp.plot.frequency.add_waterfall(ax, data, y, xquantity=x,
                                         temperature=temperature,
                                         direction=direction, colour=colour,
                                         alpha=alpha, linewidth=linewidth,
                                         edgecolors=edgecolour, marker=marker,
-                                        s=markersize)
+                                        s=markersize, verbose=verbose)
 
     tp.plot.utilities.set_locators(ax, xscale, yscale)
 
@@ -1959,7 +1970,7 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
         ax.set_ylim(top=ymax)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -1993,9 +2004,10 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
               help='Output filename, sans extension.',
               default='tp-wideband',
               show_default=True)
+@verbose_option
 
 def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
-             large, extension, output):
+             large, extension, output, verbose):
     """Plots a broadened phonon dispersion."""
 
     axes = tp.axes.one_large if large else tp.axes.one
@@ -2011,10 +2023,10 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
 
     tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=temperature,
                                  poscar=poscar, smoothing=smoothing,
-                                 colour=colour)
+                                 colour=colour, verbose=verbose)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 
@@ -2079,7 +2091,7 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
                               ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
 
     for ext in extension:
-        plt.savefig('{}.{}'.format(output, ext))
+        fig.savefig('{}.{}'.format(output, ext))
 
     return
 

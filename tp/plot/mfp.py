@@ -35,7 +35,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   label=None, xmarkers=None, ymarkers=None, add_xticks=False,
                   add_yticks=False, main=True, scale=False, colour=None,
                   fill=False, fillcolour=0.2, line=True, linestyle='-',
-                  marker=None, markerkwargs={}, **kwargs):
+                  marker=None, markerkwargs={}, verbose=False, **kwargs):
     """Cumulates and plots kappa against mean free path.
 
     Can plot data from multiple data dictionaries and directions.
@@ -106,6 +106,9 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         marker : str or list, optional
             (list of) markers. Default: None.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         markerkwargs : dict, optional
             keyword arguments for the markers, passed to
             matplotlib.pyplot.plot.
@@ -116,7 +119,6 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
                 color:      black
                 rasterized: False
-
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
@@ -259,6 +261,10 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                 yticks.append(ytick)
 
             i += 1
+
+        if verbose:
+            print('Using {} {}.'.format(dat['meta']['temperature'],
+                                        dat['meta']['units']['temperature']))
 
     # axes formatting
 

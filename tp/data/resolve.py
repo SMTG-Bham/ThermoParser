@@ -52,6 +52,7 @@ def resolve(data, quantities, **kwargs):
 
     data = deepcopy(data) # sever the link to enable the original data to be reused
     if 'meta' not in data or 'dimensions' not in data['meta']:
+        print(data.keys())
         raise Exception('data must have a meta subdictionary with a '
                         'dimensions subdictionary.')
     if isinstance(quantities, str):

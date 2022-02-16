@@ -19,10 +19,12 @@ Functions
     fill_options
     plot_io_options
     temperature_option
+    verbose_option
     xy_limit_options
     c_limit_options
 """
 
+from email.policy import default
 import click
 
 def direction_option(f):
@@ -283,6 +285,16 @@ def temperature_option(f):
                      type=click.FloatRange(0),
                      default=300.,
                      show_default=True)(f)
+
+    return f
+
+def verbose_option(f):
+    """Option for verbose output."""
+
+    f = click.option('--verbose/--notverbose',
+                     help='Output plot conditions.  [default: verbose]',
+                     default=True,
+                     show_default=False)(f)
 
     return f
 

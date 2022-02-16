@@ -359,7 +359,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
                        poscar='POSCAR', main=True, log=False,
                        interpolate=10000, smoothing=5, colour=['#44ffff',
                        '#ff8044', '#ff4444', '#00000010'], linestyle='-',
-                       marker=None, workers=32, xmarkkwargs={}, **kwargs):
+                       marker=None, workers=32, xmarkkwargs={}, verbose=False,
+                       **kwargs):
     """Plots a phono3py quantity on a high-symmetry path.
 
     Labels, colours and linestyles can be given one for the whole
@@ -437,6 +438,9 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -470,7 +474,6 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from scipy.interpolate import interp1d
 
     # defaults
@@ -495,7 +498,11 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     if quantity in tnames: quantity = tnames[quantity]
     if quantity == 'kappa': quantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, quantity, temperature, direction)
+    data = tp.data.resolve.resolve(data, quantity, temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     y = data[quantity]
     if bandmin is None:
         bandmin = 0
@@ -583,7 +590,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
                              poscar='POSCAR', main=True, interpolate=500,
                              colour='viridis_r', cmin=None, cmax=None,
                              cscale=None, unoccupied='grey', workers=32,
-                             xmarkkwargs={}, **kwargs):
+                             xmarkkwargs={}, verbose=False, **kwargs):
     """Plots a phonon dispersion with projected colour.
 
     Plots a phonon dispersion, and projects a quantity onto the colour
@@ -657,6 +664,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -691,8 +701,6 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
-    from copy import copy
     from scipy.interpolate import interp1d
 
     # defaults
@@ -716,7 +724,11 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     quantity = tnames[quantity] if quantity in tnames else quantity
     if quantity == 'kappa': quantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, quantity, temperature, direction)
+    data = tp.data.resolve.resolve(data, quantity, temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     c = data[quantity]
     if bandmin is None:
         bandmin = 0
@@ -799,7 +811,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  log=False, interpolate=10000, smoothing=10,
                                  colour='viridis_r', cmin=None, cmax=None,
                                  cscale=None, unoccupied='grey', workers=32,
-                                 xmarkkwargs={}, **kwargs):
+                                 xmarkkwargs={}, verbose=False, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path and projection.
 
     Just because you can, doesn't mean you should. A maxim I may fail to
@@ -877,6 +889,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -911,8 +926,6 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
-    from copy import copy
     from scipy.interpolate import interp1d
 
     # defaults
@@ -941,7 +954,11 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     if projected == 'kappa': projected = 'mode_kappa'
     qs = quantity if quantity == projected else [quantity, projected]
 
-    data = tp.data.resolve.resolve(data, qs, temperature, direction)
+    data = tp.data.resolve.resolve(data, qs, temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     y = data[quantity]
     c = data[projected]
     if bandmin is None:
@@ -1022,7 +1039,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
 def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
                  smoothing=5, colour='viridis', workers=32, xmarkkwargs={},
-                 **kwargs):
+                 verbose=False, **kwargs):
     """Plots a phonon dispersion with broadened bands.
 
     Requires a POSCAR.
@@ -1074,6 +1091,9 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -1108,7 +1128,6 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from scipy.interpolate import interp1d
     from tp.calculate import lorentzian
 
@@ -1132,7 +1151,10 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # Phono3py data formatting
 
-    kdata = tp.data.resolve.resolve(kdata, 'gamma', temperature)
+    kdata = tp.data.resolve.resolve(kdata, 'gamma', temperature=temperature)
+    if verbose:
+        print('Using {} {}.'.format(kdata['meta']['temperature'],
+                                    kdata['meta']['units']['temperature']))
     c = np.array(kdata['gamma'])
     qk = kdata['qpoint']
 

@@ -32,7 +32,6 @@ import tp
 import warnings
 import yaml
 from scipy.stats import gaussian_kde
-from tp.data import resolve
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
@@ -319,7 +318,7 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
 def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
                   main=True, invert=False, scale=False, colour=None,
                   fill=False, fillcolour=0.2, line=True, linestyle='-',
-                  marker=None, **kwargs):
+                  marker=None, verbose=False, **kwargs):
     """Cumulates and plots kappa against frequency.
 
     Can plot data from multiple data dictionaries and directions.
@@ -379,6 +378,9 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
         marker : str or list, optional
             (list of) markers. Default: None.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
@@ -445,7 +447,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
     for dat in data:
         for d in direction:
             data2 = tp.data.resolve.resolve(dat, 'mode_kappa',
-                                          temperature=temperature, direction=d)
+                                            temperature=temperature,
+                                            direction=d)
             k = np.ravel(data2['mode_kappa'])
             f = np.ravel(data2['frequency'])
 
@@ -516,6 +519,10 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
 
             i += 1
 
+        if verbose:
+            print('Using {} {}.'.format(dat['meta']['temperature'],
+                                        dat['meta']['units']['temperature']))
+
     # axes formatting
 
     if main:
@@ -545,7 +552,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
 
 def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                   direction='avg', main=True, invert=False, colour='viridis',
-                  **kwargs):
+                  verbose=False, **kwargs):
     """Adds a waterfall plot of quantities against frequency.
 
     Has an option to change the x-quantity.
@@ -584,6 +591,9 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             colourmap or a dictionary with cmin and cmax keys or a
             single colour. Default: viridis.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
@@ -636,7 +646,11 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity],
-                                   temperature, direction)
+                                   temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
 
@@ -700,7 +714,8 @@ def add_projected_waterfall(ax, data, quantity, projected,
                             xquantity='frequency', temperature=300,
                             direction='avg', main=True, invert=False,
                             colour='viridis', cmin=None, cmax=None,
-                            cscale=None, unoccupied='grey', **kwargs):
+                            cscale=None, unoccupied='grey', verbose=False,
+                            **kwargs):
     """Adds a waterfall plot against frequency with a colour axis.
 
     Has an option to change the x-quantity.
@@ -752,6 +767,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
             coloured in this colour. If set to None, or cmin is set,
             this feature is turned off. Default: grey.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
@@ -809,7 +827,11 @@ def add_projected_waterfall(ax, data, quantity, projected,
     projected = tnames[projected] if projected in tnames else projected
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity, projected],
-                                   temperature, direction)
+                                   temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
     c = np.abs(np.ravel(data[projected]))
@@ -845,7 +867,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
 def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
                 direction='avg', main=True, invert=False, colour='Blues',
-                **kwargs):
+                verbose=False, **kwargs):
     """Adds a density plot of quantities against frequency.
 
     Has an option to change the x-quantity.
@@ -883,6 +905,9 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             highlight, min, max colours in that order, or dictionary
             with cmid and cmin and/or cmax keys. Default: Blues.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
@@ -927,7 +952,11 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity],
-                                   temperature, direction)
+                                   temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
     xy = np.vstack([x,y])
@@ -957,7 +986,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     return
 
 def format_waterfall(ax, data, yquantity, xquantity='frequency',
-                     temperature=None, direction=None):
+                     temperature=300, direction='avg'):
     """Formats axes for waterfall plots.
 
     Arguments
@@ -965,7 +994,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
 
         ax : axes
             axes to format.
-        data : array-like
+        data : dict
             data.
         yquantity : str
             y quantity name.
@@ -985,12 +1014,12 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
             formats ax directly.
     """
 
-    data = tp.data.resolve.resolve(data, [xquantity, yquantity], temperature,
-                                   direction)
+    data = tp.data.resolve.resolve(data, [xquantity, yquantity],
+                                   temperature=temperature,
+                                   direction=direction)
     data2 = {'x': np.ravel(data[xquantity]), 'y': np.ravel(data[yquantity])}
 
     limit = {'x': ax.set_xlim,   'y': ax.set_ylim}
-    scale = {'x': ax.set_xscale, 'y': ax.set_yscale}
     loc = {}
     lim = {}
 
