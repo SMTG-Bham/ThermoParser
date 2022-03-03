@@ -379,7 +379,7 @@ def boltztrap_dimensions():
     return dims
 
 def labels():
-    """Get the default labels for use in tp."""
+    """Get the default labels for small axes in tp."""
 
     labels = {'short':  short_labels,
               'medium': medium_labels,
@@ -408,7 +408,7 @@ def inverted_labels():
     return labels[length]()
 
 def large_labels():
-    """Get the default labels for large axes (command-line only)."""
+    """Get the default labels for large axes."""
 
     labels = {'short':  short_labels,
               'medium': medium_labels,

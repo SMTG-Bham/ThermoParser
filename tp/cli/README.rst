@@ -49,6 +49,8 @@ Based around the ``tp.data.resolve.resolve`` function.
 
 Plotting tools.
 
+- ``tp plot avg-rates``: amset scattering rates against doping
+   concentration and/ or temperature.
 - ``tp plot cumkappa``: cumulative lattice thermal conductivity against
   frequency or mean free path. Python: ``tp.plot.frequency.add_cumkappa``
   or ``tp.plot.mfp.add_cumkappa``.
@@ -104,4 +106,3 @@ Saves data to files.
   thermal conductivity at each temperature and the associated carrier
   concentration to a human-readable yaml, and prints the max ZT across
   all temperatures to the terminal. Python: ``tp.data.save.zt``.
-

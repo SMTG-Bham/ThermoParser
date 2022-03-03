@@ -197,6 +197,11 @@ def legend_options(f):
                      default=None)(f)
     f = click.option('--legend_title',
                      help='Legend title. Accepts maths notation.')(f)
+    f = click.option('--location',
+                     help='Legend location. Accepts strings such as '
+                          'above and below, as well as 1-indexed '
+                          'ordinals corresponding to inside those axes',
+                     type=str)(f)
 
     return f
 
@@ -214,6 +219,11 @@ def auto_legend_options(f):
                      help='Show legend.  [default: legend]',
                      default=True,
                      show_default=False)(f)
+    f = click.option('--location',
+                     help='Legend location. Accepts strings such as '
+                          'above and below, as well as 1-indexed '
+                          'ordinals corresponding to inside those axes',
+                     type=str)(f)
 
     return f
 

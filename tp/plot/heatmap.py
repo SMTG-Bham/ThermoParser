@@ -216,7 +216,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     # plotting
     heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
-    cbar = plt.colorbar(heat, extend=extend)
+    fig = ax.get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos']:
+        # place colourbar outside dos
+        cbar = plt.colorbar(heat, extend=extend)
+    else:
+        cbar = plt.colorbar(heat, ax=ax, extend=extend)
 
     # axes formatting
     tp.plot.utilities.set_locators(ax, x=xscale, y=yscale)

@@ -31,7 +31,6 @@ Functions
             ztmap
 """
 
-from tabnanny import verbose
 import click
 import h5py
 import matplotlib as mpl
@@ -541,7 +540,7 @@ def run():
 
 def boltztrap(tmin, tmax, tstep, dmin, dmax, ndope, relaxation_time, lpfac,
               kmode, run, analyse, kpoints, vasprun, output):
-    """Run BoltzTraP and sends data to hdf5."""
+    """Runs BoltzTraP and sends data to hdf5."""
 
     doping = np.geomspace(dmin, dmax, ndope)
 
@@ -708,11 +707,11 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
     """
 
     if x == 'both':
-        axes = tp.axes.two_large if large else tp.axes.two
-        fig, ax, add_legend = axes.h_medium_legend(style)
+        axes = tp.axes.large if large else tp.axes.small
+        fig, ax, add_legend = axes.two_h(style)
     else:
-        axes = tp.axes.one_large if large else tp.axes.one
-        fig, ax, add_legend = axes.medium_legend(style)
+        axes = tp.axes.large if large else tp.axes.small
+        fig, ax, add_legend = axes.one(style)
     tax = ax[0] if x == 'both' else ax
     dax = ax[1] if x == 'both' else ax
 
@@ -876,8 +875,9 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
 
 def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
              fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin, ymax,
-             label, legend_title, style, large, extension, output, verbose):
-    """Plot cumulative kappa against frequency or mean free path.
+             label, legend_title, location, style, large, extension, output,
+             verbose):
+    """Plots cumulative kappa against frequency or mean free path.
 
     Reads Phono3py hdf5. Properties such as colour and linestyle loop,
     so if you have two data files and two directions, only two colours
@@ -891,11 +891,8 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
     label = list(label) if len(label) > 0 else None
     marker = list(marker) if len(marker) > 0 else None
 
-    axes = tp.axes.one_large if large else tp.axes.one
-    if label is None:
-        fig, ax = axes.plain(style)
-    else:
-        fig, ax, add_legend = axes.medium_legend(style)
+    axes = tp.axes.large if large else tp.axes.small
+    fig, ax, add_legend = axes.one(style)
 
     if mfp:
         data = [tp.data.load.phono3py(f, ['mode_kappa', 'mean_free_path']) for f in filenames]
@@ -923,7 +920,10 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
             ax.set_ylabel(tp.settings.large_labels()['cumulative_kappa'])
 
     if label is not None:
-        add_legend(title="${}$".format(legend_title))
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     if xmin is not None:
         if xmax is not None:
@@ -972,11 +972,11 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
 
 def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
         colour, fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin,
-        ymax, legend_title, style, large, extension, output):
-    """Plot a phonon density of states."""
+        ymax, legend_title, location, style, large, extension, output):
+    """Plots a phonon density of states."""
 
-    axes = tp.axes.one_large if large else tp.axes.one
-    fig, ax, add_legend = axes.medium_legend(style)
+    axes = tp.axes.large if large else tp.axes.small
+    fig, ax, add_legend = axes.one(style)
 
     linestyle = list(linestyle)
     colour = list(colour)
@@ -990,9 +990,10 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
                               totalcolour=total_colour, fill=fill,
                               fillalpha=fillalpha, line=line,
                               linestyle=linestyle, marker=marker)
-    if legend_title is not None:
-        legend_title = "${}$".format(legend_title)
-    add_legend(title=legend_title)
+    if location is None:
+        add_legend(title=legend_title)
+    else:
+        add_legend(title=legend_title, location=location)
 
     if xmin is not None:
         if xmax is not None:
@@ -1061,7 +1062,7 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
 
 def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
           colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-          legend_title, legend, style, large, extension, output):
+          legend_title, legend, location, style, large, extension, output):
     """Plots line graphs of thermal conductivity against temperature.
 
     Currently not all combinations of inputs work. If multiple --direction
@@ -1083,11 +1084,8 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
     etc = 'electronic_thermal_conductivity'
     ltc = 'lattice_thermal_conductivity'
 
-    axes = tp.axes.one_large if large else tp.axes.one
-    if legend:
-        fig, ax, add_legend = axes.medium_legend(style)
-    else:
-        fig, ax = axes.plain(style)
+    axes = tp.axes.large if large else tp.axes.small
+    fig, ax, add_legend = axes.one(style)
 
     if component in ['electronic', 'total']:
         if len(efile) != 0:
@@ -1269,7 +1267,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
     ax.set_ylabel(axlabels[q])
     tp.plot.utilities.set_locators(ax, 'linear', 'linear')
     if legend:
-        add_legend(title="${}$".format(legend_title))
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     for ext in extension:
         fig.savefig('{}.{}'.format(output, ext))
@@ -1322,13 +1323,13 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
     else:
         colour = list(colour)
 
-    axes = tp.axes.one_large if large else tp.axes.one
+    axes = tp.axes.large if large else tp.axes.small
     try:
         edata = tp.data.load.amset(filename)
     except UnicodeDecodeError:
         edata = tp.data.load.boltztrap(filename)
 
-    fig, ax = axes.colourbar(style)
+    fig, ax, _ = axes.one_colourbar(style)
 
     cbar = tp.plot.heatmap.add_kappa_target(ax, edata, zt=zt,
                                             direction=direction,
@@ -1395,10 +1396,10 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
               show_default=True)
 
 def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
-                     xmarkcolour, xmarklinestyle, dos, poscar, atoms, projected,
-                     total, total_label, total_colour, doscolour, fill,
-                     fillalpha, line, label, legend_title, style, large,
-                     extension, output):
+                     xmarkcolour, xmarklinestyle, dos, poscar, atoms,
+                     projected, total, total_label, total_colour, doscolour,
+                     fill, fillalpha, line, label, legend_title, location,
+                     style, large, extension, output):
     """Plots and overlays phonon dispersions.
 
     Can have optional DoS on the side.
@@ -1427,14 +1428,11 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 
     data = [tp.data.load.phonopy_dispersion(f) for f in filenames]
 
-    axes = tp.axes.one_large if large else tp.axes.one
+    axes = tp.axes.large if large else tp.axes.small
     if dos is None:
-        if label != [None]:
-            fig, ax, add_legend = axes.medium_legend(style)
-        else:
-            fig, ax = axes.plain(style)
+        fig, ax, add_legend = axes.one(style)
     else:
-        fig, ax, add_legend = axes.dos_small_legend(style)
+        fig, ax, add_legend = axes.one_dos(style)
         dosax = ax[1]
         ax = ax[0]
 
@@ -1454,9 +1452,10 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
         tp.plot.utilities.set_locators(dosax, dos=True)
 
     if label != [None] or dos is not None:
-        if legend_title is not None:
-            legend_title = "${}$".format(legend_title)
-        add_legend(title=legend_title)
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     for ext in extension:
         fig.savefig('{}.{}'.format(output, ext))
@@ -1506,7 +1505,7 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 
 def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
               colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-              legend_title, legend, style, large, extension, output):
+              legend_title, legend, location, style, large, extension, output):
     """Plots line graphs of transport properties against temperature.
 
     Currently not all combinations of inputs work. The order of
@@ -1533,29 +1532,10 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
     etc = 'electronic_thermal_conductivity'
     ltc = 'lattice_thermal_conductivity'
 
-    axmod = {'large': {'legend':   [tp.axes.one_large.medium_legend,
-                                    tp.axes.two_large.h_medium_legend,
-                                    tp.axes.three_large.h_top_legend,
-                                    tp.axes.four_large.square_legend],
-                       'nolegend': [tp.axes.one_large.plain,
-                                    tp.axes.two_large.h,
-                                    tp.axes.three_large.h,
-                                    tp.axes.four_large.square]},
-             'small': {'legend':   [tp.axes.one.medium_legend,
-                                    tp.axes.two.h_medium_legend,
-                                    tp.axes.three.h_top_legend,
-                                    tp.axes.four.square_legend],
-                       'nolegend': [tp.axes.one.plain,
-                                    tp.axes.two.h,
-                                    tp.axes.three.h,
-                                    tp.axes.four.square]}}
-    size = 'large' if large else 'small'
-    leg = 'legend' if legend else 'nolegend'
+    axes = tp.axes.large if large else tp.axes.small
+    axf = [axes.one, axes.two_h, axes.three_h, axes.four_square]
     axlabels = tp.settings.large_labels() if large else tp.settings.labels()
-    if legend:
-        fig, ax, add_legend =  axmod[size][leg][len(quantity) - 1](style)
-    else:
-        fig, ax =  axmod[size][leg][len(quantity) - 1](style)
+    fig, ax, add_legend =  axf[len(quantity) - 1](style)
     if len(quantity) == 4:
         ax = [ax[0][0], ax[0][1], ax[1][0], ax[1][1]]
 
@@ -1797,7 +1777,10 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
         else:
             tp.plot.utilities.set_locators(ax[i], 'linear', 'linear')
     if legend:
-        add_legend(title="{}".format(legend_title))
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     for a in ax:
         if xmin is not None:
@@ -1898,9 +1881,9 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
               linewidth, edgecolour, marker, markersize, xscale, yscale,
               cscale, xmin, xmax, ymin, ymax, cmin, cmax, style, large,
               extension, output, verbose):
-    """Plot 3rd-order phonon properties per band per q-point."""
+    """Plots 3rd-order phonon properties per band per q-point."""
 
-    axes = tp.axes.one_large if large else tp.axes.one
+    axes = tp.axes.large if large else tp.axes.small
     if len(colour) == 1:
         colour = colour[0]
     else:
@@ -1917,9 +1900,9 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
     data = tp.data.load.phono3py(filename, quantities)
 
     if projected is None or projected == 'density':
-        fig, ax = axes.plain(style)
+        fig, ax, _ = axes.one(style)
     else:
-        fig, ax = axes.colourbar(style)
+        fig, ax, _ = axes.one_colourbar(style)
 
     if projected == 'density':
         cbar = tp.plot.frequency.add_density(ax, data, y, xquantity=x,
@@ -2010,7 +1993,7 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
              large, extension, output, verbose):
     """Plots a broadened phonon dispersion."""
 
-    axes = tp.axes.one_large if large else tp.axes.one
+    axes = tp.axes.large if large else tp.axes.small
     if len(colour) == 1:
         colour = colour[0]
     else:
@@ -2019,7 +2002,7 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
     pdata = tp.data.load.phonopy_dispersion(phonons)
     kdata = tp.data.load.phono3py(kappa, 'wideband')
 
-    fig, ax = axes.plain(style)
+    fig, ax, _ = axes.one(style)
 
     tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=temperature,
                                  poscar=poscar, smoothing=smoothing,
@@ -2062,7 +2045,7 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
           xmax, ymin, ymax, cmin, cmax, style, large, extension, output):
     """Plots ZT against temperature and carrier concentration."""
 
-    axes = tp.axes.one_large if large else tp.axes.one
+    axes = tp.axes.large if large else tp.axes.small
     if len(colour) == 1:
         colour = colour[0]
 
@@ -2083,7 +2066,7 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
     else:
         kdata = None
 
-    fig, ax = axes.colourbar(style)
+    fig, ax, _ = axes.one_colourbar(style)
 
     tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=direction,
                               xinterp=interpolate, yinterp=interpolate,

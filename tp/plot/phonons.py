@@ -37,6 +37,7 @@ import warnings
 import yaml
 
 warnings.filterwarnings('ignore', module='matplotlib')
+warnings.filterwarnings('ignore', module='scipy')
 
 try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
@@ -775,7 +776,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
         f2.append(finterp(xtemp))
 
         cinterp = interp1d(x[index[0]:index[1]], c[index[0]:index[1]],
-                           kind='cubic', axis=0, fill_value='extrapolate')
+                           kind='linear', axis=0, fill_value='extrapolate')
         c2.append(np.abs(cinterp(xtemp)))
 
     cmap = tp.plot.utilities.parse_colours(colour)
@@ -792,7 +793,12 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     # axes formatting
 
     axlabels = tp.settings.labels()
-    cbar = plt.colorbar(line, extend=extend)
+    fig = ax.get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos']:
+        # place colourbar outside dos
+        cbar = plt.colorbar(line, extend=extend)
+    else:
+        cbar = plt.colorbar(line, ax=ax, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[quantity])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
@@ -1025,7 +1031,12 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     # axes formatting
 
     axlabels = tp.settings.labels()
-    cbar = plt.colorbar(line, extend=extend)
+    fig = ax.get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos']:
+        # place colourbar outside dos
+        cbar = plt.colorbar(line, extend=extend)
+    else:
+        cbar = plt.colorbar(line, ax=ax, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
