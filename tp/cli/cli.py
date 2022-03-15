@@ -1136,9 +1136,9 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['labels'] = kfile
             for i in range(len(kdata)):
                 kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                                   direction=direction)
+                                                   direction=direction[0])
                 edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
-                                                   direction=direction)
+                                                   direction=direction[0])
                 kdata[i], edata[i] = tp.calculate.interpolate(kdata[i],
                                                               edata[i],
                                                               'temperature',
@@ -1150,10 +1150,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['title'] = 'Electronic Data'
             defleg['labels'] = efile
             kdata[0] = tp.data.resolve.resolve(kdata[0], ltc,
-                                               direction=direction)
+                                               direction=direction[0])
             for i in range(len(edata)):
                 edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
-                                                   direction=direction)
+                                                   direction=direction[0])
                 kdata2 = kdata[0] # in case of different-sized arrays
                 kdata2, edata[i] = tp.calculate.interpolate(kdata2, edata[i],
                                                             'temperature',
@@ -1165,10 +1165,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['title'] = 'Phononic Data'
             defleg['labels'] = kfile
             edata[0] = tp.data.resolve.resolve(edata[0], etc, doping=doping,
-                                               direction=direction)
+                                               direction=direction[0])
             for i in range(len(kdata)):
                 kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                                   direction=direction)
+                                                   direction=direction[0])
                 edata2 = edata[0]
                 kdata[i], edata2 = tp.calculate.interpolate(kdata[i], edata2,
                                                             'temperature',
@@ -1190,7 +1190,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['labels'] = kfile
             for i in range(len(kdata)):
                 kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                                   direction=direction)
+                                                   direction=direction[0])
                 data.append({'temperature': kdata[i]['temperature'],
                              tc:            kdata[i][ltc]})
     elif component == 'electronic':
@@ -1207,7 +1207,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['labels'] = efile
             for i in range(len(edata)):
                 edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
-                                                   direction=direction)
+                                                   direction=direction[0])
                 data.append({'temperature': edata[i]['temperature'],
                              tc:            edata[i][etc]})
 

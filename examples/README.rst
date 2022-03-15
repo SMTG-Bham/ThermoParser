@@ -1,11 +1,14 @@
-Here are some examples to give an idea of what ThermoPlotter can do.
+Here are some examples to help you get started with ThermoPlotter. The
+numbered examples aim to provide a tutorial of how the package in
+general works, while the rest show some more concrete examples you
+might find in published work.
 
-Some require large data files to run, which haven't been included in the
-data folder, but can be downloaded using the ``get-data.sh`` script
-provided in the relevant directories. If ``wget`` doesn't work for you, 
-navigate to the URL (*repo* in ``get-data.sh``) in your browser to
-download the required file and add it to the ``../data`` directory (*f*
-in ``get-data.sh``).
+Some examples require large data files to run, which haven't been
+included in the data folder, but can be downloaded using the
+``get-data.sh`` script provided in the relevant directories. If
+``wget`` doesn't work for you, navigate to the URL (``repo`` in
+``get-data.sh``) in your browser to download the required file and add
+it to the ``../data`` directory (``f`` in ``get-data.sh``).
 
 cumkappa
 --------

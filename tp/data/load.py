@@ -495,8 +495,13 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
                'occupation': ['frequency']}
 
     for i in range(len(quantities)):
-        if quantities[i] in subs:
-            quantities[i] = subs[quantities[i]]
+        while True:
+            if quantities[i] in subs:
+                quantities.extend(subs[quantities[i]])
+                del quantities[i]
+            else:
+                break
+        
     for q in derived:
         if q in quantities:
             for q2 in derived[q]:

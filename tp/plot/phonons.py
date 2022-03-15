@@ -545,7 +545,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     # interpolate
 
     x2 = np.linspace(min(x), max(x), interpolate)
-    yinterp = interp1d(x, y2, kind='cubic', axis=0)
+    yinterp = interp1d(x, y2, kind='linear', axis=0)
     y2 = np.abs(yinterp(x2))
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
@@ -1222,7 +1222,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
         cmap = mpl.cm.get_cmap(colour)
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
-            colours = colour
+            cmap = colour
         elif isinstance(colour, str):
             cmap = tp.plot.colour.linear(colour)
         elif isinstance(colour, list):

@@ -10,7 +10,7 @@ different materials (so long as they are at least in the same space
 group and preferably closely related) or materials under expansion or
 compression.
 
-This is also available as a command line script ``tp-converge-phonons``.
+This is also available as a command line script ``tp plot phonons``.
 
 This also demonstrates the large axes style, more appropriate for
 presentations or posters than the default style, which is better for

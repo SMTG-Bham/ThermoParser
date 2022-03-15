@@ -121,14 +121,6 @@ def dos_options(f):
                      help='Label for the total line.',
                      default='Total',
                      show_default=True)(f)
-    f = click.option('-c', '--colour',
-                     help='Colour(s) in POSCAR order with total at the end or '
-                          'colourmap name. If --notprojected, a single colour '
-                          'can be specified. Total colour is overridden by '
-                          '--total-colour.',
-                     multiple=True,
-                     default=['tab10'],
-                     show_default=True)(f)
     f = click.option('--total-colour',
                      help='Colour for the total line. Overrides --colour.')(f)
 

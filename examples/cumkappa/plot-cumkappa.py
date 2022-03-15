@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import matplotlib.pyplot as plt
 from os import path
 import tp
 
@@ -18,16 +17,13 @@ colour = ['#59c605', '#ffcf06']
 colours = {'Zn': '#d46ef9',
            'O':  '#7b8eff'}
 # Axes
-
-fig, ax, add_legend = tp.axes.two.h_small_legend()
+fig, ax, add_legend = tp.axes.small.two_h()
 
 # Load
-
 data = tp.data.load.phono3py(kappafile, quantities=quantities)
 dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 
 # Add
-
 tp.plot.frequency.add_cum_kappa(ax[0], data, temperature=temperature,
                                 direction=direction, colour=colour)
 tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
@@ -37,6 +33,5 @@ tp.plot.frequency.add_dos(ax[0], dos, colour=colours, scale=True, main=False)
 add_legend()
 
 # Save
-
-plt.savefig('cumkappa.pdf')
-plt.savefig('cumkappa.png')
+fig.savefig('cumkappa.pdf')
+fig.savefig('cumkappa.png')

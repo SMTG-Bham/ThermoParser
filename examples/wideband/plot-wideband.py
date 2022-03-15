@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import matplotlib.pyplot as plt
 from os import path
 import tp
 
@@ -14,20 +13,16 @@ if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
 colour = ['#000000', '#ff0000']
 
 # Axes
-
-fig, ax = tp.axes.one_large.plain('dark_background')
+fig, ax, add_legend = tp.axes.large.one('dark_background')
 
 # Load
-
 data = tp.data.load.phono3py(kappafile, quantities='wideband')
 pdata = tp.data.load.phonopy_dispersion(phile)
 
 # Add
-
 tp.plot.phonons.add_wideband(ax, data, pdata, temperature=temperature,
                              colour=colour, poscar=poscar)
 
 # Save
-
-plt.savefig('wideband.pdf')
-plt.savefig('wideband.png')
+fig.savefig('wideband.pdf')
+fig.savefig('wideband.png')

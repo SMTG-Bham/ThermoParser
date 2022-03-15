@@ -8,7 +8,8 @@ relative contributions of the constituent atoms to the lattice thermal
 conductivity. The second is against mean free path, and can be used to
 approximate the effect of nanostructuring, for which reason the ability
 to add markers has been included, e.g. here you can see nanostructuring
-to 10 nanometers may reduce the lattice thermal conductivity by nearly 50 %.
+to 10 nanometers may reduce the lattice thermal conductivity by nearly
+50 %.
 
 This also demonstrates use of the add_legend function supplied with
 relevant ``tp.axes`` functions, which combines the legends of all plots

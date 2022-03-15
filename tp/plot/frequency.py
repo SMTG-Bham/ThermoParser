@@ -698,7 +698,9 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # axes formatting
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        data[xquantity] = x
+        data[quantity] = y
+        format_waterfall(ax, data, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
@@ -853,7 +855,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
     cbar.draw_all()
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        data[xquantity] = x
+        data[quantity] = y
+        format_waterfall(ax, data, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
@@ -973,7 +977,9 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     # axes formatting
 
     if main:
-        format_waterfall(ax, {xquantity: x_dens, quantity: y_dens}, quantity, xquantity)
+        data[xquantity] = x_dens
+        data[quantity] = y_dens
+        format_waterfall(ax, data, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
@@ -986,7 +992,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     return
 
 def format_waterfall(ax, data, yquantity, xquantity='frequency',
-                     temperature=300, direction='avg'):
+                     temperature=300, direction='avg', invert=False):
     """Formats axes for waterfall plots.
 
     Arguments
@@ -1006,6 +1012,8 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c or
             average/ avg. Default: average.
+        invert : bool, optional
+            invert x- and y-axes. Default: False.
 
     Returns
     -------
@@ -1014,10 +1022,14 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
             formats ax directly.
     """
 
-    data = tp.data.resolve.resolve(data, [xquantity, yquantity],
-                                   temperature=temperature,
-                                   direction=direction)
-    data2 = {'x': np.ravel(data[xquantity]), 'y': np.ravel(data[yquantity])}
+
+    if invert:
+        xquantity, yquantity = yquantity, xquantity
+        
+    data2 = tp.data.resolve.resolve(data, [xquantity, yquantity],
+                                    temperature=temperature,
+                                    direction=direction)
+    data2 = {'x': np.ravel(data2[xquantity]), 'y': np.ravel(data2[yquantity])}
 
     limit = {'x': ax.set_xlim,   'y': ax.set_ylim}
     loc = {}

@@ -5,7 +5,6 @@ import json
 import unittest
 import numpy as np
 import yaml
-from glob import glob
 from os import remove
 from pymatgen.io.vasp.inputs import Poscar
 from unittest.mock import call, MagicMock, mock_open, patch

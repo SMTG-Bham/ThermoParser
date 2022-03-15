@@ -13,7 +13,7 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :1.0.0\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.0.0\
     |_________________________________:______________________________________:_____/
 
 
@@ -70,6 +70,8 @@ longer process is required:
 6. ``cd ThermoPlotter``
 7. ``pip install --user -e .``
 
+Using conda may circumvent this process.
+
 Python Usage
 ------------
 
@@ -86,10 +88,10 @@ ThermoPlotter is designed to have four main stages:
 
 As ThermoPlotter is dependent on matplotlib, each stage can be
 substituted with bespoke code, e.g. using ``matplotlib.pyplot.subplots``
-or ``matplotlib.axes.Axes.scatter``. These can still be
-supplemented with ThermoPlotter helper functions, such as default labels 
-which the user can set in ``tp.settings`` 
-or colourmap generators in ``tp.plot.colour``.
+or ``matplotlib.axes.Axes.scatter``. These can still be supplemented
+with ThermoPlotter helper functions, such as default labels which the
+user can set in ``tp.settings`` or colourmap generators in
+``tp.plot.colour``.
 
 The best way to get a feel for ThermoPlotter is to see it in action:
 Take a look at our  `examples <https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples>`_ scripts.
