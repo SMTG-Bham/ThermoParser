@@ -112,7 +112,7 @@
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts AMSET keys and power_factor.</span>
-<span class="sd">            Loads dependant properties. Default: seebeck, conductivity,</span>
+<span class="sd">            Loads dependent properties. Default: seebeck, conductivity,</span>
 <span class="sd">            electronic_thermal_conductivity.</span>
 
 <span class="sd">        doping : str, optional</span>
@@ -142,7 +142,7 @@
     <span class="c1"># quantities derived from those in the file</span>
     <span class="n">derived</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;power_factor&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">]}</span>
 
-    <span class="c1"># add dependant variables</span>
+    <span class="c1"># add dependent variables</span>
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;temperatures&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
@@ -253,7 +253,7 @@
 <span class="sd">            k-points, fd_weights, the weights of the energies wrt the</span>
 <span class="sd">            derivative of the Fermi-Dirac distribution, and</span>
 <span class="sd">            weighted_rates, scattering_rates weighted by fd_weights</span>
-<span class="sd">            and averaged over kpoints. Loads dependant properties.</span>
+<span class="sd">            and averaged over kpoints. Loads dependent properties.</span>
 <span class="sd">            Default: scattering_rates.</span>
 
 <span class="sd">        doping : str, optional</span>
@@ -284,7 +284,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="n">quantities</span> <span class="o">=</span> <span class="n">quantities</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">anames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
-    <span class="c1"># list of abbriviations and dependant quantites</span>
+    <span class="c1"># list of abbriviations and dependent quantites</span>
     <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">]}</span>
     <span class="n">hasspin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;vb_index&#39;</span><span class="p">,</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">]</span>
 
@@ -294,7 +294,7 @@
 
     <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">quantities</span><span class="p">))</span>
 
-    <span class="c1"># add dependant variables</span>
+    <span class="c1"># add dependent variables</span>
 
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;ir_kpoints&#39;</span><span class="p">,</span> <span class="s1">&#39;temperatures&#39;</span><span class="p">,</span> <span class="s1">&#39;scattering_labels&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
@@ -476,7 +476,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="n">quantities</span> <span class="o">=</span> <span class="n">quantities</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">bnames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">bnames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
-    <span class="c1"># add dependant variables</span>
+    <span class="c1"># add dependent variables</span>
 
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
@@ -577,7 +577,7 @@
 
     <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">quantities</span><span class="p">))</span>
 
-    <span class="c1"># add dependant variables</span>
+    <span class="c1"># add dependent variables</span>
 
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>

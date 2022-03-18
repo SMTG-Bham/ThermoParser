@@ -7,6 +7,8 @@ Functions
         combine legends.
     add_add_legend
         add add_legend function.
+    alphabetise
+        alphabetises or enumerates axes.
 """
 
 import numpy as np
@@ -190,3 +192,83 @@ def add_add_legend(ax, locations, names, defloc):
         """.format(namestr, defloc, customstr)
 
     return add_legend
+
+def alphabetise(ax, labels=None, preset='latin', prefix='', suffix='',
+                label_dos=True):
+    """Enumerates or alphabetises plot axes
+
+    Can manually define, or some presets are available.
+
+    Arguments
+    ---------
+
+        ax : axes or list
+            axes to enumerate.
+
+        labels : str or list, optional
+            manually defined labels. Overrides preset.
+        preset : str
+            preset label sequence. Options:
+
+                latin
+                    a, b, c... (default)
+                Latin
+                    A, B, C...
+                arabic
+                    1, 2, 3...
+                roman
+                    i, ii, iii...
+                Roman
+                    I, II, III...
+                greek
+                    \\alpha, \\beta, \gamma...
+                Greek
+                    \Alpha, \Beta, \Gamma...
+
+        prefix : str, optional
+            prefix to all labels, e.g. "(". Default: None.
+        suffix : str, optional
+            suffix to all labels, e.g. ")". Default: None.
+
+        label_dos : bool, optional
+            label DoS axes. Only works with tp axes. Default: True.
+    """
+
+    if isinstance(ax, list):
+        ax = np.ravel(ax)
+    else:
+        ax = list(ax)
+    fig = ax[0].get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos'] and not label_dos:
+        ax = ax[:-1]
+
+    presets = {'latin':  list('abcdefghijklmnopqrstuvwxyz'),
+               'Latin':  list('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+               'arabic': np.array(range(len(ax))) + 1,
+               'roman':  'i ii iii iv v vi vii viii ix x '
+                         'xi xii xiii xiv xv xvi xvii xviii xix xx'.split(),
+               'Roman':  'I II III IV V VI VII VIII IX X '
+                         'XI XII XIII XIV XV XVI XVII XVIII XIX XX'.split(),
+               'greek':  ['$\\alpha$', '$\\beta$', '$\gamma$', '$\delta$',
+                          '$\\varepsilon$', '$\zeta$', '$\eta$', '$\\theta$',
+                          '$\iota$', '$\kappa$', '$\lambda$', '$\mu$',
+                          '$\\nu$', '$\\xi$', 'o', '$\pi$',
+                          '$\\rho$', '$\sigma$', '$\\tau$', '$\\upsilon$',
+                          '$\phi$', '$\chi$', '$\psi$', '$\omega$'],
+               'Greek':  ['A', 'B', '$\Gamma$', '$\Delta$',
+                          'E', 'Z', 'H', '$\Theta$',
+                          'I', 'K', '$\Lambda$', 'M',
+                          'N', '$\Xi$', 'O', '$\Pi$',
+                          'P', '$\Sigma$', 'T', '$\\Upsilon$',
+                          '$\Phi$', 'X', '$\Psi$', '$\Omega$']}
+
+    if labels is None:
+        labels = presets[preset][:len(ax)]
+    if len(labels) < len(ax):
+        ax = ax[:len(labels)]
+
+    for i, a in enumerate(ax):
+        a.text(0, 1.01, prefix + str(labels[i]) + suffix, ha='left',
+               transform=a.transAxes)
+
+    return

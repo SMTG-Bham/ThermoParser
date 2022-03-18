@@ -508,7 +508,7 @@ def run():
               help='Kappa calculation method. Options:'
                    'boltzmann: boltztrap method (default); '
                    'wiedemann: Wiedemann-Franz law with constant L; '
-                   'snyder:    Wiedemann-Franz law with L dependant on '
+                   'snyder:    Wiedemann-Franz law with L dependent on '
                               'Seebeck coefficient.',
               default='boltzmann',
               type=click.Choice(['boltzmann', 'wiedemann', 'snyder'],
@@ -1239,10 +1239,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         label.append(None)
 
     for i in range(len(data)):
-        j = np.where((data[i]['temperature'] <= tmax)
-                   & (data[i]['temperature'] >= tmin))[0]
+        j = np.where((np.array(data[i]['temperature']) <= tmax)
+                   & (np.array(data[i]['temperature']) >= tmin))[0]
 
-        ax.plot(data[i]['temperature'][j], data[i][tc][j],
+        ax.plot(np.array(data[i]['temperature'])[j], data[i][tc][j],
                 label='${}$'.format(label[i]), linestyle=linestyle[i],
                 marker=marker[i], c=colours[i])
 

@@ -20,7 +20,7 @@ import yaml
 def phono3py(filename, quantities, output='tp-phono3py', force=False):
     """Save calculated properties to hdf5.
 
-    Also saves dependant properties (temperature etc.) and metadata.
+    Also saves dependent properties (temperature etc.) and metadata.
 
     Arguments
     ---------

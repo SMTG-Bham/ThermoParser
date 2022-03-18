@@ -40,7 +40,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
 
         quantites : str or list, optional
             values to extract. Accepts AMSET keys and power_factor.
-            Loads dependant properties. Default: seebeck, conductivity,
+            Loads dependent properties. Default: seebeck, conductivity,
             electronic_thermal_conductivity.
 
         doping : str, optional
@@ -70,7 +70,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
     # quantities derived from those in the file
     derived = {'power_factor': ['conductivity', 'seebeck']}
 
-    # add dependant variables
+    # add dependent variables
     for d in ['doping', 'temperatures']:
         if d not in quantities:
             for q in quantities:
@@ -181,7 +181,7 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
             k-points, fd_weights, the weights of the energies wrt the
             derivative of the Fermi-Dirac distribution, and
             weighted_rates, scattering_rates weighted by fd_weights
-            and averaged over kpoints. Loads dependant properties.
+            and averaged over kpoints. Loads dependent properties.
             Default: scattering_rates.
 
         doping : str, optional
@@ -212,7 +212,7 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [anames[q] if q in anames else q for q in quantities]
 
-    # list of abbriviations and dependant quantites
+    # list of abbriviations and dependent quantites
     subs = {'weights': ['ibz_weights', 'fd_weights']}
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
@@ -222,7 +222,7 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
 
     quantities = list(np.ravel(quantities))
 
-    # add dependant variables
+    # add dependent variables
 
     for d in ['doping', 'ir_kpoints', 'temperatures', 'scattering_labels']:
         if d not in quantities:
@@ -404,7 +404,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [bnames[q] if q in bnames else q for q in quantities]
 
-    # add dependant variables
+    # add dependent variables
 
     for d in ['doping', 'temperature']:
         if d not in quantities:
@@ -510,7 +510,7 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     quantities = list(np.ravel(quantities))
 
-    # add dependant variables
+    # add dependent variables
 
     for d in ['temperature', 'qpoint']:
         if d not in quantities:

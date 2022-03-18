@@ -5,7 +5,7 @@ Data handling modules.
 --------------
 
 ``resolve.py`` uses the metadata stored by ThermoPlotter to break data
-down by its dependant variables, such as selecting ZT at a certain
+down by its dependent variables, such as selecting ZT at a certain
 temperature.
 
 -----------

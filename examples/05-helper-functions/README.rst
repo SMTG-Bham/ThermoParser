@@ -24,7 +24,7 @@ Resolve
 
 ``tp.data.resolve.resolve`` resolves a data array by dependent
 properties. As arguments, it takes a data dictionary, an array of the
-names of the quantities to be resolved, and the dependant variable
+names of the quantities to be resolved, and the dependent variable
 values. This can be used easily with data loaded through ThermoPlotter,
 but with some minor alterations, almost any data can be resolved.
 
@@ -33,12 +33,12 @@ subdictionary, which contains metadata including units, array shapes
 and data source. For ``resolve`` to work, it needs a ``dimensions``
 subdictionary in ``meta``, which should contain an array with the same
 name as the variable to be resolved. This should contain the names of
-the dependant variables in the order of the data dimensions, except
+the dependent variables in the order of the data dimensions, except
 directions, which can be either 3 or 6. For example,
 ``adata['meta']['dimensions']['seebeck'] == ['temperature', 'doping', 3, 3]``.
 The direction is represented by a 3x3 array. The other thing that is
-needed is for the dependant variables to also be in the dictionary.
-ThermoPlotter automatically loads dependant variables. 
+needed is for the dependent variables to also be in the dictionary.
+ThermoPlotter automatically loads dependent variables. 
 
 ``resolve`` does not interpolate, but rather rounds to the nearest data
 point, which it saves to ``['meta']['variable_name']``, so you can be

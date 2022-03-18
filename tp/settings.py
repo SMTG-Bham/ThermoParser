@@ -167,8 +167,8 @@ def to_tp():
              'mk':                   'mode_kappa',
              'pf':                   'power_factor',
              'qpoints':              'qpoint',
+             'tc':                   'thermal_conductivity',
              'temperatures':         'temperature',
-             'thermal_conductivity': 'electronic_thermal_conductivity',
              'scattering_labels':    'stype'}
 
     if conf is not None and 'to_tp' in conf and conf['to_tp'] is not None:
@@ -188,7 +188,6 @@ def to_amset():
              'kpoint':               'ir_kpoints',
              'kpoints':              'ir_kpoints',
              'temperature':          'temperatures',
-             'thermal_conductivity': 'electronic_thermal_conductivity',
              'stype':                'scattering_labels'}
 
     if conf is not None and 'to_amset' in conf and \
@@ -203,8 +202,7 @@ def to_boltztrap():
     names = {'etc':                  'electronic_thermal_conductivity',
              'kappa':                'electronic_thermal_conductivity',
              'kappae':               'electronic_thermal_conductivity',
-             'ke':                   'electronic_thermal_conductivity',
-             'thermal_conductivity': 'electronic_thermal_conductivity'}
+             'ke':                   'electronic_thermal_conductivity'}
 
     if conf is not None and 'to_boltztrap' in conf and \
        conf['to_boltztrap'] is not None:
@@ -315,6 +313,7 @@ def units(use_tprc=True):
              'seebeck':                         'muV K-1',
              'seebeck_effective_mass':          'm_e',
              'temperature':                     'K',
+             'thermal_conductivity':            'W m-1 K-1',
              'weighted_rates':                  's-1',
              'zt':                              ''}
 
@@ -359,6 +358,7 @@ def dimensions():
             'seebeck':                         ['temperature', 'doping', 3, 3],
             'seebeck_effective_mass':          [],
             'temperature':                     ['temperature'],
+            'thermal_conductivity':            ['temperature', 'doping', 3, 3],
             'weighted_rates':                  ['stype', 'temperature', 'doping'],
             'zt':                              ['temperature', 'doping', 3, 3]}
 

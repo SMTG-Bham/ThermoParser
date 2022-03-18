@@ -134,15 +134,15 @@ Contributing
 
 We welcome any contributions, whether they be a feature request or a new
 piece of code (or anything else). Adding options is inteded to be
-straightforward; the modularity of the code means that each step is mostly 
-independent of the others. 
+straightforward; the modularity of the code means that each step is mostly
+independent of the others.
 
 Bugs and feature requests can be submitted to the `issue tracker`_,
 while contributions can be made using the `fork and pull`_ approach.
 Contributions should include comprehensive docstrings, and where
 appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
-appreciated. Documentation uses the `sphinx`_ package, and can be built from the docs
-directory with ``sphinx-build -b html src/ .``.
+appreciated. Documentation uses the `sphinx`_ package, and can be built from
+the docs directory with ``sphinx-build -b html src/ .``.
 
 .. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
 .. _fork and pull: https://guides.github.com/activities/forking

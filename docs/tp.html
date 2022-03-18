@@ -314,15 +314,15 @@
 
 <dl class="py function">
 <dt id="tp.calculate.interpolate">
-<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">interpolate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data1</span></em>, <em class="sig-param"><span class="n">data2</span></em>, <em class="sig-param"><span class="n">dependant</span></em>, <em class="sig-param"><span class="n">keys1</span></em>, <em class="sig-param"><span class="n">keys2</span></em>, <em class="sig-param"><span class="n">axis1</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">axis2</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.interpolate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">interpolate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data1</span></em>, <em class="sig-param"><span class="n">data2</span></em>, <em class="sig-param"><span class="n">dependent</span></em>, <em class="sig-param"><span class="n">keys1</span></em>, <em class="sig-param"><span class="n">keys2</span></em>, <em class="sig-param"><span class="n">axis1</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">axis2</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'linear'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#interpolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.interpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shrinks datasets to smallest common size and interpolates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong><strong>(</strong><strong>1</strong><strong>,</strong><strong>2</strong><strong>)</strong> (<em>dict</em>) – input data.</p></li>
-<li><p><strong>dependant</strong> (<em>str</em>) – variable to interpolate against.</p></li>
+<li><p><strong>dependent</strong> (<em>str</em>) – variable to interpolate against.</p></li>
 <li><p><strong>keys</strong><strong>(</strong><strong>1</strong><strong>,</strong><strong>2</strong><strong>)</strong> (<em>array-like</em><em> or </em><em>str</em>) – data keys to interpolate</p></li>
-<li><p><strong>axis</strong><strong>(</strong><strong>1</strong><strong>,</strong><strong>2</strong><strong>)</strong> (<em>int</em><em>, </em><em>optional</em>) – axis of the dependant variable wrt the keys. Default: 0.</p></li>
+<li><p><strong>axis</strong><strong>(</strong><strong>1</strong><strong>,</strong><strong>2</strong><strong>)</strong> (<em>int</em><em>, </em><em>optional</em>) – axis of the dependent variable wrt the keys. Default: 0.</p></li>
 <li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – interpolation kind</p></li>
 </ul>
 </dd>

@@ -59,7 +59,7 @@ def linear(cmax, cmin='#ffffff', alpha=1., density=512):
 
     return ListedColormap(colours)
 
-def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
+def uniform(cmid, cmin='#ffffff', cmax='#333333', alpha=1.,
           density=512):
     """Generates bigradient colourmaps.
 
@@ -139,7 +139,6 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
     cmid2 = rgb2array(cmid, alpha)
     cmax2 = rgb2array(cmax, alpha)
     y = [cmin2, cmid2, cmax2]
-    colours = []
     x2 = np.linspace(0, 1, density)
     c = interp1d(x, y, 'linear', axis=0)
     colour = np.abs(c(x2))

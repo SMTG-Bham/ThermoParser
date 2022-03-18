@@ -263,8 +263,8 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             i += 1
 
         if verbose:
-            print('Using {} {}.'.format(dat['meta']['temperature'],
-                                        dat['meta']['units']['temperature']))
+            print('Using {} {}.'.format(data2['meta']['temperature'],
+                                        data2['meta']['units']['temperature']))
 
     # axes formatting
 

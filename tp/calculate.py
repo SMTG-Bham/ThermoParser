@@ -451,10 +451,17 @@ def zt_fromdict(data, use_tprc=True):
             dictionary with ZTs.
     """
 
-    data['zt'] = zt(data['conductivity'], data['seebeck'],
-                 data['electronic_thermal_conductivity'],
-                 data['lattice_thermal_conductivity'],
-                 data['temperature'], use_tprc=use_tprc)
+    if 'power_factor' not in data:
+        data = power_factor_fromdict(data, use_tprc=use_tprc)
+    if 'thermal_conductivity' not in data:
+        tc = 'thermal_conductivity'
+        etc, ltc = 'electronic_' + tc, 'lattice_' + tc
+        data[tc] = np.add(data[ltc], data[etc])
+        data['meta']['units'][tc] = tp.settings.units(use_tprc=use_tprc)[tc]
+        data['meta']['dimensions'][tc] = tp.settings.dimensions()[tc]
+
+    data['zt'] = zt(data['conductivity'], data['seebeck'], data[etc],
+                    data[ltc], data['temperature'], use_tprc=use_tprc)
     data['meta']['units']['zt'] = tp.settings.units(use_tprc=use_tprc)['zt']
     data['meta']['dimensions']['zt'] = tp.settings.dimensions()['zt']
 
@@ -549,7 +556,7 @@ def from_tp(name, value):
 
     return value
 
-def interpolate(data1, data2, dependant, keys1, keys2, axis1=0, axis2=0,
+def interpolate(data1, data2, dependent, keys1, keys2, axis1=0, axis2=0,
                 kind='linear'):
     """Shrinks datasets to smallest common size and interpolates.
 
@@ -558,12 +565,12 @@ def interpolate(data1, data2, dependant, keys1, keys2, axis1=0, axis2=0,
 
         data(1,2) : dict
             input data.
-        dependant : str
+        dependent : str
             variable to interpolate against.
         keys(1,2) : array-like or str
             data keys to interpolate
         axis(1,2) : int, optional
-            axis of the dependant variable wrt the keys. Default: 0.
+            axis of the dependent variable wrt the keys. Default: 0.
         kind : str, optional
             interpolation kind
 
@@ -588,23 +595,23 @@ def interpolate(data1, data2, dependant, keys1, keys2, axis1=0, axis2=0,
     if isinstance(keys2, str):
         keys2 = [keys2]
 
-    dmin = np.nanmax([data1[dependant][0], data2[dependant][0]])
-    dmax = np.nanmin([data1[dependant][-1], data2[dependant][-1]])
-    index1 = np.where((data1[dependant]<=dmax) & (data1[dependant]>=dmin))[0]
-    index2 = np.where((data2[dependant]<=dmax) & (data2[dependant]>=dmin))[0]
+    dmin = np.nanmax([data1[dependent][0], data2[dependent][0]])
+    dmax = np.nanmin([data1[dependent][-1], data2[dependent][-1]])
+    index1 = np.where((data1[dependent]<=dmax) & (data1[dependent]>=dmin))[0]
+    index2 = np.where((data2[dependent]<=dmax) & (data2[dependent]>=dmin))[0]
 
-    data1[dependant] = np.array(data1[dependant])[index1]
+    data1[dependent] = np.array(data1[dependent])[index1]
     for key in keys1:
         data1[key] = np.swapaxes(data1[key], 0, axis1)
         data1[key] = np.array(data1[key])[index1]
         data1[key] = np.swapaxes(data1[key], 0, axis1)
 
-    data2[dependant] = np.array(data2[dependant])[index2]
+    data2[dependent] = np.array(data2[dependent])[index2]
     for key in keys2:
         data2[key] = np.swapaxes(data2[key], 0, axis2)
         data2[key] = np.array(data2[key])[index2]
-        interp = interp1d(data2[dependant], data2[key], kind=kind, axis=0)
-        data2[key] = interp(data1[dependant])
+        interp = interp1d(data2[dependent], data2[key], kind=kind, axis=0)
+        data2[key] = interp(data1[dependent])
         data2[key] = np.swapaxes(data2[key], 0, axis2)
 
     return data1, data2

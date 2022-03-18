@@ -14,7 +14,7 @@ but each part can be replaced by your own code if you prefer.
 The CLI version of this code is:
 
 .. code-block:: bash
-   
+
    tp plot phonons ../data/zno/band.yaml
 
 ----
@@ -26,7 +26,7 @@ Within, there is a ``large`` module, which provides presentation-
 oriented figures, but these take relatively long to load so here we use
 ``small``, which is better for papers. The functions consist of the
 number of primary axes, and a description where necessary. In this
-case, we use the most basic ``one``. 
+case, we use the most basic ``one``.
 
 Every function returns three things:
 
