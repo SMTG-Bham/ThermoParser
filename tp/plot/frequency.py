@@ -963,6 +963,9 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
                                     data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
+    mask = np.ma.masked_invalid(y).mask
+    x = np.ma.masked_where(mask, x).compressed()
+    y = np.ma.masked_where(mask, y).compressed()
     xy = np.vstack([x,y])
     z = gaussian_kde(xy)(xy)
     idx = z.argsort()

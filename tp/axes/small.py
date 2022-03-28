@@ -65,11 +65,13 @@ def one(style=[]):
              ['above'],
              ['below']]
     locations = [{'loc':            'center left',
-                  'bbox_to_anchor': (1, 0.5)},
+                  'bbox_to_anchor': (1, 0.5),
+                  'ncol':           4},
                  {'loc':            'lower center',
                   'bbox_to_anchor': (0.5, 1)},
                  {'loc':            'upper center',
-                  'bbox_to_anchor': (0.5, -0.1)}]
+                  'bbox_to_anchor': (0.5, -0.1),
+                  'ncol':           4}]
     add_legend = tp.axes.legend.add_add_legend(ax, locations, names, 'right')
 
     return fig, ax, add_legend
@@ -109,9 +111,11 @@ def one_colourbar(style=[]):
     locations = [{'loc':            'center left',
                   'bbox_to_anchor': (1.27, 0.5)},
                  {'loc':            'lower center',
-                  'bbox_to_anchor': (0.5, 1)},
+                  'bbox_to_anchor': (0.5, 1),
+                  'ncol':           4},
                  {'loc':            'upper center',
-                  'bbox_to_anchor': (0.5, -0.1)}]
+                  'bbox_to_anchor': (0.5, -0.1),
+                  'ncol':           4}]
     add_legend = tp.axes.legend.add_add_legend(ax, locations, names, 'right')
 
     return fig, ax, add_legend
@@ -158,10 +162,12 @@ def one_dos(style=[]):
                   'bbox_to_anchor': (1, 0.5)},
                  {'axes':           0,
                   'loc':            'lower center',
-                  'bbox_to_anchor': (0.5, 1)},
+                  'bbox_to_anchor': (0.5, 1),
+                  'ncol':           4},
                  {'axes':           0,
-                 'loc':            'upper center',
-                  'bbox_to_anchor': (0.5, -0.1)}]
+                  'loc':            'upper center',
+                  'bbox_to_anchor': (0.5, -0.1),
+                  'ncol':           4}]
     add_legend = tp.axes.legend.add_add_legend(ax, locations, names, 'right')
 
     return fig, ax, add_legend
@@ -208,10 +214,12 @@ def one_dos_colourbar(style=[]):
                   'bbox_to_anchor': (1.6, 0.5)},
                  {'axes':           0,
                   'loc':            'lower center',
-                  'bbox_to_anchor': (0.5, 1)},
+                  'bbox_to_anchor': (0.5, 1),
+                  'ncol':           4},
                  {'axes':           0,
-                 'loc':            'upper center',
-                  'bbox_to_anchor': (0.5, -0.1)}]
+                  'loc':            'upper center',
+                  'bbox_to_anchor': (0.5, -0.1),
+                  'ncol':           4}]
     add_legend = tp.axes.legend.add_add_legend(ax, locations, names, 'right')
 
     return fig, ax, add_legend

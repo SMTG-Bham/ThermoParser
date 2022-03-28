@@ -92,7 +92,7 @@ def add_add_legend(ax, locations, names, defloc):
             if 'ncol' in kwargs:
                 for l in locations:
                     l['ncol'] = kwargs['ncol']
-                    del kwargs['ncol']
+                del kwargs['ncol']
 
             fin = False
             if custom:
@@ -116,7 +116,9 @@ def add_add_legend(ax, locations, names, defloc):
                 for i, a in enumerate(ax):
                     if a is not None and location in names[i]:
                         legend = a.legend(loc='best', handles=handles,
-                                          labels=labels, *args, **kwargs)
+                                          labels=labels,
+                                          ncol=locations[i]['ncol'],
+                                          *args, **kwargs)
                         fin = True
                         break
                 if not fin:
@@ -147,12 +149,13 @@ def add_add_legend(ax, locations, names, defloc):
             if 'ncol' in kwargs:
                 for l in locations:
                     l['ncol'] = kwargs['ncol']
-                    del kwargs['ncol']
+                del kwargs['ncol']
 
             fin = False
             for i, a in enumerate(ax):
                 if location in names[i]:
-                    legend = a.legend(loc='best', *args, **kwargs)
+                    legend = a.legend(loc='best', ncol=locations[i]['ncol'],
+                                      *args, **kwargs)
                     fin = True
                     break
             if not fin:
@@ -194,7 +197,7 @@ def add_add_legend(ax, locations, names, defloc):
     return add_legend
 
 def alphabetise(ax, labels=None, preset='latin', prefix='', suffix='',
-                label_dos=True):
+                x=0., y=1.01, label_dos=True):
     """Enumerates or alphabetises plot axes
 
     Can manually define, or some presets are available.
@@ -230,6 +233,11 @@ def alphabetise(ax, labels=None, preset='latin', prefix='', suffix='',
         suffix : str, optional
             suffix to all labels, e.g. ")". Default: None.
 
+        x : float, optional
+            x-position, where the axis is a scale from 0-1. Default: 0.
+        y : float, optional
+            y-position, where the axis is a scale from 0-1. Default: 1.01.
+
         label_dos : bool, optional
             label DoS axes. Only works with tp axes. Default: True.
     """
@@ -238,9 +246,11 @@ def alphabetise(ax, labels=None, preset='latin', prefix='', suffix='',
         ax = np.ravel(ax)
     else:
         ax = list(ax)
+
     fig = ax[0].get_figure()
     if 'dos' in fig.__dict__ and fig.__dict__['dos'] and not label_dos:
         ax = ax[:-1]
+    ax = list(ax[np.where(ax != None)])
 
     presets = {'latin':  list('abcdefghijklmnopqrstuvwxyz'),
                'Latin':  list('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
@@ -268,7 +278,7 @@ def alphabetise(ax, labels=None, preset='latin', prefix='', suffix='',
         ax = ax[:len(labels)]
 
     for i, a in enumerate(ax):
-        a.text(0, 1.01, prefix + str(labels[i]) + suffix, ha='left',
+        a.text(x, y, prefix + str(labels[i]) + suffix, ha='left',
                transform=a.transAxes)
 
     return

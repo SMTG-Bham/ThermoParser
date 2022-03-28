@@ -10,3 +10,10 @@ character. This example highlights a complication: in order for the
 waterfall to be on top of the DoS, so as not to obscure the colour, an
 additional command, ``format_waterfall``, must be used so the DoS can
 be scaled correctly (line 43).
+
+.. image:: density.png
+   :alt: Density waterfall plot of mean free path against frequency.
+
+This is an alternative of the waterfall plot, where the colour darkness
+shows the density of the points, which is often clearer than just
+adjusting the alpha parameter on the regular waterfall plot.

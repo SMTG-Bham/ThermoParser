@@ -246,6 +246,48 @@ def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
 
     return weights
 
+def thermal_conductivity(etc, ltc, use_tprc=True):
+    """Calculates ZT.
+
+    Arguments
+    ---------
+
+        etc : array-like
+            electronic thermal conductivities (by default in W m-1 K-1).
+        ltc : array-like
+            lattice thermal conductivities (by default in W m-1 K-1).
+
+        use_tprc : bool, optional
+            use custom unit conversions. Default: True.
+
+    Returns
+    -------
+
+        np.array
+            thermal conductivity.
+    """
+
+    if use_tprc:
+        etc = to_tp('electronic_thermal_conductivity', etc)
+        ltc = to_tp('lattice_thermal_conductivity', ltc)
+
+    if np.ndim(etc) in [0, 1]:
+        tc = np.add(etc, np.array(ltc))
+    elif np.ndim(etc) == 2:
+        tc = np.add(etc, np.array(ltc)[:, None])
+    elif np.ndim(etc) == 3:
+        tc = np.add(etc, np.array(ltc)[:, :3, :3])
+    elif np.ndim(etc) == 4:
+        tc = np.add(etc, np.array(ltc)[:, None, :3, :3])
+    else:
+        raise Exception('Unexpectedly dimensionous electronic thermal conductivity!\n'
+                        'Abort!')
+
+    if use_tprc:
+        tc = from_tp('thermal_conductivity', tc)
+
+    return tc
+
 def power_factor(conductivity, seebeck, use_tprc=True):
     """Calculates power factor.
 
@@ -307,34 +349,18 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
     """
 
     pf = power_factor(conductivity, seebeck, use_tprc=use_tprc)
+    tc = thermal_conductivity(electronic_thermal_conductivity,
+                              lattice_thermal_conductivity, use_tprc=use_tprc)
 
     if use_tprc:
         pf = to_tp('power_factor', pf)
-        electronic_thermal_conductivity = to_tp(
-            'electronic_thermal_conductivity', electronic_thermal_conductivity)
-        lattice_thermal_conductivity = to_tp('lattice_thermal_conductivity',
-                                              lattice_thermal_conductivity)
+        tc = to_tp('thermal_conductivity', tc)
         temperature = to_tp('temperature', temperature)
 
-    if np.ndim(pf) == 1:
-        zt = np.multiply(pf, np.array(temperature)) / \
-                         np.add(electronic_thermal_conductivity,
-                                np.array(lattice_thermal_conductivity))
-    elif np.ndim(pf) == 2:
-        zt = np.multiply(pf, np.array(temperature)[:, None]) / \
-                         np.add(electronic_thermal_conductivity,
-                                np.array(lattice_thermal_conductivity)[:, None])
-    elif np.ndim(pf) == 3:
-        zt = np.multiply(pf, np.array(temperature)[:, None, None]) / \
-                         np.add(electronic_thermal_conductivity,
-                                 np.array(lattice_thermal_conductivity)[:, :3, :3])
-    elif np.ndim(pf) == 4:
-        zt = np.multiply(pf, np.array(temperature)[:, None, None, None]) / \
-                         np.add(electronic_thermal_conductivity,
-                                np.array(lattice_thermal_conductivity)[:, None, :3, :3])
+    if isinstance(pf, (float, int)):
+        zt = np.multiply(pf, temperature) / tc
     else:
-        raise Exception('Unexpectedly dimensionous electrical properties!\n'
-                        'Abort!')
+        zt = np.apply_along_axis(np.multiply, 0, pf, temperature) / tc
 
     if use_tprc:
         zt = from_tp('zt', zt)
@@ -456,7 +482,7 @@ def zt_fromdict(data, use_tprc=True):
     if 'thermal_conductivity' not in data:
         tc = 'thermal_conductivity'
         etc, ltc = 'electronic_' + tc, 'lattice_' + tc
-        data[tc] = np.add(data[ltc], data[etc])
+        data[tc] = thermal_conductivity(data[etc], data[ltc])
         data['meta']['units'][tc] = tp.settings.units(use_tprc=use_tprc)[tc]
         data['meta']['dimensions'][tc] = tp.settings.dimensions()[tc]
 

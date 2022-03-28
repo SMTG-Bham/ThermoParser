@@ -38,7 +38,7 @@ directions, which can be either 3 or 6. For example,
 ``adata['meta']['dimensions']['seebeck'] == ['temperature', 'doping', 3, 3]``.
 The direction is represented by a 3x3 array. The other thing that is
 needed is for the dependent variables to also be in the dictionary.
-ThermoPlotter automatically loads dependent variables. 
+ThermoPlotter automatically loads dependent variables.
 
 ``resolve`` does not interpolate, but rather rounds to the nearest data
 point, which it saves to ``['meta']['variable_name']``, so you can be
@@ -63,3 +63,11 @@ Legends
 ``tp.axes.legend.consolidate`` consolidates the legends of a list of
 axes into one, ensuring no duplicates, and returns the handles and
 labels, which can then be passed to ``ax.legend``.
+
+Not exactly a legend, but ``tp.axes.legend.alphabetise`` adds labels
+to the axes. ``preset``s are available for ``latin`` and ``greek``
+alphabetisation, and ``arabic`` and ``roman`` enumeration.
+Capitalising the first letter (e.g. ``Greek``) will capitalise the
+labels where applicable. Fully custom labels can also be specified
+using the ``labels`` argument, along with ``prefix``es and
+``suffix``es, and the position can be modified with ``x`` and ``y``.

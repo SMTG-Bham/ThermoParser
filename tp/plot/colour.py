@@ -74,7 +74,7 @@ def uniform(cmid, cmin='#ffffff', cmax='#333333', alpha=1.,
         cmin : str, optional.
             colour at minimum. Default: #ffffff.
         cmax : str, optional
-            colour at maximum. Default: #000000.
+            colour at maximum. Default: #333333.
         alpha : float, optional
             colour alpha (from 0-1). Default: 1.0.
 

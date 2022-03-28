@@ -51,6 +51,7 @@ for i, q in enumerate([*quantities, q]):
 handles, labels = tp.axes.legend.consolidate(ax)
 ax[2].legend(loc='best', title=axlabels['doping'], handles=handles,
              labels=labels)
+tp.axes.legend.alphabetise(ax, preset='roman', suffix=')', x=-0.12)
 
 # Save
 fig.savefig('transport.pdf')

@@ -30,7 +30,7 @@ tp.plot.mfp.add_cum_kappa(ax[1], data, temperature=temperature,
                           direction=direction, colour=colour, xmarkers=1e-7)
 tp.plot.frequency.add_dos(ax[0], dos, colour=colours, scale=True, main=False)
 
-add_legend()
+add_legend(location=2, ncol=2)
 
 # Save
 fig.savefig('cumkappa.pdf')

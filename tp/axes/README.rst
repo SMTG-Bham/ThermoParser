@@ -23,4 +23,6 @@ returns a 2x2 array of axes.
 ``legend`` contains helper functions for the other modules, but may
 also be useful to people using their own axes layouts.
 ``legend.consolidate``, for example, takes the legend entries from a
-list of axes and combines them, removing duplicates.
+list of axes and combines them, removing duplicates; and
+``legend.alphabetise`` labels each set of axes with a letter or number
+from several preset sequences, or something of your choice.
