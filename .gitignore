@@ -1,5 +1,7 @@
-*/archive/
-*/kappa-m*.hdf5
+# Large files and development directories
+**/archive/
+**/kappa-m*.hdf5
+examples/test/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -13,3 +13,9 @@ generated dynamically with the input of a single ``#RRGGBB`` colour
 code. In this case, the ``tp.plot.colour.uniform`` colourmap generator
 has been used, which calculates a uniform colourmap between white, a
 supplied highlight colour and black, or three colours of your choosing.
+There are several other heatmap functions in Thermoplotter:
+
+ * ``pfmap``: Like ``ztmap``, but for power factor.
+ * ``ztdiff``: Difference between two ZTs, including auto-generating
+   diverging colourmap centred on zero. and (optional) legend.
+ * ``pfdiff``: Like ``ztdiff``, but for power factor.

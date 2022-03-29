@@ -1,7 +1,8 @@
+click
+h5py
 matplotlib
 numpy >=1.14.3
-scipy
 pymatgen >=2020.1.28
 pyyaml
-h5py
-
+scipy
+sphinx

@@ -1,72 +1,30 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>tp.settings &mdash; ThermoPlotter 1.0.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>tp.settings &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../contents.html" class="icon icon-home"> ThermoPlotter
-          
-
-          
-            
-            <img src="../../_static/tp-logo.png" class="logo" alt="Logo"/>
-          
+            <a href="../../contents.html" class="icon icon-home"> ThermoPlotter<img src="../../_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,24 +32,12 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#contributing">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html#id2">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#license">License</a></li>
@@ -99,69 +45,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python Package</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../contents.html">ThermoPlotter</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../contents.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
       <li>tp.settings</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for tp.settings</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Settings and defaults.</span>
 
@@ -187,12 +94,14 @@
 <span class="sd">        convert names to tp conventions.</span>
 <span class="sd">    to_amset:</span>
 <span class="sd">        convert names to amset conventions.</span>
-<span class="sd">    to_amset:</span>
+<span class="sd">    to_boltztrap:</span>
 <span class="sd">        convert names to boltztrap conventions.</span>
 <span class="sd">    to_phono3py:</span>
 <span class="sd">        convert names to phono3py conventions.</span>
 
 
+<span class="sd">    conversions:</span>
+<span class="sd">        default unit conversions.</span>
 <span class="sd">    amset_conversions:</span>
 <span class="sd">        unit conversions.</span>
 <span class="sd">    boltztrap_conversions:</span>
@@ -205,14 +114,23 @@
 
 <span class="sd">    units:</span>
 <span class="sd">        default units used.</span>
+<span class="sd">    dimensions:</span>
+<span class="sd">        dimensions of each variable.</span>
+<span class="sd">    boltztrap_dimensions:</span>
+<span class="sd">        updated dimensions for BoltzTraP.</span>
+
 <span class="sd">    labels:</span>
 <span class="sd">        default axis labels.</span>
 <span class="sd">    inverted_labels:</span>
-<span class="sd">        default inverted axis labels.</span>
+<span class="sd">        default labels for a dos-style axis.</span>
+<span class="sd">    large_labels:</span>
+<span class="sd">        default labels for a large axis.</span>
 <span class="sd">    long_labels:</span>
 <span class="sd">        list of long axis labels.</span>
+<span class="sd">    medium_labels:</span>
+<span class="sd">        list of slightly abbreviated axis labels.</span>
 <span class="sd">    short_labels:</span>
-<span class="sd">        list of short axis labels.</span>
+<span class="sd">        list of fully contracted axis labels.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -226,7 +144,7 @@
 <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">ParserError</span><span class="p">:</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Failed to read ~/.config/tprc.yaml&#39;</span><span class="p">)</span>
     <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
     <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">def</span> <span class="fm">__dir__</span><span class="p">():</span>
@@ -306,18 +224,24 @@
 
     <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ave_pp&#39;</span><span class="p">:</span>               <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">,</span>
              <span class="s1">&#39;energies&#39;</span><span class="p">:</span>             <span class="s1">&#39;energy&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;etc&#39;</span><span class="p">:</span>                  <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;fermi_levels&#39;</span><span class="p">:</span>         <span class="s1">&#39;fermi_level&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gv&#39;</span><span class="p">:</span>                   <span class="s1">&#39;group_velocity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ir_kpoints&#39;</span><span class="p">:</span>           <span class="s1">&#39;kpoint&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kpoints&#39;</span><span class="p">:</span>              <span class="s1">&#39;kpoint&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kappa&#39;</span><span class="p">:</span>                <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">,</span> <span class="c1"># because p3p</span>
              <span class="s1">&#39;kappae&#39;</span><span class="p">:</span>               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kappal&#39;</span><span class="p">:</span>               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ke&#39;</span><span class="p">:</span>                   <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kl&#39;</span><span class="p">:</span>                   <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ltc&#39;</span><span class="p">:</span>                  <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mfp&#39;</span><span class="p">:</span>                  <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mk&#39;</span><span class="p">:</span>                   <span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span>
              <span class="s1">&#39;pf&#39;</span><span class="p">:</span>                   <span class="s1">&#39;power_factor&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;qpoints&#39;</span><span class="p">:</span>              <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span>
              <span class="s1">&#39;temperatures&#39;</span><span class="p">:</span>         <span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">}</span>
+             <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;scattering_labels&#39;</span><span class="p">:</span>    <span class="s1">&#39;stype&#39;</span><span class="p">}</span>
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;to_tp&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;to_tp&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">names</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;to_tp&#39;</span><span class="p">]}</span>
@@ -328,12 +252,16 @@
     <span class="sd">&quot;&quot;&quot;Get dictionary to translate to amset.&quot;&quot;&quot;</span>
 
     <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;energy&#39;</span><span class="p">:</span>               <span class="s1">&#39;energies&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;etc&#39;</span><span class="p">:</span>                  <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>          <span class="s1">&#39;fermi_levels&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kappa&#39;</span><span class="p">:</span>                <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kappae&#39;</span><span class="p">:</span>               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ke&#39;</span><span class="p">:</span>                   <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kpoint&#39;</span><span class="p">:</span>               <span class="s1">&#39;ir_kpoints&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kpoints&#39;</span><span class="p">:</span>              <span class="s1">&#39;ir_kpoints&#39;</span><span class="p">,</span>
              <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>          <span class="s1">&#39;temperatures&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">}</span>
+             <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;stype&#39;</span><span class="p">:</span>                <span class="s1">&#39;scattering_labels&#39;</span><span class="p">}</span>
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;to_amset&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
        <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;to_amset&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -344,7 +272,8 @@
 <div class="viewcode-block" id="to_boltztrap"><a class="viewcode-back" href="../../tp.html#tp.settings.to_boltztrap">[docs]</a><span class="k">def</span> <span class="nf">to_boltztrap</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary to translate to boltztrap.&quot;&quot;&quot;</span>
 
-    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kappa&#39;</span><span class="p">:</span>                <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;etc&#39;</span><span class="p">:</span>                  <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kappa&#39;</span><span class="p">:</span>                <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kappae&#39;</span><span class="p">:</span>               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ke&#39;</span><span class="p">:</span>                   <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
              <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">}</span>
@@ -362,9 +291,11 @@
              <span class="s1">&#39;kappal&#39;</span><span class="p">:</span>                       <span class="s1">&#39;kappa&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kl&#39;</span><span class="p">:</span>                           <span class="s1">&#39;kappa&#39;</span><span class="p">,</span>
              <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ltc&#39;</span><span class="p">:</span>                          <span class="s1">&#39;kappa&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mfp&#39;</span><span class="p">:</span>                          <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mk&#39;</span><span class="p">:</span>                           <span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>               <span class="s1">&#39;ave_pp&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;qpoint&#39;</span><span class="p">:</span>                       <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span>
              <span class="s1">&#39;temperatures&#39;</span><span class="p">:</span>                 <span class="s1">&#39;temperature&#39;</span><span class="p">}</span>
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;to_phono3py&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
@@ -373,59 +304,40 @@
 
     <span class="k">return</span> <span class="n">names</span></div>
 
-<div class="viewcode-block" id="amset_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.amset_conversions">[docs]</a><span class="k">def</span> <span class="nf">amset_conversions</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for amset.</span>
-
-<span class="sd">    If modified, you will probably want to change tp.settings.units,</span>
-<span class="sd">    tp.settings.long_labels, tp.settings.short_labels and maybe</span>
-<span class="sd">    tp.settings.boltztrap_conversions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">conversions</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of custom unit conversions from tprc.yaml.&quot;&quot;&quot;</span>
 
     <span class="n">conversions</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;amset_conversions&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
-       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;amset_conversions&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">conversions</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">conversions</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;amset_conversions&#39;</span><span class="p">]}</span>
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;conversions&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;conversions&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">conversions</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;conversions&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">conversions</span>
+
+<div class="viewcode-block" id="amset_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.amset_conversions">[docs]</a><span class="k">def</span> <span class="nf">amset_conversions</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for amset to tp.&quot;&quot;&quot;</span>
+
+    <span class="n">conversions</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">return</span> <span class="n">conversions</span></div>
 
 <div class="viewcode-block" id="boltztrap_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.boltztrap_conversions">[docs]</a><span class="k">def</span> <span class="nf">boltztrap_conversions</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for boltztrap.</span>
-
-<span class="sd">    If modified, you will probably want to change tp.settings.units,</span>
-<span class="sd">    tp.settings.long_labels, tp.settings.short_labels and maybe</span>
-<span class="sd">    tp.settings.amset_conversions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for boltztrap to tp.&quot;&quot;&quot;</span>
 
     <span class="n">conversions</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;boltztrap_conversions&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
-       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;boltztrap_conversions&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">conversions</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">conversions</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;boltztrap_conversions&#39;</span><span class="p">]}</span>
 
     <span class="k">return</span> <span class="n">conversions</span></div>
 
 <div class="viewcode-block" id="phonopy_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.phonopy_conversions">[docs]</a><span class="k">def</span> <span class="nf">phonopy_conversions</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for phonopy.</span>
-
-<span class="sd">    If modified, you will probably want to change tp.settings.units,</span>
-<span class="sd">    tp.settings.long_labels and tp.settings.short_labels.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for phonopy to tp.&quot;&quot;&quot;</span>
 
     <span class="n">conversions</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;phonopy_conversions&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
-       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;phonopy_conversions&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">conversions</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">conversions</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;phonopy_conversions&#39;</span><span class="p">]}</span>
 
     <span class="k">return</span> <span class="n">conversions</span></div>
 
 <div class="viewcode-block" id="phono3py_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.phono3py_conversions">[docs]</a><span class="k">def</span> <span class="nf">phono3py_conversions</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for phono3py.</span>
-
-<span class="sd">    If modified, you will probably want to change tp.settings.units,</span>
-<span class="sd">    tp.settings.long_labels and tp.settings.short_labels.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for phono3py to tp.&quot;&quot;&quot;</span>
 
     <span class="n">conversions</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span> <span class="mf">1e2</span><span class="p">,</span>         <span class="c1"># THz AA to m s-1</span>
                    <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>       <span class="mf">1e4</span><span class="p">,</span>         <span class="c1"># THz2 AA2 to m2 s-2</span>
@@ -433,14 +345,17 @@
                    <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>       <span class="mf">1e-12</span><span class="p">,</span>       <span class="c1"># THz-1 to s</span>
                    <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span> <span class="mf">1e-10</span><span class="p">}</span>       <span class="c1"># AA to m</span>
 
-    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;phono3py_conversions&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
-       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;phono3py_conversions&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">conversions</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">conversions</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;phono3py_conversions&#39;</span><span class="p">]}</span>
-
     <span class="k">return</span> <span class="n">conversions</span></div>
 
-<div class="viewcode-block" id="units"><a class="viewcode-back" href="../../tp.html#tp.settings.units">[docs]</a><span class="k">def</span> <span class="nf">units</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get dictionary of units of quantities used in tp.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="units"><a class="viewcode-back" href="../../tp.html#tp.settings.units">[docs]</a><span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="n">use_tprc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of units of quantities used in tp.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        use_tprc : bool, optional</span>
+<span class="sd">            read custom units from tprc.yaml if present. Default: True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">units</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
              <span class="s1">&#39;chemical_potential&#39;</span><span class="p">:</span>              <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
@@ -457,6 +372,7 @@
              <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="s1">&#39;m2 s-2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="s1">&#39;cm-3&#39;</span><span class="p">,</span>
              <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="s1">&#39;J K-1&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kpoint&#39;</span><span class="p">:</span>                          <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>    <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>                        <span class="s1">&#39;s&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span>                  <span class="s1">&#39;m&#39;</span><span class="p">,</span>
@@ -466,16 +382,73 @@
              <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>                      <span class="s1">&#39;phonons&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>                  <span class="s1">&#39;eV2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;qpoint&#39;</span><span class="p">:</span>                          <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>                <span class="s1">&#39;s-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;seebeck_effective_mass&#39;</span><span class="p">:</span>          <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
              <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>                  <span class="s1">&#39;s-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;zt&#39;</span><span class="p">:</span>                              <span class="s1">&#39;&#39;</span><span class="p">}</span>
 
-    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">use_tprc</span> <span class="ow">and</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">units</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">units</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]}</span>
 
     <span class="k">return</span> <span class="n">units</span></div>
+
+<span class="k">def</span> <span class="nf">dimensions</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of dimensions of quantities used in tp.&quot;&quot;&quot;</span>
+
+    <span class="n">dims</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;chemical_potential&#39;</span><span class="p">:</span>              <span class="p">[],</span>
+            <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>                          <span class="p">[],</span>
+            <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;energy&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>                       <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>                           <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+            <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="p">[],</span>
+            <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;kpoint&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;kpoint&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+            <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;mesh&#39;</span><span class="p">:</span>                            <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+            <span class="s1">&#39;mu_bounds&#39;</span><span class="p">:</span>                       <span class="p">[],</span>
+            <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;qpoint&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
+                <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;seebeck_effective_mass&#39;</span><span class="p">:</span>          <span class="p">[],</span>
+            <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;zt&#39;</span><span class="p">:</span>                              <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+
+    <span class="k">return</span> <span class="n">dims</span>
+
+<span class="k">def</span> <span class="nf">boltztrap_dimensions</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of dimensions of quantities updated for BoltzTraP.&quot;&quot;&quot;</span>
+
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">()</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">]</span> <span class="o">=</span>                <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">]</span> <span class="o">=</span>                    <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;fermi_level&#39;</span><span class="p">]</span> <span class="o">=</span>                     <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">]</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;mobility&#39;</span><span class="p">]</span> <span class="o">=</span>                        <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">]</span> <span class="o">=</span>                    <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;seebeck&#39;</span><span class="p">]</span> <span class="o">=</span>                         <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">dims</span>
 
 <div class="viewcode-block" id="labels"><a class="viewcode-back" href="../../tp.html#tp.settings.labels">[docs]</a><span class="k">def</span> <span class="nf">labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get the default labels for use in tp.&quot;&quot;&quot;</span>
@@ -532,6 +505,8 @@
                   <span class="s1">&#39;Conductivity (S m$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;cumulative_percent&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Cumulative Lattice Thermal Conductivity (%)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Carrier Concentration (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
@@ -582,6 +557,8 @@
                   <span class="s1">&#39;Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Wavevector&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;ZT&#39;</span><span class="p">}</span>
 
@@ -602,6 +579,8 @@
                   <span class="s1">&#39;Conductivity (S m$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;cumulative_percent&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Cum. LTC (%)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Carrier Concentration (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
@@ -652,6 +631,8 @@
                   <span class="s1">&#39;Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Wavevector&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;ZT&#39;</span><span class="p">}</span>
 
@@ -672,6 +653,8 @@
                   <span class="s1">&#39;$\mathregular{\sigma\ (S\ m^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;cumulative_percent&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;$\mathregular{\kappa_l}$ (%)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;n (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
@@ -722,6 +705,8 @@
                   <span class="s1">&#39;$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;q&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau^{-1}\ (s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;ZT&#39;</span><span class="p">}</span>
 
@@ -733,46 +718,30 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Scanlon Materials Theory Group.
-
-    </p>
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

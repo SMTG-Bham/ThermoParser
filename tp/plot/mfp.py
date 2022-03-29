@@ -25,14 +25,17 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
 def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                   label=None, xmarkers=None, ymarkers=None, add_xticks=False,
-                  add_yticks=False, main=True, scale=False, colour='#000000',
+                  add_yticks=False, main=True, scale=False, colour=None,
                   fill=False, fillcolour=0.2, line=True, linestyle='-',
-                  marker=None, markerkwargs={}, **kwargs):
+                  marker=None, markerkwargs={}, verbose=False, **kwargs):
     """Cumulates and plots kappa against mean free path.
 
     Can plot data from multiple data dictionaries and directions.
@@ -103,6 +106,9 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
         marker : str or list, optional
             (list of) markers. Default: None.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         markerkwargs : dict, optional
             keyword arguments for the markers, passed to
             matplotlib.pyplot.plot.
@@ -113,7 +119,6 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
                 color:      black
                 rasterized: False
-
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
@@ -190,17 +195,14 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             mfp = np.abs(np.ravel(data2['mean_free_path']))
 
             mfp, k = cumulate(mfp, k)
-            np.savetxt('cumkappa-mfp-{:.0f}K-{}.dat'.format(
-                       dat['meta']['temperature'], d), np.transpose([mfp, k]),
-                       header='mfp(m) k_l(Wm-1K-1)')
 
-            mindex = next(x[0] for x in enumerate(k) if x[1] > kmin*k[-1]/100)
+            mindex = next(x[0] for x in enumerate(np.ma.masked_invalid(k).compressed()) if x[1] > kmin*k[-1]/100)
             if mfpmin is None or mfpmin > mfp[mindex]:
                 mfpmin = mfp[mindex]
             if mfpmax is None or mfpmax < mfp[-1]:
-                mfpmax = mfp[-1]
+                mfpmax = np.nanmax(mfp)
             if kmax is None or kmax < k[-1]:
-                kmax = 100 if main and scale else k[-1]
+                kmax = 100 if main and scale else np.nanmax(k[-1])
 
             mfp = np.append(mfp, 100*mfp[-1])
             k = np.append(k, k[-1])
@@ -215,7 +217,10 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             fillcolour1 = fillcolour[i % len(fillcolour)]
             linestyle1 = linestyle[i % len(linestyle)]
             marker1 = marker[i % len(marker)]
-            label1 = "${}$".format(label[i % len(label)])
+            if label is not None:
+                label1 = "${}$".format(label[i % len(label)])
+            else:
+                label1 = None
 
             # colour
             # Tries to read the colour as an rgb code, then alpha value.
@@ -223,7 +228,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             if fill:
                 try:
                     fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
-                except Exception:
+                except ValueError:
                     if isinstance(colour1, list) and \
                        isinstance(fillcolour1, (float, int)) and \
                        fillcolour1 >= 0 and fillcolour1 <= 1:
@@ -256,6 +261,10 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
                 yticks.append(ytick)
 
             i += 1
+
+        if verbose:
+            print('Using {} {}.'.format(data2['meta']['temperature'],
+                                        data2['meta']['units']['temperature']))
 
     # axes formatting
 

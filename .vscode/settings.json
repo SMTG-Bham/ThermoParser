@@ -1,0 +1,13 @@
+{
+    "restructuredtext.confPath": "${workspaceFolder}\\docs\\src",
+    "restructuredtext.languageServer.disabled": true,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
+}
