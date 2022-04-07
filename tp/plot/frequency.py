@@ -100,7 +100,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             Default: None.
 
         kwargs
-            keyword arguments passed to matplotlib.pyplot.fill_between.
+            keyword arguments passed to matplotlib.pyplot.plot, unless
+            line=False, in which case they are passed to fill_between
+            instead. rasterized is always passed to both.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
             arguments passed to this function.
@@ -235,14 +237,15 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
         if invert:
             if fill and line:
                 ax.fill_between(totaldata, f, facecolor=colour['total'],
-                                linewidth=0, alpha=fillalpha)
+                                linewidth=0, alpha=fillalpha,
+                                rasterized=kwargs['rasterized'])
                 ax.plot(totaldata, f, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
             elif fill and not line:
-                ax.fill_between(totaldata, f, label=totallabel,
-                                facecolor=colour['total'], linewidth=0,
-                                alpha=fillalpha)
+                ax.fill_between(totaldata, f, label=totallabel, linewidth=0,
+                                facecolor=colour['total'], alpha=fillalpha,
+                                rasterized=kwargs['rasterized'])
             else:
                 ax.plot(totaldata, f, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
@@ -250,14 +253,15 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
         else:
             if fill and line:
                 ax.fill_between(f, totaldata, facecolor=colour['total'],
-                                linewidth=0, alpha=fillalpha)
+                                linewidth=0, alpha=fillalpha,
+                                rasterized=kwargs['rasterized'])
                 ax.plot(f, totaldata, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
             elif fill and not line:
                 ax.fill_between(f, totaldata, label=totallabel,
                                 facecolor=colour['total'], linewidth=0,
-                                alpha=fillalpha)
+                                alpha=fillalpha, **kwargs)
             else:
                 ax.plot(f, totaldata, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],

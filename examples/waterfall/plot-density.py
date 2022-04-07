@@ -11,6 +11,7 @@ direction = 'avg'
 temperature = 300
 waterfall = 'mean_free_path'
 quantities = ['waterfall', waterfall]
+# waterfall is an alias for frequency
 
 colours = {'Ba': '#ffcf06',
            'Sn': '#59c605',
