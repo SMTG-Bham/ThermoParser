@@ -21,6 +21,7 @@ Functions
         colour converter.
 """
 
+from wsgiref.simple_server import WSGIRequestHandler
 from matplotlib.colors import ListedColormap
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -58,7 +59,7 @@ def linear(cmax, cmin='#ffffff', alpha=1., density=512):
 
     return ListedColormap(colours)
 
-def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
+def uniform(cmid, cmin='#ffffff', cmax='#333333', alpha=1.,
           density=512):
     """Generates bigradient colourmaps.
 
@@ -73,7 +74,7 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
         cmin : str, optional.
             colour at minimum. Default: #ffffff.
         cmax : str, optional
-            colour at maximum. Default: #000000.
+            colour at maximum. Default: #333333.
         alpha : float, optional
             colour alpha (from 0-1). Default: 1.0.
 
@@ -92,7 +93,7 @@ def uniform(cmid, cmin='#ffffff', cmax='#000000', alpha=1.,
     cmax2 = np.array(rgb2array(cmax, alpha))
     cnorm = (cmid2[:3] - cmin2[:3]) / (cmax2[:3] - cmin2[:3])
     # pythagoras
-    midpoint = np.sqrt(((1-cnorm[0])**2 + (1-cnorm[1])**2 + (1-cnorm[2])**2)/3)
+    midpoint = np.sqrt((cnorm[0]**2 + cnorm[1]**2 + cnorm[2]**2)/3)
     x = [0, midpoint, 1]
     y = [cmin2, cmid2, cmax2]
     colours = []
@@ -138,7 +139,6 @@ def elbow(cmid, cmin='#ffffff', cmax='#000000', midpoint=0.7, alpha=1.,
     cmid2 = rgb2array(cmid, alpha)
     cmax2 = rgb2array(cmax, alpha)
     y = [cmin2, cmid2, cmax2]
-    colours = []
     x2 = np.linspace(0, 1, density)
     c = interp1d(x, y, 'linear', axis=0)
     colour = np.abs(c(x2))

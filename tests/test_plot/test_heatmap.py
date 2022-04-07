@@ -3,8 +3,6 @@
 import unittest
 import tp
 import numpy as np
-from glob import glob
-from os import remove
 from unittest.mock import Mock, patch
 from tp.plot import heatmap
 import matplotlib as mpl
@@ -35,9 +33,9 @@ class HeatmapTest(unittest.TestCase):
 
     @patch.object(plt, 'colorbar')
     def test_log(self, mock_colourbar):
-        self.x = np.power(10, self.x)
-        self.y = np.power(10, self.y)
-        self.c = np.power(10, self.c)
+        self.x = np.power(10., self.x)
+        self.y = np.power(10., self.y)
+        self.c = np.power(10., self.c)
         cbar = heatmap.add_heatmap(self.ax, self.x, self.y, self.c,
                                    xinterp=None, yinterp=None, xscale='log',
                                    yscale='log', cscale='log')
@@ -166,15 +164,14 @@ class ZTMapTest(unittest.TestCase):
                             [4, 8]]
         self.ax = Mock()
 
-    def tearDown(self):
-        dat = glob("zt.hdf5")
-        for f in dat: remove(f)
-
     @patch.object(tp.calculate, 'zt_fromdict')
+    @patch.object(tp.calculate, 'interpolate')
     @patch.object(tp.data.resolve, 'resolve')
     @patch.object(plt, 'colorbar')
-    def test_default(self, mock_colourbar, mock_resolve, mock_zt):
+    def test_default(self, mock_colourbar, mock_resolve, mock_interpolate, mock_zt):
         mock_zt.return_value = self.data2
+        mock_interpolate.return_value = (self.data, self.data)
+        mock_resolve.return_value = self.data
         cbar = heatmap.add_ztmap(self.ax, self.data, xinterp=None,
                                  yinterp=None)
 
@@ -185,7 +182,8 @@ class ZTMapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
-        mock_resolve.assert_not_called()
+        self.assertEqual(mock_resolve.call_count, 2)
+        mock_interpolate.assert_called_once()
         mock_zt.assert_called_once()
 
     @patch.object(tp.calculate, 'zt_fromdict')
@@ -203,7 +201,7 @@ class ZTMapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
-        mock_resolve.assert_not_called()
+        mock_resolve.assert_called_once()
         mock_zt.assert_not_called()
 
 class TargetKLTest(unittest.TestCase):
@@ -226,10 +224,6 @@ class TargetKLTest(unittest.TestCase):
         self.data2['lattice_thermal_conductivity'] = [[1, 2],
                                                       [4, 8]]
         self.ax = Mock()
-
-    def tearDown(self):
-        dat = glob("target-kl.hdf5")
-        for f in dat: remove(f)
 
     @patch.object(tp.calculate, 'kl_fromdict')
     @patch.object(tp.data.resolve, 'resolve')

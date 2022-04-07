@@ -1,5 +1,6 @@
 """Tests the tp.calculate module."""
 
+from re import I
 import unittest
 from tp import calculate
 
@@ -50,7 +51,8 @@ class PowerFactorZTTest(unittest.TestCase):
                  'electronic_thermal_conductivity': cls.ke,
                  'lattice_thermal_conductivity':    cls.kl,
                  'temperature':                     cls.t,
-                 'meta':                            {'units': {}}}
+                 'meta':                            {'units':      {},
+                                                     'dimensions': {}}}
 
     def test_power_factor(self):
         pf2 = calculate.power_factor(conductivity=self.c, seebeck=self.s)
@@ -83,7 +85,8 @@ class PowerFactorZTTest(unittest.TestCase):
              'electronic_thermal_conductivity': self.ke,
              'zt':                              self.zt,
              'temperature':                     self.t,
-             'meta':                            {'units': {}}}
+             'meta':                            {'units':      {},
+                                                 'dimensions': {}}}
         d = calculate.kl_fromdict(d)
         self.assertEqual(d['zt'], self.zt)
 

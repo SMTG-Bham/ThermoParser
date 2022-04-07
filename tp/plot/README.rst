@@ -15,8 +15,8 @@ Contains colourmap generators:
 * ``linear``: a linear colourmap between a max and min colour.
 * ``uniform`` and ``elbow``: colourmaps where the highlight colour is
   part way through the map. ``uniform`` calculates the midpoint relative
-  to the end points to attempt a more uniform plot, in ``elbow`` the
-  position can be chosen. Varyingly successful.
+  to the end points for a more uniform plot, while in ``elbow`` the
+  position can be chosen.
 * ``highlight``: adds a highlight colour to an existing colourmap.
   may be useful in ``tp.plot.frequency.add_waterfall`` or
   ``tp.plot.phonons``.
@@ -56,8 +56,8 @@ several of these plots.
 * ``format_waterfall``: formats the axes for waterfall plots.
 
 .. tip::
-    If you run ``format_waterfall`` then ``add_dos` and then
-    ``add_waterfall``, the waterfall will be overlayed on top of the dos
+    If you run ``format_waterfall`` then ``add_dos`` and then
+    ``add_waterfall``, the waterfall will be overlayed on top of the DoS
     so the waterfall colours remain clear.
 
 --------------
@@ -123,13 +123,14 @@ Reference
 
 .. code-block:: bibtex
 
-@article{Maradudin1962,
-  title={Scattering of neutrons by an anharmonic crystal},
-  author={Maradudin, AA and Fein, AE},
-  journal={Physical Review},
-  volume={128},
-  number={6},
-  pages={2589},
-  year={1962},
-  publisher={APS}
-}
+    @article{Maradudin1962,
+      title={Scattering of neutrons by an anharmonic crystal},
+      author={Maradudin, AA and Fein, AE},
+      journal={Physical Review},
+      volume={128},
+      number={6},
+      pages={2589},
+      year={1962},
+      publisher={APS}
+    }
+

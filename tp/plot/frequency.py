@@ -20,8 +20,8 @@ Functions
     add_density:
         density of phonon modes for a property vs frequency.
 
-    format_waterfall
-        formatting for the waterfall and density plots
+    format_waterfall:
+        formatting for the waterfall and density plots.
 """
 
 import matplotlib as mpl
@@ -32,7 +32,6 @@ import tp
 import warnings
 import yaml
 from scipy.stats import gaussian_kde
-from tp.data import resolve
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
@@ -40,11 +39,16 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
-def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
-            colour='tab10', fill=True, fillalpha=0.2, line=True, **kwargs):
+def add_dos(ax, data, projected=True, total=False, totallabel='Total',
+            main=True, invert=False, scale=False, colour='tab10',
+            totalcolour=None, fill=True, fillalpha=0.2, line=True,
+            linestyle='-', marker=None, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments
@@ -55,8 +59,13 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         data : dict
             DoS data.
 
+        projected : bool, optional
+            plot atom-projected DoS. Default: True.
         total : bool, optional
             plot total DoS. Default: False
+        totallabel : str, optional
+            label for the total line. Other labels are taken directly
+            from the input dictionary. Default: Total.
 
         main : bool, optional
             set ticks, labels, limits. Default: True.
@@ -68,17 +77,32 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
 
         colour : dict or list or str or colourmap, optional
             RGB colours per atom as a dictionary or a list in POSCAR
-            order. Can instead provide a colourmap or colourmap name.
-            Default: tab10.
+            order, with total as the last colour. Can instead provide a
+            colourmap or colourmap name, which don't include a total
+            colour. If not projected, can specify a single total colour.
+            Total colour is overridden by totalcolour. Default: tab10.
+        totalcolour : str, optional
+            colour for the total line. Overrides specifying as part of
+            colour. Default: black.
         fill : bool, optional
             fill below lines. Default: True.
         fillalpha : float, optional
             fill alpha scaled to 0-1. Default: 0.2.
         line : bool, optional
             plot lines. Default: True.
+        linestyle : dict or list or str, optional
+            linestyle or dictionary of linestyles per atom and total, or
+            list in POSCAR order, with total as the last linestyle.
+            Default: -.
+        marker : dict or list or str or tuple, optional
+            marker or dictionary of markers per atom and total, or list
+            in POSCAR order, with total as the last marker.
+            Default: None.
 
         kwargs
-            keyword arguments passed to matplotlib.pyplot.fill_between.
+            keyword arguments passed to matplotlib.pyplot.plot, unless
+            line=False, in which case they are passed to fill_between
+            instead. rasterized is always passed to both.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
             arguments passed to this function.
@@ -108,6 +132,7 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
                            [ total,   main,   invert,   scale,   fill,   line]):
         assert isinstance(value, bool), '{} must be True or False.'.format(name)
     assert fill or line, 'fill or line or both must be True.'
+    assert projected or total, 'projected or total or both must be True.'
     assert isinstance(fillalpha, (float, int)) and fillalpha >= 0 \
                                                and fillalpha <= 1, \
            'fillalpha must be a float/ integer between 0 and 1.'
@@ -115,11 +140,9 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
     # data scaling
 
     data = dict(data)
-    f = data['frequency']
-    del data['frequency']
+    f = data.pop('frequency')
     if 'meta' in data: del data['meta']
-    if not total:
-        del data['total']
+    if not total: del data['total']
 
     if scale:
         axscale = [0, 100] if main else None
@@ -127,73 +150,154 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
         data = tp.plot.utilities.scale_to_axis(ax, data, scale=axscale,
                                                axis=axis)
     if total:
-        totaldata = data['total']
-        del data['total']
+        totaldata = data.pop('total')
 
     # colours
-    # Tries to read the colour as a colourmap name, then colourmap
+    # If projected, tries to read the colour as a colourmap name, then colourmap
     # object, then list of colours, then dictionary, and converts it
-    # into a dictionary if necessary.
+    # into a dictionary if necessary. If not projected, colour can be a single
+    # colour for the total. The total colour is found first from totalcolour,
+    # otherwise it can be specified in the dictionary under total or as the
+    # last list item, or defaults to black.
 
-    if not isinstance(colour, dict):
-        if not isinstance(colour, list):
-            try:
-                cmap = plt.cm.get_cmap(colour)(np.linspace(0,1,len(data)))
-            except Exception:
-                cmap = colour(np.linspace(0,1,len(data)))
+    if not projected:
+        if totalcolour is not None:
+            colour = {'total': totalcolour}
+        elif isinstance(colour, dict) and 'total' in colour:
+            pass
+        elif isinstance(colour, list):
+            if len(colour) == 1:
+                colour = {'total': colour[0]}
+            elif len(colour) > len(data):
+                colour = {'total': colour[len(data)]}
         else:
-            cmap = colour
-        colour = {}
-        for i, c in enumerate(data):
-            colour[c] = cmap[i]
+            colour = {'total': colour}
+    else:
+        if not isinstance(colour, dict):
+            if not isinstance(colour, list):
+                try:
+                    cmap = plt.cm.get_cmap(colour)(np.linspace(0,1,len(data)))
+                except ValueError:
+                    cmap = colour(np.linspace(0,1,len(data)))
+            else:
+                cmap = colour
+            colour = {}
+            for i, c in enumerate(data):
+                colour[c] = cmap[i]
+            if len(cmap) > len(data):
+                colour['total'] = cmap[len(data)]
 
-    if total and 'total' not in colour:
-        colour['total'] = '#000000'
-    fillcolour = {}
-    for c in colour:
-        if isinstance(colour[c], str):
-            colour[c] = tp.plot.colour.rgb2array(colour[c])
-        if fill:
-            fillcolour[c] = list(colour[c])
-            fillcolour[c][3] = fillalpha
+        if total and 'total' not in colour:
+            if totalcolour is not None:
+                colour['total'] = totalcolour
+            else:
+                colour['total'] = '#000000'
+
+    markers = {}
+    if isinstance(marker, (str, tuple)) or marker is None:
+        if not projected:
+            markers['total'] = marker
+        else:
+            marker = [marker]
+    if isinstance(marker, list):
+        while len(marker) < len(data):
+            marker.append(marker[-1])
+        for i, c in enumerate(data):
+            markers[c] = marker[i]
+        if len(marker) > len(data):
+            markers['total'] = marker[len(data)+1]
+    elif isinstance(marker, dict):
+        markers = marker
+    else:
+        raise Exception('marker must be a dict, list, str, tuple or None')
+    if total not in markers:
+        markers['total'] = None
+
+    linestyles = {}
+    if isinstance(linestyle, str):
+        if not projected:
+            linestyles['total'] = linestyle 
+        else:
+            linestyle = [linestyle]
+    if isinstance(linestyle, list):
+        while len(linestyle) < len(data):
+            linestyle.append(linestyle[-1])
+        for i, c in enumerate(data):
+            linestyles[c] = linestyle[i]
+        if len(linestyle) > len(data):
+            linestyles['total'] = linestyle[len(data)+1]
+    if isinstance(linestyle, dict):
+        linestyles = linestyle
+    if total not in linestyles:
+        linestyles['total'] = '-'
 
     # plotting
 
     if total:
         if invert:
             if fill and line:
-                ax.fill_between(totaldata, f, facecolor=fillcolour['total'], linewidth=0)
-                ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
+                ax.fill_between(totaldata, f, facecolor=colour['total'],
+                                linewidth=0, alpha=fillalpha,
+                                rasterized=kwargs['rasterized'])
+                ax.plot(totaldata, f, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
             elif fill and not line:
-                ax.fill_between(totaldata, f, label='Total', facecolor=fillcolour['total'],
-                                linewidth=0)
+                ax.fill_between(totaldata, f, label=totallabel, linewidth=0,
+                                facecolor=colour['total'], alpha=fillalpha,
+                                rasterized=kwargs['rasterized'])
             else:
-                ax.plot(totaldata, f, label='Total', color=colour['total'], **kwargs)
-        else:
-            if fill:
-                ax.fill_between(f, totaldata, label='Total', facecolor=fillcolour['total'],
-                               linewidth=0)
-            if line:
-                ax.plot(f, totaldata, label='Total', color=colour['total'], **kwargs)
-
-    for key in data:
-        if invert:
-            if fill and line:
-                ax.fill_between(data[key], f, facecolor=fillcolour[key], linewidth=0)
-                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
-            elif fill and not line:
-                ax.fill_between(data[key], f, label=key, facecolor=fillcolour[key], linewidth=0)
-            else:
-                ax.plot(data[key], f, label=key, color=colour[key], **kwargs)
+                ax.plot(totaldata, f, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
         else:
             if fill and line:
-                ax.fill_between(f, data[key], facecolor=fillcolour[key], linewidth=0)
-                ax.plot(f, data[key], color=colour[key], label=key, **kwargs)
+                ax.fill_between(f, totaldata, facecolor=colour['total'],
+                                linewidth=0, alpha=fillalpha,
+                                rasterized=kwargs['rasterized'])
+                ax.plot(f, totaldata, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
             elif fill and not line:
-                ax.fill_between(f, data[key], label=key, facecolor=fillcolour[key], linewidth=0)
+                ax.fill_between(f, totaldata, label=totallabel,
+                                facecolor=colour['total'], linewidth=0,
+                                alpha=fillalpha, **kwargs)
             else:
-                ax.plot(f, data[key], label=key, color=colour[key], **kwargs)
-         
+                ax.plot(f, totaldata, label=totallabel, color=colour['total'],
+                        linestyle=linestyles['total'], marker=markers['total'],
+                        **kwargs)
+    if projected:
+        for key in data:
+            if invert:
+                if fill and line:
+                    ax.fill_between(data[key], f, facecolor=colour[key],
+                                    linewidth=0, alpha=fillalpha)
+                    ax.plot(data[key], f, label=key, color=colour[key],
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
+                elif fill and not line:
+                    ax.fill_between(data[key], f, label=key,
+                                    facecolor=colour[key], linewidth=0,
+                                    alpha=fillalpha)
+                else:
+                    ax.plot(data[key], f, label=key, color=colour[key],
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
+            else:
+                if fill and line:
+                    ax.fill_between(f, data[key], facecolor=colour[key],
+                                    linewidth=0, alpha=fillalpha)
+                    ax.plot(f, data[key], color=colour[key], label=key,
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
+                elif fill and not line:
+                    ax.fill_between(f, data[key], label=key,
+                                    facecolor=colour[key], linewidth=0,
+                                    alpha=fillalpha)
+                else:
+                    ax.plot(f, data[key], label=key, color=colour[key],
+                            linestyle=linestyles[key], marker=markers[key],
+                            **kwargs)
 
     # axes formatting
 
@@ -215,53 +319,80 @@ def add_dos(ax, data, total=False, main=True, invert=False, scale=False,
 
     return
 
-def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
-                  invert=False, scale=False, colour='#000000', fill=False,
-                  fillcolour=0.2, line=True, **kwargs):
+def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
+                  main=True, invert=False, scale=False, colour=None,
+                  fill=False, fillcolour=0.2, line=True, linestyle='-',
+                  marker=None, verbose=False, **kwargs):
     """Cumulates and plots kappa against frequency.
+
+    Can plot data from multiple data dictionaries and directions.
+    Colour, linestyle etc. are looped, so if you have two datasets and
+    two directions, but only specify two colours, the first will apply
+    to the first direction in both datasets, whereas if you want one for
+    the first dataset and one for the second, you would repeat the first
+    colour twice and the second twice too.
 
     Arguments
     ---------
 
         ax : axes
             axes to plot on.
-        data : dict
-            Phono3py data including mode_kappa and frequency.
+        data : dict or list
+            (list of sets of) Phono3py data including:
 
         temperature : float, optional
             temperature in K (finds nearest). Default: 300.
-        direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average
+
+                mode_kappa: array-like
+                    frequency and q-point decomposed lattice thermal
+                    conductivity.
+                frequency : array-like
+                    frequencies.
+                temperature : array-like
+                    temperature.
+
+        direction : str or list, optional
+            (list of) direction(s) from anisotropic data, accepts x-z/ a-c or
+            average/ avg. Default: average.
+        label : str, optional
+            (list of) legend label(s). Defaults to $\mathregular{\kappa_l}$
+            if there is only one line plotted, or direction if there are
+            more.
 
         main : bool, optional
             set ticks, labels, limits. Default: True.
         invert : bool, optional
             plot frequency on y axis. Default: False.
         scale : bool, optional
-            if main, scale to percent. If not main, scale to axis
-            limits. Default: True.
+            if main, scale to percent, else scale to axis limits.
+            Default: True.
 
-        colour : str, optional
-            RGB line colour. Default: #000000.
+        colour : str or list, optional
+            (list of) RGB line colour(s). Default: default colour cycle.
         fill : bool, optional
             fill below lines. Default: False.
-        fillcolour : int or str, optional
+        fillcolour : int or str or list, optional
             if a float from 0-1 and colour in #RRGGBB format, sets
             fill colour opacity. Otherwise treats it as a colour.
             Default: 0.2.
         line : bool, optional
             plot lines. Default: True.
+        linestyle : str or list, optional
+            (list of) linestyle(s). Default: "-".
+        marker : str or list, optional
+            (list of) markers. Default: None.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.fill_between
             if filled or matplotlib.pyplot.plot otherwise.
             Defaults are defined below, which are overridden by those in
             ``~/.config/tprc.yaml``, both of which are overridden by
             arguments passed to this function.
-            Defaults:
+            Default:
 
-                label:      $\mathregular{\kappa_l}$
                 rasterized: False
 
     Returns
@@ -273,8 +404,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
     # defaults
 
-    defkwargs = {'label':      '$\mathregular{\kappa_l}$',
-                 'rasterized': False}
+    defkwargs = {'rasterized': False}
 
     if conf is None or 'frequency_cum_kappa_kwargs' not in conf or \
        conf['frequency_cum_kappa_kwargs'] is None:
@@ -291,79 +421,134 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
     # data formatting and calculation
 
-    data = tp.resolve.resolve(data, 'mode_kappa', temperature=temperature,
-                                                  direction=direction)
-    k = np.ravel(data['mode_kappa'])
-    f = np.ravel(data['frequency'])
-
-    f, k = tp.calculate.cumulate(f, k)
-    np.savetxt('cumkappa-frequency-{:.0f}K-{}.dat'.format(
-               data['meta']['temperature'], direction),
-               np.transpose([f, k]), header='Frequency(THz) k_l(Wm-1K-1)')
-    f = np.append(f, 100*f[-1])
-    k = np.append(k, k[-1])
-
-    if scale:
-        axscale = [0, 100] if main else None
-        axis = 'x' if invert else 'y'
-        k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale, axis=axis)
-
-    # colour
-    # Tries to read the colour as an rgb code, then alpha value.
-    
-    if fill:
-        try:
-            fillcolour2 = tp.plot.colour.rgb2array(colour, fillcolour)
-        except Exception:
-            if isinstance(colour, list) and \
-               isinstance(fillcolour, (float, int)) and fillcolour >= 0 and \
-               fillcolour <= 1:
-                fillcolour2 = list(colour)
-                if len(colour) == 3:
-                    fillcolour2.append(fillcolour)
-                elif len(colour) == 4:
-                    fillcolour2[3] = fillcolour
-            else:
-                fillcolour2 = fillcolour
-
-     # plotting
-
-    if fill and line:
-        if invert:
-            ax.plot(k, f, color=colour, **kwargs)
-            ax.fill_between(k, f, facecolor=fillcolour2, linewidth=0)
+    if isinstance(direction, str):
+        direction = [direction]
+    if isinstance(data, dict):
+        data = [data]
+    if colour is None:
+        colour = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    elif isinstance(colour, str):
+        colour = [colour]
+    if fillcolour is None:
+        fillcolour = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    elif isinstance(fillcolour, (str, float, int)):
+        fillcolour = [fillcolour]
+    if isinstance(linestyle, str):
+        linestyle = [linestyle]
+    if marker is None or isinstance(marker, str):
+        marker = [marker]
+    if label is None:
+        if len(data) == 1 and len(direction) == 1:
+            label = ['$\mathregular{\kappa_l}$']
         else:
-            ax.plot(f, k, color=colour, **kwargs)
-            ax.fill_between(f, k, facecolor=fillcolour2)
+            label = direction
+    elif isinstance(label, str):
+        label = [label]
 
-    elif fill and not line: 
-            if invert:
-                ax.fill_between(k, f, facecolor=fillcolour2, **kwargs)
+    fmax, kmax = None, None
+    i = 0
+
+    for dat in data:
+        for d in direction:
+            data2 = tp.data.resolve.resolve(dat, 'mode_kappa',
+                                            temperature=temperature,
+                                            direction=d)
+            k = np.ravel(data2['mode_kappa'])
+            f = np.ravel(data2['frequency'])
+
+            f, k = tp.calculate.cumulate(f, k)
+
+            if fmax is None or fmax < f[-1]:
+                fmax = f[-1]
+            if kmax is None or kmax < k[-1]:
+                kmax = 100 if main and scale else k[-1]
+
+            f = np.append(f, 100*f[-1])
+            k = np.append(k, k[-1])
+
+            if scale:
+                axscale = [0, 100] if main else None
+                axis = 'x' if invert else 'y'
+                k = tp.plot.utilities.scale_to_axis(ax, k, scale=axscale, axis=axis)
+
+            colour1 = colour[i % len(colour)]
+            fillcolour1 = fillcolour[i % len(fillcolour)]
+            linestyle1 = linestyle[i % len(linestyle)]
+            marker1 = marker[i % len(marker)]
+            label1 = "${}$".format(label[i % len(label)])
+
+            # colour
+            # Tries to read the colour as an rgb code, then alpha value.
+
+            if fill:
+                try:
+                    fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
+                except ValueError:
+                    if isinstance(colour1, list) and \
+                       isinstance(fillcolour1, (float, int)) and \
+                       fillcolour1 >= 0 and fillcolour1 <= 1:
+                        fillcolour2 = colour1
+                        if len(colour1) == 3:
+                            fillcolour2.append(fillcolour1)
+                        elif len(colour1) == 4:
+                            fillcolour2[3] = fillcolour1
+                    else:
+                        fillcolour2 = fillcolour1
+
+             # plotting
+
+            if fill and line:
+                if invert:
+                    ax.plot(k, f, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
+                    ax.fill_between(k, f, facecolor=fillcolour2, linewidth=0)
+                else:
+                    ax.plot(f, k, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
+                    ax.fill_between(f, k, facecolor=fillcolour2)
+
+            elif fill and not line:
+                    if invert:
+                        ax.fill_between(k, f, facecolor=fillcolour2, **kwargs)
+                    else:
+                        ax.fill_between(f, k, facecolor=fillcolour2, **kwargs)
+
             else:
-                ax.fill_between(f, k, facecolor=fillcolour2, **kwargs)
+                if invert:
+                    ax.plot(k, f, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
+                else:
+                    ax.plot(f, k, color=colour1, linestyle=linestyle1,
+                            marker=marker1, label=label1, **kwargs)
 
-    else:
-        if invert:
-            ax.plot(k, f, color=colour, **kwargs)
-        else:
-            ax.plot(f, k, color=colour, **kwargs)
+            i += 1
+
+        if verbose:
+            print('Using {} {}.'.format(data2['meta']['temperature'],
+                                        data2['meta']['units']['temperature']))
 
     # axes formatting
 
     if main:
         if invert:
             axlabels = tp.settings.inverted_labels()
-            ax.set_xlabel(axlabels['cumulative_kappa'])
+            if scale:
+                ax.set_xlabel(axlabels['cumulative_percent'])
+            else:
+                ax.set_xlabel(axlabels['cumulative_kappa'])
             ax.tick_params(axis='y', labelleft=False)
-            ax.set_xlim(0, k[-2])
-            ax.set_ylim(0, f[-2])
+            ax.set_xlim(0, kmax)
+            ax.set_ylim(0, fmax)
 
         else:
             axlabels = tp.settings.labels()
-            ax.set_ylabel(axlabels['cumulative_kappa'])
+            if scale:
+                ax.set_ylabel(axlabels['cumulative_percent'])
+            else:
+                ax.set_ylabel(axlabels['cumulative_kappa'])
             ax.set_xlabel(axlabels['frequency'])
-            ax.set_ylim(0, k[-2])
-            ax.set_xlim(0, f[-2])
+            ax.set_ylim(0, kmax)
+            ax.set_xlim(0, fmax)
 
         tp.plot.utilities.set_locators(ax, x='linear', y='linear')
 
@@ -371,7 +556,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', main=True,
 
 def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
                   direction='avg', main=True, invert=False, colour='viridis',
-                  **kwargs):
+                  verbose=False, **kwargs):
     """Adds a waterfall plot of quantities against frequency.
 
     Has an option to change the x-quantity.
@@ -387,7 +572,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             y-axis quantity. Accepts frequency, gamma, group_velocity,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
             mode_kappa, occupation or ph_ph_strength.
-            
+
         xquantity : str, optional
             x-axis quantity. Accepts frequency, gamma, group_velocity,
             gv_by_gv, heat_capacity, lifetime, mean_free_path,
@@ -404,11 +589,15 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
         invert : bool, optional
             invert x- and y-axes. Default: False.
 
-        colour : colourmap or str or array-like, optional
+        colour : colourmap or str or array-like or dict, optional
             colourmap or colourmap name or list of colours (one for
-            each band or one for each point) or a single colour.
-            Default: viridis.
+            each band or one for each point) or two colours for a linear
+            colourmap or a dictionary with cmin and cmax keys or a
+            single colour. Default: viridis.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
@@ -461,22 +650,27 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity],
-                                   temperature, direction)
+                                   temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
 
     # colour
     # Tries to read as a colourmap name or colourmap object or list of
     # colours (of varying formats), one per band, and assigns
-    # appropriately. Otherwise leaves as is, which is appropriate for 
-    # a single colour or colour per point.
+    # appropriately, or just two colours generate a linear colourmap, or
+    # a dictionary with cmin and cmax keys. Otherwise leaves as is,
+    # which is appropriate for a single colour or colour per point.
 
     s = np.shape(data[xquantity])
     try:
         colour = mpl.cm.get_cmap(colour)
         colours = [colour(i) for i in np.linspace(0, 1, s[1])]
         colours = np.tile(colours, (s[0], 1))
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = [colour(i) for i in np.linspace(0, 1, s[1])]
             colours = np.tile(colours, (s[0], 1))
@@ -484,12 +678,20 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
             colour = tp.plot.colour.skelton()
             colours = [colour(i) for i in np.linspace(0, 1, s[1])]
             colours = np.tile(colours, (s[0], 1))
-        elif (isinstance(colour, list) or isinstance(colour, np.ndarray) and
-              len(colour) == s[1]):
-            if np.ndim(colour) == 1:
-                colours = np.tile(colour, s[0])
-            elif np.ndim(colour) == 2:
-                colours = np.tile(colour, (s[0], 1))
+        elif isinstance(colour, list) or isinstance(colour, np.ndarray):
+            if len(colour) == s[1]:
+                if np.ndim(colour) == 1:
+                    colours = np.tile(colour, s[0])
+                elif np.ndim(colour) == 2:
+                    colours = np.tile(colour, (s[0], 1))
+            elif len(colour) == 2:
+                colour = tp.plot.colour.linear(cmin=colour[0], cmax=colour[1])
+                colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+                colours = np.tile(colours, (s[0], 1))
+        elif isinstance(colour, dict):
+                colour = tp.plot.colour.linear(**colour)
+                colours = [colour(i) for i in np.linspace(0, 1, s[1])]
+                colours = np.tile(colours, (s[0], 1))
         else:
             colours = colour
 
@@ -500,7 +702,9 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     # axes formatting
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        data[xquantity] = x
+        data[quantity] = y
+        format_waterfall(ax, data, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
@@ -516,7 +720,8 @@ def add_projected_waterfall(ax, data, quantity, projected,
                             xquantity='frequency', temperature=300,
                             direction='avg', main=True, invert=False,
                             colour='viridis', cmin=None, cmax=None,
-                            cscale=None, unoccupied='grey', **kwargs):
+                            cscale=None, unoccupied='grey', verbose=False,
+                            **kwargs):
     """Adds a waterfall plot against frequency with a colour axis.
 
     Has an option to change the x-quantity.
@@ -553,8 +758,10 @@ def add_projected_waterfall(ax, data, quantity, projected,
         invert : bool, optional
             invert x- and y-axes. Default: False.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys. Default: viridis.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -566,6 +773,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
             coloured in this colour. If set to None, or cmin is set,
             this feature is turned off. Default: grey.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
@@ -623,25 +833,16 @@ def add_projected_waterfall(ax, data, quantity, projected,
     projected = tnames[projected] if projected in tnames else projected
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity, projected],
-                                   temperature, direction)
+                                   temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
     c = np.abs(np.ravel(data[projected]))
 
-    # colour
-    # Reads a colourmap or colourmap name.
-
-    try:
-        cmap = copy(mpl.cm.get_cmap(colour))
-    except Exception:
-        if isinstance(colour, mpl.colors.ListedColormap):
-            cmap = copy(colour)
-        elif isinstance(colour, str) and colour == 'skelton':
-            cmap = tp.plot.colour.skelton()
-        else:
-            raise Exception('Unrecognised colour argument. '
-                            'Expected a colourmap or colourmap name.')
-
+    cmap = tp.plot.utilities.parse_colours(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c, projected, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -658,7 +859,9 @@ def add_projected_waterfall(ax, data, quantity, projected,
     cbar.draw_all()
 
     if main:
-        format_waterfall(ax, {xquantity: x, quantity: y}, quantity, xquantity)
+        data[xquantity] = x
+        data[quantity] = y
+        format_waterfall(ax, data, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
@@ -672,7 +875,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
 
 def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
                 direction='avg', main=True, invert=False, colour='Blues',
-                **kwargs):
+                verbose=False, **kwargs):
     """Adds a density plot of quantities against frequency.
 
     Has an option to change the x-quantity.
@@ -705,11 +908,14 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
         invert : bool, optional
             invert x- and y-axes. Default: False.
 
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name. A single #rrggbb colour can be
-            given to generate a custom uniform colourmap.
-            Default: Blues.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys. Default: Blues.
 
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
         kwargs
             keyword arguments passed to matplotlib.pyplot.scatter.
             Defaults are defined below, which are overridden by those in
@@ -754,38 +960,33 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity],
-                                   temperature, direction)
+                                   temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     x = np.ravel(data[xquantity])
     y = np.abs(np.ravel(data[quantity]))
+    mask = np.ma.masked_invalid(y).mask
+    x = np.ma.masked_where(mask, x).compressed()
+    y = np.ma.masked_where(mask, y).compressed()
     xy = np.vstack([x,y])
     z = gaussian_kde(xy)(xy)
     idx = z.argsort()
     x_dens, y_dens, z_dens = x[idx], y[idx], z[idx]
 
-    # colour
-    # Tries to read as a colourmap or colourmap name, or uses a single
-    # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
-
-    try:
-        colours = mpl.cm.get_cmap(colour)
-    except Exception:
-        if isinstance(colour, mpl.colors.ListedColormap):
-            colours = colour
-        else:
-            try:
-                colours = tp.plot.colour.uniform(colour)
-            except Exception:
-                raise Exception('colour must be a colourmap, colourmap'
-                                'name or single #rrggbb colour.')
+    cmap = tp.plot.utilities.parse_colours(colour)
 
     # plotting
 
-    ax.scatter(x_dens, y_dens, c=z_dens, cmap=colour, **kwargs)
+    ax.scatter(x_dens, y_dens, c=z_dens, cmap=cmap, **kwargs)
 
     # axes formatting
 
     if main:
-        format_waterfall(ax, {xquantity: x_dens, quantity: y_dens}, quantity, xquantity)
+        data[xquantity] = x_dens
+        data[quantity] = y_dens
+        format_waterfall(ax, data, quantity, xquantity)
         if invert:
             axlabels = tp.settings.inverted_labels()
             ax.set_xlabel(axlabels[xquantity])
@@ -798,7 +999,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     return
 
 def format_waterfall(ax, data, yquantity, xquantity='frequency',
-                     temperature=None, direction=None):
+                     temperature=300, direction='avg', invert=False):
     """Formats axes for waterfall plots.
 
     Arguments
@@ -806,7 +1007,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
 
         ax : axes
             axes to format.
-        data : array-like
+        data : dict
             data.
         yquantity : str
             y quantity name.
@@ -818,6 +1019,8 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
         direction : str, optional
             direction from anisotropic data, accepts x-z/ a-c or
             average/ avg. Default: average.
+        invert : bool, optional
+            invert x- and y-axes. Default: False.
 
     Returns
     -------
@@ -826,12 +1029,16 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
             formats ax directly.
     """
 
-    data = tp.data.resolve.resolve(data, [xquantity, yquantity], temperature,
-                                   direction)
-    data2 = {'x': np.ravel(data[xquantity]), 'y': np.ravel(data[yquantity])}
+
+    if invert:
+        xquantity, yquantity = yquantity, xquantity
+        
+    data2 = tp.data.resolve.resolve(data, [xquantity, yquantity],
+                                    temperature=temperature,
+                                    direction=direction)
+    data2 = {'x': np.ravel(data2[xquantity]), 'y': np.ravel(data2[yquantity])}
 
     limit = {'x': ax.set_xlim,   'y': ax.set_ylim}
-    scale = {'x': ax.set_xscale, 'y': ax.set_yscale}
     loc = {}
     lim = {}
 

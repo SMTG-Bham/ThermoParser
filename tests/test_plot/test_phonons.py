@@ -158,7 +158,10 @@ class AltDispersionTest(unittest.TestCase):
         # warnings ignored as there are tonnes, likely due to random
         # input data to pymatgen (but filtering pymatgen warnings failed).
         warnings.simplefilter('ignore')
-        self.poscar = 'data/POSCAR'
+
+        import os, re
+        cwd = os.getcwd()
+        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
@@ -189,7 +192,7 @@ class AltDispersionTest(unittest.TestCase):
     def test_default(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data
-
+        
         phonons.add_alt_dispersion(self.ax, self.data, self.pdata,
                                    'mode_kappa', main=True, smoothing=1,
                                    poscar=self.poscar)
@@ -250,7 +253,9 @@ class ProjectedDispersionTest(unittest.TestCase):
         # warnings ignored as there are tonnes, likely due to random
         # input data to pymatgen (but filtering pymatgen warnings failed).
         warnings.simplefilter('ignore')
-        self.poscar = 'data/POSCAR'
+        import os, re
+        cwd = os.getcwd()
+        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
@@ -361,7 +366,9 @@ class AltProjectedDispersionTest(unittest.TestCase):
         # warnings ignored as there are tonnes, likely due to random
         # input data to pymatgen (but filtering pymatgen warnings failed).
         warnings.simplefilter('ignore')
-        self.poscar = 'data/POSCAR'
+        import os, re
+        cwd = os.getcwd()
+        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
@@ -476,7 +483,9 @@ class WidebandTest(unittest.TestCase):
         # warnings ignored as there are tonnes, likely due to random
         # input data to pymatgen (but filtering pymatgen warnings failed).
         warnings.simplefilter('ignore')
-        self.poscar = 'data/POSCAR'
+        import os, re
+        cwd = os.getcwd()
+        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],

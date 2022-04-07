@@ -1,11 +1,14 @@
-Here are some examples to give an idea of what ThermoPlotter can do.
+Here are some examples to help you get started with ThermoPlotter. The
+numbered examples aim to provide a tutorial of how the package in
+general works, while the rest show some more concrete examples you
+might find in published work.
 
-Some require large data files to run, which haven't been included in the
-data folder, but can be downloaded using the ``get-data.sh`` script
-provided in the relevant directories. If ``wget`` doesn't work for you, 
-navigate to the URL (*repo* in `get-data.sh`) in your browser to
-download the required file and add it to the ``../data`` directory (*f*
-in `get-data.sh`).
+Some examples require large data files to run, which haven't been
+included in the data folder, but can be downloaded using the
+``get-data.sh`` script provided in the relevant directories. If
+``wget`` doesn't work for you, navigate to the URL (``repo`` in
+``get-data.sh``) in your browser to download the required file and add
+it to the ``../data`` directory (``f`` in ``get-data.sh``).
 
 cumkappa
 --------
@@ -21,19 +24,26 @@ kappa-target
    :alt: Lattice thermal conductivity required to reach a given ZT against carrier concentration and temperature.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/kappa-target
 
-multiphon
----------
-
-.. image:: multiphon/multiphon.png
-   :alt: Phonon dispersions for different supercell sizes.
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/multiphon
-
 phonons
 -------
 
 .. image:: phonons/phonons.png
    :alt: Phonon dispersion and density of states.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/phonons
+
+multiphon
+---------
+
+.. image:: phonons/multiphon.png
+   :alt: Phonon dispersions for different supercell sizes.
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/phonons
+
+wideband
+--------
+
+.. image:: projected-phonons/wideband.png
+   :alt: Phonon dispersion with broadened bands.
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/projected-phonons
 
 projected-phonons
 -----------------
@@ -49,12 +59,12 @@ waterfall
    :alt: Waterfall plot of mean free path against frequency with lattice thermal conductivity projected.
    :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/waterfall
 
-wideband
---------
+density
+-------
 
-.. image:: wideband/wideband.png
-   :alt: Phonon dispersion with broadened bands.
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/wideband
+.. image:: waterfall/density.png
+   :alt: Scatter-density plot of mean free path against frequency.
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/examples/waterfall
 
 ztmap
 -----

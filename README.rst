@@ -1,4 +1,5 @@
 .. image:: figures/tp-logo-header.png
+    :alt: The ThermoPlotter logo, which looks like "TP"
     :target: https://smtg-ucl.github.io/ThermoPlotter/
     :align: center
 
@@ -12,23 +13,23 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :1.0.0\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.0.0\
     |_________________________________:______________________________________:_____/
 
 
 .. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
+    :alt: The travis-ci badge
     :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
 
-ThermoPlotter is a toolkit used to simplify the production of
-high-quality plots from the outputs of specialised analytical codes. It
-is focused on computational materials science and particularly
-thermoelectrics materials. Traditionally, the steps required to
-transform raw data, produce appropriate plots and adjust their
-appearance are arduous and often result in long, unweildy python
-scripts. ThermoPlotter is built on top of `matplotlib`_ and greatly
-simplifies this process. It can be used to build short,
-easy-to-customise plotting scripts and there are also several basic
-command-line interface options.
+ThermoPlotter is a toolkit used to simplify the analysis of data
+produced by specialist materials science codes, centred around
+thermoelectrics, but also useful for anything pertaining to electronic
+and/ or phononic transport. ThermoPlotter is a Python library which
+contains functions for data retrieval, manipulation and plotting, which
+can be easily used with a little Python knowlege to generate a wide
+array of high-quality plots in only a few lines of code. ThermoPlotter
+also contains a suite of command-line tools which can retrieve specific
+data, save derived properties and plot graphs in a single command.
 
 Click on the image to go to the `gallery`_!
 
@@ -45,17 +46,34 @@ ThermoPlotter can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone git@github.com:SMTG-UCL/ThermoPlotter.git
+    git clone https://github.com/SMTG-UCL/ThermoPlotter.git
     cd ThermoPlotter
-    python3 -m pip install --user .
+    pip install --user .
 
 After installing, you may want to copy ``ThermoPlotter/tprc.yaml`` to
 ``~/.config/tprc.yaml``, if you want to set your own default axis
 labels, unit conversions, default style sheets (two are provided),
 other aesthetic alterations and more!
 
-Usage
------
+Mac
+^^^
+
+If installing on an m1 mac, you can't currently pip install h5py, so a
+longer process is required:
+
+0. Install brew
+1. Install hdf5 with brew
+2. ``python3 -m pip install cython numpy``
+3. ``brew info hdf5`` to retrieve the path to your hdf5 install
+4. ``HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py``
+5. ``git clone https://github.com/SMTG-UCL/ThermoPlotter.git``
+6. ``cd ThermoPlotter``
+7. ``pip install --user -e .``
+
+Using conda may circumvent this process.
+
+Python Usage
+------------
 
 ThermoPlotter is designed to have four main stages:
 
@@ -70,10 +88,10 @@ ThermoPlotter is designed to have four main stages:
 
 As ThermoPlotter is dependent on matplotlib, each stage can be
 substituted with bespoke code, e.g. using ``matplotlib.pyplot.subplots``
-or ``matplotlib.axes.Axes.scatter``. These can still be
-supplemented with ThermoPlotter helper functions, such as default labels 
-which the user can set in ``tp.settings`` 
-or colourmap generators in ``tp.plot.colour``.
+or ``matplotlib.axes.Axes.scatter``. These can still be supplemented
+with ThermoPlotter helper functions, such as default labels which the
+user can set in ``tp.settings`` or colourmap generators in
+``tp.plot.colour``.
 
 The best way to get a feel for ThermoPlotter is to see it in action:
 Take a look at our  `examples <https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples>`_ scripts.
@@ -116,15 +134,15 @@ Contributing
 
 We welcome any contributions, whether they be a feature request or a new
 piece of code (or anything else). Adding options is inteded to be
-straightforward; the modularity of the code means that each step is mostly 
-independent of the others. 
+straightforward; the modularity of the code means that each step is mostly
+independent of the others.
 
 Bugs and feature requests can be submitted to the `issue tracker`_,
 while contributions can be made using the `fork and pull`_ approach.
 Contributions should include comprehensive docstrings, and where
 appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
-appreciated. Documentation uses the `sphinx`_ package, and can be built from the docs
-directory with ``sphinx-build -b html src/ .``.
+appreciated. Documentation uses the `sphinx`_ package, and can be built from
+the docs directory with ``sphinx-build -b html src/ .``.
 
 .. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
 .. _fork and pull: https://guides.github.com/activities/forking
@@ -153,6 +171,7 @@ Roughly chronologically, they are so far:
 * Bonan Zhu
 * Sean R. Kavanagh
 * Warda Rahim
+* Katarina Brlec
 
 License
 -------
@@ -165,6 +184,7 @@ Requirements
 
 ThermoPlotter uses the following open-source packages:
 
+* `click <https://click.palletsprojects.com/en/8.0.x/>`_
 * `h5py <http://docs.h5py.org/>`_
 * `json <https://docs.python.org/3/library/json.html>`_
 * `matplotlib <https://matplotlib.org>`_
@@ -173,3 +193,4 @@ ThermoPlotter uses the following open-source packages:
 * `scipy <https://www.scipy.org>`_
 * `sphinx <https://www.sphinx-doc.org>`_
 * `yaml <https://pyyaml.org/>`_
+

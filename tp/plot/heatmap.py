@@ -9,18 +9,27 @@ Functions
 
     add_heatmap:
         heatmap.
+    add_pfmap:
+        power factor vs temperature and carrier concentration.
+    add_pfdiff:
+        power factor difference vs temperature and carrier concentration.
     add_ztmap:
         ZT vs temperature and carrier concentration.
+    add_ztdiff:
+        ZT difference vs temperature and carrier concentration.
     add_kappa_target:
         kappa_l needed to reach a given ZT.
 """
 
+from copy import copy
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import tp
 import warnings
-from scipy.interpolate import interp1d, interp2d
+import yaml
+from scipy.interpolate import interp2d
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
@@ -28,13 +37,16 @@ try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
 def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
                 xscale='linear', yscale='linear', cscale='linear', xmin=None,
                 xmax=None, ymin=None, ymax=None, cmin=None, cmax=None,
-                colour='viridis', **kwargs):
+                colour='viridis', undercolour=None, overcolour=None, **kwargs):
     """Adds a heatmap to a set of axes.
 
     Formats limits, parses extra colourmap options, makes sure data
@@ -78,9 +90,14 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         cmax : float, optional
             override colour scale maximum. Default: None.
 
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name; or key RGB colour to generate a
-            uniform colour map. Default: viridis.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with mid and min and/or max keys. Default: Blues.
+        undercolour : str or array-like, optional
+            colour for values under cmin. Default: None.
+        overcolour : str or array-like, optional
+            colour for values over cmax. Default: None.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -89,7 +106,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             arguments passed to this function.
             Defaults:
 
-                rasterized: False
+                rasterized: True
 
     Returns
     -------
@@ -100,7 +117,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     # defaults
 
-    defkwargs = {'rasterized': False}
+    defkwargs = {'rasterized': True}
 
     if conf is None or 'heatmap_kwargs' not in conf or \
        conf['heatmap_kwargs'] is None:
@@ -113,14 +130,14 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     x = np.array(x)
     y = np.array(y)
     c = np.array(c)
-    if xmin is None: xmin = x[0]
-    if xmax is None: xmax = x[-1]
-    if ymin is None: ymin = y[0]
-    if ymax is None: ymax = y[-1]
+    if xmin is None: xmin = np.nanmin(x)
+    if xmax is None: xmax = np.nanmax(x)
+    if ymin is None: ymin = np.nanmin(y)
+    if ymax is None: ymax = np.nanmax(y)
     xi = np.where((x >= xmin) & (x <= xmax))[0]
     yi = np.where((y >= ymin) & (y <= ymax))[0]
-    x = x[xi]
     y = y[yi]
+    x = x[xi]
 
     try:
         c = c[np.ix_(xi, yi)]
@@ -132,12 +149,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     extend = 'neither'
     if cmin is None:
-        cmin = np.amin(c)
-    elif cmin > np.amin(c):
+        cmin = np.nanmin(c)
+    elif cmin > np.nanmin(c):
         extend = 'min'
     if cmax is None:
-        cmax = np.amax(c)
-    elif cmax < np.amax(c):
+        cmax = np.nanmax(c)
+    elif cmax < np.nanmax(c):
         if extend == 'min':
             extend = 'both'
         else:
@@ -152,16 +169,26 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
 
     try:
-        colours = mpl.cm.get_cmap(colour)
-    except Exception:
+        colours = copy(mpl.cm.get_cmap(colour))
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
+        elif isinstance(colour, str):
+            colours = tp.plot.colour.uniform(colour)
+        elif isinstance(colour, list):
+            colours = tp.plot.colour.uniform(*colour)
+        elif isinstance(colour, dict):
+            colours = tp.plot.colour.uniform(**colour)
         else:
-            try:
-                colours = tp.plot.colour.uniform(colour)
-            except Exception:
-                raise Exception('colour must be a colourmap, colourmap'
-                                'name or single #rrggbb colour.')
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb highlight colour or '
+                            'highlight, min, max #rrggbb colours in '
+                            'that order, or a dictionary with mid and '
+                            'min and/or max keys.')
+    if undercolour is not None:
+        colours.set_under(undercolour)
+    if overcolour is not None:
+        colours.set_over(overcolour)
 
     # data interpolation
 
@@ -173,7 +200,11 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         if yinterp is not None:
             if yscale == 'linear': y = np.linspace(y[0], y[-1], yinterp)
             if yscale == 'log': y = np.geomspace(y[0], y[-1], yinterp)
+        x = np.array(x)
+        y = np.array(y)
         c = cinterp(x, y)
+    else:
+        c = np.transpose(c)
 
     # ensure all data is shown
     if len(x) == len(c[0]):
@@ -190,9 +221,13 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             y.append(y[-1] ** 2 / y[-2])
 
     # plotting
-
     heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
-    cbar = plt.colorbar(heat, extend=extend)
+    fig = ax.get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos']:
+        # place colourbar outside dos
+        cbar = plt.colorbar(heat, extend=extend)
+    else:
+        cbar = plt.colorbar(heat, ax=ax, extend=extend)
 
     # axes formatting
     tp.plot.utilities.set_locators(ax, x=xscale, y=yscale)
@@ -203,13 +238,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
     return cbar
 
-def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
-              yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
-              ymax=None, cmin=None, cmax=None, colour='viridis',
-              output='zt.hdf5', **kwargs):
-    """Convenience wrapper for plotting ZT heatmaps.
+def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
+              kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
+              cmin=None, cmax=None, colour='viridis', **kwargs):
+    """Convenience wrapper for plotting power factor heatmaps.
 
-    Calculates ZT and writes to hdf5, plots and formats labels etc.
+    Calculates power factor, plots and formats labels etc.
 
     Arguments
     ---------
@@ -217,16 +251,12 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         ax : axes
             axes to plot on.
         data : dict
-            dictionary containing temperature and doping, and either zt
-            or conductivity, seebeck and electronic_thermal_conductivity.
+            dictionary containing temperature and doping, and either
+            power_factor or conductivity and seebeck.
 
-        kdata : dict, optional
-            dictionary containing lattice_thermal_conductivity and
-            temperature. Ignored if zt in data, if not ignored and None,
-            defaults to 1 at all temperatures.
         direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
 
         xinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
@@ -251,11 +281,106 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
 
-        output : str, optional
-            output filename to write to. Only writes if ZT has been
-            within this function. Set to None to not write. Can be
-            loaded with h5py.File to put back into this function.
-            Default: zt.hdf5.
+        kwargs
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
+            Defaults:
+
+                rasterized: True
+
+    Returns
+    -------
+
+        colourbar
+            colourbar.
+    """
+    
+    # defaults
+
+    defkwargs = {'rasterized': True}
+
+    if conf is None or 'pfmap_kwargs' not in conf or \
+       conf['pfmap_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['pfmap_kwargs'], **kwargs}
+
+    equants = ['conductivity', 'seebeck']
+
+    # data formatting
+
+    if 'power_factor' in data:
+        data = tp.data.resolve.resolve(data, 'power_factor', direction=direction)
+    else:
+        data = tp.data.resolve.resolve(data, equants, direction=direction)
+        data = tp.calculate.power_factor_fromdict(data, use_tprc=True)
+
+    # plotting
+
+    cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
+                       data['power_factor'], xinterp=xinterp, yinterp=yinterp,
+                       kind=kind, yscale='log', xmin=xmin, xmax=xmax,
+                       ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax,
+                       colour=colour, **kwargs)
+
+    # axes formatting
+
+    labels = tp.settings.labels()
+    ax.set_xlabel(labels['temperature'])
+    ax.set_ylabel(labels['doping'])
+    cbar.set_label(labels['power_factor'])
+
+    return cbar
+
+def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
+               kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
+               cmin=None, cmax=None, colour1='#800080', colour2='#FF8000',
+               midcolour='#FFFFFF', label1=None, label2=None, **kwargs):
+    """Plots a difference of two power factors heatmap.
+
+    Calculates power factor, plots and formats labels etc.
+
+    Arguments
+    ---------
+
+        ax : axes
+            axes to plot on.
+        data(1,2) : dict
+            dictionaries containing temperature and doping, and either
+            power_factor or conductivity and seebeck. The result is
+            data1 - data2.
+
+        direction : str, optional
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
+
+        xinterp : int, optional
+            density of interpolation. None turns it off. Default: 200.
+        yinterp : int, optional
+            density of interpolation. None turns it off. Default: 200.
+        kind : str, optional
+            interpolation kind. Default: linear.
+
+        xmin : float, optional
+            override temperature minimum. Default: None.
+        xmax : float, optional
+            override temperature maximum. Default: None.
+        ymin : float, optional
+            override doping minimum. Default: None.
+        ymax : float, optional
+            override doping maximum. Default: None.
+        cmin : float, optional
+            override ZT minimum. Default: None.
+        cmax : float, optional
+            override ZT maximum. Default: None.
+        colour(1,2) : str, optional
+            #RRGGBB colours for data(1,2). Default: #800080, #FF8000.
+        midcolour : str, optional
+            colour at 0 difference. Default: #FFFFFF.
+        label(1,2) : str, optional
+            labels for data(1,2) to go in a legend. Default: None.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -264,7 +389,142 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             arguments passed to this function.
             Defaults:
 
-                rasterized: False
+                rasterized: True
+
+    Returns
+    -------
+
+        colourbar
+            colourbar.
+        list
+            legend handles.
+        list
+            legend labels.
+    """
+
+    # defaults
+
+    defkwargs = {'rasterized': True}
+
+    if conf is None or 'pfdiff_kwargs' not in conf or \
+       conf['pfdiff_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['pfdiff_kwargs'], **kwargs}
+
+    equants = ['conductivity', 'seebeck']
+
+    # data formatting
+
+    data = [data1, data2]
+    for i in [0, 1]:
+        data[i]['doping'] = np.abs(data[i]['doping'])
+        if 'power_factor' in data[i]:
+            data[i] = tp.data.resolve.resolve(data[i], 'power_factor',
+                                              direction=direction)
+        else:
+            data[i] = tp.data.resolve.resolve(data[i], equants,
+                                              direction=direction)
+            data[i] = tp.calculate.power_factor_fromdict(data[i], use_tprc=True)
+
+    data[0], data[1] = tp.calculate.interpolate(*data, dependent='temperature',
+                                                keys1='power_factor',
+                                                keys2='power_factor')
+    data[0], data[1] = tp.calculate.interpolate(*data, dependent='doping',
+                                                keys1='power_factor', axis1=1,
+                                                keys2='power_factor', axis2=1)
+    diff = np.subtract(data[0]['power_factor'], data[1]['power_factor'])
+    dmin, dmax = np.nanmin(diff), np.nanmax(diff)
+    mid = dmin / (dmin - dmax)
+
+    # colours
+
+    # legend handles and labels
+    h = [mpl.patches.Patch(facecolor=colour1, label=label1),
+         mpl.patches.Patch(facecolor=colour2, label=label2)]
+    l = [label1, label2]
+
+    # if one is uniformly less than the other, its colour doesn't show
+    if dmin > 0:
+        colour2 = midcolour
+    elif dmax < 0:
+        colour1 = midcolour
+
+    colour = tp.plot.colour.elbow(cmin=colour2, cmax=colour1, cmid=midcolour,
+                                  midpoint=mid)
+                            
+    # plotting
+
+    cbar = add_heatmap(ax, data[0]['temperature'], list(data[0]['doping']),
+                       diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
+                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
+                       **kwargs)
+
+    # axes formatting
+
+    labels = tp.settings.labels()
+    ax.set_xlabel(labels['temperature'])
+    ax.set_ylabel(labels['doping'])
+    cbar.set_label('$\Delta$ '+labels['power_factor'])
+
+    return cbar, h, l
+
+def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
+              yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
+              ymax=None, cmin=None, cmax=None, colour='viridis', **kwargs):
+    """Convenience wrapper for plotting ZT heatmaps.
+
+    Calculates ZT, plots and formats labels etc.
+
+    Arguments
+    ---------
+
+        ax : axes
+            axes to plot on.
+        data : dict
+            dictionary containing temperature and doping, and either zt
+            or conductivity, seebeck and electronic_thermal_conductivity.
+
+        kdata : dict or int or float, optional
+            dictionary containing lattice_thermal_conductivity and
+            temperature. Ignored if zt in data. Can specify a constant
+            value instead. Default: 1.
+        direction : str, optional
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
+
+        xinterp : int, optional
+            density of interpolation. None turns it off. Default: 200.
+        yinterp : int, optional
+            density of interpolation. None turns it off. Default: 200.
+        kind : str, optional
+            interpolation kind. Default: linear.
+
+        xmin : float, optional
+            override temperature minimum. Default: None.
+        xmax : float, optional
+            override temperature maximum. Default: None.
+        ymin : float, optional
+            override doping minimum. Default: None.
+        ymax : float, optional
+            override doping maximum. Default: None.
+        cmin : float, optional
+            override ZT minimum. Default: None.
+        cmax : float, optional
+            override ZT maximum. Default: None.
+        colour : colourmap or str or array-like, optional
+            colourmap or colourmap name; or key colour or min and max
+            RGB colours to generate a colour map. Default: viridis.
+
+        kwargs
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
+            Defaults:
+
+                rasterized: True
 
     Returns
     -------
@@ -272,12 +532,10 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         colourbar
             colourbar.
     """
-
-    import h5py
-
+    
     # defaults
 
-    defkwargs = {'rasterized': False}
+    defkwargs = {'rasterized': True}
 
     if conf is None or 'ztmap_kwargs' not in conf or \
        conf['ztmap_kwargs'] is None:
@@ -285,61 +543,35 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
     else:
         kwargs = {**defkwargs, **conf['ztmap_kwargs'], **kwargs}
 
+    ltc = 'lattice_thermal_conductivity'
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+
     # data formatting
 
     if 'zt' in data:
-        if np.ndim(data['zt']) == 4:
-            data = tp.data.resolve(data, 'zt', direction)
-        else:
-            data = dict(data)
+        data = tp.data.resolve.resolve(data, 'zt', direction=direction)
     else:
-        if np.ndim(data['conductivity']) == 4:
-            data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
-                                           'electronic_thermal_conductivity'],
-                                           direction=direction)
+        data = tp.data.resolve.resolve(data, equants, direction=direction)
+
+        if not isinstance(kdata, (int, float)):
+            kdata = tp.data.resolve.resolve(kdata, ltc, direction=direction)
+            data, kdata = tp.calculate.interpolate(data, kdata, 'temperature',
+                                                   equants, ltc, kind='cubic')
+            data[ltc] = kdata[ltc]
+
         else:
-            data = dict(data)
+            data[ltc] = kdata * np.ones(len(data['temperature']))
+            data['meta']['kappa_source'] = 'Set to {} W m^-1 K^-1'.format(kdata)
 
-        if 'meta' not in data:
-            data['meta'] = {}
-
-        if kdata is not None:
-            kdata = tp.data.resolve.resolve(kdata,
-                                            'lattice_thermal_conductivity',
-                                            direction=direction)
-
-            # scale to smallest data set (don't extrapolate)
-            # interpolation takes care of it if data is smaller than kdata
-            tindex = np.where((data['temperature'] <= kdata['temperature'][-1])
-                            & (data['temperature'] >= kdata['temperature'][0]))
-            data['temperature'] = np.array(data['temperature'])[tindex[0]]
-            data['conductivity'] = np.array(data['conductivity'])[tindex[0]]
-            data['electronic_thermal_conductivity'] = \
-                   np.array(data['electronic_thermal_conductivity'])[tindex[0]]
-            data['seebeck'] = np.array(data['seebeck'])[tindex[0]]
-
-            kinterp = interp1d(kdata['temperature'],
-                               kdata['lattice_thermal_conductivity'],
-                               kind='cubic')
-            data['lattice_thermal_conductivity'] = kinterp(data['temperature'])
-            data['meta']['kappa_source'] = kdata['meta']['kappa_source']
-        else: # if no kappa_lat, set to 1
-            data['lattice_thermal_conductivity'] = np.ones(
-                                                   len(data['temperature']))
-            data['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
-
-        data = tp.calculate.zt_fromdict(data)
-
-        if output is not None:
-            tp.data.save.hdf5(data, output)
+        data = tp.calculate.zt_fromdict(data, use_tprc=True)
 
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       data['zt'], xinterp=xinterp,
-                       yinterp=yinterp, kind=kind, yscale='log', xmin=xmin,
-                       xmax=xmax, ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax,
-                       colour=colour, **kwargs)
+                       data['zt'], xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
+                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
+                       **kwargs)
 
     # axes formatting
 
@@ -350,10 +582,165 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
     return cbar
 
+def add_ztdiff(ax, data1, data2, kdata1=None, kdata2=None, direction='avg',
+               xinterp=200, yinterp=200, kind='linear', xmin=None, xmax=None,
+               ymin=None, ymax=None, cmin=None, cmax=None, colour1='#800080',
+               colour2='#FF8000', midcolour='#FFFFFF', label1=None,
+               label2=None, **kwargs):
+    """Plots a difference of two ZTs heatmap.
+
+    Calculates ZT, plots and formats labels etc.
+
+    Arguments
+    ---------
+
+        ax : axes
+            axes to plot on.
+        data(1,2) : dict
+            dictionaries containing temperature and doping, and either
+            zt or conductivity, seebeck and electronic_thermal_conductivity.
+            The result is data1 - data2.
+
+        kdata(1,2) : dict or int or float, optional
+            dictionaries containing lattice_thermal_conductivity and
+            temperature. Ignored if zt in data. Can specify constant
+            values instead. Default: 1.
+        direction : str, optional
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
+
+        xinterp : int, optional
+            density of interpolation. None turns it off. Default: 200.
+        yinterp : int, optional
+            density of interpolation. None turns it off. Default: 200.
+        kind : str, optional
+            interpolation kind. Default: linear.
+
+        xmin : float, optional
+            override temperature minimum. Default: None.
+        xmax : float, optional
+            override temperature maximum. Default: None.
+        ymin : float, optional
+            override doping minimum. Default: None.
+        ymax : float, optional
+            override doping maximum. Default: None.
+        cmin : float, optional
+            override ZT minimum. Default: None.
+        cmax : float, optional
+            override ZT maximum. Default: None.
+        colour(1,2) : str, optional
+            #RRGGBB colours for data(1,2). Default: #800080, #FF8000.
+        midcolour : str, optional
+            colour at 0 difference. Default: #FFFFFF.
+        label(1,2) : str, optional
+            labels for data(1,2) to go in a legend. Default: None.
+
+        kwargs
+            keyword arguments passed to matplotlib.pyplot.pcolormesh.
+            Defaults are defined below, which are overridden by those in
+            ``~/.config/tprc.yaml``, both of which are overridden by
+            arguments passed to this function.
+            Defaults:
+
+                rasterized: True
+
+    Returns
+    -------
+
+        colourbar
+            colourbar.
+        list
+            legend handles.
+        list
+            legend labels.
+    """
+
+    # defaults
+
+    defkwargs = {'rasterized': True}
+
+    if conf is None or 'ztdiff_kwargs' not in conf or \
+       conf['ztdiff_kwargs'] is None:
+        kwargs = {**defkwargs, **kwargs}
+    else:
+        kwargs = {**defkwargs, **conf['ztdiff_kwargs'], **kwargs}
+
+    ltc = 'lattice_thermal_conductivity'
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+
+    # data formatting
+
+    data = [data1, data2]
+    kdata = [kdata1, kdata2]
+    for i in [0, 1]:
+        data[i]['doping'] = np.abs(data[i]['doping'])
+        if 'zt' in data[i]:
+            data[i] = tp.data.resolve.resolve(data[i], 'zt',
+                                              direction=direction)
+        else:
+            data[i] = tp.data.resolve.resolve(data[i], equants,
+                                              direction=direction)
+            if not isinstance(kdata[i], (int, float)):
+                kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
+                                                   direction=direction)
+                data[i], kdata[i] = tp.calculate.interpolate(data[i], kdata[i],
+                                                             'temperature',
+                                                             equants, ltc,
+                                                             kind='cubic')
+                data[i][ltc] = kdata[i][ltc]
+
+            else:
+                data[ltc] = kdata[i] * np.ones(len(data[i]['temperature']))
+                data['meta']['kappa_source'] = 'Set to {} W m^-1 K^-1'.format(kdata[i])
+                        
+            data[i] = tp.calculate.zt_fromdict(data[i], use_tprc=True)
+
+    data[0], data[1] = tp.calculate.interpolate(*data, dependent='temperature',
+                                                keys1='zt', keys2='zt')
+    data[0], data[1] = tp.calculate.interpolate(*data, dependent='doping',
+                                                keys1='zt', axis1=1,
+                                                keys2='zt', axis2=1)
+    diff = np.subtract(data[0]['zt'], data[1]['zt'])
+    dmin, dmax = np.nanmin(diff), np.nanmax(diff)
+    mid = dmin / (dmin - dmax)
+
+    # colours
+
+    # legend handles and labels
+    h = [mpl.patches.Patch(facecolor=colour1, label=label1),
+         mpl.patches.Patch(facecolor=colour2, label=label2)]
+    l = [label1, label2]
+
+    # if one is uniformly less than the other, its colour doesn't show
+    if dmin > 0:
+        colour2 = midcolour
+    elif dmax < 0:
+        colour1 = midcolour
+
+    colour = tp.plot.colour.elbow(cmin=colour2, cmax=colour1, cmid=midcolour,
+                                  midpoint=mid)
+                            
+    # plotting
+
+    cbar = add_heatmap(ax, data[0]['temperature'], list(data[0]['doping']),
+                       diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
+                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
+                       **kwargs)
+
+    # axes formatting
+
+    labels = tp.settings.labels()
+    ax.set_xlabel(labels['temperature'])
+    ax.set_ylabel(labels['doping'])
+    cbar.set_label('$\Delta$ '+labels['zt'])
+
+    return cbar, h, l
+    
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                      yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
-                     output='target-kl.hdf5', **kwargs):
+                     negativecolour='grey', **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels
@@ -371,8 +758,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         zt : float, optional
             target ZT. Default: 2.
         direction : str, optional
-            direction from anisotropic data, accepts x-z/ a-c or
-            average/ avg. Default: average.
+            crystal direction, accepts x-z/ a-c or average/ avg.
+            Default: average.
 
         xinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
@@ -396,10 +783,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
             RGB colours to generate a colour map. Default: viridis.
-
-        output : str, optional
-            output filename to write to. Set to None to not write.
-            Default: target-kl.hdf5.
+        negativecolour : str or array-like, optional
+            colour for values under cmin. Default: grey.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -408,7 +793,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
             arguments passed to this function.
             Defaults:
 
-                rasterized: False
+                rasterized: True
 
     Returns
     -------
@@ -419,7 +804,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
 
     # defaults
 
-    defkwargs = {'rasterized': False}
+    defkwargs = {'rasterized': True}
 
     if conf is None or 'kappa_target_kwargs' not in conf or \
        conf['kappa_target_kwargs'] is None:
@@ -427,31 +812,28 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     else:
         kwargs = {**defkwargs, **conf['kappa_target_kwargs'], **kwargs}
 
+    ltc = 'lattice_thermal_conductivity'
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
     # data formatting
 
-    data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
-                                   'electronic_thermal_conductivity'],
-                                   direction=direction)
+    data = tp.data.resolve.resolve(data, equants, direction=direction)
     data['zt'] = zt
 
-    data = tp.calculate.kl_fromdict(data)
-
-    if output is not None:
-        tp.data.save.hdf5(data, output)
+    data = tp.calculate.kl_fromdict(data, use_tprc=False)
 
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       data['lattice_thermal_conductivity'],
-                       xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       data[ltc], xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
-                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,**kwargs)
+                       ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
+                       undercolour=negativecolour, **kwargs)
 
     # axes formatting
 
     labels = tp.settings.labels()
     ax.set_xlabel(labels['temperature'])
     ax.set_ylabel(labels['doping'])
-    cbar.set_label(labels['lattice_thermal_conductivity'])
+    cbar.set_label(labels[ltc])
 
     return cbar

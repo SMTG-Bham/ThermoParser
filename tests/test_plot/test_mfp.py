@@ -1,7 +1,5 @@
 """Tests the tp.plot.mfp module."""
 
-from glob import glob 
-from os import remove
 import unittest
 import tp
 from unittest.mock import MagicMock, patch
@@ -14,10 +12,6 @@ class CumKappaTest(unittest.TestCase):
                      'temperature':    [0],
                      'meta':           {'temperature': 0}}
         self.ax = MagicMock()
-
-    def tearDown(self):
-        dat = glob("cumkappa-mfp-*.dat")
-        for f in dat: remove(f)
 
     @patch.object(tp.data.resolve, 'resolve')
     def test_default(self, mock_resolve):

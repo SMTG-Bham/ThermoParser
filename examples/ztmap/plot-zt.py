@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from matplotlib import pyplot as plt
 from os import path
 import tp
 
@@ -13,19 +12,15 @@ direction = 'x'
 colour = '#800080'
 
 # Axes
-
-fig, ax = tp.axes.one_large.colourbar()
+fig, ax, add_legend = tp.axes.small.one_colourbar()
 
 # Load
-
 adata = tp.data.load.boltztrap(bfile)
 kdata = tp.data.load.phono3py(kfile)
 
 # Add
-
 tp.plot.heatmap.add_ztmap(ax, adata, kdata, direction=direction, colour=colour)
 
 # Save
-
-plt.savefig('ztmap.pdf')
-plt.savefig('ztmap.png')
+fig.savefig('ztmap.pdf')
+fig.savefig('ztmap.png')

@@ -37,17 +37,21 @@ import warnings
 import yaml
 
 warnings.filterwarnings('ignore', module='matplotlib')
+warnings.filterwarnings('ignore', module='scipy')
 
 try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
         conf = yaml.safe_load(f)
-except Exception:
+except yaml.parser.ParserError:
+    warnings.warn('Failed to read ~/.config/tprc.yaml')
+    conf = None
+except FileNotFoundError:
     conf = None
 
 def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
                    label=None, colour='#800080', linestyle='solid',
-                   xmarkkwargs={}, **kwargs):
+                   marker=None, xmarkkwargs={}, **kwargs):
     """Adds a phonon band structure to a set of axes.
 
     Labels, colours and linestyles can be given one for the whole
@@ -91,6 +95,8 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
             Default: #800080.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        marker : str or array-like, optional
+            marker(s). Default: None.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -150,9 +156,9 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     colour = tile_properties(colour, bandmin, bandmax)
     linestyle = tile_properties(linestyle, bandmin, bandmax)
+    marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
-
     label2 = []
     if isinstance(label, str):
         label2.extend(['$\mathregular{{{}}}$'.format(label)])
@@ -184,7 +190,7 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     for n in range(len(f[0])):
         ax.plot(x, f[:,n], color=colour[n], linestyle=linestyle[n],
-                label=label2[n], **kwargs)
+                marker=marker[n], label=label2[n], **kwargs)
 
     # axes formatting
 
@@ -197,7 +203,8 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     return
 
 def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
-              colour='winter_r', linestyle='solid', xmarkkwargs={}, **kwargs):
+              colour='winter_r', linestyle='solid', marker=None,
+              xmarkkwargs={}, **kwargs):
     """Adds multiple phonon band structures to a set of axes.
 
     Scales the x-scales to match.
@@ -229,12 +236,17 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         label : array-like, optional
             legend labels. Default: None
 
-        colour : colourmap or str or array-like, optional
-            colourmap or colourmap name or list of colours. Note [r,g,b]
-            format colours should be enclosed in and additional [],
-            i.e. [[[r,g,b]],...]. Default: winter_r.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or list of colours, one for each
+                dispersion or a min and max colour to generate a linear
+                colourmap between or a dictionary with cmin and cmax
+                keys. Note [r,g,b] format colours should be enclosed in
+                and additional [], i.e. [[[r,g,b]],...].
+                Default: winter_r.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        marker : str or array-like, optional
+            marker(s). Default: None.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -283,11 +295,17 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     try:
         colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, len(data)))
         colours = [[c] for c in colours]
-    except Exception:
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         elif isinstance(colour, str) and colour == 'skelton':
             colour = tp.plot.colour.skelton()
+            colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isinstance(colour, list) and len(colour) == 2 and len(data) != 2:
+            colour = tp.plot.colour.linear(*colour)
+            colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isinstance(colour, dict):
+            colour = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         else:
             colours = colour
@@ -301,12 +319,19 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         while len(linestyle) < len(data):
             linestyle.append(linestyle[-1])
 
+    if marker is None or isinstance(marker, (str, tuple)) or len(marker) == 1:
+        marker = np.repeat(marker, len(data))
+    elif len(marker) < len(data):
+        while len(marker) < len(data):
+            marker.append(marker[-1])
+
     # plotting
 
     for i in range(len(data)):
         add_dispersion(ax, data[i], sdata=data[0], bandmin=bandmin,
                        bandmax=bandmax, main=False, label=label[i],
-                       colour=colours[i], linestyle=linestyle[i], **kwargs)
+                       colour=colours[i], linestyle=linestyle[i],
+                       marker=marker[i], **kwargs)
 
     # axes formatting
 
@@ -335,7 +360,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
                        poscar='POSCAR', main=True, log=False,
                        interpolate=10000, smoothing=5, colour=['#44ffff',
                        '#ff8044', '#ff4444', '#00000010'], linestyle='-',
-                       workers=32, xmarkkwargs={}, **kwargs):
+                       marker=None, workers=32, xmarkkwargs={}, verbose=False,
+                       **kwargs):
     """Plots a phono3py quantity on a high-symmetry path.
 
     Labels, colours and linestyles can be given one for the whole
@@ -408,9 +434,14 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
             Default: ['#44ffff', '#ff8044', '#ff4444', '#00000010'].
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
+        marker : str or array-like, optional
+            marker(s). Default: None.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -444,7 +475,6 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from scipy.interpolate import interp1d
 
     # defaults
@@ -469,7 +499,11 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     if quantity in tnames: quantity = tnames[quantity]
     if quantity == 'kappa': quantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, quantity, temperature, direction)
+    data = tp.data.resolve.resolve(data, quantity, temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     y = data[quantity]
     if bandmin is None:
         bandmin = 0
@@ -511,7 +545,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     # interpolate
 
     x2 = np.linspace(min(x), max(x), interpolate)
-    yinterp = interp1d(x, y2, kind='cubic', axis=0)
+    yinterp = interp1d(x, y2, kind='linear', axis=0)
     y2 = np.abs(yinterp(x2))
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
@@ -522,6 +556,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     colour = tile_properties(colour, bandmin, bandmax)
     linestyle = tile_properties(linestyle, bandmin, bandmax)
+    marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
 
@@ -541,7 +576,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     for n in range(len(y2[0])):
         ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
-                label=label2[n], **kwargs)
+                label=label2[n], marker=marker[n], **kwargs)
 
     # axes formatting
 
@@ -556,7 +591,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
                              poscar='POSCAR', main=True, interpolate=500,
                              colour='viridis_r', cmin=None, cmax=None,
                              cscale=None, unoccupied='grey', workers=32,
-                             xmarkkwargs={}, **kwargs):
+                             xmarkkwargs={}, verbose=False, **kwargs):
     """Plots a phonon dispersion with projected colour.
 
     Plots a phonon dispersion, and projects a quantity onto the colour
@@ -613,8 +648,10 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
             number of points per path (e.g. gamma -> X) per line.
             Default: 500.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis_r.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys. Default: viridis_r.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -628,6 +665,9 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -662,8 +702,6 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
-    from copy import copy
     from scipy.interpolate import interp1d
 
     # defaults
@@ -687,7 +725,11 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     quantity = tnames[quantity] if quantity in tnames else quantity
     if quantity == 'kappa': quantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, quantity, temperature, direction)
+    data = tp.data.resolve.resolve(data, quantity, temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     c = data[quantity]
     if bandmin is None:
         bandmin = 0
@@ -734,13 +776,10 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
         f2.append(finterp(xtemp))
 
         cinterp = interp1d(x[index[0]:index[1]], c[index[0]:index[1]],
-                           kind='cubic', axis=0, fill_value='extrapolate')
+                           kind='linear', axis=0, fill_value='extrapolate')
         c2.append(np.abs(cinterp(xtemp)))
 
-    if isinstance(colour, str):
-        cmap = copy(plt.cm.get_cmap(colour))
-    else:
-        cmap = copy(colour)
+    cmap = tp.plot.utilities.parse_colours(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c2, quantity, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -754,7 +793,12 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     # axes formatting
 
     axlabels = tp.settings.labels()
-    cbar = plt.colorbar(line, extend=extend)
+    fig = ax.get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos']:
+        # place colourbar outside dos
+        cbar = plt.colorbar(line, extend=extend)
+    else:
+        cbar = plt.colorbar(line, ax=ax, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[quantity])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
@@ -771,9 +815,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  bandmin=None, bandmax=None, temperature=300,
                                  direction='avg', poscar='POSCAR', main=True,
                                  log=False, interpolate=10000, smoothing=10,
-                                 colour='viridis', cmin=None, cmax=None,
+                                 colour='viridis_r', cmin=None, cmax=None,
                                  cscale=None, unoccupied='grey', workers=32,
-                                 xmarkkwargs={}, **kwargs):
+                                 xmarkkwargs={}, verbose=False, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path and projection.
 
     Just because you can, doesn't mean you should. A maxim I may fail to
@@ -834,8 +878,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
         smoothing : int, optional
             every n points to sample. Default: 10.
 
-        colour : colormap or str, optional
-            colourmap or colourmap name. Default: viridis.
+        colour : colourmap or str or array-like or dict, optional
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys. Default: viridis_r.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -849,6 +895,9 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -883,8 +932,6 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
-    from copy import copy
     from scipy.interpolate import interp1d
 
     # defaults
@@ -913,7 +960,11 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     if projected == 'kappa': projected = 'mode_kappa'
     qs = quantity if quantity == projected else [quantity, projected]
 
-    data = tp.data.resolve.resolve(data, qs, temperature, direction)
+    data = tp.data.resolve.resolve(data, qs, temperature=temperature,
+                                   direction=direction)
+    if verbose and 'temperature' in data['meta']:
+        print('Using {} {}.'.format(data['meta']['temperature'],
+                                    data['meta']['units']['temperature']))
     y = data[quantity]
     c = data[projected]
     if bandmin is None:
@@ -967,10 +1018,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     cinterp = interp1d(x, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
-    if isinstance(colour, str):
-        cmap = copy(plt.cm.get_cmap(colour))
-    else:
-        cmap = copy(colour)
+    cmap = tp.plot.utilities.parse_colours(colour)
     cnorm, extend = tp.plot.utilities.colour_scale(c2, projected, cmap, cmin,
                                                    cmax, cscale, unoccupied)
 
@@ -983,7 +1031,12 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     # axes formatting
 
     axlabels = tp.settings.labels()
-    cbar = plt.colorbar(line, extend=extend)
+    fig = ax.get_figure()
+    if 'dos' in fig.__dict__ and fig.__dict__['dos']:
+        # place colourbar outside dos
+        cbar = plt.colorbar(line, extend=extend)
+    else:
+        cbar = plt.colorbar(line, ax=ax, extend=extend)
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
@@ -997,7 +1050,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
 def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
                  smoothing=5, colour='viridis', workers=32, xmarkkwargs={},
-                 **kwargs):
+                 verbose=False, **kwargs):
     """Plots a phonon dispersion with broadened bands.
 
     Requires a POSCAR.
@@ -1044,10 +1097,14 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
         colour : colormap or str or list, optional
             colourmap or colourmap name or max #RRGGBB colour (fades to
-            white) or min and max #RRGGBB colours. Default: viridis.
+            white) or min and max #RRGGBB colours or dictionary with
+            cmin and cmax keys. Default: viridis.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
+        verbose : bool, optional
+            Write actual temperature used if applicable.
+            Default: False.
 
         xmarkkwargs : dict, optional
             keyword arguments for x markers passed to
@@ -1082,7 +1139,6 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     from multiprocessing import Pool
     from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
     from pymatgen.io.vasp.inputs import Poscar
-    import pymatgen.symmetry.analyzer as pmg
     from scipy.interpolate import interp1d
     from tp.calculate import lorentzian
 
@@ -1106,7 +1162,10 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # Phono3py data formatting
 
-    kdata = tp.data.resolve.resolve(kdata, 'gamma', temperature)
+    kdata = tp.data.resolve.resolve(kdata, 'gamma', temperature=temperature)
+    if verbose:
+        print('Using {} {}.'.format(kdata['meta']['temperature'],
+                                    kdata['meta']['units']['temperature']))
     c = np.array(kdata['gamma'])
     qk = kdata['qpoint']
 
@@ -1160,20 +1219,25 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     # the min and max values.
 
     try:
-        colours = mpl.cm.get_cmap(colour)
-    except Exception:
+        cmap = mpl.cm.get_cmap(colour)
+    except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
-            colours = colour
+            cmap = colour
+        elif isinstance(colour, str):
+            cmap = tp.plot.colour.linear(colour)
+        elif isinstance(colour, list):
+            cmap = tp.plot.colour.linear(colour[1], colour[0])
+        elif isinstance(colour, dict):
+            cmap = tp.plot.colour.linear(**colour)
         else:
-            try:
-                colours = tp.plot.colour.linear(colour)
-            except Exception:
-                colours = tp.plot.colour.linear(colour[1], colour[0])
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb max colour or min '
+                            'and max #rrggbb colours, or a dictionary '
+                            'with cmin and cmax keys.')
 
     # plotting
 
-    ax.pcolormesh(x2, f2, np.transpose(area), cmap=colours, norm=cnorm,
-                  **kwargs)
+    ax.pcolormesh(x2, f2, np.transpose(area), cmap=cmap, norm=cnorm, **kwargs)
 
     # axes formatting
 
@@ -1329,7 +1393,7 @@ def tile_properties(properties, bandmin, bandmax):
     """
 
     bdiff = bandmax - bandmin
-    if isinstance(properties, str):
+    if isinstance(properties, str) or properties is None:
         tiled = np.repeat(properties, bdiff)
     elif len(properties) == 1:
         tiled = np.tile(properties, (bdiff, 1))

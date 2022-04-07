@@ -76,3 +76,4 @@ legend.frameon              : False
 
 figure.dpi                  : 500
 figure.frameon              : False
+savefig.bbox                : tight

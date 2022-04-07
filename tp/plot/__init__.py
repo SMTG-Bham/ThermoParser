@@ -19,3 +19,5 @@ Modules
     utilities
         ancillary scripts.
 """
+
+from . import colour, frequency, heatmap, mfp, phonons, utilities
