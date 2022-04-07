@@ -2,6 +2,7 @@
 **/archive/
 **/kappa-m*.hdf5
 examples/test/
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -65,10 +65,10 @@ def one(style=[]):
              ['above'],
              ['below']]
     locations = [{'loc':            'center left',
-                  'bbox_to_anchor': (1, 0.5),
-                  'ncol':           4},
+                  'bbox_to_anchor': (1, 0.5)},
                  {'loc':            'lower center',
-                  'bbox_to_anchor': (0.5, 1)},
+                  'bbox_to_anchor': (0.5, 1),
+                  'ncol':           4},
                  {'loc':            'upper center',
                   'bbox_to_anchor': (0.5, -0.1),
                   'ncol':           4}]

@@ -7,6 +7,8 @@ kappafile = '../data/zno/kappa-m404021.hdf5'
 temperature = 300
 direction = ['x', 'z']
 quantities = 'frequency mode_kappa mfp'
+# Note for cumkappa and waterfall plots, mode_kappa and not kappa is required
+
 if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
     raise Exception('File not found, please use get-data.sh')
 
