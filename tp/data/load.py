@@ -135,6 +135,9 @@ def amset(filename, quantities=['seebeck', 'conductivity',
                 if 'temperature' in dimensions[q2]:
                     data2[q2] = np.swapaxes(data2[q2],0,1)
         if q2 in dimensions and 'stype' in dimensions[q2]:
+            if q2 == 'mobility':
+                data[q2]['total'] = data[q2]['overall']
+                del data[q2]['overall']
             if 'stype' not in data2:
                 data2['stype'] = list(data[q].keys())
             # for consistency with the format in the mesh data
@@ -299,6 +302,8 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
             q2 = tnames[q] if q in tnames else q
             if q in hasspin:
                 data[q2] = resolve_spin(f, q, spin)
+                if q == 'scattering_rates':
+                    data[q2]['total'] = np.sum(data[q2], axis=0)
             elif q in f:
                 data[q2] = f[q][()]
             elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates']:
