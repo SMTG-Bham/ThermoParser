@@ -303,7 +303,7 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
             if q in hasspin:
                 data[q2] = resolve_spin(f, q, spin)
                 if q == 'scattering_rates':
-                    data[q2]['total'] = np.sum(data[q2], axis=0)
+                    data[q2] = [*data[q2], np.sum(data[q2], axis=0)]
             elif q in f:
                 data[q2] = f[q][()]
             elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates']:
@@ -354,8 +354,8 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
         data['doping'] = np.array(data['doping'])[di]
 
     if 'stype' in data:
-        data['stype'] = \
-                         [l.decode('UTF-8') for l in data['stype']]
+        data['stype'] = [l.decode('UTF-8') for l in data['stype']]
+        data['stype'].append('total')
 
     for c in aconversions:
         if c in data:

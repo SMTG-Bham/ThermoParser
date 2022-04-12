@@ -84,10 +84,12 @@ class AmsetTest(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open)
     def test_mobility(self, mock_opens, mock_json):
         q = 'mobility'
-        data = {q:              {'test': np.zeros((2, 2, 3, 3))},
+        data = {q:              {'test':    np.zeros((2, 2, 3, 3)),
+                                 'overall': np.zeros((2, 2, 3, 3))},
                 'temperatures': [0, 1],
                 'doping':       [1, 2]}
         data[q]['test'][0,1,0,0] = 1
+        data[q]['overall'][0,1,0,0] = 1
         mock_json.return_value = data
 
         data2 = load.amset('mock', q)
@@ -96,7 +98,7 @@ class AmsetTest(unittest.TestCase):
         for q2 in [q, 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data2)
         self.assertEqual(np.array(data2[q])[0,1,0,0,0], 1)
-        self.assertEqual(list(data2['stype']), ['test'])
+        self.assertEqual(list(data2['stype']), ['test', 'total'])
 
 class AmsetMeshTest(unittest.TestCase):
 
@@ -118,7 +120,7 @@ class AmsetMeshTest(unittest.TestCase):
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data)
         self.assertEqual(data['scattering_rates'][0,1,0,0,0], 1)
-        self.assertEqual(data['stype'], ['test'])
+        self.assertEqual(data['stype'], ['test', 'total'])
 
     def test_spin(self):
         with h5py.File('test.hdf5', 'w') as f:
@@ -135,7 +137,7 @@ class AmsetMeshTest(unittest.TestCase):
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data)
         self.assertEqual(data['scattering_rates'][0,1,0,0,0], 2)
-        self.assertEqual(data['stype'], ['test'])
+        self.assertEqual(data['stype'], ['test', 'total'])
 
 class BoltzTraPTest(unittest.TestCase):
 
