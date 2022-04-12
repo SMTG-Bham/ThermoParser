@@ -88,7 +88,11 @@ def resolve(data, quantities, **kwargs):
                         if d == key:
                             if i == 0:
                                 del data['meta']['dimensions'][q][i]
-                                data[q] = data[q][val]
+                                if key in data and val in data[key]:
+                                    pos = data[key].index(val)
+                                    data[q] = data[q][pos]
+                                else:
+                                    data[q] = data[q][val]
                                 data['meta'][key] = val
                                 break
                             else:
