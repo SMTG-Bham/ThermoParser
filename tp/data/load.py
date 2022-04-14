@@ -136,8 +136,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
                     data2[q2] = np.swapaxes(data2[q2],0,1)
         if q2 in dimensions and 'stype' in dimensions[q2]:
             if q2 == 'mobility':
-                data[q2]['total'] = data[q2]['overall']
-                del data[q2]['overall']
+                data[q2]['total'] = data[q2].pop('overall')
             if 'stype' not in data2:
                 data2['stype'] = list(data[q].keys())
             # for consistency with the format in the mesh data
@@ -216,7 +215,8 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
     quantities = [anames[q] if q in anames else q for q in quantities]
 
     # list of abbriviations and dependent quantites
-    subs = {'weights': ['ibz_weights', 'fd_weights']}
+    subs = {'weights': ['ibz_weights', 'fd_weights'],
+            'weighted_rates': ['scattering_rates', 'weighted_rates']}
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
     for i in range(len(quantities)):
@@ -302,14 +302,14 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
             q2 = tnames[q] if q in tnames else q
             if q in hasspin:
                 data[q2] = resolve_spin(f, q, spin)
-                if q == 'scattering_rates':
-                    data[q2] = [*data[q2], np.sum(data[q2], axis=0)]
             elif q in f:
                 data[q2] = f[q][()]
             elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates']:
                 raise Exception('{} unrecognised. Quantity must be {}, '
                                 'ibz_weights, fd_weights weighted_rates'
                                 ''.format(q, ', '.join(f)))
+            if q == 'scattering_rates':
+                data[q2] = [*list(data[q2]), list(np.sum(data[q2], axis=0))]
             if q in ['ibz_weights', 'weighted_rates']:
                 _, data['ibz_weights'] = np.unique(f['ir_to_full_kpoint_mapping'],
                                                    return_counts=True)
@@ -320,7 +320,8 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
                                                          f['doping'],
                                                          amset_order=True)
             if q == 'weighted_rates':
-                rates = resolve_spin(f, 'scattering_rates', spin)
+                from copy import deepcopy
+                rates = np.array(deepcopy(data['scattering_rates']))
                 rates[rates > 1e20] = 1e15
                 data['total_weights'] = data['fd_weights'] * data['ibz_weights']
                 data['normalised_weights'] = data['total_weights'] / \
