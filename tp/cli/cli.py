@@ -670,7 +670,7 @@ def plot():
               default='both',
               show_default=True)
 @click.option('--crt',
-        help='Constant relaxation time value.  [default: off]',
+        help='Constant relaxation time rate.  [default: off]',
               type=float)
 @doping_option
 @temperature_option
@@ -730,10 +730,6 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
         raise Exception('Please specify at most two filenames')
 
     nlines = np.amax([len(d['stype']) for d in data])
-    if total:
-        nlines += 1
-    if crt is not None:
-        nlines += 1
 
     linestyle = list(linestyle)
     colour = list(colour)
@@ -766,14 +762,10 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
             print('Using {} {}.'.format(tdata['meta']['doping'],
                                         tdata['meta']['units']['doping']))
         for i, rate in enumerate(data[tindex]['stype']):
-            tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
-                     color=colours[i], linestyle=linestyle[i],
-                     marker=marker[i], label=rate)
-        if total:
-            i += 1
-            totrate = np.sum(tdata['weighted_rates'], axis=0)
-            tax.plot(tdata['temperature'], totrate, color=colours[i],
-                     linestyle=linestyle[i], marker=marker[i], label='Total')
+            if total or rate != 'Total':
+                tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
+                         color=colours[i], linestyle=linestyle[i],
+                         marker=marker[i], label=rate)
         if crt is not None:
             i += 1
             crtrate = np.full(len(tdata['temperature']), crt)
@@ -790,14 +782,10 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
             print('Using {} {}.'.format(ddata['meta']['temperature'],
                                         ddata['meta']['units']['temperature']))
         for i, rate in enumerate(data[dindex]['stype']):
-            dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
-                     color=colours[i], linestyle=linestyle[i],
-                     marker=marker[i], label=rate)
-        if total:
-            i += 1
-            totrate = np.sum(ddata['weighted_rates'], axis=0)
-            dax.plot(np.abs(ddata['doping']), totrate, color=colours[i],
-                     linestyle=linestyle[i], marker=marker[i], label='Total')
+            if total or rate != 'Total':
+                dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
+                         color=colours[i], linestyle=linestyle[i],
+                         marker=marker[i], label=rate)
         if crt is not None:
             i += 1
             crtrate = np.full(len(ddata['doping']), crt)
@@ -1566,6 +1554,8 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
         else:
             raise Exception('--kfile must be specified for a '
                             '--quantity of {} or {}.'.format(ltc, tc))
+    else:
+        kdata = None
 
     for e in edata:
         e['doping'] = np.abs(e['doping'])

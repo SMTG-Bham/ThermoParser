@@ -562,10 +562,10 @@ def three_square(style=[], blank=2):
     plt.subplots_adjust(left=0.1, right=0.97,
                         bottom=0.07, top=0.97)
 
-    names = [['topleft'],
-             ['topright'],
-             ['bottomleft'],
-             ['bottomright'],
+    names = [['topleft', 'q2'],
+             ['topright', 'q1'],
+             ['bottomleft', 'q3'],
+             ['bottomright','q4'],
              ['blank', 'empty', 'out', 'outside', str(blank)]]
     axes = [1, 0, 3, 2]
     bbox = [(-0.91,0.5), (1.91,0.5), (-0.91, 0.5), (1.91,0.5)]

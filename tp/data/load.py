@@ -136,7 +136,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
                     data2[q2] = np.swapaxes(data2[q2],0,1)
         if q2 in dimensions and 'stype' in dimensions[q2]:
             if q2 == 'mobility':
-                data[q2]['total'] = data[q2].pop('overall')
+                data[q2]['Total'] = data[q2].pop('overall')
             if 'stype' not in data2:
                 data2['stype'] = list(data[q].keys())
             # for consistency with the format in the mesh data
@@ -158,7 +158,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
 
     for c in conversions:
         if c in data2:
-            data2[c] = np.multiply(data2[c], conversions[c])
+            data2[c] = np.multiply(data2[c], float(conversions[c]))
 
     return data2
 
@@ -356,7 +356,7 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
 
     if 'stype' in data:
         data['stype'] = [l.decode('UTF-8') for l in data['stype']]
-        data['stype'].append('total')
+        data['stype'].append('Total')
 
     for c in aconversions:
         if c in data:
