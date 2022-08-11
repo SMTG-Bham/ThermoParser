@@ -692,8 +692,8 @@ def plot():
 @verbose_option
 
 def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
-              marker, xmin, xmax, ymin, ymax, style, large, extension, output,
-              verbose):
+              marker, xmin, xmax, ymin, ymax, style, large, save, show,
+              extension, output, verbose):
     """Plots averaged scattering rates.
 
     Requires AMSET mesh files. Plots scattering rates averaged over
@@ -817,8 +817,11 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
         for a in ax:
             ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -863,8 +866,8 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
 
 def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
              fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin, ymax,
-             label, legend_title, location, style, large, extension, output,
-             verbose):
+             label, legend_title, location, style, large, save, show, extension,
+             output, verbose):
     """Plots cumulative kappa against frequency or mean free path.
 
     Reads Phono3py hdf5. Properties such as colour and linestyle loop,
@@ -929,8 +932,11 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
     elif ymax is not None:
         ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -960,7 +966,8 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
 
 def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
         colour, fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin,
-        ymax, legend_title, location, style, large, extension, output):
+        ymax, legend_title, location, style, large, save, show, extension,
+        output):
     """Plots a phonon density of states."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -999,8 +1006,11 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
     elif ymax is not None:
         ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1050,7 +1060,8 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
 
 def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
           colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-          legend_title, legend, location, style, large, extension, output):
+          legend_title, legend, location, style, large, save, show, extension,
+          output):
     """Plots line graphs of thermal conductivity against temperature.
 
     Currently not all combinations of inputs work. If multiple --direction
@@ -1260,8 +1271,11 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         else:
             add_legend(title=legend_title, location=location)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1299,7 +1313,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
 
 def kappa_target(filename, zt, direction, interpolate, kind, colour,
                  negativecolour, xmin, xmax, ymin, ymax, cmin, cmax, style,
-                 large, extension, output):
+                 large, save, show, extension, output):
     """Plots lattice thermal conductivity to reach a target ZT.
 
     Currently accepts AMSET transport json or BoltzTraP hdf5.
@@ -1331,8 +1345,11 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
     if large:
         cbar.set_label(tp.settings.large_labels()['lattice_thermal_conductivity'])
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1387,7 +1404,7 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
                      xmarkcolour, xmarklinestyle, dos, poscar, atoms,
                      projected, total, total_label, total_colour, doscolour,
                      fill, fillalpha, line, label, legend_title, location,
-                     style, large, extension, output):
+                     style, large, save, show, extension, output):
     """Plots and overlays phonon dispersions.
 
     Can have optional DoS on the side.
@@ -1445,8 +1462,11 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
         else:
             add_legend(title=legend_title, location=location)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1493,7 +1513,8 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 
 def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
               colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-              legend_title, legend, location, style, large, extension, output):
+              legend_title, legend, location, style, large, save, show,
+              extension, output):
     """Plots line graphs of transport properties against temperature.
 
     Currently not all combinations of inputs work. The order of
@@ -1789,8 +1810,11 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
     #elif ymax is not None:
     #    ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1870,7 +1894,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
 def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
               linewidth, edgecolour, marker, markersize, xscale, yscale,
               cscale, xmin, xmax, ymin, ymax, cmin, cmax, style, large,
-              extension, output, verbose):
+              save, show, extension, output, verbose):
     """Plots 3rd-order phonon properties per band per q-point."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1942,8 +1966,11 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
     elif ymax is not None:
         ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1980,7 +2007,7 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
 @verbose_option
 
 def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
-             large, extension, output, verbose):
+             large, save, show, extension, output, verbose):
     """Plots a broadened phonon dispersion."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1998,8 +2025,11 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
                                  poscar=poscar, smoothing=smoothing,
                                  colour=colour, verbose=verbose)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -2032,7 +2062,8 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
               show_default=True)
 
 def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
-          xmax, ymin, ymax, cmin, cmax, style, large, extension, output):
+          xmax, ymin, ymax, cmin, cmax, style, large, save, show, extension,
+          output):
     """Plots ZT against temperature and carrier concentration."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -2063,8 +2094,11 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
                               kind=kind, colour=colour, xmin=xmin, xmax=xmax,
                               ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
