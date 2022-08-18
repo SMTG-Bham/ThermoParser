@@ -23,9 +23,6 @@ Functions
 
 from wsgiref.simple_server import WSGIRequestHandler
 from matplotlib.colors import ListedColormap
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import numpy as np
 from scipy.interpolate import interp1d
 

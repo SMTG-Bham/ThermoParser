@@ -340,6 +340,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             bandmin = 0
         else:
             bandmin = np.amax([0, bandmin])
+        
         if bandmax is None:
             bandmax = len(data[0]['frequency'][0])
         else:

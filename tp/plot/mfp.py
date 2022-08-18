@@ -160,20 +160,26 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     if isinstance(direction, str):
         direction = [direction]
+    
     if isinstance(data, dict):
         data = [data]
+    
     if colour is None:
         colour = plt.rcParams['axes.prop_cycle'].by_key()['color']
     elif isinstance(colour, str):
         colour = [colour]
+    
     if fillcolour is None:
         fillcolour = plt.rcParams['axes.prop_cycle'].by_key()['color']
     elif isinstance(fillcolour, (str, float, int)):
         fillcolour = [fillcolour]
+    
     if isinstance(linestyle, str):
         linestyle = [linestyle]
+    
     if marker is None or isinstance(marker, str):
         marker = [marker]
+    
     if label is None:
         if len(data) == 1 and len(direction) == 1:
             label = ['$\mathregular{\kappa_l}$']
