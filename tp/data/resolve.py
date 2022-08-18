@@ -34,7 +34,8 @@ def resolve(data, quantities, **kwargs):
 
                 direction
                     direction to resolve, accepts x-z/, a-c,
-                    average/ avg or normal/ norm.
+                    average/ avg/ mean/ arithmetic/ arith,  or
+                    norm/ normal or harmonic/ harm.
                 dtype
                     n or p
                 stype
@@ -122,7 +123,7 @@ def resolve(data, quantities, **kwargs):
                             data[q] = np.moveaxis(data[q], i, 0)
                             if val in direction:
                                 data[q] = data[q][direction[val]]
-                            elif val in ['avg', 'average']:
+                            elif val in ['mean', 'arithmetic', 'arith', 'average', 'avg']:
                                 if len(data['meta']['dimensions'][q]) > i and \
                                    data['meta']['dimensions'][q][i] == 3:
                                     # if this is a 3x3 array
@@ -135,8 +136,10 @@ def resolve(data, quantities, **kwargs):
                                 else:
                                     # if this is a 3x1 or 6x1 array
                                     data[q] = np.average(data[q][:3], axis=0)
+                                data['meta'][key] = 'arithmetic mean'
                             elif val in ['norm', 'normal']:
-                                if data['meta']['dimensions'][q][i] == 3:
+                                if len(data['meta']['dimensions'][q]) > i and \
+                                   data['meta']['dimensions'][q][i] == 3:
                                     # if this is a 3x3 array
                                     del data['meta']['dimensions'][q][i]
                                     data[q] = np.moveaxis(data[q], i+1, 1)
@@ -150,7 +153,24 @@ def resolve(data, quantities, **kwargs):
                                             + np.square(data[q][1]) \
                                             + np.square(data[q][2])
                                     data[q] = np.sqrt(data[q])
-                            data['meta'][key] = val
+                                data['meta'][key] = 'norm'
+                            elif val in ['harmonic', 'harm']:
+                                if len(data['meta']['dimensions'][q]) > i and \
+                                   data['meta']['dimensions'][q][i] == 3:
+                                    # if this is a 3x3 array
+                                    del data['meta']['dimensions'][q][i]
+                                    data[q] = np.moveaxis(data[q], i+1, 1)
+                                    data[q] = 1/np.average([1/data[q][0][0],
+                                                            1/data[q][1][1],
+                                                            1/data[q][2][2]],
+                                                           axis=0)
+                                else:
+                                    # if this is a 3x1 or 6x1 array
+                                    data[q] = 1/np.average([1/data[q][0],
+                                                            1/data[q][1],
+                                                            1/data[q][2]],
+                                                           axis=0)
+                                data['meta'][key] = 'harmonic mean'
                             break
                     else:
                         break

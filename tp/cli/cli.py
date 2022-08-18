@@ -407,18 +407,24 @@ def get_phono3py(filename, quantity, direction, temperature, band, qpoint,
 @doping_option
 @direction_option
 @temperature_option
-def get_zt(filename, kappa, dtype, doping, direction, temperature):
+@click.option('--max',
+              is_flag=True,
+              help='Print max ZT. Overrides temperature and concentration.')
+def get_zt(filename, kappa, dtype, doping, direction, temperature, max):
     """Calculates and prints the ZT at given conditions.
 
     Requires electronic input file, and preferably phononic input, else
     lattice thermal conductivity defaults to 1.
     """
 
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+    ltc = 'lattice_thermal_conductivity'
+
     try:
-        edata = tp.data.load.amset(filename)
+        edata = tp.data.load.amset(filename, equants)
     except UnicodeDecodeError:
         try:
-            edata = tp.data.load.boltztrap(filename, doping=dtype)
+            edata = tp.data.load.boltztrap(filename, equants, doping=dtype)
         except Exception:
             data = h5py.File(filename, 'r')
             edata = dict(data)
@@ -426,12 +432,8 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
                 if isinstance(edata[key], dict) and dtype in edata[key]:
                     edata[key] = edata[key][dtype][()]
 
-    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
-    ltc = 'lattice_thermal_conductivity'
-
     if 'zt' in edata:
-        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
-                                        doping=doping, temperature=temperature)
+        pass
     elif kappa is not None:
         kdata = tp.data.load.phono3py(kappa)
         edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
@@ -439,8 +441,6 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
         edata[ltc] = kdata[ltc]
         edata['meta']['dimensions'][ltc] = kdata['meta']['dimensions'][ltc]
         edata = tp.calculate.zt_fromdict(edata)
-        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
-                                        doping=doping, temperature=temperature)
     else:
         warnings.warn('Lattice thermal conductivity set to 1. For a more '
                       'accurate calculation, pass a phono3py kappa file to -k.')
@@ -448,6 +448,17 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
 
         edata['meta']['dimensions'][ltc] = ['temperature']
         edata = tp.calculate.zt_fromdict(edata)
+    
+    if max:
+        mlabel = 'max '
+        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction)
+        maxindex = np.where(np.round(edata['zt'], 10) \
+                         == np.round(np.amax(edata['zt']), 10))
+        edata['zt'] = edata['zt'][maxindex[0][0]][maxindex[1][0]]
+        edata['meta']['temperature'] = edata['temperature'][maxindex[0][0]]
+        edata['meta']['doping'] = edata['doping'][maxindex[1][0]]
+    else:
+        mlabel = ''
         edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
                                         doping=doping, temperature=temperature)
 
@@ -455,8 +466,8 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
     n = edata['meta']['doping']
     t = int(edata['meta']['temperature'])
 
-    print('The ZT in the {} direction at {:d} K and {:.3e} carriers cm^-3 '
-            'is {:.3f}'.format(direction, t, n, zt))
+    print('The {}ZT in the {} direction at {:d} K and {:.3e} carriers cm^-3 '
+            'is {:.3f}'.format(mlabel, direction, t, n, zt))
 
     return
 
@@ -670,7 +681,7 @@ def plot():
               default='both',
               show_default=True)
 @click.option('--crt',
-        help='Constant relaxation time value.  [default: off]',
+        help='Constant relaxation time rate.  [default: off]',
               type=float)
 @doping_option
 @temperature_option
@@ -692,8 +703,8 @@ def plot():
 @verbose_option
 
 def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
-              marker, xmin, xmax, ymin, ymax, style, large, extension, output,
-              verbose):
+              marker, xmin, xmax, ymin, ymax, style, large, save, show,
+              extension, output, verbose):
     """Plots averaged scattering rates.
 
     Requires AMSET mesh files. Plots scattering rates averaged over
@@ -730,10 +741,6 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
         raise Exception('Please specify at most two filenames')
 
     nlines = np.amax([len(d['stype']) for d in data])
-    if total:
-        nlines += 1
-    if crt is not None:
-        nlines += 1
 
     linestyle = list(linestyle)
     colour = list(colour)
@@ -766,14 +773,10 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
             print('Using {} {}.'.format(tdata['meta']['doping'],
                                         tdata['meta']['units']['doping']))
         for i, rate in enumerate(data[tindex]['stype']):
-            tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
-                     color=colours[i], linestyle=linestyle[i],
-                     marker=marker[i], label=rate)
-        if total:
-            i += 1
-            totrate = np.sum(tdata['weighted_rates'], axis=0)
-            tax.plot(tdata['temperature'], totrate, color=colours[i],
-                     linestyle=linestyle[i], marker=marker[i], label='Total')
+            if total or rate != 'Total':
+                tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
+                         color=colours[i], linestyle=linestyle[i],
+                         marker=marker[i], label=rate)
         if crt is not None:
             i += 1
             crtrate = np.full(len(tdata['temperature']), crt)
@@ -790,14 +793,10 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
             print('Using {} {}.'.format(ddata['meta']['temperature'],
                                         ddata['meta']['units']['temperature']))
         for i, rate in enumerate(data[dindex]['stype']):
-            dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
-                     color=colours[i], linestyle=linestyle[i],
-                     marker=marker[i], label=rate)
-        if total:
-            i += 1
-            totrate = np.sum(ddata['weighted_rates'], axis=0)
-            dax.plot(np.abs(ddata['doping']), totrate, color=colours[i],
-                     linestyle=linestyle[i], marker=marker[i], label='Total')
+            if total or rate != 'Total':
+                dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
+                         color=colours[i], linestyle=linestyle[i],
+                         marker=marker[i], label=rate)
         if crt is not None:
             i += 1
             crtrate = np.full(len(ddata['doping']), crt)
@@ -829,8 +828,11 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
         for a in ax:
             ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -875,8 +877,8 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
 
 def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
              fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin, ymax,
-             label, legend_title, location, style, large, extension, output,
-             verbose):
+             label, legend_title, location, style, large, save, show, extension,
+             output, verbose):
     """Plots cumulative kappa against frequency or mean free path.
 
     Reads Phono3py hdf5. Properties such as colour and linestyle loop,
@@ -941,8 +943,11 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
     elif ymax is not None:
         ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -972,7 +977,8 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
 
 def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
         colour, fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin,
-        ymax, legend_title, location, style, large, extension, output):
+        ymax, legend_title, location, style, large, save, show, extension,
+        output):
     """Plots a phonon density of states."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1011,8 +1017,11 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
     elif ymax is not None:
         ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1062,7 +1071,8 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
 
 def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
           colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-          legend_title, legend, location, style, large, extension, output):
+          legend_title, legend, location, style, large, save, show, extension,
+          output):
     """Plots line graphs of thermal conductivity against temperature.
 
     Currently not all combinations of inputs work. If multiple --direction
@@ -1272,8 +1282,11 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         else:
             add_legend(title=legend_title, location=location)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1311,7 +1324,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
 
 def kappa_target(filename, zt, direction, interpolate, kind, colour,
                  negativecolour, xmin, xmax, ymin, ymax, cmin, cmax, style,
-                 large, extension, output):
+                 large, save, show, extension, output):
     """Plots lattice thermal conductivity to reach a target ZT.
 
     Currently accepts AMSET transport json or BoltzTraP hdf5.
@@ -1343,8 +1356,11 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
     if large:
         cbar.set_label(tp.settings.large_labels()['lattice_thermal_conductivity'])
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1399,7 +1415,7 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
                      xmarkcolour, xmarklinestyle, dos, poscar, atoms,
                      projected, total, total_label, total_colour, doscolour,
                      fill, fillalpha, line, label, legend_title, location,
-                     style, large, extension, output):
+                     style, large, save, show, extension, output):
     """Plots and overlays phonon dispersions.
 
     Can have optional DoS on the side.
@@ -1457,8 +1473,11 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
         else:
             add_legend(title=legend_title, location=location)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1505,7 +1524,8 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 
 def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
               colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
-              legend_title, legend, location, style, large, extension, output):
+              legend_title, legend, location, style, large, save, show,
+              extension, output):
     """Plots line graphs of transport properties against temperature.
 
     Currently not all combinations of inputs work. The order of
@@ -1566,6 +1586,8 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
         else:
             raise Exception('--kfile must be specified for a '
                             '--quantity of {} or {}.'.format(ltc, tc))
+    else:
+        kdata = None
 
     for e in edata:
         e['doping'] = np.abs(e['doping'])
@@ -1799,8 +1821,11 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
     #elif ymax is not None:
     #    ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1880,7 +1905,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
 def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
               linewidth, edgecolour, marker, markersize, xscale, yscale,
               cscale, xmin, xmax, ymin, ymax, cmin, cmax, style, large,
-              extension, output, verbose):
+              save, show, extension, output, verbose):
     """Plots 3rd-order phonon properties per band per q-point."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1952,8 +1977,11 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
     elif ymax is not None:
         ax.set_ylim(top=ymax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -1990,7 +2018,7 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
 @verbose_option
 
 def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
-             large, extension, output, verbose):
+             large, save, show, extension, output, verbose):
     """Plots a broadened phonon dispersion."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -2008,8 +2036,11 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
                                  poscar=poscar, smoothing=smoothing,
                                  colour=colour, verbose=verbose)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 
@@ -2042,7 +2073,8 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
               show_default=True)
 
 def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
-          xmax, ymin, ymax, cmin, cmax, style, large, extension, output):
+          xmax, ymin, ymax, cmin, cmax, style, large, save, show, extension,
+          output):
     """Plots ZT against temperature and carrier concentration."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -2073,8 +2105,11 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
                               kind=kind, colour=colour, xmin=xmin, xmax=xmax,
                               ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
 
-    for ext in extension:
-        fig.savefig('{}.{}'.format(output, ext))
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
 
     return
 

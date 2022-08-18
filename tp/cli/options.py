@@ -270,8 +270,16 @@ def plot_io_options(f):
                      help='Axes size.  [default: small]',
                      default=False,
                      show_default=False)(f)
+    f = click.option('--save/--nosave',
+                     help='Write to file.  [default: save]',
+                     default=True,
+                     show_default=False)(f)
+    f = click.option('--show/--noshow',
+                     help='Show plot.  [default: noshow]',
+                     default=False,
+                     show_default=False)(f)
     f = click.option('--extension',
-                     help='Output extension(s).',
+                     help='Output extension(s). Requires --save.',
                      multiple=True,
                      default=['pdf'],
                      type=str,
