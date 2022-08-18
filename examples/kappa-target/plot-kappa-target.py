@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
 
 import tp
-from matplotlib import pyplot as plt
 
 f = '../data/zno/boltztrap.hdf5'
 target = 2
 direction = 'x'
 
 colour = tp.plot.colour.uniform('#008080')
-colour = tp.plot.colour.highlight(colour, '#d3d3d3')
 
 # Axes
-
-fig, ax = tp.axes.one.colourbar()
+fig, ax, _ = tp.axes.small.one_colourbar()
 
 # Load
-
 data = tp.data.load.boltztrap(f)
 
 # Add
-
 tp.plot.heatmap.add_kappa_target(ax, data, zt=target, colour=colour,
                                  direction=direction)
 
 # Save
-
-plt.savefig('kappa-target.pdf')
-plt.savefig('kappa-target.png')
+fig.savefig('kappa-target.pdf')
+fig.savefig('kappa-target.png')

@@ -31,10 +31,12 @@ Functions
     kl_fromdict:
         adds lattice thermal conductivity for target ZT to dictionary.
 
-    to_tp
+    to_tp:
         converts quantities to tp defaults from tprc.yaml.
-    from_tp
+    from_tp:
         converts quantities from tp defaults from tprc.yaml.
+    interpolate:
+        shrinks to smallest data size and interpolates.
 """
 
 import numpy as np
@@ -116,8 +118,10 @@ def lifetime(gamma, use_tprc=True):
     if use_tprc:
         gamma = to_tp('gamma', gamma)
 
-    lifetime = np.reciprocal(np.multiply(2 * 2 * np.pi, gamma))
-    lifetime = np.where(np.isinf(lifetime), 0, data['lifetime'])
+    with np.errstate(divide='ignore', invalid='ignore'):
+        lifetime = np.reciprocal(np.multiply(2e12 * 2 * np.pi, gamma))
+    lifetime = np.where(np.isinf(lifetime), np.nanmax(lifetime), lifetime)
+    lifetime = np.where(np.isnan(lifetime), np.nanmin(lifetime), lifetime)
 
     if use_tprc:
         lifetime = from_tp('lifetime', lifetime)
@@ -195,7 +199,7 @@ def be_occupation(frequency, temperature, use_tprc=True):
 
     return occupation
 
-def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
+def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
           use_tprc=True):
     """Derivative of the Fermi-Dirac distribution.
 
@@ -204,8 +208,8 @@ def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
 
         energy : array-like
             energies per band and k-point (by default in eV).
-        fermi_levels : array-like
-            fermi levels per temperature and dopant (by default in eV).
+        fermi_level : array-like
+            fermi level per temperature and dopant (by default in eV).
         temperature : array-like
             temperatures (by default in K).
         doping : array-like
@@ -232,7 +236,7 @@ def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
         doping = to_tp('doping', doping)
 
     kbt = np.multiply(kb, temperature)
-    de = -np.subtract.outer(fermi_levels, energy)
+    de = -np.subtract.outer(fermi_level, energy)
     if amset_order:
         weights = -0.25 / np.cosh(0.5 * de / kbt[None, :, None, None]) ** 2
         weights = weights / kbt[None, :, None, None]
@@ -241,6 +245,48 @@ def dfdde(energy, fermi_levels, temperature, doping, amset_order=False,
         weights = weights / kbt[:, None, None, None]
 
     return weights
+
+def thermal_conductivity(etc, ltc, use_tprc=True):
+    """Calculates ZT.
+
+    Arguments
+    ---------
+
+        etc : array-like
+            electronic thermal conductivities (by default in W m-1 K-1).
+        ltc : array-like
+            lattice thermal conductivities (by default in W m-1 K-1).
+
+        use_tprc : bool, optional
+            use custom unit conversions. Default: True.
+
+    Returns
+    -------
+
+        np.array
+            thermal conductivity.
+    """
+
+    if use_tprc:
+        etc = to_tp('electronic_thermal_conductivity', etc)
+        ltc = to_tp('lattice_thermal_conductivity', ltc)
+
+    if np.ndim(etc) in [0, 1]:
+        tc = np.add(etc, np.array(ltc))
+    elif np.ndim(etc) == 2:
+        tc = np.add(etc, np.array(ltc)[:, None])
+    elif np.ndim(etc) == 3:
+        tc = np.add(etc, np.array(ltc)[:, :3, :3])
+    elif np.ndim(etc) == 4:
+        tc = np.add(etc, np.array(ltc)[:, None, :3, :3])
+    else:
+        raise Exception('Unexpectedly dimensionous electronic thermal conductivity!\n'
+                        'Abort!')
+
+    if use_tprc:
+        tc = from_tp('thermal_conductivity', tc)
+
+    return tc
 
 def power_factor(conductivity, seebeck, use_tprc=True):
     """Calculates power factor.
@@ -303,18 +349,18 @@ def zt(conductivity, seebeck, electronic_thermal_conductivity,
     """
 
     pf = power_factor(conductivity, seebeck, use_tprc=use_tprc)
+    tc = thermal_conductivity(electronic_thermal_conductivity,
+                              lattice_thermal_conductivity, use_tprc=use_tprc)
 
     if use_tprc:
         pf = to_tp('power_factor', pf)
-        electronic_thermal_conductivity = to_tp(
-            'electronic_thermal_conductivity', electronic_thermal_conductivity)
-        lattice_thermal_conductivity = to_tp('lattice_thermal_conductivity',
-                                              lattice_thermal_conductivity)
+        tc = to_tp('thermal_conductivity', tc)
         temperature = to_tp('temperature', temperature)
 
-    zt = np.multiply(pf, np.array(temperature)[:, None]) / \
-                     np.add(electronic_thermal_conductivity,
-                            np.array(lattice_thermal_conductivity)[:, None])
+    if isinstance(pf, (float, int)):
+        zt = np.multiply(pf, temperature) / tc
+    else:
+        zt = np.apply_along_axis(np.multiply, 0, pf, temperature) / tc
 
     if use_tprc:
         zt = from_tp('zt', zt)
@@ -394,6 +440,8 @@ def power_factor_fromdict(data, use_tprc=True):
                                         data['seebeck'], use_tprc=use_tprc)
     data['meta']['units']['power_factor'] = \
                            tp.settings.units(use_tprc=use_tprc)['power_factor']
+    data['meta']['dimensions']['power_factor'] = \
+                                       tp.settings.dimensions()['power_factor']
 
     return data
 
@@ -429,11 +477,19 @@ def zt_fromdict(data, use_tprc=True):
             dictionary with ZTs.
     """
 
-    data['zt'] = zt(data['conductivity'], data['seebeck'],
-                 data['electronic_thermal_conductivity'],
-                 data['lattice_thermal_conductivity'],
-                 data['temperature'], use_tprc=use_tprc)
+    tc = 'thermal_conductivity'
+    etc, ltc = 'electronic_' + tc, 'lattice_' + tc
+    if 'power_factor' not in data:
+        data = power_factor_fromdict(data, use_tprc=use_tprc)
+    if 'thermal_conductivity' not in data:
+        data[tc] = thermal_conductivity(data[etc], data[ltc])
+        data['meta']['units'][tc] = tp.settings.units(use_tprc=use_tprc)[tc]
+        data['meta']['dimensions'][tc] = tp.settings.dimensions()[tc]
+
+    data['zt'] = zt(data['conductivity'], data['seebeck'], data[etc],
+                    data[ltc], data['temperature'], use_tprc=use_tprc)
     data['meta']['units']['zt'] = tp.settings.units(use_tprc=use_tprc)['zt']
+    data['meta']['dimensions']['zt'] = tp.settings.dimensions()['zt']
 
     return data
 
@@ -474,6 +530,7 @@ def kl_fromdict(data, use_tprc=True):
                  data['electronic_thermal_conductivity'], data['zt'],
                  data['temperature'], use_tprc=use_tprc)
     data['meta']['units'][q] = tp.settings.units(use_tprc=use_tprc)[q]
+    data['meta']['dimensions'][q] = tp.settings.dimensions()[q]
 
     return data
 
@@ -524,3 +581,71 @@ def from_tp(name, value):
         value = np.multiply(value, conversions[name])
 
     return value
+
+def interpolate(data1, data2, dependent, keys1, keys2, axis1=0, axis2=0,
+                kind='linear'):
+    """Shrinks datasets to smallest common size and interpolates.
+
+    Arguments
+    ---------
+
+        data(1,2) : dict
+            input data.
+        dependent : str
+            variable to interpolate against.
+        keys(1,2) : array-like or str
+            data keys to interpolate
+        axis(1,2) : int, optional
+            axis of the dependent variable wrt the keys. Default: 0.
+        kind : str, optional
+            interpolation kind
+
+    Returns
+    -------
+
+        dict
+            shrunk data1
+        dict
+            shrunk and interpolated data2
+    """
+    # Future: could be rewritten to auto-detect axis like resolve
+
+    from copy import deepcopy
+    from scipy.interpolate import interp1d
+
+    data1 = deepcopy(data1)
+    data2 = deepcopy(data2)
+
+    if isinstance(keys1, str):
+        keys1 = [keys1]
+    if isinstance(keys2, str):
+        keys2 = [keys2]
+
+    # interpolate onto the densest dataset covered by both
+    dmin = np.nanmax([np.nanmin(data1[dependent]), np.nanmin(data2[dependent])])
+    dmax = np.nanmin([np.nanmax(data1[dependent]), np.nanmax(data2[dependent])])
+    invert = len(np.where((data1[dependent]<=dmax) & (data1[dependent]>=dmin))[0]) < \
+             len(np.where((data2[dependent]<=dmax) & (data2[dependent]>=dmin))[0])
+    if invert:
+        data1, data2 = data2, data1
+        keys1, keys2 = keys2, keys1
+        axis1, axis2 = axis2, axis1
+    index = np.where((data1[dependent]>=data2[dependent][0]) & (data1[dependent]<=data2[dependent][-1]))[0]
+
+    data1[dependent] = np.array(data1[dependent])[index]
+    for key in keys1:
+        data1[key] = np.swapaxes(data1[key], 0, axis1)
+        data1[key] = np.array(data1[key])[index]
+        data1[key] = np.swapaxes(data1[key], 0, axis1)
+
+    for key in keys2:
+        interp = interp1d(data2[dependent], data2[key], kind=kind, axis=axis2)
+        data2[key] = interp(data1[dependent])
+    data2[dependent] = data1[dependent]
+
+    if invert:
+        data1, data2 = data2, data1
+        keys1, keys2 = keys2, keys1
+        axis1, axis2 = axis2, axis1
+
+    return data1, data2

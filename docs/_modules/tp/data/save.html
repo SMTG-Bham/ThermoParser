@@ -1,72 +1,30 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>tp.data.save &mdash; ThermoPlotter 1.0.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>tp.data.save &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter
-          
-
-          
-            
-            <img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
-          
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter<img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,24 +32,12 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html#id2">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
@@ -99,74 +45,367 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../contents.html">ThermoPlotter</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
       <li>tp.data.save</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for tp.data.save</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Utility to save to hdf5&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Utilities to save data</span>
+
+<span class="sd">Functions:</span>
+<span class="sd">    phono3py: save calculated properties to hdf5.</span>
+<span class="sd">    zt: save zt to hdf5 and highlights to yaml.</span>
+<span class="sd">    kappa_target: save kappa to hdf5.</span>
+<span class="sd">    cumkappa: save cumkappa to text.</span>
+
+<span class="sd">    hdf5: save nested dictionaries to hdf5 (up to depth 3).</span>
+<span class="sd">    prompt: prompt before overwriting input</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">exit</span>
+<span class="kn">import</span> <span class="nn">tp</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<div class="viewcode-block" id="phono3py"><a class="viewcode-back" href="../../../tp.data.html#tp.data.save.phono3py">[docs]</a><span class="k">def</span> <span class="nf">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;tp-phono3py&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save calculated properties to hdf5.</span>
+
+<span class="sd">    Also saves dependent properties (temperature etc.) and metadata.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">            filepath.</span>
+<span class="sd">        quantities : str or list</span>
+<span class="sd">            values to save. Accepts any phonop3y properties, but only</span>
+<span class="sd">            lifetime, mean_free_path and/ or occupation are recommended.</span>
+
+<span class="sd">        output : str, optional</span>
+<span class="sd">            output filename (no extension). Default: tp-phono3py.</span>
+<span class="sd">        force : bool, optional</span>
+<span class="sd">            force overwrite input file. Default: False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        none</span>
+<span class="sd">            instead writes to hdf5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+        <span class="n">prompt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.hdf5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+    <span class="n">hdf5</span><span class="p">(</span><span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.hdf5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="zt"><a class="viewcode-back" href="../../../tp.data.html#tp.data.save.zt">[docs]</a><span class="k">def</span> <span class="nf">zt</span><span class="p">(</span><span class="n">efile</span><span class="p">,</span> <span class="n">kfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">tinterp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+       <span class="n">dinterp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;tp-zt&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save ZT to hdf5 and highlights to yaml.</span>
+
+<span class="sd">    Also saves temperature and doping and metadata.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        efile : str</span>
+<span class="sd">            electronic data filepath.</span>
+
+<span class="sd">        kfile : str</span>
+<span class="sd">            phononic data filepath.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
+<span class="sd">            Default: average.</span>
+<span class="sd">        doping : str, optional</span>
+<span class="sd">            doping type for BoltzTraP. Must be n or p. Default: n.</span>
+
+<span class="sd">        tinterp : int, optional</span>
+<span class="sd">            density of interpolation for temperature. None turns it off.</span>
+<span class="sd">            Default: 200.</span>
+<span class="sd">        dinterp : int, optional</span>
+<span class="sd">            density of interpolation for doping. None turns it off.</span>
+<span class="sd">            Default: 200.</span>
+<span class="sd">        kind : str, optional</span>
+<span class="sd">            interpolation kind. Default: linear.</span>
+
+<span class="sd">        output : str, optional</span>
+<span class="sd">            output filename (no extension). Default: tp-zt.</span>
+<span class="sd">        force : bool, optional</span>
+<span class="sd">            force overwrite input file. Default: False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        none</span>
+<span class="sd">            instead writes to hdf5, yaml and stdout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="n">efile</span><span class="p">,</span> <span class="n">kfile</span><span class="p">]:</span>
+            <span class="n">prompt</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.hdf5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.yaml&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">)])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">edata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">amset</span><span class="p">(</span><span class="n">efile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+        <span class="n">edata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">boltztrap</span><span class="p">(</span><span class="n">efile</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">doping</span><span class="p">)</span>
+
+    <span class="n">equants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">,</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">]</span>
+    <span class="n">ltc</span> <span class="o">=</span> <span class="s1">&#39;lattice_thermal_conductivity&#39;</span>
+    <span class="n">edata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">edata</span><span class="p">,</span> <span class="n">equants</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">kfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span>
+        <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="n">ltc</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="n">edata</span><span class="p">,</span> <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">edata</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
+                                                <span class="n">equants</span><span class="p">,</span> <span class="n">ltc</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
+        <span class="n">edata</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span>
+        <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># if lattice thermal conductivity not supplied, set to 1 W m-1 K-1</span>
+        <span class="n">edata</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
+        <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Set to 1 W m^-1 K^-1&#39;</span>
+    <span class="n">edata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">zt_fromdict</span><span class="p">(</span><span class="n">edata</span><span class="p">)</span>
+
+    <span class="n">ztdata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="o">**</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">],</span>
+                       <span class="s1">&#39;original_temperature&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                                                <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                       <span class="s1">&#39;original_doping&#39;</span><span class="p">:</span>      <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                                                <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()}}</span>
+    <span class="c1"># interpolation of zt (if applicable)</span>
+    <span class="k">if</span> <span class="n">tinterp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dinterp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tinterp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                <span class="n">tinterp</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dinterp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                            <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="n">dinterp</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">ztinterp</span> <span class="o">=</span> <span class="n">interp2d</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span> <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">],</span>
+                            <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
+        <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ztinterp</span><span class="p">(</span><span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="n">hdf5</span><span class="p">(</span><span class="n">ztdata</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.hdf5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+
+    <span class="c1"># highlights</span>
+    <span class="n">ydata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">],</span>
+             <span class="s1">&#39;max&#39;</span><span class="p">:</span>  <span class="p">{}}</span>
+
+    <span class="c1"># max zt and corresponding temperature and doping</span>
+    <span class="n">maxindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> \
+                     <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">]),</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">][</span><span class="s1">&#39;zt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">][</span><span class="n">maxindex</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="n">maxindex</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">][</span><span class="n">maxindex</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="n">maxindex</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="c1"># max zt per temperature and corresponding doping</span>
+    <span class="n">maxindices</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">zt</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> \
+                            <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">zt</span><span class="p">),</span><span class="mi">10</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> \
+                  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">zt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">])]</span>
+    <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">maxindices</span><span class="p">]</span>
+    <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
+    <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ztdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">maxindices</span><span class="p">]</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.yaml&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">ydata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max ZT in the </span><span class="si">{}</span><span class="s1"> direction of </span><span class="si">{:.2f}</span><span class="s1"> at </span><span class="si">{:.0f}</span><span class="s1"> K, </span><span class="si">{:.2e}</span><span class="s1"> carriers cm^-3&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                                   <span class="n">direction</span><span class="p">,</span>
+                                                   <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">][</span><span class="s1">&#39;zt&#39;</span><span class="p">],</span>
+                                                   <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                                   <span class="n">ydata</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]))</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="kappa_target"><a class="viewcode-back" href="../../../tp.data.html#tp.data.save.kappa_target">[docs]</a><span class="k">def</span> <span class="nf">kappa_target</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">zt</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">tinterp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dinterp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;tp-kappa-target&#39;</span><span class="p">,</span>
+                 <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save target kappa_l to hdf5.</span>
+
+<span class="sd">    Also saves temperature and doping and metadata.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">            data filepath.</span>
+
+<span class="sd">        zt : float, optional</span>
+<span class="sd">            target ZT. Default: 2.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
+<span class="sd">            Default: average.</span>
+<span class="sd">        doping : str, optional</span>
+<span class="sd">            doping type for BoltzTraP. Must be n or p. Default: n.</span>
+
+<span class="sd">        tinterp : int, optional</span>
+<span class="sd">            density of interpolation for temperature. None turns it off.</span>
+<span class="sd">            Default: 200.</span>
+<span class="sd">        dinterp : int, optional</span>
+<span class="sd">            density of interpolation for doping. None turns it off.</span>
+<span class="sd">            Default: 200.</span>
+<span class="sd">        kind : str, optional</span>
+<span class="sd">            interpolation kind. Default: linear.</span>
+
+<span class="sd">        output : str, optional</span>
+<span class="sd">            output filename (no extension). Default: tp-kappa-target.</span>
+<span class="sd">        force : bool, optional</span>
+<span class="sd">            force overwrite input file. Default: False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        none</span>
+<span class="sd">            instead writes to hdf5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+        <span class="n">prompt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.hdf5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">amset</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">boltztrap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">doping</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">],</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zt</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">kl_fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">kdata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">],</span>
+                     <span class="s1">&#39;original_temperature&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                     <span class="s1">&#39;original_doping&#39;</span><span class="p">:</span>      <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]}}</span>
+    <span class="c1"># interpolation of kl (if applicable)</span>
+    <span class="k">if</span> <span class="n">tinterp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dinterp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tinterp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="n">tinterp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dinterp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                           <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dinterp</span><span class="p">)</span>
+
+        <span class="n">kinterp</span> <span class="o">=</span> <span class="n">interp2d</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                           <span class="n">data</span><span class="p">[</span><span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
+        <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kinterp</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                                        <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                                       <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">]</span>
+        <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span>
+        <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span>
+
+    <span class="n">hdf5</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.hdf5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="cumkappa"><a class="viewcode-back" href="../../../tp.data.html#tp.data.save.cumkappa">[docs]</a><span class="k">def</span> <span class="nf">cumkappa</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+             <span class="n">output</span><span class="o">=</span><span class="s1">&#39;tp-cumkappa&#39;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;dat&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Saves cumulated lattice thermal conductivity against frequency or mfp.</span>
+
+<span class="sd">    Saves in normal units and percent to a dat file.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">            data filepath</span>
+
+<span class="sd">        mfp : bool, optional</span>
+<span class="sd">            calculate against mean free path not frequency. Default: False.</span>
+<span class="sd">        temperature : float or int, optional</span>
+<span class="sd">            temperature in K. Default: 300.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
+<span class="sd">            Default: average.</span>
+
+<span class="sd">        output : str, optional</span>
+<span class="sd">            output filename (no extension). Default: tp-kappa-target.</span>
+<span class="sd">        extension : str or list, optional</span>
+<span class="sd">            output filetype. Must be dat and/ or csv. Default: dat.</span>
+<span class="sd">        force : bool, optional</span>
+<span class="sd">            force overwrite input file. Default: False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        none</span>
+<span class="sd">            instead writes to dat.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="p">[</span><span class="n">extension</span><span class="p">]</span>
+    <span class="n">csv</span><span class="p">,</span> <span class="n">dat</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">extension</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="s1">&#39;csv&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">csv</span><span class="p">:</span>
+                <span class="n">csv</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ignoring duplicate extension csv.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="s1">&#39;dat&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dat</span><span class="p">:</span>
+                <span class="n">dat</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ignoring duplicate extension dat.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Extension must be dat and/ or csv.&#39;</span><span class="p">)</span>
+
+    <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mean_free_path&#39;</span> <span class="k">if</span> <span class="n">mfp</span> <span class="k">else</span> <span class="s1">&#39;frequency&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="p">],</span>
+                                   <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">])</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">])</span>
+    <span class="n">q</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">cumulate</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">k</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">) cum_kappa_</span><span class="si">{d}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">) cum_kappa_</span><span class="si">{d}</span><span class="s1">(%)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">quantity</span><span class="p">,</span>
+                             <span class="n">units</span><span class="p">[</span><span class="n">quantity</span><span class="p">],</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">],</span> <span class="n">d</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">csv</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.csv&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span><span class="p">]),</span>
+                   <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dat</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.dat&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span><span class="p">]),</span>
+                   <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
 
 <div class="viewcode-block" id="hdf5"><a class="viewcode-back" href="../../../tp.data.html#tp.data.save.hdf5">[docs]</a><span class="k">def</span> <span class="nf">hdf5</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Saves to hdf5.</span>
@@ -188,67 +427,97 @@
 <span class="sd">            instead writes to file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">datafile</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">group</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="n">group2</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">k2</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> \
+                               <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> \
+                               <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                                <span class="n">ds</span> <span class="o">=</span> <span class="n">group2</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k2</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">]),),</span>
+                                                           <span class="n">dtype</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">string_dtype</span><span class="p">())</span>
+                                <span class="n">ds</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">group2</span><span class="p">[</span><span class="n">k2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">group</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">group</span> <span class="o">=</span> <span class="n">datafile</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">group2</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">k2</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">group2</span><span class="p">[</span><span class="n">k2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">k2</span><span class="p">]</span>
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="prompt"><a class="viewcode-back" href="../../../tp.data.html#tp.data.save.prompt">[docs]</a><span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Prompts before overwrite.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">            input filename.</span>
+<span class="sd">        output : str or list</span>
+<span class="sd">            output filename(s).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        none</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+        <span class="n">tries</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: this will overwrite </span><span class="si">{}</span><span class="s1">. Continue?&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+            <span class="n">cont</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;[y/n]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">cont</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;ye&#39;</span><span class="p">,</span> <span class="s1">&#39;yes&#39;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Continuing...&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">cont</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Aborting!&#39;</span><span class="p">)</span>
+                <span class="n">exit</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tries</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">tries</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Invalid response. 2 tries remain.&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">tries</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Invalid response. 1 try remains.&#39;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">group</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">datafile</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-
-    <span class="n">datafile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Invalid response. Aborting!&#39;</span><span class="p">)</span>
+                    <span class="n">exit</span><span class="p">()</span>
 
     <span class="k">return</span></div>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Scanlon Materials Theory Group.
-
-    </p>
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

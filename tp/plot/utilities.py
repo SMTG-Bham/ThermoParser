@@ -4,7 +4,9 @@ Functions
 ---------
 
     colour_scale:
-        Sorts colour limits and colourbar format.
+        sorts colour limits and colourbar format.
+    parse_colours
+        returns a colour map from a range of input types.
     scale_to_axis
         scales data to axes limits
     set_locators:
@@ -13,6 +15,7 @@ Functions
 
 import matplotlib as mpl
 import numpy as np
+import tp
 
 def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
                  unoccupied='grey'):
@@ -116,6 +119,46 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
         extend = 'neither'
 
     return cnorm, extend
+
+def parse_colours(colour):
+    """Parses a range of inputs into a colourmap
+
+    Argument
+    --------
+
+        colour : colourmap or str or array-like or dict
+            colourmap or colourmap name or #rrggbb highlight colour or
+            highlight, min, max colours in that order, or dictionary
+            with cmid and cmin and/or cmax keys.
+
+    Returns
+    -------
+
+        colourmap
+            colourmap
+    """
+
+    from copy import copy
+
+    try:
+        cmap = copy(mpl.cm.get_cmap(colour))
+    except ValueError:
+        if isinstance(colour, mpl.colors.ListedColormap):
+            cmap = copy(colour)
+        elif isinstance(colour, str):
+            cmap = tp.plot.colour.uniform(colour)
+        elif isinstance(colour, list):
+            cmap = tp.plot.colour.uniform(*colour)
+        elif isinstance(colour, dict):
+            cmap = tp.plot.colour.uniform(**colour)
+        else:
+            raise Exception('colour must be a colourmap, colourmap '
+                            'name, single #rrggbb highlight colour or '
+                            'highlight, min, max #rrggbb colours in '
+                            'that order, or a dictionary with cmid and '
+                            'cmin and/or cmax keys.')
+
+    return cmap
 
 def scale_to_axis(ax, data, exclude=[], scale=None, axis='y'):
     """Scale data to fit an axis.

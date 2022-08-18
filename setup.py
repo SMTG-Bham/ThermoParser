@@ -3,16 +3,16 @@
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Scanlon Materials Theory Group (2020)'
-__version__ =    '1.0.0'
+__version__ =    '2.0.0'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
 __date__ =       'February 4th 2021'
 
-from glob import glob
 import os
 import setuptools
 from setuptools.command.install import install
 from shutil import copy
+import unittest
 
 with open('README.rst', 'r') as f:
     long_description=f.read()
@@ -38,8 +38,6 @@ class PostInstallMoveFile(install):
         super().__init__(*args, **kwargs)
         install_style()
 
-scripts = glob("scripts/tp-*")
-
 setuptools.setup(
     name='tp',
     version=__version__,
@@ -50,7 +48,7 @@ setuptools.setup(
     url='https://smtg-ucl.github.io/ThermoPlotter/',
     packages=setuptools.find_packages(),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Natural Language :: English',
@@ -62,8 +60,8 @@ setuptools.setup(
     keywords='chemistry materials thermoelectric dft phonopy phono3py '
              'amset boltztrap tp te matplotlib',
     test_suite='setup.load_test_suite',
-    install_requires=['h5py', 'matplotlib', 'numpy', 'pymatgen',
+    install_requires=['click', 'h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy'],
     python_requires='>=3.6',
     cmdclass={'install': PostInstallMoveFile},
-    scripts=scripts)
+    entry_points={'console_scripts': ['tp = tp.cli.cli:tp_cli']})

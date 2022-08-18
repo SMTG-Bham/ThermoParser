@@ -20,7 +20,7 @@ import yaml
 def phono3py(filename, quantities, output='tp-phono3py', force=False):
     """Save calculated properties to hdf5.
 
-    Also saves dependant properties (temperature etc.) and metadata.
+    Also saves dependent properties (temperature etc.) and metadata.
 
     Arguments
     ---------
@@ -96,39 +96,22 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
 
     try:
         edata = tp.data.load.amset(efile)
-    except Exception:
+    except UnicodeDecodeError:
         edata = tp.data.load.boltztrap(efile, doping=doping)
-    edata = tp.data.resolve.resolve(edata, ['conductivity', 'seebeck',
-                                    'electronic_thermal_conductivity'],
-                                    direction=direction)
+
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+    ltc = 'lattice_thermal_conductivity'
+    edata = tp.data.resolve.resolve(edata, equants, direction=direction)
 
     if kfile is not None:
         kdata = tp.data.load.phono3py(kfile)
-        kdata = tp.data.resolve.resolve(kdata, 'lattice_thermal_conductivity',
-                                        direction=direction)
-        # shrink to smallest temperature
-        tmin = np.amax([edata['temperature'][0], kdata['temperature'][0]])
-        tmax = np.amin([edata['temperature'][-1], kdata['temperature'][-1]])
-        etindex = np.where((edata['temperature'] <= tmax)
-                         & (edata['temperature'] >= tmin))
-        edata['temperature'] = np.array(edata['temperature'])[etindex[0]]
-        edata['conductivity'] = np.array(edata['conductivity'])[etindex[0]]
-        edata['electronic_thermal_conductivity'] = \
-                 np.array(edata['electronic_thermal_conductivity'])[etindex[0]]
-        edata['seebeck'] = np.array(edata['seebeck'])[etindex[0]]
-        ktindex = np.where((kdata['temperature'] <= tmax)
-                         & (kdata['temperature'] >= tmin))
-        kdata['temperature'] = np.array(kdata['temperature'])[ktindex[0]]
-        kdata['lattice_thermal_conductivity'] = \
-                    np.array(kdata['lattice_thermal_conductivity'])[ktindex[0]]
-        # interpolate lattice thermal conductivity to fit electronic data
-        kinterp = interp1d(kdata['temperature'],
-                           kdata['lattice_thermal_conductivity'], kind='cubic')
-        edata['lattice_thermal_conductivity'] = kinterp(edata['temperature'])
+        kdata = tp.data.resolve.resolve(kdata, ltc, direction=direction)
+        edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
+                                                equants, ltc, kind='cubic')
+        edata[ltc] = kdata[ltc]
         edata['meta']['kappa_source'] = kdata['meta']['kappa_source']
     else: # if lattice thermal conductivity not supplied, set to 1 W m-1 K-1
-        edata['lattice_thermal_conductivity'] = np.ones(
-                                                     len(edata['temperature']))
+        edata[ltc] = np.ones(len(edata['temperature']))
         edata['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
     edata = tp.calculate.zt_fromdict(edata)
 
@@ -240,7 +223,7 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
 
     try:
         data = tp.data.load.amset(filename)
-    except Exception:
+    except UnicodeDecodeError:
         data = tp.data.load.boltztrap(filename, doping=doping)
     data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
                                    'electronic_thermal_conductivity'],
@@ -281,7 +264,7 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
     return
 
 def cumkappa(filename, mfp=False, temperature=300, direction='avg',
-             output='tp-cumkappa', force=False):
+             output='tp-cumkappa', extension='dat', force=False):
     """Saves cumulated lattice thermal conductivity against frequency or mfp.
 
     Saves in normal units and percent to a dat file.
@@ -302,6 +285,8 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
 
         output : str, optional
             output filename (no extension). Default: tp-kappa-target.
+        extension : str or list, optional
+            output filetype. Must be dat and/ or csv. Default: dat.
         force : bool, optional
             force overwrite input file. Default: False.
 
@@ -311,6 +296,23 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
         none
             instead writes to dat.
     """
+
+    if isinstance(extension, str):
+        extension = [extension]
+    csv, dat = False, False
+    for e in extension:
+        if e == 'csv':
+            if not csv:
+                csv = True
+            else:
+                print('Ignoring duplicate extension csv.')
+        elif e == 'dat':
+            if not dat:
+                dat = True
+            else:
+                print('Ignoring duplicate extension dat.')
+        else:
+            raise Exception('Extension must be dat and/ or csv.')
 
     quantity = 'mean_free_path' if mfp else 'frequency'
     data = tp.data.load.phono3py(filename, ['mode_kappa', quantity])
@@ -324,7 +326,12 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
     units = tp.settings.units()
     header = '{}({}) cum_kappa_{d}({}) cum_kappa_{d}(%)'.format(quantity,
                              units[quantity], units['mode_kappa'], d=direction)
-    np.savetxt('{}.dat'.format(output), np.transpose([q, k, p]), header=header)
+    if csv:
+        np.savetxt('{}.csv'.format(output), np.transpose([q, k, p]),
+                   header=header, delimiter=',')
+    if dat:
+        np.savetxt('{}.dat'.format(output), np.transpose([q, k, p]),
+                   header=header, delimiter=' ')
 
     return
 
@@ -356,53 +363,18 @@ def hdf5(data, output):
                     if isinstance(data[key][k], dict):
                         group2 = group.create_group(k)
                         for k2 in data[key][k].keys():
-                            group2[k2] = data[key][k][k2]
+                            if isinstance(data[key][k][k2], list) and \
+                               len(data[key][k][k2]) != 0 and \
+                               isinstance(data[key][k][k2][0], str):
+                                ds = group2.create_dataset(k2, (len(data[key][k][k2]),),
+                                                           dtype=h5py.string_dtype())
+                                ds = data[key][k][k2]
+                            else:
+                                group2[k2] = data[key][k][k2]
                     else:
                         group[k] = data[key][k]
             else:
                 f.create_dataset(key, np.shape(data[key]), data=data[key])
-
-    return
-
-def prompt(filename, output):
-    """Prompts before overwrite.
-
-    Arguments
-    ---------
-
-        filename : str
-            input filename.
-        output : str or list
-            output filename(s).
-
-    Returns
-    -------
-
-        none
-    """
-
-    if isinstance(output, str):
-        output = [output]
-    if filename in output:
-        tries = 3
-        while True:
-            print('Warning: this will overwrite {}. Continue?'.format(filename))
-            cont = input('[y/n]').lower()
-            if cont in ['y', 'ye', 'yes']:
-                print('Continuing...')
-                break
-            elif cont in ['n', 'no']:
-                print('Aborting!')
-                exit()
-            else:
-                tries -= 1
-                if tries == 2:
-                    print('Invalid response. 2 tries remain.')
-                elif tries == 1:
-                    print('Invalid response. 1 try remains.')
-                else:
-                    print('Invalid response. Aborting!')
-                    exit()
 
     return
 

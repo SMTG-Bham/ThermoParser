@@ -22,12 +22,14 @@ Functions
         convert names to tp conventions.
     to_amset:
         convert names to amset conventions.
-    to_amset:
+    to_boltztrap:
         convert names to boltztrap conventions.
     to_phono3py:
         convert names to phono3py conventions.
 
 
+    conversions:
+        default unit conversions.
     amset_conversions:
         unit conversions.
     boltztrap_conversions:
@@ -42,14 +44,21 @@ Functions
         default units used.
     dimensions:
         dimensions of each variable.
+    boltztrap_dimensions:
+        updated dimensions for BoltzTraP.
+
     labels:
         default axis labels.
     inverted_labels:
-        default inverted axis labels.
+        default labels for a dos-style axis.
+    large_labels:
+        default labels for a large axis.
     long_labels:
         list of long axis labels.
+    medium_labels:
+        list of slightly abbreviated axis labels.
     short_labels:
-        list of short axis labels.
+        list of fully contracted axis labels.
 """
 
 import os
@@ -63,7 +72,7 @@ try:
 except yaml.parser.ParserError:
     warnings.warn('Failed to read ~/.config/tprc.yaml')
     conf = None
-except Exception:
+except FileNotFoundError:
     conf = None
 
 def __dir__():
@@ -143,18 +152,24 @@ def to_tp():
 
     names = {'ave_pp':               'ph_ph_strength',
              'energies':             'energy',
+             'etc':                  'electronic_thermal_conductivity',
              'fermi_levels':         'fermi_level',
              'gv':                   'group_velocity',
+             'ir_kpoints':           'kpoint',
+             'kpoints':              'kpoint',
              'kappa':                'lattice_thermal_conductivity', # because p3p
              'kappae':               'electronic_thermal_conductivity',
              'kappal':               'lattice_thermal_conductivity',
              'ke':                   'electronic_thermal_conductivity',
              'kl':                   'lattice_thermal_conductivity',
+             'ltc':                  'lattice_thermal_conductivity',
              'mfp':                  'mean_free_path',
              'mk':                   'mode_kappa',
              'pf':                   'power_factor',
+             'qpoints':              'qpoint',
+             'tc':                   'thermal_conductivity',
              'temperatures':         'temperature',
-             'thermal_conductivity': 'electronic_thermal_conductivity'}
+             'scattering_labels':    'stype'}
 
     if conf is not None and 'to_tp' in conf and conf['to_tp'] is not None:
         names = {**names, **conf['to_tp']}
@@ -165,12 +180,15 @@ def to_amset():
     """Get dictionary to translate to amset."""
 
     names = {'energy':               'energies',
+             'etc':                  'electronic_thermal_conductivity',
              'fermi_level':          'fermi_levels',
              'kappa':                'electronic_thermal_conductivity',
              'kappae':               'electronic_thermal_conductivity',
              'ke':                   'electronic_thermal_conductivity',
+             'kpoint':               'ir_kpoints',
+             'kpoints':              'ir_kpoints',
              'temperature':          'temperatures',
-             'thermal_conductivity': 'electronic_thermal_conductivity'}
+             'stype':                'scattering_labels'}
 
     if conf is not None and 'to_amset' in conf and \
        conf['to_amset'] is not None:
@@ -181,10 +199,10 @@ def to_amset():
 def to_boltztrap():
     """Get dictionary to translate to boltztrap."""
 
-    names = {'kappa':                'electronic_thermal_conductivity',
+    names = {'etc':                  'electronic_thermal_conductivity',
+             'kappa':                'electronic_thermal_conductivity',
              'kappae':               'electronic_thermal_conductivity',
-             'ke':                   'electronic_thermal_conductivity',
-             'thermal_conductivity': 'electronic_thermal_conductivity'}
+             'ke':                   'electronic_thermal_conductivity'}
 
     if conf is not None and 'to_boltztrap' in conf and \
        conf['to_boltztrap'] is not None:
@@ -199,9 +217,11 @@ def to_phono3py():
              'kappal':                       'kappa',
              'kl':                           'kappa',
              'lattice_thermal_conductivity': 'kappa',
+             'ltc':                          'kappa',
              'mfp':                          'mean_free_path',
              'mk':                           'mode_kappa',
              'ph_ph_strength':               'ave_pp',
+             'qpoint':                       'qpoint',
              'temperatures':                 'temperature'}
 
     if conf is not None and 'to_phono3py' in conf and \
@@ -278,6 +298,7 @@ def units(use_tprc=True):
              'gv_by_gv':                        'm2 s-2',
              'hall_carrier_concentration':      'cm-3',
              'heat_capacity':                   'J K-1',
+             'kpoint':                          '',
              'lattice_thermal_conductivity':    'W m-1 K-1',
              'lifetime':                        's',
              'mean_free_path':                  'm',
@@ -287,10 +308,12 @@ def units(use_tprc=True):
              'occupation':                      'phonons',
              'ph_ph_strength':                  'eV2',
              'power_factor':                    'W m-1 K-2',
+             'qpoint':                          '',
              'scattering_rates':                's-1',
              'seebeck':                         'muV K-1',
              'seebeck_effective_mass':          'm_e',
              'temperature':                     'K',
+             'thermal_conductivity':            'W m-1 K-1',
              'weighted_rates':                  's-1',
              'zt':                              ''}
 
@@ -303,43 +326,60 @@ def units(use_tprc=True):
 def dimensions():
     """Get dictionary of dimensions of quantities used in tp."""
 
-    units = {'average_eff_mass':                ['temperature', 'doping', 3, 3],
-             'chemical_potential':              [],
-             'conductivity':                    ['temperature', 'doping', 3, 3],
-             'doping':                          [],
-             'efermi':                          [],
-             'effective_mass':                  ['temperature', 'doping', 3, 3],
-             'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
-             'energy':                          ['temperature', 'band', 'kpoints'],
-             'fermi_level':                     ['temperature', 'doping'],
-             'frequency':                       ['qpoint', 'band'],
-             'gamma':                           ['temperature', 'qpoint', 'band'],
-             'group_velocity':                  ['qpoint', 'band', 3],
-             'gv_by_gv':                        ['qpoint', 'band', 6],
-             'hall_carrier_concentration':      [],
-             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
-             'lattice_thermal_conductivity':    ['temperature', 6],
-             'lifetime':                        ['temperature', 'qpoint', 'band'],
-             'mean_free_path':                  ['temperature', 'qpoint', 'band', 3],
-             'mobility':                        ['temperature', 'doping', 3, 3],
-             'mode_kappa':                      ['temperature', 'qpoint', 'band', 6],
-             'mu_bounds':                       [],
-             'occupation':                      ['temperature', 'qpoint', 'band'],
-             'ph_ph_strength':                  ['qpoint', 'band'],
-             'power_factor':                    ['temperature', 'doping', 3, 3],
-             'scattering_rates':
-                 ['scattering_labels', 'doping', 'temperature', 'band', 'kpoints'],
-             'seebeck':                         ['temperature', 'doping', 3, 3],
-             'seebeck_effective_mass':          [],
-             'temperature':                     [],
-             'weighted_rates':
-                 ['scattering_type', 'temperature', 'doping'],
-             'zt':                              ['temperature', 'doping', 3, 3]}
+    dims = {'average_eff_mass':                ['temperature', 'doping', 3, 3],
+            'chemical_potential':              [],
+            'conductivity':                    ['temperature', 'doping', 3, 3],
+            'doping':                          ['doping'],
+            'efermi':                          [],
+            'effective_mass':                  ['temperature', 'doping', 3, 3],
+            'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
+            'energy':                          ['band', 'kpoint'],
+            'fermi_level':                     ['temperature', 'doping'],
+            'frequency':                       ['qpoint', 'band'],
+            'gamma':                           ['temperature', 'qpoint', 'band'],
+            'group_velocity':                  ['qpoint', 'band', 3],
+            'gv_by_gv':                        ['qpoint', 'band', 6],
+            'hall_carrier_concentration':      [],
+            'heat_capacity':                   ['temperature', 'qpoint', 'band'],
+            'kpoint':                          ['kpoint', 3],
+            'lattice_thermal_conductivity':    ['temperature', 6],
+            'lifetime':                        ['temperature', 'qpoint', 'band'],
+            'mean_free_path':                  ['temperature', 'qpoint', 'band', 3],
+            'mesh':                            [3],
+            'mobility':                        ['stype', 'temperature', 'doping', 3, 3],
+            'mode_kappa':                      ['temperature', 'qpoint', 'band', 6],
+            'mu_bounds':                       [],
+            'occupation':                      ['temperature', 'qpoint', 'band'],
+            'ph_ph_strength':                  ['qpoint', 'band'],
+            'power_factor':                    ['temperature', 'doping', 3, 3],
+            'qpoint':                          ['qpoint', 3],
+            'scattering_rates':
+                ['stype', 'doping', 'temperature', 'band', 'kpoint'],
+            'seebeck':                         ['temperature', 'doping', 3, 3],
+            'seebeck_effective_mass':          [],
+            'temperature':                     ['temperature'],
+            'thermal_conductivity':            ['temperature', 'doping', 3, 3],
+            'weighted_rates':                  ['stype', 'temperature', 'doping'],
+            'zt':                              ['temperature', 'doping', 3, 3]}
 
-    return units
+    return dims
+
+def boltztrap_dimensions():
+    """Get dictionary of dimensions of quantities updated for BoltzTraP."""
+
+    dims = dimensions()
+    dims['average_eff_mass'] =                ['dtype', 'temperature', 'doping', 3, 3]
+    dims['conductivity'] =                    ['dtype', 'temperature', 'doping', 3, 3]
+    dims['electronic_thermal_conductivity'] = ['dtype', 'temperature', 'doping', 3, 3]
+    dims['fermi_level'] =                     ['dtype', 'temperature', 'doping']
+    dims['mobility'] =                        ['dtype', 'temperature', 'doping', 3, 3]
+    dims['power_factor'] =                    ['dtype', 'temperature', 'doping', 3, 3]
+    dims['seebeck'] =                         ['dtype', 'temperature', 'doping', 3, 3]
+
+    return dims
 
 def labels():
-    """Get the default labels for use in tp."""
+    """Get the default labels for small axes in tp."""
 
     labels = {'short':  short_labels,
               'medium': medium_labels,
@@ -368,7 +408,7 @@ def inverted_labels():
     return labels[length]()
 
 def large_labels():
-    """Get the default labels for large axes (command-line only)."""
+    """Get the default labels for large axes."""
 
     labels = {'short':  short_labels,
               'medium': medium_labels,
