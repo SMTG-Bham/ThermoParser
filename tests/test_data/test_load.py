@@ -98,7 +98,7 @@ class AmsetTest(unittest.TestCase):
         for q2 in [q, 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data2)
         self.assertEqual(np.array(data2[q])[0,1,0,0,0], 1)
-        self.assertEqual(list(data2['stype']), ['test', 'total'])
+        self.assertEqual(list(data2['stype']), ['test', 'Total'])
 
 class AmsetMeshTest(unittest.TestCase):
 
@@ -120,7 +120,7 @@ class AmsetMeshTest(unittest.TestCase):
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data)
         self.assertEqual(data['scattering_rates'][0,1,0,0,0], 1)
-        self.assertEqual(data['stype'], ['test', 'total'])
+        self.assertEqual(data['stype'], ['test', 'Total'])
 
     def test_spin(self):
         with h5py.File('test.hdf5', 'w') as f:
@@ -137,7 +137,7 @@ class AmsetMeshTest(unittest.TestCase):
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:
             self.assertIn(q2, data)
         self.assertEqual(data['scattering_rates'][0,1,0,0,0], 2)
-        self.assertEqual(data['stype'], ['test', 'total'])
+        self.assertEqual(data['stype'], ['test', 'Total'])
 
 class BoltzTraPTest(unittest.TestCase):
 

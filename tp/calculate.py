@@ -628,6 +628,8 @@ def interpolate(data1, data2, dependent, keys1, keys2, axis1=0, axis2=0,
              len(np.where((data2[dependent]<=dmax) & (data2[dependent]>=dmin))[0])
     if invert:
         data1, data2 = data2, data1
+        keys1, keys2 = keys2, keys1
+        axis1, axis2 = axis2, axis1
     index = np.where((data1[dependent]>=data2[dependent][0]) & (data1[dependent]<=data2[dependent][-1]))[0]
 
     data1[dependent] = np.array(data1[dependent])[index]
@@ -640,5 +642,10 @@ def interpolate(data1, data2, dependent, keys1, keys2, axis1=0, axis2=0,
         interp = interp1d(data2[dependent], data2[key], kind=kind, axis=axis2)
         data2[key] = interp(data1[dependent])
     data2[dependent] = data1[dependent]
+
+    if invert:
+        data1, data2 = data2, data1
+        keys1, keys2 = keys2, keys1
+        axis1, axis2 = axis2, axis1
 
     return data1, data2

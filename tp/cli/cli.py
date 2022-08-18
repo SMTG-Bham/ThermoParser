@@ -407,18 +407,24 @@ def get_phono3py(filename, quantity, direction, temperature, band, qpoint,
 @doping_option
 @direction_option
 @temperature_option
-def get_zt(filename, kappa, dtype, doping, direction, temperature):
+@click.option('--max',
+              is_flag=True,
+              help='Print max ZT. Overrides temperature and concentration.')
+def get_zt(filename, kappa, dtype, doping, direction, temperature, max):
     """Calculates and prints the ZT at given conditions.
 
     Requires electronic input file, and preferably phononic input, else
     lattice thermal conductivity defaults to 1.
     """
 
+    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
+    ltc = 'lattice_thermal_conductivity'
+
     try:
-        edata = tp.data.load.amset(filename)
+        edata = tp.data.load.amset(filename, equants)
     except UnicodeDecodeError:
         try:
-            edata = tp.data.load.boltztrap(filename, doping=dtype)
+            edata = tp.data.load.boltztrap(filename, equants, doping=dtype)
         except Exception:
             data = h5py.File(filename, 'r')
             edata = dict(data)
@@ -426,12 +432,8 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
                 if isinstance(edata[key], dict) and dtype in edata[key]:
                     edata[key] = edata[key][dtype][()]
 
-    equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
-    ltc = 'lattice_thermal_conductivity'
-
     if 'zt' in edata:
-        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
-                                        doping=doping, temperature=temperature)
+        pass
     elif kappa is not None:
         kdata = tp.data.load.phono3py(kappa)
         edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
@@ -439,8 +441,6 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
         edata[ltc] = kdata[ltc]
         edata['meta']['dimensions'][ltc] = kdata['meta']['dimensions'][ltc]
         edata = tp.calculate.zt_fromdict(edata)
-        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
-                                        doping=doping, temperature=temperature)
     else:
         warnings.warn('Lattice thermal conductivity set to 1. For a more '
                       'accurate calculation, pass a phono3py kappa file to -k.')
@@ -448,6 +448,17 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
 
         edata['meta']['dimensions'][ltc] = ['temperature']
         edata = tp.calculate.zt_fromdict(edata)
+    
+    if max:
+        mlabel = 'max '
+        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction)
+        maxindex = np.where(np.round(edata['zt'], 10) \
+                         == np.round(np.amax(edata['zt']), 10))
+        edata['zt'] = edata['zt'][maxindex[0][0]][maxindex[1][0]]
+        edata['meta']['temperature'] = edata['temperature'][maxindex[0][0]]
+        edata['meta']['doping'] = edata['doping'][maxindex[1][0]]
+    else:
+        mlabel = ''
         edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
                                         doping=doping, temperature=temperature)
 
@@ -455,8 +466,8 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature):
     n = edata['meta']['doping']
     t = int(edata['meta']['temperature'])
 
-    print('The ZT in the {} direction at {:d} K and {:.3e} carriers cm^-3 '
-            'is {:.3f}'.format(direction, t, n, zt))
+    print('The {}ZT in the {} direction at {:d} K and {:.3e} carriers cm^-3 '
+            'is {:.3f}'.format(mlabel, direction, t, n, zt))
 
     return
 
