@@ -1,7 +1,7 @@
 .. image:: wideband.png
    :alt: Finite bandwidth phonon dispersion of ZnO.
 
-In most cases, plotting scripts will be more complex than example 01.
+In most cases, plotting scripts will be more complex than ``01-python-foundations``.
 Many functions require more inputs, and most users will want to
 customise plots with colours and stuff.
 

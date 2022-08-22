@@ -55,4 +55,4 @@ into one legend, with duplicates removed, which uses up the ``handles``
 and ``labels`` arguments, so in order to specify your own, you must set
 ``custom=True`` (not necessary for single-axes figures).
 ``tp.axes.legend.consolidate`` may also be useful for non-ThermoPlotter
-endaevors, as will be discussed in example 05
+endaevors, as will be discussed in ``05-helper-functions``.

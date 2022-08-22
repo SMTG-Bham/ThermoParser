@@ -52,9 +52,10 @@ Locators, Ticks and Labels
 There are several functions to aid in formatting axes.
 ``tp.settings.labels``, and its variations ``large_``, ``long_``,
 ``medium_`` and ``short_labels`` return a dictionary of axes labels
-(more on these in example 06). ``tp.plot.utilities.set_locators`` sets
-the locators, if you provide a set of axes and set ``x`` and ``y`` to
-either ``'linear'`` or ``'log'`` as appropriate.
+(more on these in ``06-package-customisation``).
+``tp.plot.utilities.set_locators`` sets the locators, if you provide a
+set of axes and set ``x`` and ``y`` to either ``'linear'`` or ``'log'``
+as appropriate.
 
 -------
 Legends

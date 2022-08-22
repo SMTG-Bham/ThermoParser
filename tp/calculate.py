@@ -554,7 +554,7 @@ def to_tp(name, value):
 
     conversions = tp.settings.conversions()
     if name in conversions and conversions[name] is not None:
-        value = np.divide(value, conversions[name])
+        value = np.divide(value, float(conversions[name]))
 
     return value
 
@@ -578,7 +578,7 @@ def from_tp(name, value):
 
     conversions = tp.settings.conversions()
     if name in conversions and conversions[name] is not None:
-        value = np.multiply(value, conversions[name])
+        value = np.multiply(value, float(conversions[name]))
 
     return value
 

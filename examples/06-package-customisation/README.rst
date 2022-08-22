@@ -29,17 +29,18 @@ dictionaries like the locators. The aliases are listed as:
         alias: xxx_name
 
 If you add unit conversions, remember to update the units and labels
-too! There are six labels dictionaries. ``long_``, ``medium_`` and
-``short_labels`` contain the actual labels of those lengths, while
-``labels``, ``inverted_labels`` and ``large_labels`` point to which
-of those you' would liek to default to for small, inverted and large
-axes, respectively. For example, if you prefer to put a inverted DoSs
-in a separate axes rather than a DoS axes, you may want to set
-``inverted_labels: long``. Finally, there are the default ``kwargs``
-for each function, which are passed to the matplotlib plotting
-function, such as ``plt.plot``. These override defaults set in the
-ThermoPlotter plotting function, but are overridden by arguments
-specified by the user.
+too! An example has been provided for converting from
+S m<super>-1</super> to S cm<super>-1</super>. There are six labels
+dictionaries. ``long_``, ``medium_`` and ``short_labels`` contain the
+actual labels of those lengths, while ``labels``, ``inverted_labels``
+and ``large_labels`` point to which of those you would like to default
+to for small, inverted and large axes, respectively. For example, if
+you prefer to put a inverted DoSs in a separate axes rather than a DoS
+axes, you may want to set ``inverted_labels: long``. Finally, there are
+the default ``kwargs`` for each function, which are passed to the
+matplotlib plotting function, such as ``plt.plot``. These override
+defaults set in the ThermoPlotter plotting function, but are overridden
+by arguments specified by the user.
 
 -----------------------
 Extending ThermoPlotter

@@ -54,4 +54,4 @@ ax[2].legend(loc='best', title=axlabels['doping'], handles=handles,
 tp.axes.legend.alphabetise(ax, preset='roman', suffix=')', x=-0.12)
 
 # Save
-fig.savefig('transport.pdf')
+fig.savefig('transport.png')

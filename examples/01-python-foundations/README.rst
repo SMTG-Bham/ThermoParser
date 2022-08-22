@@ -34,7 +34,7 @@ Every function returns three things:
  2. axes: Where the data goes, used in step 3.
  3. add_legend: Adds a legend. We don't use it here, so we've thrown it
     away by assigning it to ``_``. Giving it any name and not using it
-    has the same effect. Legends will be discussed in example 03.
+    has the same effect. Legends will be discussed in ``03-compound-axes``.
 
 This command can easily be replaced with ``matplotlib.pyplot`` commands
 such as ``figure`` and ``subfigs``.
@@ -50,7 +50,7 @@ file to read from, and return a dictionary of the data.
 While you can load your own data, ThermoPlotter takes several steps to
 ensure consistent format and units between codes and also with some
 old versions of these codes; and with the plotting functions. It also
-consistently applies cutom unit conversions and provides metadata
+consistently applies custom unit conversions and provides metadata
 including array shapes, units and data sources, so care should be
 taken if this step is done manually.
 
@@ -66,7 +66,7 @@ customisation option, including all the ``kwargs`` from the underlying
 
 This stage can be replaced with ordinary ``matplotlib`` functions such
 as ``ax.plot``, which can be assisted by a number of ancillary
-ThermoPlotter functions discussed later.
+ThermoPlotter functions discussed in ``05-helper-functions``.
 
 ----
 Save
