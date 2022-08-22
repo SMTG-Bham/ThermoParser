@@ -151,7 +151,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
 
     for c in aconversions:
         if c in data2:
-            data2[c] = np.multiply(data2[c], aconversions[c])
+            data2[c] = np.multiply(data2[c], float(aconversions[c]))
 
     if 'power_factor' in quantities:
         data2 = tp.calculate.power_factor_fromdict(data2)
@@ -360,11 +360,11 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
 
     for c in aconversions:
         if c in data:
-            data[c] = np.multiply(data[c], aconversions[c])
+            data[c] = np.multiply(data[c], float(aconversions[c]))
 
     for c in conversions:
         if c in data:
-            data[c] = np.multiply(data[c], conversions[c])
+            data[c] = np.multiply(data[c], float(conversions[c]))
 
     return data
 
@@ -445,11 +445,11 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     for c in bconversions:
         if c in data:
-            data[c] = np.multiply(data[c], bconversions[c])
+            data[c] = np.multiply(data[c], float(bconversions[c]))
 
     for c in conversions:
         if c in data:
-            data[c] = np.multiply(data[c], conversions[c])
+            data[c] = np.multiply(data[c], float(conversions[c]))
 
     return data
 
@@ -581,7 +581,7 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     for c in pconversions:
         if c in data:
-            data[c] = np.multiply(data[c], pconversions[c])
+            data[c] = np.multiply(data[c], float(pconversions[c]))
 
     if 'lifetime' in quantities or 'mean_free_path' in quantities:
         data['lifetime'] = tp.calculate.lifetime(data['gamma'], use_tprc=False)
@@ -596,7 +596,7 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
     for c in conversions:
         if c in data:
-            data[c] = np.multiply(data[c], conversions[c])
+            data[c] = np.multiply(data[c], float(conversions[c]))
 
     return data
 
@@ -666,11 +666,11 @@ def phonopy_dispersion(filename, xdata=None):
 
     for c in pconversions:
         if c in data2:
-            data2[c] = np.multiply(data2[c], pconversions[c])
+            data2[c] = np.multiply(data2[c], float(pconversions[c]))
 
     for c in conversions:
         if c in data2:
-            data2[c] = np.multiply(data2[c], conversions[c])
+            data2[c] = np.multiply(data2[c], float(conversions[c]))
 
     return data2
 
@@ -748,11 +748,11 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
 
     for c in pconversions:
         if c in data2:
-            data2[c] = np.multiply(data2[c], pconversions[c])
+            data2[c] = np.multiply(data2[c], float(pconversions[c]))
 
     for c in conversions:
         if c in data2:
-            data2[c] = np.multiply(data2[c], conversions[c])
+            data2[c] = np.multiply(data2[c], float(conversions[c]))
 
     return data2
 

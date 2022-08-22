@@ -11,7 +11,7 @@ to add markers has been included, e.g. here you can see nanostructuring
 to 10 nanometers may reduce the lattice thermal conductivity by nearly
 50 %.
 
-This also demonstrates use of the add_legend function supplied with
+This also demonstrates use of the ``add_legend`` function supplied with
 ``tp.axes`` functions, which combines the legends of all plots and
 places itself in one of several pre-programmed position, which you can
 select with the ``location`` argument. Numbers will place the legend

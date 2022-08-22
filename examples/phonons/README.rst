@@ -5,8 +5,8 @@ This shows a phonon dispersion and density of states (DoS). All plot-
 types in ``tp.plot.frequency`` have an invert argument to plot them
 side-on by a phonon dispersion, which also shortens their x-axis labels
 and removes their y-axis labels and tick labels. Currently the axes of
-the two plots have to be aligned manually, but this is simple (see
-script).
+the two plots have to be aligned manually, but this is simple
+(``plot-phonons.py`` line 24).
 
 .. image:: multiphon.png
    :alt: Phonon dispersions for different supercell sizes.

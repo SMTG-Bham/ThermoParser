@@ -15,7 +15,7 @@ Axes
 
 Here we use ``two_h``. h stands for horizontal, and there is a
 corresponding vertical set of axes, ``two_v``. They also come with
-colourbars, by adding ``_colourbars`` to their names.
+space for colourbars, by adding ``_colourbars`` to their names.
 
 ----
 Load
@@ -61,4 +61,4 @@ reversed with some helper functions: ``set_locators`` sets the axis
 scales and tick locators for each axis, and also has a DoS argument,
 which removes the ticks and tick labels and the y axis label, while all
 the default labels can be accessed with ``settings.labels``. These will
-be covered more in example 05.
+be covered more in ``05-helper-functions``.
