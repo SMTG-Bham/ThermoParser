@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.data package &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>tp.data package &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -50,6 +50,8 @@
 <li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">tp.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.plot.html">tp.plot package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.cli.html">tp.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.setup.html">tp.setup package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
@@ -92,9 +94,6 @@
 <h1>tp.data package<a class="headerlink" href="#tp-data-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="tp-data-aniso-module">
-<h2>tp.data.aniso module<a class="headerlink" href="#tp-data-aniso-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-tp.data.load">
 <span id="tp-data-load-module"></span><h2>tp.data.load module<a class="headerlink" href="#module-tp.data.load" title="Permalink to this headline">¶</a></h2>
@@ -330,7 +329,8 @@ Common options include:</p>
 <blockquote>
 <div><dl class="simple">
 <dt>direction</dt><dd><p>direction to resolve, accepts x-z/, a-c,
-average/ avg or normal/ norm.</p>
+average/ avg/ mean/ arithmetic/ arith,  or
+norm/ normal or harmonic/ harm.</p>
 </dd>
 <dt>dtype</dt><dd><p>n or p</p>
 </dd>
@@ -367,8 +367,8 @@ average/ avg or normal/ norm.</p>
 <dt id="tp.data.run.boltztrap">
 <code class="sig-prename descclassname">tp.data.run.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">1001</span></em>, <em class="sig-param"><span class="n">tstep</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">tmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">array([1e+18, 1.53992653e+18, 2.37137371e+18, 3.65174127e+18, 5.62341325e+18, 8.65964323e+18, 1.33352143e+19, 2.05352503e+19, 3.16227766e+19, 4.86967525e+19, 7.49894209e+19, 1.15478198e+20, 1.77827941e+20, 2.73841963e+20, 4.21696503e+20, 6.49381632e+20, 1e+21])</span></em>, <em class="sig-param"><span class="n">ke_mode</span><span class="o">=</span><span class="default_value">'boltzmann'</span></em>, <em class="sig-param"><span class="n">vasprun</span><span class="o">=</span><span class="default_value">'vasprun.xml'</span></em>, <em class="sig-param"><span class="n">kpoints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">relaxation_time</span><span class="o">=</span><span class="default_value">1e-14</span></em>, <em class="sig-param"><span class="n">lpfac</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">analyse</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'boltztrap.hdf5'</span></em>, <em class="sig-param"><span class="n">run_dir</span><span class="o">=</span><span class="default_value">'.'</span></em>, <em class="sig-param"><span class="n">clean</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/run.html#boltztrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.run.boltztrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs BoltzTraP from a VASP density of states (DoS).</p>
-<p>Runs quicker and more robustly than the pymatgen from_files version,
-and outputs an hdf5 file.
+<p>Wrapper for pymatgen.electronic_structure.boltztrap but runs faster than
+using the built in from_files method and outputs an hdf5 file.
 Note: BoltzTraP can be a fickle friend, so if you’re getting errors,
 it may be worth reinstalling or trying on a different machine.</p>
 <dl class="field-list simple">
@@ -645,8 +645,6 @@ Default: 200.</p></li>
 <h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><dl class="simple">
-<dt>aniso</dt><dd><p>resolves data by direction or averages.</p>
-</dd>
 <dt>resolve</dt><dd><p>resolves named data by direction and/or temperature.</p>
 </dd>
 <dt>load</dt><dd><p>loads data from specific codes.</p>

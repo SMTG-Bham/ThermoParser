@@ -92,7 +92,10 @@ def amset(filename, quantities=['seebeck', 'conductivity',
         data = json.load(f)
 
     if 'doping' in quantities:
-        d = np.array(data['doping'])
+        if 'data' in data['doping']:
+            d = np.array(data['doping']['data'])
+        else:
+            d = np.array(data['doping'])
         if (d < 0).all():
             doping = 'n'
             di = np.where(d < 0)[0]

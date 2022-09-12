@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tp.cli package &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tp.setup package" href="tp.setup.html" />
+    <link rel="prev" title="tp.plot package" href="tp.plot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.plot.html">tp.plot package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">tp.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.setup.html">tp.setup package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">tp</a> &raquo;</li>
+          <li><a href="tp.html">tp package</a> &raquo;</li>
+      <li>tp.cli package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tp.cli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tp-cli-package">
+<h1>tp.cli package<a class="headerlink" href="#tp-cli-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tp.cli.cli">
+<span id="tp-cli-cli-module"></span><h2>tp.cli.cli module<a class="headerlink" href="#module-tp.cli.cli" title="Permalink to this headline">¶</a></h2>
+<p>Provides a command line interface.</p>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>tp</dt><dd><dl class="simple">
+<dt>gen</dt><dd><p>kpar
+kpoints</p>
+</dd>
+<dt>get</dt><dd><p>amset
+boltztrap
+phono3py
+zt</p>
+</dd>
+<dt>run</dt><dd><p>boltztrap</p>
+</dd>
+<dt>save</dt><dd><p>cumkappa
+kappa
+zt</p>
+</dd>
+<dt>plot</dt><dd><p>avg_rates
+cumkappa
+dos
+kappa
+kappa_target
+phonons
+transport
+waterfall
+wideband
+ztmap</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="module-tp.cli.options">
+<span id="tp-cli-options-module"></span><h2>tp.cli.options module<a class="headerlink" href="#module-tp.cli.options" title="Permalink to this headline">¶</a></h2>
+<p>Provides groups of options to streamline the CLI</p>
+<div class="section" id="id1">
+<h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>direction_option
+directions_option
+doping_type_option
+doping_option
+dopings_option
+dos_options
+input_argument
+inputs_argument
+interpolate_options
+kpoints_options
+legend_options
+auto_legend_options
+line_options
+fill_options
+plot_io_options
+temperature_option
+verbose_option
+xy_limit_options
+c_limit_options</p>
+</div></blockquote>
+<dl class="py function">
+<dt id="tp.cli.options.auto_legend_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">auto_legend_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#auto_legend_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.auto_legend_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group of options for auto-generating plot legends.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.c_limit_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">c_limit_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#c_limit_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.c_limit_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for colour axes limits.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.direction_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">direction_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#direction_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.direction_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for singular option for anisotropic data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.directions_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">directions_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#directions_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.directions_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for multiple directions for anisotropic data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.doping_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">doping_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#doping_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.doping_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for a doping concentration.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.doping_type_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">doping_type_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#doping_type_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.doping_type_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for doping type.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.dopings_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">dopings_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#dopings_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.dopings_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for doping concentrations.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.dos_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">dos_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#dos_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.dos_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for DoS plots.</p>
+<p>Doesn’t contain colour as this must be renamed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.fill_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">fill_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#fill_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.fill_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group of options for fillable line plots</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.input_argument">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">input_argument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#input_argument"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.input_argument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for an input file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.inputs_argument">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">inputs_argument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#inputs_argument"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.inputs_argument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for an input file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.interpolate_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">interpolate_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#interpolate_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.interpolate_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for interpolation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.kpoints_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">kpoints_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#kpoints_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.kpoints_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group of options for handling KPOINTS files.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.legend_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">legend_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#legend_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.legend_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group of options for plot legends.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.line_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">line_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#line_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.line_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group of options for line plots</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.plot_io_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">plot_io_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#plot_io_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.plot_io_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group of options for plot file I/O.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.temperature_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">temperature_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#temperature_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.temperature_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for temperature selection.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.verbose_option">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">verbose_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#verbose_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.verbose_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option for verbose output.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.xy_limit_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">xy_limit_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#xy_limit_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.xy_limit_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for x and y axes limits.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-tp.cli">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.cli" title="Permalink to this headline">¶</a></h2>
+<p>Provides CLI.</p>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>cli</dt><dd><p>Command line interface functions</p>
+</dd>
+<dt>options</dt><dd><p>Option groups for cli functions.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tp.plot.html" class="btn btn-neutral float-left" title="tp.plot package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tp.setup.html" class="btn btn-neutral float-right" title="tp.setup package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

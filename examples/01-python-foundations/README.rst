@@ -73,3 +73,13 @@ Save
 ----
 
 Simply ``figure.savefig(name.extension)``.
+
+---------
+More Help
+---------
+
+Thermoplotter has extensive docs. Docstrings are available throughout
+the code itself, if you are using IPython or Jupyter and you can access
+them by typing the command name followed by two question marks, and
+IDEs normally have options too. If you are on the master branch,
+they can also be found `here <https://smtg-ucl.github.io/ThermoPlotter/>`_.

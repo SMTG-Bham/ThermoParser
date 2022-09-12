@@ -4,14 +4,6 @@ tp.data package
 Submodules
 ----------
 
-tp.data.aniso module
---------------------
-
-.. automodule:: tp.data.aniso
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 tp.data.load module
 -------------------
 

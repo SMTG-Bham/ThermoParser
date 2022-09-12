@@ -968,7 +968,7 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
 
 @xy_limit_options
 @click.option('--legend-title',
-              help='Legend title. Accepts maths notation.')
+              help='Legend title.')
 @plot_io_options
 @click.option('-o', '--output',
               help='Output filename, sans extension.',
@@ -1253,8 +1253,8 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
                    & (np.array(data[i]['temperature']) >= tmin))[0]
 
         ax.plot(np.array(data[i]['temperature'])[j], data[i][tc][j],
-                label='${}$'.format(label[i]), linestyle=linestyle[i],
-                marker=marker[i], c=colours[i])
+                label=label[i], linestyle=linestyle[i], marker=marker[i],
+                c=colours[i])
 
     if xmin is not None:
         if xmax is not None:
@@ -1789,7 +1789,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
 
             ax[i].plot(d2['temperature'][k], d2[quantity[i]][k],
                        linestyle=linestyle[j], marker=marker[j], c=colours[j],
-                       label="${}$".format(label[j]))
+                       label=label[j])
 
     for i, q in enumerate(quantity):
         ax[i].set_xlabel(axlabels['temperature'])
@@ -1914,13 +1914,17 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
     else:
         colour = list(colour)
 
-    if x == 'kappa': x = 'mode_kappa'
-    if y == 'kappa': y = 'mode_kappa'
+    tnames = tp.settings.to_tp()
+    y = tnames[y] if y in tnames else y
+    x = tnames[x] if x in tnames else x
+    if y == 'lattice_thermal_conductivity': y = 'mode_kappa'
+    if x == 'lattice_thermal_conductivity': x = 'mode_kappa'
     quantities = [x, y]
     if projected == 'density':
         pass
     elif projected is not None:
-        if projected == 'kappa': projected = 'mode_kappa'
+        projected = tnames[projected] if projected in tnames else projected
+        if projected == 'lattice_thermal_conductivity': projected = 'mode_kappa'
         quantities.append(projected)
     data = tp.data.load.phono3py(filename, quantities)
 

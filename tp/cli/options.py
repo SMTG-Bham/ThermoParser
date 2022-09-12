@@ -183,12 +183,12 @@ def legend_options(f):
     """Group of options for plot legends."""
 
     f = click.option('-l', '--label',
-                     help='Legend label(s). Accepts maths notation.',
+                     help='Legend label(s).',
                      multiple=True,
                      type=str,
                      default=None)(f)
     f = click.option('--legend_title',
-                     help='Legend title. Accepts maths notation.')(f)
+                     help='Legend title.')(f)
     f = click.option('--location',
                      help='Legend location. Accepts strings such as '
                           'above and below, as well as 1-indexed '
@@ -201,12 +201,12 @@ def auto_legend_options(f):
     """Group of options for auto-generating plot legends."""
 
     f = click.option('-l', '--label',
-                     help='Legend label(s). Accepts maths notation.',
+                     help='Legend label(s).',
                      multiple=True,
                      type=str,
                      default=None)(f)
     f = click.option('--legend_title',
-                     help='Legend title. Accepts maths notation.')(f)
+                     help='Legend title.')(f)
     f = click.option('--legend/--nolegend',
                      help='Show legend.  [default: legend]',
                      default=True,

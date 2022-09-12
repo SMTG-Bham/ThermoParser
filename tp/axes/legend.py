@@ -86,6 +86,7 @@ def add_add_legend(ax, locations, names, defloc):
 
     if len(ax) > 1:
         def add_legend(location=defloc, custom=False, *args, **kwargs):
+            # docstring is at the bottom
 
             if isinstance(location, (int, float)):
                 location = str(location)
@@ -143,6 +144,7 @@ def add_add_legend(ax, locations, names, defloc):
 
     else:
         def add_legend(location=defloc, *args, **kwargs):
+            # docstring is at the bottom
 
             if isinstance(location, (int, float)):
                 location = str(location)
@@ -173,7 +175,7 @@ def add_add_legend(ax, locations, names, defloc):
 
         customstr = ''
 
-        # docstrings don't accept str.format the normal way :(
+    # docstrings don't accept str.format the normal way :(
     add_legend.__doc__ ="""Adds a pre-positioned legend.
 
         Accepts all normal plt.legend inputs (title etc.) except loc

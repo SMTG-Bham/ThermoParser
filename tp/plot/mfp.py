@@ -223,7 +223,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             linestyle1 = linestyle[i % len(linestyle)]
             marker1 = marker[i % len(marker)]
             if label is not None:
-                label1 = "${}$".format(label[i % len(label)])
+                label1 = label[i % len(label)]
             else:
                 label1 = None
 

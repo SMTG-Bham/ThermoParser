@@ -475,7 +475,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
             fillcolour1 = fillcolour[i % len(fillcolour)]
             linestyle1 = linestyle[i % len(linestyle)]
             marker1 = marker[i % len(marker)]
-            label1 = "${}$".format(label[i % len(label)])
+            label1 = label[i % len(label)]
 
             # colour
             # Tries to read the colour as an rgb code, then alpha value.
@@ -642,12 +642,12 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     # data formatting
 
-    if quantity == 'kappa': quantity = 'mode_kappa'
-    if xquantity == 'kappa': xquantity = 'mode_kappa'
     tnames = tp.settings.to_tp()
     if invert: quantity, xquantity = xquantity, quantity
     quantity = tnames[quantity] if quantity in tnames else quantity
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
+    if quantity == 'lattice_thermal_conductivity': quantity = 'mode_kappa'
+    if xquantity == 'lattice_thermal_conductivity': xquantity = 'mode_kappa'
 
     data = tp.data.resolve.resolve(data, [quantity, xquantity],
                                    temperature=temperature,

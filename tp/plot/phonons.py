@@ -159,17 +159,8 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
-    label2 = []
-    if isinstance(label, str):
-        label2.extend(['$\mathregular{{{}}}$'.format(label)])
-    else:
-        try:
-            label = ['$\mathregular{{{}}}$'.format(l) for l in label]
-            label2.extend(label)
-        except Exception:
-            label2.extend([label])
-    label2.append(None)
-    label2 = tile_properties(label2, bandmin, bandmax)
+    label.append(None)
+    label = tile_properties(label, bandmin, bandmax)
 
     # data scaling
 
@@ -190,7 +181,7 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     for n in range(len(f[0])):
         ax.plot(x, f[:,n], color=colour[n], linestyle=linestyle[n],
-                marker=marker[n], label=label2[n], **kwargs)
+                marker=marker[n], label=label[n], **kwargs)
 
     # axes formatting
 
@@ -560,24 +551,14 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
-
-    label2 = []
-    if isinstance(label, str):
-        label2.extend(['$\mathregular{{{}}}$'.format(label)])
-    else:
-        try:
-            label = ['$\mathregular{{{}}}$'.format(l) for l in label]
-            label2.extend(label)
-        except Exception:
-            label2.extend([label])
-    label2.append(None)
-    label2 = tile_properties(label2, bandmin, bandmax)
+    label.append(None)
+    label = tile_properties(label, bandmin, bandmax)
 
     # plotting
 
     for n in range(len(y2[0])):
         ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
-                label=label2[n], marker=marker[n], **kwargs)
+                label=label[n], marker=marker[n], **kwargs)
 
     # axes formatting
 

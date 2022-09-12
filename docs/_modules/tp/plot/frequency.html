@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.plot.frequency &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.plot.frequency &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -104,7 +104,6 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span>
-<span class="kn">from</span> <span class="nn">tp.data</span> <span class="kn">import</span> <span class="n">resolve</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">)</span>
 
@@ -173,7 +172,9 @@
 <span class="sd">            Default: None.</span>
 
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.fill_between.</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.plot, unless</span>
+<span class="sd">            line=False, in which case they are passed to fill_between</span>
+<span class="sd">            instead. rasterized is always passed to both.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
 <span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
 <span class="sd">            arguments passed to this function.</span>
@@ -308,14 +309,15 @@
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span> <span class="ow">and</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                                <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">)</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">,</span>
+                                <span class="n">rasterized</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rasterized&#39;</span><span class="p">])</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyles</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">fill</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span>
-                                <span class="n">facecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                <span class="n">facecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">,</span>
+                                <span class="n">rasterized</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rasterized&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">totaldata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyles</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
@@ -323,14 +325,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill</span> <span class="ow">and</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
-                                <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">)</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">,</span>
+                                <span class="n">rasterized</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rasterized&#39;</span><span class="p">])</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyles</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">fill</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span>
                                 <span class="n">facecolor</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">)</span>
+                                <span class="n">alpha</span><span class="o">=</span><span class="n">fillalpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">totaldata</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">totallabel</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
                         <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyles</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">],</span>
@@ -391,7 +394,7 @@
 <div class="viewcode-block" id="add_cum_kappa"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_cum_kappa">[docs]</a><span class="k">def</span> <span class="nf">add_cum_kappa</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fillcolour</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-                  <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                  <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cumulates and plots kappa against frequency.</span>
 
 <span class="sd">    Can plot data from multiple data dictionaries and directions.</span>
@@ -451,6 +454,9 @@
 <span class="sd">        marker : str or list, optional</span>
 <span class="sd">            (list of) markers. Default: None.</span>
 
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.fill_between</span>
 <span class="sd">            if filled or matplotlib.pyplot.plot otherwise.</span>
@@ -517,7 +523,8 @@
     <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
             <span class="n">data2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span>
-                                          <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+                                            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                            <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
             <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">])</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])</span>
 
@@ -588,6 +595,10 @@
 
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                        <span class="n">data2</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
+
     <span class="c1"># axes formatting</span>
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
@@ -617,7 +628,7 @@
 
 <div class="viewcode-block" id="add_waterfall"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_waterfall">[docs]</a><span class="k">def</span> <span class="nf">add_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                   <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
-                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                  <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a waterfall plot of quantities against frequency.</span>
 
 <span class="sd">    Has an option to change the x-quantity.</span>
@@ -656,6 +667,9 @@
 <span class="sd">            colourmap or a dictionary with cmin and cmax keys or a</span>
 <span class="sd">            single colour. Default: viridis.</span>
 
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
@@ -700,15 +714,19 @@
 
     <span class="c1"># data formatting</span>
 
-    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
-    <span class="k">if</span> <span class="n">xquantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
     <span class="n">tnames</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">invert</span><span class="p">:</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="n">xquantity</span><span class="p">,</span> <span class="n">quantity</span>
     <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">quantity</span>
     <span class="n">xquantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">xquantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">xquantity</span>
+    <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
+    <span class="k">if</span> <span class="n">xquantity</span> <span class="o">==</span> <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span> <span class="n">xquantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">],</span>
-                                   <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+                                   <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]))</span>
 
@@ -756,7 +774,9 @@
     <span class="c1"># axes formatting</span>
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
-        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">{</span><span class="n">xquantity</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">quantity</span><span class="p">:</span> <span class="n">y</span><span class="p">},</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">inverted_labels</span><span class="p">()</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
@@ -772,7 +792,8 @@
                             <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                             <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                            <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a waterfall plot against frequency with a colour axis.</span>
 
 <span class="sd">    Has an option to change the x-quantity.</span>
@@ -824,6 +845,9 @@
 <span class="sd">            coloured in this colour. If set to None, or cmin is set,</span>
 <span class="sd">            this feature is turned off. Default: grey.</span>
 
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
@@ -881,7 +905,11 @@
     <span class="n">projected</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">projected</span><span class="p">]</span> <span class="k">if</span> <span class="n">projected</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">projected</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">],</span>
-                                   <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+                                   <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]))</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">projected</span><span class="p">]))</span>
@@ -903,7 +931,9 @@
     <span class="n">cbar</span><span class="o">.</span><span class="n">draw_all</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
-        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">{</span><span class="n">xquantity</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">quantity</span><span class="p">:</span> <span class="n">y</span><span class="p">},</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">inverted_labels</span><span class="p">()</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
@@ -917,7 +947,7 @@
 
 <div class="viewcode-block" id="add_density"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.add_density">[docs]</a><span class="k">def</span> <span class="nf">add_density</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                 <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a density plot of quantities against frequency.</span>
 
 <span class="sd">    Has an option to change the x-quantity.</span>
@@ -955,6 +985,9 @@
 <span class="sd">            highlight, min, max colours in that order, or dictionary</span>
 <span class="sd">            with cmid and cmin and/or cmax keys. Default: Blues.</span>
 
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.scatter.</span>
 <span class="sd">            Defaults are defined below, which are overridden by those in</span>
@@ -999,9 +1032,16 @@
     <span class="n">xquantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">xquantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">xquantity</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">],</span>
-                                   <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+                                   <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]))</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">mask</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
     <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">gaussian_kde</span><span class="p">(</span><span class="n">xy</span><span class="p">)(</span><span class="n">xy</span><span class="p">)</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
@@ -1016,7 +1056,9 @@
     <span class="c1"># axes formatting</span>
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
-        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">{</span><span class="n">xquantity</span><span class="p">:</span> <span class="n">x_dens</span><span class="p">,</span> <span class="n">quantity</span><span class="p">:</span> <span class="n">y_dens</span><span class="p">},</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_dens</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_dens</span>
+        <span class="n">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
             <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">inverted_labels</span><span class="p">()</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">xquantity</span><span class="p">])</span>
@@ -1029,7 +1071,7 @@
     <span class="k">return</span></div>
 
 <div class="viewcode-block" id="format_waterfall"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.frequency.format_waterfall">[docs]</a><span class="k">def</span> <span class="nf">format_waterfall</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">yquantity</span><span class="p">,</span> <span class="n">xquantity</span><span class="o">=</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span>
-                     <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                     <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Formats axes for waterfall plots.</span>
 
 <span class="sd">    Arguments</span>
@@ -1037,7 +1079,7 @@
 
 <span class="sd">        ax : axes</span>
 <span class="sd">            axes to format.</span>
-<span class="sd">        data : array-like</span>
+<span class="sd">        data : dict</span>
 <span class="sd">            data.</span>
 <span class="sd">        yquantity : str</span>
 <span class="sd">            y quantity name.</span>
@@ -1049,6 +1091,8 @@
 <span class="sd">        direction : str, optional</span>
 <span class="sd">            direction from anisotropic data, accepts x-z/ a-c or</span>
 <span class="sd">            average/ avg. Default: average.</span>
+<span class="sd">        invert : bool, optional</span>
+<span class="sd">            invert x- and y-axes. Default: False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1057,12 +1101,16 @@
 <span class="sd">            formats ax directly.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">xquantity</span><span class="p">,</span> <span class="n">yquantity</span><span class="p">],</span> <span class="n">temperature</span><span class="p">,</span>
-                                   <span class="n">direction</span><span class="p">)</span>
-    <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">yquantity</span><span class="p">])}</span>
+
+    <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
+        <span class="n">xquantity</span><span class="p">,</span> <span class="n">yquantity</span> <span class="o">=</span> <span class="n">yquantity</span><span class="p">,</span> <span class="n">xquantity</span>
+        
+    <span class="n">data2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">xquantity</span><span class="p">,</span> <span class="n">yquantity</span><span class="p">],</span>
+                                    <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                    <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">xquantity</span><span class="p">]),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">yquantity</span><span class="p">])}</span>
 
     <span class="n">limit</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">,</span>   <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">}</span>
-    <span class="n">scale</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">}</span>
     <span class="n">loc</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">lim</span> <span class="o">=</span> <span class="p">{}</span>
 
