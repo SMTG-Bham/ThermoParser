@@ -36,7 +36,7 @@ Generates inputs for VASP.
 Gets specific data points from a data file. Rounds dependent variables
 to the nearest datum in the file and doesn't interpolate, but will tell
 you the exact conditions it used (as opposed to the ones you inputted).
-Based around the ``tp.data.resolve.resolve`` function.
+Based around the ``tp.data.utilities.resolve`` function.
 
 - ``tp get amset``
 - ``tp get boltztrap``

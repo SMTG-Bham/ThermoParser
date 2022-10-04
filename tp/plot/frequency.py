@@ -368,7 +368,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
             Default: True.
 
         colour : str or list, optional
-            (list of) RGB line colour(s). Default: default colour cycle.
+            (list of) hex or named line colour(s).
+            Default: default colour cycle.
         fill : bool, optional
             fill below lines. Default: False.
         fillcolour : int or str or list, optional
@@ -450,7 +451,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
 
     for dat in data:
         for d in direction:
-            data2 = tp.data.resolve.resolve(dat, 'mode_kappa',
+            data2 = tp.data.utilities.resolve(dat, 'mode_kappa',
                                             temperature=temperature,
                                             direction=d)
             k = np.ravel(data2['mode_kappa'])
@@ -482,7 +483,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
 
             if fill:
                 try:
-                    fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
+                    fillcolour2 = mpl.colors.to_rgba(colour1, fillcolour1)
                 except ValueError:
                     if isinstance(colour1, list) and \
                        isinstance(fillcolour1, (float, int)) and \
@@ -591,9 +592,10 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
         colour : colourmap or str or array-like or dict, optional
             colourmap or colourmap name or list of colours (one for
-            each band or one for each point) or two colours for a linear
-            colourmap or a dictionary with cmin and cmax keys or a
-            single colour. Default: viridis.
+            each band or one for each point) or two colours for a
+            linear colourmap (required hex or rgb or named colours) or
+            a dictionary with cmin and cmax keys or a single colour.
+            Default: viridis.
 
         verbose : bool, optional
             Write actual temperature used if applicable.
@@ -649,7 +651,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
     if quantity == 'lattice_thermal_conductivity': quantity = 'mode_kappa'
     if xquantity == 'lattice_thermal_conductivity': xquantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+    data = tp.data.utilities.resolve(data, [quantity, xquantity],
                                    temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
@@ -759,9 +761,11 @@ def add_projected_waterfall(ax, data, quantity, projected,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or #rrggbb highlight colour or
+            colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with cmid and cmin and/or cmax keys. Default: viridis.
+            with cmid and cmin and/or cmax keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: viridis.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -832,7 +836,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
     projected = tnames[projected] if projected in tnames else projected
 
-    data = tp.data.resolve.resolve(data, [quantity, xquantity, projected],
+    data = tp.data.utilities.resolve(data, [quantity, xquantity, projected],
                                    temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
@@ -909,9 +913,11 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or #rrggbb highlight colour or
+            colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with cmid and cmin and/or cmax keys. Default: Blues.
+            with cmid and cmin and/or cmax keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: Blues.
 
         verbose : bool, optional
             Write actual temperature used if applicable.
@@ -959,7 +965,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     quantity = tnames[quantity] if quantity in tnames else quantity
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
 
-    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+    data = tp.data.utilities.resolve(data, [quantity, xquantity],
                                    temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
@@ -1033,7 +1039,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
     if invert:
         xquantity, yquantity = yquantity, xquantity
         
-    data2 = tp.data.resolve.resolve(data, [xquantity, yquantity],
+    data2 = tp.data.utilities.resolve(data, [xquantity, yquantity],
                                     temperature=temperature,
                                     direction=direction)
     data2 = {'x': np.ravel(data2[xquantity]), 'y': np.ravel(data2[yquantity])}

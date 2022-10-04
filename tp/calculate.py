@@ -17,6 +17,8 @@ Functions
         boson occupation.
     dfdde:
         derivative of the Fermi-Dirac distribution.
+    thermal_conductivity:
+        total thermal conductivity.
     power_factor:
         power factor.
     zt:

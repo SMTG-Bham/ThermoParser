@@ -195,9 +195,9 @@ def get_amset(filename, quantity, dtype, doping, direction, temperature, spin,
     if 'doping' not in dims:
         doping = None
 
-    data = tp.data.resolve.resolve(data, quantity, direction=direction,
-                                   temperature=temperature, stype=scattering,
-                                   dtype=dtype, doping=doping, kpoint=kpt)
+    data = tp.data.utilities.resolve(data, quantity, direction=direction,
+                                     temperature=temperature, stype=scattering,
+                                     dtype=dtype, doping=doping, kpoint=kpt)
     if 'band' in dims:
         data[quantity] = data[quantity][band-1]
         if len(str(band)) > 1 and str(band)[-2:] in ['11', '12', '13']:
@@ -274,9 +274,9 @@ def get_boltztrap(filename, quantity, dtype, doping, direction, temperature):
     if 'doping' not in dims:
         doping = None
 
-    data = tp.data.resolve.resolve(data, quantity, direction=direction,
-                                   temperature=temperature, dtype=dtype,
-                                   doping=doping)
+    data = tp.data.utilities.resolve(data, quantity, direction=direction,
+                                     temperature=temperature, dtype=dtype,
+                                     doping=doping)
     printq = ''
     for i, l in enumerate(quantity):
         if l == '_':
@@ -358,8 +358,8 @@ def get_phono3py(filename, quantity, direction, temperature, band, qpoint,
     if 'temperature' not in dims:
         temperature = None
 
-    data = tp.data.resolve.resolve(data, quantity, direction=direction,
-                                   temperature=temperature, qpoint=qpt)
+    data = tp.data.utilities.resolve(data, quantity, direction=direction,
+                                     temperature=temperature, qpoint=qpt)
     if 'band' in dims:
         data[quantity] = data[quantity][band-1]
         if len(str(band)) > 1 and str(band)[-2:] in ['11', '12', '13']:
@@ -451,7 +451,7 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature, max):
     
     if max:
         mlabel = 'max '
-        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction)
+        edata = tp.data.utilities.resolve(edata, 'zt', direction=direction)
         maxindex = np.where(np.round(edata['zt'], 10) \
                          == np.round(np.amax(edata['zt']), 10))
         edata['zt'] = edata['zt'][maxindex[0][0]][maxindex[1][0]]
@@ -459,8 +459,8 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature, max):
         edata['meta']['doping'] = edata['doping'][maxindex[1][0]]
     else:
         mlabel = ''
-        edata = tp.data.resolve.resolve(edata, 'zt', direction=direction,
-                                        doping=doping, temperature=temperature)
+        edata = tp.data.utilities.resolve(edata, 'zt', direction=direction,
+                                          doping=doping, temperature=temperature)
 
     zt = edata['zt']
     n = edata['meta']['doping']
@@ -622,8 +622,8 @@ def save_kappa(filename, direction, output):
     header = 'T({})'.format(units['temperature'])
     data = [f['temperature']]
     for d in direction:
-        aniso = tp.data.resolve.resolve(f, 'lattice_thermal_conductivity',
-                                        direction=d)
+        aniso = tp.data.utilities.resolve(f, 'lattice_thermal_conductivity',
+                                          direction=d)
         header += ' kappa_{}({})'.format(d, units['lattice_thermal_conductivity'])
         data.append(aniso['lattice_thermal_conductivity'])
 
@@ -767,8 +767,8 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
 
     labels = tp.settings.large_labels() if large else tp.settings.labels()
     if x == 'temperature' or x == 'both':
-        tdata = tp.data.resolve.resolve(data[tindex], 'weighted_rates',
-                                        doping=doping)
+        tdata = tp.data.utilities.resolve(data[tindex], 'weighted_rates',
+                                          doping=doping)
         if verbose:
             print('Using {} {}.'.format(tdata['meta']['doping'],
                                         tdata['meta']['units']['doping']))
@@ -787,8 +787,8 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
         tp.plot.utilities.set_locators(tax, x='linear', y='log')
 
     if x == 'doping' or x == 'both':
-        ddata = tp.data.resolve.resolve(data[dindex], 'weighted_rates',
-                                        temperature=temperature)
+        ddata = tp.data.utilities.resolve(data[dindex], 'weighted_rates',
+                                          temperature=temperature)
         if verbose:
             print('Using {} {}.'.format(ddata['meta']['temperature'],
                                         ddata['meta']['units']['temperature']))
@@ -1133,9 +1133,9 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['title'] = 'Direction'
             defleg['labels'] = direction
             for d in direction:
-                kdata2 = tp.data.resolve.resolve(kdata[0], ltc, direction=d)
-                edata2 = tp.data.resolve.resolve(edata[0], etc, doping=doping,
-                                                 direction=d)
+                kdata2 = tp.data.utilities.resolve(kdata[0], ltc, direction=d)
+                edata2 = tp.data.utilities.resolve(edata[0], etc, doping=doping,
+                                                   direction=d)
                 kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                           'temperature', ltc,
                                                           etc, kind='cubic')
@@ -1145,10 +1145,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['title'] = 'Phononic Data'
             defleg['labels'] = kfile
             for i in range(len(kdata)):
-                kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                                   direction=direction[0])
-                edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
-                                                   direction=direction[0])
+                kdata[i] = tp.data.utilities.resolve(kdata[i], ltc,
+                                                     direction=direction[0])
+                edata[i] = tp.data.utilities.resolve(edata[i], etc, doping=doping,
+                                                     direction=direction[0])
                 kdata[i], edata[i] = tp.calculate.interpolate(kdata[i],
                                                               edata[i],
                                                               'temperature',
@@ -1159,11 +1159,11 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         elif len(kdata) == 1:
             defleg['title'] = 'Electronic Data'
             defleg['labels'] = efile
-            kdata[0] = tp.data.resolve.resolve(kdata[0], ltc,
-                                               direction=direction[0])
+            kdata[0] = tp.data.utilities.resolve(kdata[0], ltc,
+                                                 direction=direction[0])
             for i in range(len(edata)):
-                edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
-                                                   direction=direction[0])
+                edata[i] = tp.data.utilities.resolve(edata[i], etc, doping=doping,
+                                                     direction=direction[0])
                 kdata2 = kdata[0] # in case of different-sized arrays
                 kdata2, edata[i] = tp.calculate.interpolate(kdata2, edata[i],
                                                             'temperature',
@@ -1174,11 +1174,11 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         elif len(edata) == 1:
             defleg['title'] = 'Phononic Data'
             defleg['labels'] = kfile
-            edata[0] = tp.data.resolve.resolve(edata[0], etc, doping=doping,
-                                               direction=direction[0])
+            edata[0] = tp.data.utilities.resolve(edata[0], etc, doping=doping,
+                                                 direction=direction[0])
             for i in range(len(kdata)):
-                kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                                   direction=direction[0])
+                kdata[i] = tp.data.utilities.resolve(kdata[i], ltc,
+                                                     direction=direction[0])
                 edata2 = edata[0]
                 kdata[i], edata2 = tp.calculate.interpolate(kdata[i], edata2,
                                                             'temperature',
@@ -1192,15 +1192,15 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['title'] = 'Direction'
             defleg['labels'] = direction
             for d in direction:
-                kdata2 = tp.data.resolve.resolve(kdata[0], ltc, direction=d)
+                kdata2 = tp.data.utilities.resolve(kdata[0], ltc, direction=d)
                 data.append({'temperature': kdata2['temperature'],
                              tc:            kdata2[ltc]})
         else:
             defleg['title'] = 'Phononic Data'
             defleg['labels'] = kfile
             for i in range(len(kdata)):
-                kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
-                                                   direction=direction[0])
+                kdata[i] = tp.data.utilities.resolve(kdata[i], ltc,
+                                                     direction=direction[0])
                 data.append({'temperature': kdata[i]['temperature'],
                              tc:            kdata[i][ltc]})
     elif component == 'electronic':
@@ -1209,15 +1209,15 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             defleg['title'] = 'Direction'
             defleg['labels'] = direction
             for d in direction:
-                edata2 = tp.data.resolve.resolve(edata[0], etc, direction=d)
+                edata2 = tp.data.utilities.resolve(edata[0], etc, direction=d)
                 data.append({'temperature': edata2['temperature'],
                              tc:            edata2[etc]})
         else:
             defleg['title'] = 'Electronic Data'
             defleg['labels'] = efile
             for i in range(len(edata)):
-                edata[i] = tp.data.resolve.resolve(edata[i], etc, doping=doping,
-                                                   direction=direction[0])
+                edata[i] = tp.data.utilities.resolve(edata[i], etc, doping=doping,
+                                                     direction=direction[0])
                 data.append({'temperature': edata[i]['temperature'],
                              tc:            edata[i][etc]})
 
@@ -1303,9 +1303,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
 @interpolate_options
 
 @click.option('-c', '--colour',
-              help='Colourmap name or #rrggbb highlight colour or min '
-                   'and max and highlight #rrggbb colours to generate '
-                   'a colourmap from.',
+              help='Colourmap name or highlight colour or min and max '
+                   'and highlight colours to generate a colourmap '
+                   'from. Colour may be #rrggbb or a named colour in '
+                   'matplotlib.',
               multiple=True,
               default=['viridis'],
               show_default=True)
@@ -1604,13 +1605,13 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             defleg['title'] = axlabels['doping']
             if q == tc:
                 kdata2 = deepcopy(kdata[0])
-                kdata2 = tp.data.resolve.resolve(kdata2, ltc,
-                                                 direction=direction[0])
+                kdata2 = tp.data.utilities.resolve(kdata2, ltc,
+                                                   direction=direction[0])
                 dopelist = []
                 for d in doping:
                     edata2 = deepcopy(edata[0])
-                    edata2 = tp.data.resolve.resolve(edata2, etc, doping=d,
-                                                     direction=direction[0])
+                    edata2 = tp.data.utilities.resolve(edata2, etc, doping=d,
+                                                       direction=direction[0])
                     dopelist.append('{:.2e}'.format(edata2['meta']['doping']))
                     kdata3, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                               'temperature',
@@ -1623,16 +1624,16 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                 dopelist = []
                 for d in doping:
                     edata2 = deepcopy(edata[0])
-                    edata2 = tp.data.resolve.resolve(edata2, q, doping=d,
-                                                     direction=direction[0])
+                    edata2 = tp.data.utilities.resolve(edata2, q, doping=d,
+                                                       direction=direction[0])
                     dopelist.append('{:.2e}'.format(edata2['meta']['doping']))
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
                 defleg['labels'] = dopelist
             elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 kdata2 = deepcopy(kdata[0])
-                kdata2 = tp.data.resolve.resolve(kdata2, q,
-                                                 direction=direction[0])
+                kdata2 = tp.data.utilities.resolve(kdata2, q,
+                                                   direction=direction[0])
                 data[i].append({'temperature': kdata2['temperature'],
                                 q:             kdata2[q]})
         elif len(direction) > 1: # one line per direction
@@ -1642,12 +1643,12 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             if q == tc:
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
-                    kdata2 = tp.data.resolve.resolve(kdata2, ltc,
-                                                     direction=d)
+                    kdata2 = tp.data.utilities.resolve(kdata2, ltc,
+                                                       direction=d)
                     edata2 = deepcopy(edata[0])
-                    edata2 = tp.data.resolve.resolve(edata2, etc,
-                                                     doping=doping[0],
-                                                     direction=d)
+                    edata2 = tp.data.utilities.resolve(edata2, etc,
+                                                       doping=doping[0],
+                                                       direction=d)
                     kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                               'temperature',
                                                               ltc, etc,
@@ -1657,16 +1658,16 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
             elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
                 for d in direction:
                     edata2 = deepcopy(edata[0])
-                    edata2 = tp.data.resolve.resolve(edata2, q,
-                                                     doping=doping[0],
-                                                     direction=d)
+                    edata2 = tp.data.utilities.resolve(edata2, q,
+                                                       doping=doping[0],
+                                                       direction=d)
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
             elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
-                    kdata2 = tp.data.resolve.resolve(kdata2, q,
-                                                     direction=d)
+                    kdata2 = tp.data.utilities.resolve(kdata2, q,
+                                                       direction=d)
                     data[i].append({'temperature': kdata2['temperature'],
                                     q:             kdata2[q]})
         else: # one line per file/ one line
@@ -1678,11 +1679,11 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     for j in range(len(kdata)):
                         kdata2 = deepcopy(kdata[j])
                         edata2 = deepcopy(edata[j])
-                        kdata2 = tp.data.resolve.resolve(kdata2, ltc,
-                                                         direction=direction[0])
-                        edata2 = tp.data.resolve.resolve(edata2, etc,
-                                                         doping=doping[0],
-                                                         direction=direction[0])
+                        kdata2 = tp.data.utilities.resolve(kdata2, ltc,
+                                                           direction=direction[0])
+                        edata2 = tp.data.utilities.resolve(edata2, etc,
+                                                           doping=doping[0],
+                                                           direction=direction[0])
                         kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                                   'temperature',
                                                                   ltc, etc,
@@ -1694,13 +1695,13 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     defleg['labels'] = filenames
                     lendata = len(edata)
                     kdata2 = deepcopy(kdata[0])
-                    kdata2 = tp.data.resolve.resolve(kdata, ltc,
-                                                     direction=direction[0])
+                    kdata2 = tp.data.utilities.resolve(kdata, ltc,
+                                                       direction=direction[0])
                     for j in range(len(edata)):
                         edata2 = deepcopy(edata[j])
-                        edata2 = tp.data.resolve.resolve(edata2, etc,
-                                                         doping=doping[0],
-                                                         direction=direction[0])
+                        edata2 = tp.data.utilities.resolve(edata2, etc,
+                                                           doping=doping[0],
+                                                           direction=direction[0])
                         kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                                   'temperature',
                                                                   ltc, etc,
@@ -1711,13 +1712,13 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     defleg['title'] = 'Phononic Data'
                     defleg['labels'] = kfile
                     edata2 = deepcopy(edata[0])
-                    edata2 = tp.data.resolve.resolve(edata2, etc,
-                                                     doping=doping[0],
-                                                     direction=direction[0])
+                    edata2 = tp.data.utilities.resolve(edata2, etc,
+                                                       doping=doping[0],
+                                                       direction=direction[0])
                     for j in range(len(kdata)):
                         kdata2 = deepcopy(kdata[j])
-                        kdata2 = tp.data.resolve.resolve(kdata2, ltc,
-                                                         direction=direction[0])
+                        kdata2 = tp.data.utilities.resolve(kdata2, ltc,
+                                                           direction=direction[0])
                         kdata2, edata2 = tp.calculate.interpolate(kdata2, edata2,
                                                                   'temperature',
                                                                   ltc, etc,
@@ -1734,9 +1735,9 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     defleg['labels'] = filenames
                 for j in range(len(edata)):
                     edata2 = deepcopy(edata[j])
-                    edata2 = tp.data.resolve.resolve(edata2, q,
-                                                     doping=doping[0],
-                                                     direction=direction[0])
+                    edata2 = tp.data.utilities.resolve(edata2, q,
+                                                       doping=doping[0],
+                                                       direction=direction[0])
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
             elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
@@ -1749,8 +1750,8 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
                     defleg['labels'] = kfile
                 for j in range(len(kdata)):
                     kdata2 = deepcopy(kdata[j])
-                    kdata2 = tp.data.resolve.resolve(kdata2, q,
-                                                     direction=direction[0])
+                    kdata2 = tp.data.utilities.resolve(kdata2, q,
+                                                       direction=direction[0])
                     data[i].append({'temperature': kdata2['temperature'],
                                     q:             kdata2[q]})
 
@@ -2005,7 +2006,9 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
 
 @click.option('-c', '--colour',
               help='Colourmap name or max colour (fades to white) or '
-                   'min and max colours to generate a colourmap from.',
+                   'min and max colours to generate a colourmap from. '
+                   'Colour format must be hex or rgb (array) or a '
+                   'named colour recognised by matplotlib.',
               multiple=True,
               default=['viridis'],
               show_default=True)

@@ -6,12 +6,71 @@ Reads variables and selects specific conditions. Requires
 Functions
 ---------
 
-    resolve
+    merge:
+        merge data from multiple files.
+    resolve:
+        selects data based on dependent variables.
 """
 
 import numpy as np
 import warnings
 from copy import deepcopy
+
+def merge(data, dependent):
+    """Merges data dictionaries with shared dependent variables.
+
+    Particularly with amset in mind, to relieve memory constraints.
+    Currently works for one dependent variable, so looping will often
+    bre required. An output in the form:
+
+    ab
+
+    cd
+
+    would require three merges: a to b, c to d and ab to cd (or a to c etc.).
+
+    Arguments
+    ---------
+
+        data : list of dicts
+            data to merge. Requires tp metadata and dependent variable.
+        dependent : string
+            dependent variable.
+
+    Returns
+    -------
+
+        dict
+            merged data
+    """
+    depi = [list(range(len(data[0][dependent])))]
+    data2 = {dependent: data[0][dependent],
+             'meta': data[0]['meta']}
+    for d in data[1:]:
+        depi.append([d[dependent].index(d2) for d2 in d[dependent]\
+                     if d2 not in data[0][dependent]])
+        data2[dependent].extend(np.array(d[dependent])[depi[-1]])
+
+    for key in data[0].keys():
+        if key in [dependent, 'meta']:
+            continue
+        else:
+            present = True
+        for d in data[1:]:
+            if key not in d.keys():
+                present = False
+                break
+        if present and dependent in data[0]['meta']['dimensions'][key]:
+            axis = data[0]['meta']['dimensions'][key].index(dependent)
+            for d in data:
+                d[key] = np.swapaxes(d[key], axis, 0)
+            data2[key] = np.concatenate([np.array(data[i][key])[depi[i]] for i in range(len(data))], axis=0)
+            for d in data:
+                d[key] = np.swapaxes(d[key], 0, axis)
+        elif key not in data2 and key in data[0]:
+            data2[key] = data[0][key]
+            
+    return data2
 
 def resolve(data, quantities, **kwargs):
     """Selects particular values of arbitrary quantities.

@@ -188,7 +188,7 @@ class AltDispersionTest(unittest.TestCase):
                       'meta':          {}}
         self.ax = MagicMock()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_default(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data
@@ -203,7 +203,7 @@ class AltDispersionTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(0, 3)
         self.ax.set_ylim.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_bandmin(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data
@@ -218,7 +218,7 @@ class AltDispersionTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(0, 3)
         self.ax.set_ylim.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_bandmax(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data
@@ -233,7 +233,7 @@ class AltDispersionTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(0, 3)
         self.ax.set_ylim.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_not_main(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data
@@ -286,7 +286,7 @@ class ProjectedDispersionTest(unittest.TestCase):
                       'meta':          {}}
         self.ax = MagicMock()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -305,7 +305,7 @@ class ProjectedDispersionTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
         mock_colourbar.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_bandmin(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -323,7 +323,7 @@ class ProjectedDispersionTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(0, 5)
         self.ax.set_ylim.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_bandmax(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -342,7 +342,7 @@ class ProjectedDispersionTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
         mock_colourbar.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_not_main(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -399,7 +399,7 @@ class AltProjectedDispersionTest(unittest.TestCase):
                       'meta':          {}}
         self.ax = MagicMock()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -419,7 +419,7 @@ class AltProjectedDispersionTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
         mock_colourbar.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_bandmin(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -438,7 +438,7 @@ class AltProjectedDispersionTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(0, 5)
         self.ax.set_ylim.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_bandmax(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -458,7 +458,7 @@ class AltProjectedDispersionTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
         mock_colourbar.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_not_main(self, mock_colourbar, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
@@ -516,7 +516,7 @@ class WidebandTest(unittest.TestCase):
                       'meta':          {}}
         self.ax = MagicMock()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_default(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data
@@ -529,7 +529,7 @@ class WidebandTest(unittest.TestCase):
         self.ax.set_ylabel.assert_called_once()
         self.ax.set_xlim.assert_called_once_with(0, 5)
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_not_main(self, mock_resolve):
         self.ax.spines['bottom'].get_linewidth().return_value = 1
         mock_resolve.return_value = self.data

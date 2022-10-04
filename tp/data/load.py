@@ -22,8 +22,7 @@ import numpy as np
 import tp
 from tp import settings
 
-def amset(filename, quantities=['seebeck', 'conductivity',
-          'electronic_thermal_conductivity'], doping='n'):
+def amset(filename, quantities='all', doping='n'):
     """Loads AMSET transport data.
 
     Includes unit conversion and outputs units (see tp.settings).
@@ -40,9 +39,9 @@ def amset(filename, quantities=['seebeck', 'conductivity',
 
         quantites : str or list, optional
             values to extract. Accepts AMSET keys and power_factor.
-            Loads dependent properties. Default: seebeck, conductivity,
-            electronic_thermal_conductivity.
-
+            All loads the whole file, power factor can be added if it
+            is not in the file. Loads dependent properties.
+            Default: all.
         doping : str, optional
             doing type (n or p). If there is more than one, defaults to
             n, else this is ignored.
@@ -90,6 +89,11 @@ def amset(filename, quantities=['seebeck', 'conductivity',
 
     with open(filename) as f:
         data = json.load(f)
+    if 'all' in quantities:
+        if 'power_factor' in quantities:
+            quantities = [*data.keys(), 'power_factor']
+        else:
+            quantities = list(data.keys())
 
     if 'doping' in quantities:
         if 'data' in data['doping']:
@@ -165,8 +169,7 @@ def amset(filename, quantities=['seebeck', 'conductivity',
 
     return data2
 
-def amset_mesh(filename, quantities='scattering_rates', doping='n',
-               spin='avg'):
+def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     """Loads AMSET mesh data.
 
     Can also weight rates. Includes unit conversion and outputs units
@@ -186,8 +189,9 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
             k-points, fd_weights, the weights of the energies wrt the
             derivative of the Fermi-Dirac distribution, and
             weighted_rates, scattering_rates weighted by fd_weights
-            and averaged over kpoints. Loads dependent properties.
-            Default: scattering_rates.
+            and averaged over kpoints. "all" loads all quantities in
+            the file, which does not include ibz_weights, fd_weights or
+            weighted_rates. Loads dependent properties. Default: all.
 
         doping : str, optional
             doing type (n or p). If there is more than one, defaults to
@@ -275,6 +279,12 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
         return resolved
 
     with h5py.File(filename, 'r') as f:
+        if 'all' in quantities:
+            q2 = quantities
+            quantities = list(f.keys())
+            for q in ['ibz_weights', 'fd_weights', 'weighted_rates']:
+                if q in q2:
+                    quantities.append(q)
         if 'doping' in quantities:
             d = np.array(f['doping'][()])
             if (d < 0).all():
@@ -371,8 +381,7 @@ def amset_mesh(filename, quantities='scattering_rates', doping='n',
 
     return data
 
-def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
-              'conductivity', 'electronic_thermal_conductivity'], doping='n'):
+def boltztrap(filename, quantities='all', doping='n'):
     """Loads BoltzTraP data from the tp boltztrap.hdf5 file.
 
     Includes unit conversion and outputs units (see tp.settings).
@@ -384,9 +393,8 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
             filepath.
 
         quantites : str or list, optional
-            values to extract. Accepts boltztrap.hdf5 keys.
-            Default: temperature, doping, seebeck, conductivity,
-            electronic_thermal_conductivity.
+            values to extract. Accepts boltztrap.hdf5 keys or all.
+            Default: all.
 
         doping : str, optional
             doping.  Default: n.
@@ -411,23 +419,26 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
     units = settings.units()
     dimensions = settings.boltztrap_dimensions()
     if isinstance(quantities, str): quantities = quantities.split()
-    quantities = [bnames[q] if q in bnames else q for q in quantities]
+    if 'all' not in quantities:
+        quantities = [bnames[q] if q in bnames else q for q in quantities]
 
-    # add dependent variables
+        # add dependent variables
 
-    for d in ['doping', 'temperature']:
-        if d not in quantities:
-            for q in quantities:
-                if q in tnames:
-                    q = tnames[q]
-                if q in dimensions and \
-                   (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
-                    quantities.append(d)
-                    break
+        for d in ['doping', 'temperature']:
+            if d not in quantities:
+                for q in quantities:
+                    if q in tnames:
+                        q = tnames[q]
+                    if q in dimensions and \
+                       (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
+                        quantities.append(d)
+                        break
 
     # load data
 
     with h5py.File(filename, 'r') as f:
+        if 'all' in quantities:
+            quantities = list(f.keys())
         data = {'meta': {'doping_type':       doping,
                          'electronic_source': 'boltztrap',
                          'units':             {},
@@ -456,7 +467,7 @@ def boltztrap(filename, quantities=['temperature', 'doping', 'seebeck',
 
     return data
 
-def phono3py(filename, quantities=['kappa', 'temperature']):
+def phono3py(filename, quantities='all'):
     """Loads Phono3py data.
 
     Can also calculate lifetimes, mean free paths and occupations.
@@ -473,7 +484,9 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
 
         quantities : str or list, optional
             values to extract. Accepts Phono3py keys, lifetime,
-            mean_free_path and occupation. Default: kappa, temperature.
+            mean_free_path and occupation. 'all' loads all Phono3py
+            keys, but lifetime etc. must be loaded separately.
+            Default: all.
 
     Returns
     -------
@@ -533,6 +546,12 @@ def phono3py(filename, quantities=['kappa', 'temperature']):
     # load and calculate data
 
     with h5py.File(filename, 'r') as f:
+        if 'all' in quantities:
+            q2 = quantities
+            quantities = list(f.keys())
+            for q in derived:
+                if q in q2:
+                    quantities.append(q)
         data = {'meta': {'kappa_source': 'phono3py',
                          'units':        {},
                          'dimensions':   {}}}
