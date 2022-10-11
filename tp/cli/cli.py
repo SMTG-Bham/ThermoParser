@@ -29,6 +29,7 @@ Functions
             waterfall
             wideband
             ztmap
+            ztdiff
 """
 
 import click
@@ -423,19 +424,12 @@ def get_zt(filename, kappa, dtype, doping, direction, temperature, max):
     try:
         edata = tp.data.load.amset(filename, equants)
     except UnicodeDecodeError:
-        try:
-            edata = tp.data.load.boltztrap(filename, equants, doping=dtype)
-        except Exception:
-            data = h5py.File(filename, 'r')
-            edata = dict(data)
-            for key in edata.keys():
-                if isinstance(edata[key], dict) and dtype in edata[key]:
-                    edata[key] = edata[key][dtype][()]
+        edata = tp.data.load.boltztrap(filename, equants, doping=dtype)
 
     if 'zt' in edata:
         pass
     elif kappa is not None:
-        kdata = tp.data.load.phono3py(kappa)
+        kdata = tp.data.load.phono3py(kappa, 'ltc')
         edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
                                                 equants, ltc, kind='cubic')
         edata[ltc] = kdata[ltc]
@@ -616,7 +610,7 @@ def save_kappa(filename, direction, output):
     Saves to text file.
     """
 
-    f = tp.data.load.phono3py(filename)
+    f = tp.data.load.phono3py(filename, 'ltc')
 
     units = tp.settings.units()
     header = 'T({})'.format(units['temperature'])
@@ -669,7 +663,7 @@ def plot():
 
 
 @plot.command()
-@inputs_argument
+@inputs_function()
 @click.option('--total/--nototal',
               help='Plot total scattering rate  [default: total]',
               default=True,
@@ -695,11 +689,7 @@ def plot():
 @line_options
 
 @xy_limit_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-avg-rates',
-              show_default=True)
+@plot_io_function('tp-avg-rates')
 @verbose_option
 
 def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
@@ -838,7 +828,7 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
 
 
 @plot.command()
-@inputs_argument
+@inputs_function()
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
               default=False,
@@ -867,12 +857,8 @@ def avg_rates(filenames, total, x, crt, doping, temperature, colour, linestyle,
 @line_options
 
 @xy_limit_options
-@legend_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-cumkappa',
-              show_default=True)
+@legend_function(toggle=False)
+@plot_io_function('tp-cumkappa')
 @verbose_option
 
 def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
@@ -954,31 +940,18 @@ def cumkappa(filenames, mfp, percent, direction, temperature, minkappa, colour,
 
 @plot.command()
 @input_argument
-@dos_options
-@click.option('-c', '--colour',
-              help='Colour(s) in POSCAR order with total at the end or '
-                   'colourmap name. If --notprojected, a single colour '
-                   'can be specified. Total colour is overridden by '
-                   '--total-colour.',
-              multiple=True,
-              default=['tab10'],
-              show_default=True)
+@dos_function()
 @fill_options
 @line_options
 
 @xy_limit_options
-@click.option('--legend-title',
-              help='Legend title.')
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-dos',
-              show_default=True)
+@legend_function(label=False)
+@plot_io_function('tp-dos')
 
 def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
         colour, fill, fillalpha, line, linestyle, marker, xmin, xmax, ymin,
-        ymax, legend_title, location, style, large, save, show, extension,
-        output):
+        ymax, legend, legend_title, location, style, large, save, show,
+        extension, output):
     """Plots a phonon density of states."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -996,10 +969,11 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
                               totalcolour=total_colour, fill=fill,
                               fillalpha=fillalpha, line=line,
                               linestyle=linestyle, marker=marker)
-    if location is None:
-        add_legend(title=legend_title)
-    else:
-        add_legend(title=legend_title, location=location)
+    if legend:
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     if xmin is not None:
         if xmax is not None:
@@ -1062,12 +1036,8 @@ def dos(filename, poscar, atoms, projected, total, total_label, total_colour,
 @line_options
 
 @xy_limit_options
-@auto_legend_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-kappa',
-              show_default=True)
+@legend_function()
+@plot_io_function('tp-kappa')
 
 def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
           colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
@@ -1102,17 +1072,9 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             edata = []
             for f in efile:
                 try:
-                    edata.append(tp.data.load.amset(f))
+                    edata.append(tp.data.load.amset(f, 'etc'))
                 except UnicodeDecodeError:
-                    try:
-                        edata.append(tp.data.load.boltztrap(f, doping=dtype))
-                    except Exception:
-                        data = h5py.File(f, 'r')
-                        edata.append(dict(data))
-                        for key in edata[-1].keys():
-                            if isinstance(edata[-1][key], dict) and \
-                               dtype in edata[-1][key]:
-                                edata[-1][key] = edata[-1][key][dtype][()]
+                    edata.append(tp.data.load.boltztrap(f, 'etc', doping=dtype))
         else:
             raise Exception('--efile must be specified for a '
                             '--component of electronic or total.')
@@ -1120,7 +1082,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
         if len(kfile) != 0:
             kdata = []
             for f in kfile:
-                kdata.append(tp.data.load.phono3py(f))
+                kdata.append(tp.data.load.phono3py(f, 'ltc'))
         else:
             raise Exception('--kfile must be specified for a '
                             '--component of lattice or total.')
@@ -1317,11 +1279,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
 
 @xy_limit_options
 @c_limit_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-kappa-target',
-              show_default=True)
+@plot_io_function('tp-kappa-target')
 
 def kappa_target(filename, zt, direction, interpolate, kind, colour,
                  negativecolour, xmin, xmax, ymin, ymax, cmin, cmax, style,
@@ -1331,6 +1289,7 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
     Currently accepts AMSET transport json or BoltzTraP hdf5.
     """
 
+    equants = ['conductivity', 'seebeck', 'etc']
     cmin = 0 if cmin is None else cmin
     if len(colour) == 1:
         colour = colour[0]
@@ -1339,9 +1298,9 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
 
     axes = tp.axes.large if large else tp.axes.small
     try:
-        edata = tp.data.load.amset(filename)
+        edata = tp.data.load.amset(filename, equants)
     except UnicodeDecodeError:
-        edata = tp.data.load.boltztrap(filename)
+        edata = tp.data.load.boltztrap(filename, equants)
 
     fig, ax, _ = axes.one_colourbar(style)
 
@@ -1367,7 +1326,7 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
 
 
 @plot.command('phonons')
-@inputs_argument
+@inputs_function()
 @click.option('--bandmin',
               help='Minimum band index.',
               type=click.IntRange(0))
@@ -1380,6 +1339,12 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
                    'colours.',
               multiple=True,
               default=['winter_r'],
+              show_default=True)
+@click.option('-a', '--alpha',
+              help='Line transparency (0 (transparent) - 1 (opaque)). Useful'
+                   'for dense plots.',
+              type=click.FloatRange(0, 1),
+              default=1.,
               show_default=True)
 @line_options
 @click.option('--xmarkcolour',
@@ -1394,26 +1359,14 @@ def kappa_target(filename, zt, direction, interpolate, kind, colour,
 @click.option('-d', '--dos',
               help='projected_dos.dat or equivalent for optional DoS plot.',
               type=click.Path(exists=True, file_okay=True, dir_okay=False))
-@dos_options
-@click.option('--doscolour',
-              help='Colour(s) in POSCAR order with total at the end or '
-                   'colourmap name. If --notprojected, a single colour '
-                   'can be specified. Total colour is overridden by '
-                   '--total-colour.',
-              multiple=True,
-              default=['tab10'],
-              show_default=True)
+@dos_function(['--doscolour'])
 @fill_options
 
-@legend_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-phonons',
-              show_default=True)
+@legend_function(toggle=False)
+@plot_io_function('tp-phonons')
 
-def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
-                     xmarkcolour, xmarklinestyle, dos, poscar, atoms,
+def converge_phonons(filenames, bandmin, bandmax, colour, alpha, linestyle,
+                     marker, xmarkcolour, xmarklinestyle, dos, poscar, atoms,
                      projected, total, total_label, total_colour, doscolour,
                      fill, fillalpha, line, label, legend_title, location,
                      style, large, save, show, extension, output):
@@ -1455,7 +1408,7 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 
     tp.plot.phonons.add_multi(ax, data, colour=colour, linestyle=linestyle,
                               marker=marker, label=label, bandmin=bandmin,
-                              bandmax=bandmax,
+                              bandmax=bandmax, alpha=alpha,
                               xmarkkwargs={'color':     xmarkcolour,
                                            'linestyle': xmarklinestyle})
     if dos is not None:
@@ -1484,7 +1437,7 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 
 
 @plot.command()
-@inputs_argument
+@inputs_function()
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a --quantity '
                    'of lattice_ or total_thermal_conductivity.',
@@ -1516,12 +1469,8 @@ def converge_phonons(filenames, bandmin, bandmax, colour, linestyle, marker,
 @line_options
 
 @xy_limit_options
-@auto_legend_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-transport',
-              show_default=True)
+@legend_function()
+@plot_io_function('tp-transport')
 
 def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
               colour, linestyle, marker, xmin, xmax, ymin, ymax, label,
@@ -1565,15 +1514,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
         try:
             edata.append(tp.data.load.amset(f))
         except UnicodeDecodeError:
-            try:
-                edata.append(tp.data.load.boltztrap(f, doping=dtype))
-            except Exception:
-                data = h5py.File(f, 'r')
-                edata.append(dict(data))
-                for key in edata[-1].keys():
-                    if isinstance(edata[-1][key], dict) and \
-                       dtype in edata[-1][key]:
-                        edata[-1][key] = edata[-1][key][dtype][()]
+            edata.append(tp.data.load.boltztrap(f, doping=dtype))
     if ltc in quantity or tc in quantity:
         if len(kfile) != 0:
             kdata = []
@@ -1896,11 +1837,7 @@ def transport(filenames, kfile, quantity, direction, tmin, tmax, dtype, doping,
 @xy_limit_options
 @c_limit_options
 
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-waterfall',
-              show_default=True)
+@plot_io_function('tp-waterfall')
 @verbose_option
 
 def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
@@ -2017,11 +1954,7 @@ def waterfall(filename, y, x, projected, direction, temperature, colour, alpha,
               default=5,
               show_default=True)
 
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-wideband',
-              show_default=True)
+@plot_io_function('tp-wideband')
 @verbose_option
 
 def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
@@ -2054,6 +1987,10 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
 
 @plot.command()
 @input_argument
+@click.option('--pf/--zt',
+              help='Power factor instead of ZT.  [default: zt]',
+              default=False,
+              show_default=False)
 @click.option('-k', '--kappa',
               help='Phono3py kappa hdf5. Ignored if ZT is in file. If '
                    'otherwise unspecified, set to 1 (W m-1 K-1).',
@@ -2073,16 +2010,12 @@ def wideband(phonons, kappa, temperature, poscar, colour, smoothing, style,
 
 @xy_limit_options
 @c_limit_options
-@plot_io_options
-@click.option('-o', '--output',
-              help='Output filename, sans extension.',
-              default='tp-ztmap',
-              show_default=True)
+@plot_io_function('tp-ztmap')
 
-def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
-          xmax, ymin, ymax, cmin, cmax, style, large, save, show, extension,
-          output):
-    """Plots ZT against temperature and carrier concentration."""
+def ztmap(filename, pf, kappa, direction, dtype, interpolate, kind, colour,
+          xmin, xmax, ymin, ymax, cmin, cmax, style, large, save, show,
+          extension, output):
+    """Plots ZT or PF against temperature and carrier concentration."""
 
     axes = tp.axes.large if large else tp.axes.small
     if len(colour) == 1:
@@ -2091,26 +2024,119 @@ def ztmap(filename, kappa, direction, dtype, interpolate, kind, colour, xmin,
     try:
         edata = tp.data.load.amset(filename)
     except UnicodeDecodeError:
-        try:
-            edata = tp.data.load.boltztrap(filename, doping=dtype)
-        except Exception:
-            data = h5py.File(filename, 'r')
-            edata = dict(data)
-            for key in edata.keys():
-                if isinstance(edata[key], dict) and dtype in edata[key]:
-                    edata[key] = edata[key][dtype][()]
-
-    if kappa is not None:
-        kdata = tp.data.load.phono3py(kappa)
-    else:
-        kdata = None
+        edata = tp.data.load.boltztrap(filename, doping=dtype)
 
     fig, ax, _ = axes.one_colourbar(style)
 
-    tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=direction,
-                              xinterp=interpolate, yinterp=interpolate,
-                              kind=kind, colour=colour, xmin=xmin, xmax=xmax,
-                              ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
+    if pf:
+        tp.plot.heatmap.add_pfmap(ax, edata, direction=direction,
+                                  xinterp=interpolate, yinterp=interpolate,
+                                  kind=kind, colour=colour, xmin=xmin,
+                                  xmax=xmax, ymin=ymin, ymax=ymax, cmin=cmin,
+                                  cmax=cmax)
+    else:
+        if kappa is not None:
+            kdata = tp.data.load.phono3py(kappa, 'ltc')
+        else:
+            kdata = None
+
+        tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=direction,
+                                  xinterp=interpolate, yinterp=interpolate,
+                                  kind=kind, colour=colour, xmin=xmin,
+                                  xmax=xmax, ymin=ymin, ymax=ymax, cmin=cmin,
+                                  cmax=cmax)
+
+    if save:
+        for ext in extension:
+            fig.savefig('{}.{}'.format(output, ext))
+    if show:
+        fig.show()
+
+    return
+
+
+@plot.command()
+@inputs_function(2)
+@click.option('--pf/--zt',
+              help='Power factor instead of ZT.  [default: zt]',
+              default=False,
+              show_default=False)
+@click.option('-k', '--kappa',
+              help='Phono3py kappa hdf5s. Ignored if ZT is in file. If '
+                   'otherwise unspecified, set to 1 (W m-1 K-1).',
+              type=click.Path(file_okay=True, dir_okay=False),
+              nargs=2)
+
+@direction_option
+@doping_type_option
+@interpolate_options
+
+@click.option('-c', '--colour',
+              help='Colour for each dataset. Colour format must be hex or a '
+                   'named colour recognised by matplotlib.',
+              nargs=2,
+              default=['#FF8000', '#800080'],
+              show_default=True)
+@click.option('--midcolour',
+              help='Colour at zero. Colour format must be hex or a named '
+                   'colour recognised by matplotlib.',
+              default='white',
+              show_default=True)
+
+@xy_limit_options
+@c_limit_options
+@legend_function()
+@plot_io_function('tp-ztdiff')
+
+def ztdiff(filenames, pf, kappa, direction, dtype, interpolate, kind, colour,
+           midcolour, xmin, xmax, ymin, ymax, cmin, cmax, legend, label,
+           legend_title, location, style, large, save, show, extension,
+           output):
+    """Plots ZT or PF difference against temperature and carrier concentration.
+    
+    Requires two input datasets. Arguments that take exactly two values do not
+    repeat the name e.g. -c red blue NOT -c red -c blue.
+    """
+
+    axes = tp.axes.large if large else tp.axes.small
+    if len(colour) == 1:
+        colour = colour[0]
+
+    edata = []
+    for i, f in enumerate(filenames):
+        try:
+            edata.append(tp.data.load.amset(f))
+        except UnicodeDecodeError:
+            edata.append(tp.data.load.boltztrap(f, doping=dtype))
+
+    fig, ax, add_legend = axes.one_colourbar(style)
+
+    if pf:
+        _, h, l = tp.plot.heatmap.add_pfdiff(ax, *edata, direction=direction,
+                   xinterp=interpolate, yinterp=interpolate, kind=kind,
+                   colour1=colour[0], colour2=colour[1], midcolour=midcolour,
+                   label1=label[0], label2=label[1], xmin=xmin, xmax=xmax,
+                   ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
+    else:
+        kdata = []
+        for i, k in enumerate(kappa):
+            if k is not None:
+                kdata.append(tp.data.load.phono3py(k))
+            else:
+                kdata.append(None)
+        _, h, l = tp.plot.heatmap.add_ztdiff(ax, edata[0], edata[1], kdata1=kdata[0],
+                   kdata2=kdata[1], direction=direction, xinterp=interpolate,
+                   yinterp=interpolate, kind=kind, colour1=colour[0],
+                   colour2=colour[1], midcolour=midcolour, label1=label[0],
+                   label2=label[1], xmin=xmin, xmax=xmax, ymin=ymin,
+                   ymax=ymax, cmin=cmin, cmax=cmax)
+
+    if legend:
+        if location is None:
+            add_legend(title=legend_title, handles=h, labels=l)
+        else:
+            add_legend(title=legend_title, location=location, handles=h,
+                       labels=l)
 
     if save:
         for ext in extension:

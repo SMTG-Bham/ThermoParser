@@ -302,6 +302,8 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         elif isinstance(colour, dict):
             colour = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isinstance(colour, str):
+            colours = [colour]
         else:
             colours = colour
 

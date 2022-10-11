@@ -439,6 +439,7 @@ def boltztrap(filename, quantities='all', doping='n'):
     with h5py.File(filename, 'r') as f:
         if 'all' in quantities:
             quantities = list(f.keys())
+            quantities.remove('meta')
         data = {'meta': {'doping_type':       doping,
                          'electronic_source': 'boltztrap',
                          'units':             {},
@@ -568,16 +569,17 @@ def phono3py(filename, quantities='all'):
                    '{} unrecognised. Quantity must be in {} or {}.'.format(q,
                    ', '.join(qs[:-1]), qs[-1])
             data[q2] = f[q][()]
-            for i, d in enumerate(dimensions[q2]):
-                if d == 6:
-                    data[q2] = np.moveaxis(data[q2], i, 0)
-                    data[q2] = [[data[q2][0], data[q2][5], data[q2][4]],
-                                [data[q2][5], data[q2][1], data[q2][3]],
-                                [data[q2][4], data[q2][3], data[q2][2]]]
-                    data[q2] = np.moveaxis(data[q2], 0, i+1)
-                    data[q2] = np.moveaxis(data[q2], 0, i+1)
-                    dimensions[q2][i] = 3
-                    dimensions[q2].insert(i, 3)
+            if q2 in dimensions:
+                for i, d in enumerate(dimensions[q2]):
+                    if d == 6:
+                        data[q2] = np.moveaxis(data[q2], i, 0)
+                        data[q2] = [[data[q2][0], data[q2][5], data[q2][4]],
+                                    [data[q2][5], data[q2][1], data[q2][3]],
+                                    [data[q2][4], data[q2][3], data[q2][2]]]
+                        data[q2] = np.moveaxis(data[q2], 0, i+1)
+                        data[q2] = np.moveaxis(data[q2], 0, i+1)
+                        dimensions[q2][i] = 3
+                        dimensions[q2].insert(i, 3)
 
         # check mode_kappa and correct for certain phono3py versions
         if 'mode_kappa' in data:

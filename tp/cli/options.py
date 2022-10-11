@@ -8,23 +8,21 @@ Functions
     doping_type_option
     doping_option
     dopings_option
-    dos_options
+    dos_function
     input_argument
-    inputs_argument
+    inputs_function
     interpolate_options
     kpoints_options
     legend_options
-    auto_legend_options
     line_options
     fill_options
-    plot_io_options
+    plot_io_function
     temperature_option
     verbose_option
     xy_limit_options
     c_limit_options
 """
 
-from email.policy import default
 import click
 
 def direction_option(f):
@@ -92,39 +90,47 @@ def dopings_option(f):
 
     return f
 
-def dos_options(f):
-    """Options for DoS plots.
-
-    Doesn't contain colour as this must be renamed.
-    """
-
-    f = click.option('-p', '--poscar',
-                     help='POSCAR path. Ignored if --atoms specified.',
-                     type=click.Path(file_okay=True, dir_okay=False),
-                     default='POSCAR',
-                     show_default=True)(f)
-    f = click.option('-a', '--atoms',
-                     help='Atoms in POSCAR order. Repeated names have their '
-                          'contributions summed, or different names can be '
-                          'used to separate environments. E.g. "Ba 1 Sn 1 O 3", '
-                          '"Ba Sn O O O" and "Ba Sn O 3" are all valid and '
-                          'equivalent. Overrides --poscar.')(f)
-    f = click.option('--projected/--notprojected',
-                     help='Plot atom-projected DoS.  [default: projected]',
-                     default=True,
-                     show_default=False)(f)
-    f = click.option('-t', '--total/--nototal',
-                     help='Plot total DoS.  [default: nototal]',
-                     default=False,
-                     show_default=False)(f)
-    f = click.option('--total-label',
-                     help='Label for the total line.',
-                     default='Total',
-                     show_default=True)(f)
-    f = click.option('--total-colour',
-                     help='Colour for the total line. Overrides --colour.')(f)
-
-    return f
+def dos_function(dosargs=['-c', '--colour']):
+    def dos_options(f):
+        """Options for DoS plots."""
+    
+        f = click.option('-p', '--poscar',
+                         help='POSCAR path. Ignored if --atoms specified.',
+                         type=click.Path(file_okay=True, dir_okay=False),
+                         default='POSCAR',
+                         show_default=True)(f)
+        f = click.option('-a', '--atoms',
+                         help='Atoms in POSCAR order. Repeated names have '
+                              'their contributions summed, or different names '
+                              'can be used to separate environments. E.g. '
+                              '"Ba 1 Sn 1 O 3", "Ba Sn O O O" and "Ba Sn O 3" '
+                              'are all valid and equivalent. '
+                              'Overrides --poscar.')(f)
+        f = click.option('--projected/--notprojected',
+                         help='Plot atom-projected DoS.  [default: projected]',
+                         default=True,
+                         show_default=False)(f)
+        f = click.option(*dosargs,
+                         help='Colour(s) in POSCAR order with total at the '
+                              'end or colourmap name. If --notprojected, a '
+                              'single colour can be specified. Total colour '
+                              'is overridden by --total-colour.',
+                         multiple=True,
+                         default=['tab10'],
+                         show_default=True)(f)
+        f = click.option('-t', '--total/--nototal',
+                         help='Plot total DoS.  [default: nototal]',
+                         default=False,
+                         show_default=False)(f)
+        f = click.option('--total-label',
+                         help='Label for the total line.',
+                         default='Total',
+                         show_default=True)(f)
+        f = click.option('--total-colour',
+                         help='Colour for the total line. Overrides --colour.')(f)
+    
+        return f
+    return dos_options
 
 def input_argument(f):
     """Option for an input file."""
@@ -135,15 +141,16 @@ def input_argument(f):
 
     return f
 
-def inputs_argument(f):
-    """Option for an input file."""
+def inputs_function(nargs=-1):
+    def inputs_argument(f):
+        """Option for input files."""
+        f = click.argument('filenames',
+                           type=click.Path(exists=True, file_okay=True,
+                                           dir_okay=False),
+                           nargs=nargs)(f)
 
-    f = click.argument('filenames',
-                       type=click.Path(exists=True, file_okay=True,
-                                       dir_okay=False),
-                       nargs=-1)(f)
-
-    return f
+        return f
+    return inputs_argument
 
 def interpolate_options(f):
     """Options for interpolation."""
@@ -179,45 +186,31 @@ def kpoints_options(f):
 
     return f
 
-def legend_options(f):
-    """Group of options for plot legends."""
-
-    f = click.option('-l', '--label',
-                     help='Legend label(s).',
-                     multiple=True,
-                     type=str,
-                     default=None)(f)
-    f = click.option('--legend_title',
-                     help='Legend title.')(f)
-    f = click.option('--location',
-                     help='Legend location. Accepts strings such as '
-                          'above and below, as well as 1-indexed '
-                          'ordinals corresponding to inside those axes',
-                     type=str)(f)
-
-    return f
-
-def auto_legend_options(f):
-    """Group of options for auto-generating plot legends."""
-
-    f = click.option('-l', '--label',
-                     help='Legend label(s).',
-                     multiple=True,
-                     type=str,
-                     default=None)(f)
-    f = click.option('--legend_title',
-                     help='Legend title.')(f)
-    f = click.option('--legend/--nolegend',
-                     help='Show legend.  [default: legend]',
-                     default=True,
-                     show_default=False)(f)
-    f = click.option('--location',
-                     help='Legend location. Accepts strings such as '
-                          'above and below, as well as 1-indexed '
-                          'ordinals corresponding to inside those axes',
-                     type=str)(f)
-
-    return f
+def legend_function(toggle=True, label=True):
+    def legend_options(f):
+        """Group of options for plot legends."""
+    
+        if label:
+            f = click.option('-l', '--label',
+                             help='Legend label(s).',
+                             multiple=True,
+                             type=str,
+                             default=None)(f)
+        f = click.option('--legend_title',
+                         help='Legend title.')(f)
+        if toggle:
+            f = click.option('--legend/--nolegend',
+                             help='Show legend.  [default: legend]',
+                             default=True,
+                             show_default=False)(f)
+        f = click.option('--location',
+                         help='Legend location. Accepts strings such as '
+                              'above and below, as well as 1-indexed '
+                              'ordinals corresponding to inside those axes',
+                         type=str)(f)
+    
+        return f
+    return legend_options
 
 def line_options(f):
     """Group of options for line plots"""
@@ -256,36 +249,42 @@ def fill_options(f):
 
     return f
 
-def plot_io_options(f):
-    """Group of options for plot file I/O."""
+def plot_io_function(name):
+    def plot_io_options(f):
+        """Group of options for plot file I/O."""
+    
+        f = click.option('-s', '--style',
+                         help='Style sheet to overlay. Later ones override '
+                              'earlier ones.',
+                         multiple=True,
+                         default=[],
+                         type=str,
+                         show_default=False)(f)
+        f = click.option('--large/--small',
+                         help='Axes size.  [default: small]',
+                         default=False,
+                         show_default=False)(f)
+        f = click.option('--save/--nosave',
+                         help='Write to file.  [default: save]',
+                         default=True,
+                         show_default=False)(f)
+        f = click.option('--show/--noshow',
+                         help='Show plot.  [default: noshow]',
+                         default=False,
+                         show_default=False)(f)
+        f = click.option('--extension',
+                         help='Output extension(s). Requires --save.',
+                         multiple=True,
+                         default=['pdf'],
+                         type=str,
+                         show_default=True)(f)
+        f = click.option('-o', '--output',
+                         help='Output filename, sans extension.',
+                         default=name,
+                         show_default=True)(f)
 
-    f = click.option('-s', '--style',
-                     help='Style sheet to overlay. Later ones override '
-                          'earlier ones.',
-                     multiple=True,
-                     default=[],
-                     type=str,
-                     show_default=False)(f)
-    f = click.option('--large/--small',
-                     help='Axes size.  [default: small]',
-                     default=False,
-                     show_default=False)(f)
-    f = click.option('--save/--nosave',
-                     help='Write to file.  [default: save]',
-                     default=True,
-                     show_default=False)(f)
-    f = click.option('--show/--noshow',
-                     help='Show plot.  [default: noshow]',
-                     default=False,
-                     show_default=False)(f)
-    f = click.option('--extension',
-                     help='Output extension(s). Requires --save.',
-                     multiple=True,
-                     default=['pdf'],
-                     type=str,
-                     show_default=True)(f)
-
-    return f
+        return f
+    return plot_io_options
 
 def temperature_option(f):
     """Option for temperature selection."""
