@@ -2,11 +2,11 @@
 
 __name__ =       'ThermoPlotter'
 __author__ =     'Kieran B. Spooner'
-__copyright__ =  'Copyright Scanlon Materials Theory Group (2020)'
-__version__ =    '2.0.0'
+__copyright__ =  'Copyright Scanlon Materials Theory Group (2022)'
+__version__ =    '2.3.0'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
-__date__ =       'February 4th 2021'
+__date__ =       'October 12th 2022'
 
 import os
 import setuptools

@@ -10,7 +10,7 @@ temperature = 300
 
 colour = ['#000000', '#ff0000']
 
-# You can ignore down to line 21!
+# You can ignore down to line 20!
 from os import path
 if not path.isfile(kfile) or (path.getsize(kfile) < 1024*1024*100):
     raise Exception('File not found, please use get-data.sh')

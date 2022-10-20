@@ -12,7 +12,7 @@ much larger text, which work well for presentations and posters but can
 take much longer to render.
 
 Each function returns a figure, a set of axes or a list of sets of axes
-if there are more than one, and a function to add a legend. The
+if there are more than one, and a function to add a legend. The legend
 function takes all the normal ax.legend options, excluding ``loc`` and
 ``bbox_to_anchor``, as well as ``location``, which determines the
 legend position (e.g. ``above``), and if there are multiple axes,

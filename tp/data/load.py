@@ -18,6 +18,7 @@ Functions
         gets high path from phonopy dispersion data.
 """
 
+from re import L
 import numpy as np
 import tp
 from tp import settings
@@ -226,11 +227,15 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
             'weighted_rates': ['scattering_rates', 'weighted_rates']}
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
-    for i in range(len(quantities)):
+    l = len(quantities)
+    i = 0
+    while i < l:
         if quantities[i] in subs:
-            quantities[i] = subs[quantities[i]]
-
-    quantities = list(np.ravel(quantities))
+            quantities.extend(subs[quantities[i]])
+            del quantities[i]
+            l -= 1
+        else:
+            i += 1
 
     # add dependent variables
 
@@ -347,14 +352,14 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
             q = anames[q2] if q2 in anames else q2
             if q2 in dimensions and 'doping' in dimensions[q2]:
                 # temperature in first index for consistency with other codes
-                if 'stype' in dimensions[q]:
-                    if 'temperature' in dimensions[q]:
+                if 'stype' in dimensions[q2]:
+                    if 'temperature' in dimensions[q2]:
                         data[q2] = np.swapaxes(data[q2],1,2)
                         data[q2] = np.array(data[q2])[:,:,di]
                     else:
                         data[q2] = np.array(data[q2])[:,di]
                 else:
-                    if 'temperature' in dimensions[q]:
+                    if 'temperature' in dimensions[q2]:
                         data[q2] = np.swapaxes(data[q2],0,1)
                         data[q2] = np.array(data[q2])[:,di]
                     else:

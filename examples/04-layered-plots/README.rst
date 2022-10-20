@@ -1,3 +1,7 @@
+--------------------------
+Tutorial-04: Layered Plots
+--------------------------
+
 .. image:: phonons.png
    :alt: Phonon dispersion convergence, density of states  and mean free path of BaSnO<sub>3</sub>.
 
@@ -9,17 +13,22 @@ with supercell size. Although this can start to make scripts more
 complicated, and is not yet supported by the CLI, it is often worth the
 effort.
 
-----
-Axes
-----
+The python version of this code is:
+
+.. literalinclude:: plot-phonons.py
+   :language: python
+   :linenos:
+   :emphasize-lines: 29,32,38-44,48-51
+
+Axes (line 29)
+--------------
 
 Here we use ``two_h``. h stands for horizontal, and there is a
 corresponding vertical set of axes, ``two_v``. They also come with
 space for colourbars, by adding ``_colourbars`` to their names.
 
-----
-Load
-----
+Load (line 32)
+--------------
 
 We need lists of files here, we've used list comprehensions to generate
 the file names and load them, but you could also use something like:
@@ -31,9 +40,8 @@ the file names and load them, but you could also use something like:
 
 Although in that case, you would also need to define the labels.
 
-----
-Plot
-----
+Plot (lines 38-44)
+------------------
 
 ``add_dos`` and ``add_cumkappa`` have the arguments ``main`` and
 ``scale``, which enable them to be used on the same axes as plots with
@@ -51,9 +59,8 @@ the waterfall plot. Running ``format_waterfall``, then ``add_dos``,
 then ``add_waterfall`` solves this, however it doesn't work properly if
 ``line=True``.
 
-----------
-Formatting
-----------
+Formatting (lines 48-51)
+------------------------
 
 Setting ``invert`` removes the y-axis labels and shortens the x-axis
 one in anticipation of being a DoS-style set of axes, but this can be

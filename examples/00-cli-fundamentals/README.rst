@@ -1,3 +1,7 @@
+-----------------------------
+Tutorial-00: CLI Fundamentals
+-----------------------------
+
 The simplest way to use ThermoPlotter is via the command-line interface
 (CLI). This is easily navigable due to its modular structure. To get
 started, simply type ``tp`` into the command line, and a list of
@@ -11,7 +15,7 @@ a detailed description of how to use the function, e.g.
 Typically, you will need one or more data files, which are inputted
 directly after the command, e.g. ``tp plot avg-rates mesh.h5``. Then
 there is a list of optional inputs for customisation. Options with a
-slash, e.g. ``--total / --nototal`` are toggles, which can be appended
+slash, e.g. ``--total/--nototal`` are toggles, which can be appended
 by themselves, while other options normally require something else
 written afterwards, e.g. ``-n 1e19``. If there is a list in square
 brackets, the appended text must be from that list. Many options can

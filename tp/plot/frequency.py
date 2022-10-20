@@ -45,10 +45,10 @@ except yaml.parser.ParserError:
 except FileNotFoundError:
     conf = None
 
-def add_dos(ax, data, projected=True, total=False, totallabel='Total',
-            main=True, invert=False, scale=False, colour='tab10',
-            totalcolour=None, fill=True, fillalpha=0.2, line=True,
-            linestyle='-', marker=None, **kwargs):
+def add_dos(ax, data, sigma=None, projected=True, total=False,
+            totallabel='Total', main=True, invert=False, scale=False,
+            colour='tab10', totalcolour=None, fill=True, fillalpha=0.2,
+            line=True, linestyle='-', marker=None, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments
@@ -58,6 +58,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             axes to plot on.
         data : dict
             DoS data.
+        sigma : float
+            Gaussian broadening. 0.2 is a good place to start. Does not
+            know if you've already broadened it. Default: None.
 
         projected : bool, optional
             plot atom-projected DoS. Default: True.
@@ -143,6 +146,42 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
     f = data.pop('frequency')
     if 'meta' in data: del data['meta']
     if not total: del data['total']
+
+    # find the true ends of the data and truncate to there
+    n = int(np.ceil(0.9*len(f)))
+    for key in data:
+        while n < len(f) - 1 and data[key][n] != 0:
+            n += 1
+    n += 1
+    f = f[:n]
+    for key in data:
+        data[key] = data[key][:n]
+
+    n = int(np.ceil(0.1*len(f)))
+    for key in data:
+        while n > 0 and data[key][n] != 0:
+            n -= 1
+    f = f[n:]
+    for key in data:
+        data[key] = data[key][n:]
+
+    fmin, fmax = f[0], f[-1]
+    fstep = f[1] - f[0]
+
+    if sigma is not None:
+        # extend the data to 3 sigma above and below
+        while f[-1] < fmax + 3 * sigma:
+            f = np.append(f, f[-1] + fstep)
+
+        while f[0] > fmin - 3 * sigma:
+            f = np.insert(f, 0, f[0] - fstep)
+
+        data2 = {}
+        for key in data:
+            data2[key] = np.zeros(len(f))
+            for i, d in enumerate(data[key]):
+                data2[key] += d * tp.calculate.gaussian(f, f[i], sigma)
+        data = data2
 
     if scale:
         axscale = [0, 100] if main else None
@@ -272,34 +311,39 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
                 if fill and line:
                     ax.fill_between(data[key], f, facecolor=colour[key],
                                     linewidth=0, alpha=fillalpha)
-                    ax.plot(data[key], f, label=key, color=colour[key],
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(data[key], f, label='${}$'.format(key),
+                            color=colour[key], linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
                 elif fill and not line:
-                    ax.fill_between(data[key], f, label=key,
+                    ax.fill_between(data[key], f, label='${}$'.format(key),
                                     facecolor=colour[key], linewidth=0,
                                     alpha=fillalpha)
                 else:
-                    ax.plot(data[key], f, label=key, color=colour[key],
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(data[key], f, label='${}$'.format(key),
+                            color=colour[key], linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
             else:
                 if fill and line:
                     ax.fill_between(f, data[key], facecolor=colour[key],
                                     linewidth=0, alpha=fillalpha)
-                    ax.plot(f, data[key], color=colour[key], label=key,
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(f, data[key], color=colour[key],
+                            label='${}$'.format(key), linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
                 elif fill and not line:
-                    ax.fill_between(f, data[key], label=key,
+                    ax.fill_between(f, data[key], label='${}$'.format(key),
                                     facecolor=colour[key], linewidth=0,
                                     alpha=fillalpha)
                 else:
-                    ax.plot(f, data[key], label=key, color=colour[key],
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(f, data[key], label='${}$'.format(key),
+                            color=colour[key], linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
 
     # axes formatting
+
+    if sigma is not None:
+        fmax += sigma
+    else:
+        fmax *= 1.01
 
     if main:
         if invert:
@@ -308,6 +352,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             ax.set_xlabel(axlabels['dos'], labelpad=pad)
             ax.tick_params(axis='y', labelleft=False)
             ax.set_xlim(left=0)
+            ax.set_ylim(top=fmax)
+            if round(fmin, 1) >= 0.:
+                ax.set_ylim(bottom=0)
             tp.plot.utilities.set_locators(ax, x='null', y='linear')
         else:
             axlabels = tp.settings.labels()
@@ -315,6 +362,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             ax.set_xlabel(axlabels['frequency'])
             ax.set_ylabel(axlabels['dos'], labelpad=pad)
             ax.set_ylim(bottom=0)
+            ax.set_xlim(right=fmax)
+            if round(fmin, 1) >= 0.:
+                ax.set_xlim(left=0)
             tp.plot.utilities.set_locators(ax, y='null', x='linear')
 
     return
@@ -941,7 +991,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
 
     # defaults
 
-    defkwargs = {'s':      1,
+    defkwargs = {'s':      20,
                  'rasterized': True}
 
     if conf is None or 'density_kwargs' not in conf or \

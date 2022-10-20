@@ -21,13 +21,8 @@ def merge(data, dependent):
 
     Particularly with amset in mind, to relieve memory constraints.
     Currently works for one dependent variable, so looping will often
-    bre required. An output in the form:
-
-    ab
-
-    cd
-
-    would require three merges: a to b, c to d and ab to cd (or a to c etc.).
+    be required. An output in the form [ab,cd] would require three
+    merges: a to b, c to d and ab to cd (or a to c etc.).
 
     Arguments
     ---------
@@ -41,7 +36,7 @@ def merge(data, dependent):
     -------
 
         dict
-            merged data
+            merged data.
     """
     depi = [list(range(len(data[0][dependent])))]
     data2 = {dependent: data[0][dependent],
@@ -96,12 +91,13 @@ def resolve(data, quantities, **kwargs):
                     average/ avg/ mean/ arithmetic/ arith,  or
                     norm/ normal or harmonic/ harm.
                 dtype
-                    n or p
+                    n or p.
                 stype
-                    codes from amset, e.g. IMP, or overall
+                    codes from amset, e.g. IMP, or overall.
                 doping
-                    concentration, not to be confused with dtype
+                    concentration, not to be confused with dtype.
                 temperature
+                    temperature.
 
     Returns
     -------

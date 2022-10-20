@@ -1,7 +1,10 @@
+----------------------------------
+Tutorial-06: Package Customisation
+----------------------------------
+
 First we'll look at the ``tprc.yaml``, which can customise how
 ThermoPlotter behaves, and then how you might expand it.
 
----------
 tprc.yaml
 ---------
 
@@ -42,7 +45,6 @@ matplotlib plotting function, such as ``plt.plot``. These override
 defaults set in the ThermoPlotter plotting function, but are overridden
 by arguments specified by the user.
 
------------------------
 Extending ThermoPlotter
 -----------------------
 

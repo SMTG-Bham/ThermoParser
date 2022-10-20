@@ -91,6 +91,8 @@ def dopings_option(f):
     return f
 
 def dos_function(dosargs=['-c', '--colour']):
+    if isinstance(dosargs, str):
+        dosargs = [dosargs]
     def dos_options(f):
         """Options for DoS plots."""
     
@@ -106,6 +108,12 @@ def dos_function(dosargs=['-c', '--colour']):
                               '"Ba 1 Sn 1 O 3", "Ba Sn O O O" and "Ba Sn O 3" '
                               'are all valid and equivalent. '
                               'Overrides --poscar.')(f)
+        f = click.option('--sigma',
+                         help='Standard deviation of Gaussian broadening. 0.2 '
+                              'is a good place to start. Does not know if '
+                              'you\'ve already broadened it. Off by default.',
+                        type=float,
+                        default=None)(f)
         f = click.option('--projected/--notprojected',
                          help='Plot atom-projected DoS.  [default: projected]',
                          default=True,
@@ -132,19 +140,10 @@ def dos_function(dosargs=['-c', '--colour']):
         return f
     return dos_options
 
-def input_argument(f):
-    """Option for an input file."""
-
-    f = click.argument('filename',
-                       type=click.Path(exists=True, file_okay=True,
-                                       dir_okay=False))(f)
-
-    return f
-
-def inputs_function(nargs=-1):
+def inputs_function(name='filenames', nargs=-1):
     def inputs_argument(f):
         """Option for input files."""
-        f = click.argument('filenames',
+        f = click.argument(name,
                            type=click.Path(exists=True, file_okay=True,
                                            dir_okay=False),
                            nargs=nargs)(f)

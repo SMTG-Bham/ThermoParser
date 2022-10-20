@@ -33,12 +33,12 @@ kdata = tp.data.load.phono3py(kfile)
 # Plot
 for i, q in enumerate(quantities):
     for d in doping:
-        data = tp.data.resolve.resolve(adata, q, direction=direction, doping=d)
+        data = tp.data.utilities.resolve(adata, q, direction=direction, doping=d)
         ax[i].plot(data['temperature'], data[q],
                    label="{:.2e}".format(data['meta']['doping']))
 
 q = 'lattice_thermal_conductivity'
-data = tp.data.resolve.resolve(kdata, q, direction=direction)
+data = tp.data.utilities.resolve(kdata, q, direction=direction)
 ax[2].plot(data['temperature'], data[q])
 
 # Formatting

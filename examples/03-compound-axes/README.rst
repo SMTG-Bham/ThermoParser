@@ -1,3 +1,7 @@
+--------------------------
+Tutorial-03: Compound Axes
+--------------------------
+
 .. image:: phonons.png
    :alt: Phonon dispersion and density of states of ZnO.
 
@@ -12,18 +16,23 @@ The CLI version of this code is:
    
    tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --doscolour '#d46ef9' --doscolour '#7b8eff' --legend_title ZnO --location 2
 
-----
-Axes
-----
+And the python version is:
+
+.. literalinclude:: plot-phonons.py
+   :language: python
+   :linenos:
+   :emphasize-lines: 15,22,23,27
+
+Axes (line 15)
+--------------
 
 Rather than discard the ``add_legend`` function, we now need to keep
 it. We also a different axes function, ``one_dos``, which contains a
 standard set of axes and a small ancillary one for the DoS. As there
 are multiple axes, ``ax`` is now a list of axes.
 
-----
-Plot
-----
+Plot (lines 22-23)
+------------------
 
 As ``ax`` is a list, we need to index it with ``[]`` to select which
 one we want to plot on. The order is always the same as they appear on
@@ -39,9 +48,8 @@ are either atom names (e.g. Zn) or numbers corresponding to the
 previous atom name. In this way, atoms in different environments can be
 separated, or multiple unalike atoms can be plotted as one.
 
-------
-Legend
-------
+Legend (line 27)
+----------------
 
 ``add_legend`` places a legend at one of several pre-designed places,
 depending on the axes function. The default is usually to the right of,

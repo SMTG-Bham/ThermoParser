@@ -13,7 +13,7 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.0.0\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.3.0\
     |_________________________________:______________________________________:_____/
 
 
@@ -172,6 +172,7 @@ Roughly chronologically, they are so far:
 * Sean R. Kavanagh
 * Warda Rahim
 * Katarina Brlec
+* Joe Willis
 
 License
 -------
@@ -193,4 +194,3 @@ ThermoPlotter uses the following open-source packages:
 * `scipy <https://www.scipy.org>`_
 * `sphinx <https://www.sphinx-doc.org>`_
 * `yaml <https://pyyaml.org/>`_
-
