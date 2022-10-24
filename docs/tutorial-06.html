@@ -38,21 +38,22 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html">Tutorial-00: CLI Fundamentals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html">Tutorial-01: Python Foundations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html">Tutorial-02: Individual Customisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html">Tutorial-03: Compound Axes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-04.html">Tutorial-04: Layered Plots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html">Tutorial-05: Helper Functions</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial-06: Package Customisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html"> Tutorial-00: CLI Fundamentals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html"> Tutorial-01: Python Foundations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html"> Tutorial-02: Individual Customisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html"> Tutorial-03: Compound Axes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-04.html"> Tutorial-04: Layered Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html"> Tutorial-05: Helper Functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Tutorial-06: Package Customaisation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tprc-yaml">tprc.yaml</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#extending-thermoplotter">Extending ThermoPlotter</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html">Tutorial-0X: VASP Assists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
@@ -114,17 +115,19 @@ dictionaries like the locators. The aliases are listed as:</p>
 </div>
 <p>If you add unit conversions, remember to update the units and labels
 too! An example has been provided for converting from
-S m&lt;sup&gt;-1&lt;/sup&gt; to S cm&lt;sup&gt;-1&lt;/sup&gt;. There are six labels
-dictionaries. <code class="docutils literal notranslate"><span class="pre">long_</span></code>, <code class="docutils literal notranslate"><span class="pre">medium_</span></code> and <code class="docutils literal notranslate"><span class="pre">short_labels</span></code> contain the
-actual labels of those lengths, while <code class="docutils literal notranslate"><span class="pre">labels</span></code>, <code class="docutils literal notranslate"><span class="pre">inverted_labels</span></code>
-and <code class="docutils literal notranslate"><span class="pre">large_labels</span></code> point to which of those you would like to default
-to for small, inverted and large axes, respectively. For example, if
-you prefer to put a inverted DoSs in a separate axes rather than a DoS
-axes, you may want to set <code class="docutils literal notranslate"><span class="pre">inverted_labels:</span> <span class="pre">long</span></code>. Finally, there are
-the default <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for each function, which are passed to the
-matplotlib plotting function, such as <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>. These override
-defaults set in the ThermoPlotter plotting function, but are overridden
-by arguments specified by the user.</p>
+S m<sup>-1</sup> to S cm<sup>-1</sup> <a class="reference external" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/06-package-customisation/tprc.yaml">here</a>.
+There are six labels dictionaries. <code class="docutils literal notranslate"><span class="pre">long_</span></code>, <code class="docutils literal notranslate"><span class="pre">medium_</span></code> and
+<code class="docutils literal notranslate"><span class="pre">short_labels</span></code> contain the actual labels of those lengths, while
+<code class="docutils literal notranslate"><span class="pre">labels</span></code>, <code class="docutils literal notranslate"><span class="pre">inverted_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">large_labels</span></code> point to which of
+those you would like to default to for small, inverted and large axes,
+respectively. For example, if you prefer to put a inverted DoSs in a
+separate axes rather than a DoS axes, you may want to set
+<code class="docutils literal notranslate"><span class="pre">inverted_labels:</span> <span class="pre">long</span></code>. Finally, there are the default <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>
+for each function, which are passed to the matplotlib plotting
+function, such as <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>. These override defaults set in the
+ThermoPlotter plotting function, but are overridden by arguments
+specified by the user (in the Python inteface, extra arguments will be
+passed on to the underlying matplotlib plotting function).</p>
 </div>
 <div class="section" id="extending-thermoplotter">
 <h2>Extending ThermoPlotter<a class="headerlink" href="#extending-thermoplotter" title="Permalink to this headline">¶</a></h2>

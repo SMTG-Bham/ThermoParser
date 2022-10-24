@@ -38,23 +38,24 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html">Tutorial-00: CLI Fundamentals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html">Tutorial-01: Python Foundations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html">Tutorial-02: Individual Customisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html">Tutorial-03: Compound Axes</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial-04: Layered Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html"> Tutorial-00: CLI Fundamentals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html"> Tutorial-01: Python Foundations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html"> Tutorial-02: Individual Customisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html"> Tutorial-03: Compound Axes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Tutorial-04: Layered Plots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#axes-line-29">Axes (line 29)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load-line-32">Load (line 32)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plot-lines-38-44">Plot (lines 38-44)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#formatting-lines-48-51">Formatting (lines 48-51)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html">Tutorial-05: Helper Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-06.html">Tutorial-06: Package Customisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html">Tutorial-0X: VASP Assists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html"> Tutorial-05: Helper Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-06.html"> Tutorial-06: Package Customaisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
@@ -231,9 +232,9 @@ the file names and load them, but you could also use something like:</p>
 <h2>Plot (lines 38-44)<a class="headerlink" href="#plot-lines-38-44" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">add_dos</span></code> and <code class="docutils literal notranslate"><span class="pre">add_cumkappa</span></code> have the arguments <code class="docutils literal notranslate"><span class="pre">main</span></code> and
 <code class="docutils literal notranslate"><span class="pre">scale</span></code>, which enable them to be used on the same axes as plots with
-other axis scales. <code class="docutils literal notranslate"><span class="pre">main``causes</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">ticks,</span> <span class="pre">labels</span> <span class="pre">and</span> <span class="pre">limits</span> <span class="pre">to</span>
-<span class="pre">be</span> <span class="pre">set</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">plot,</span> <span class="pre">so</span> <span class="pre">turning</span> <span class="pre">it</span> <span class="pre">off</span> <span class="pre">doesn't</span> <span class="pre">interfere</span> <span class="pre">with</span> <span class="pre">the</span>
-<span class="pre">current</span> <span class="pre">configuration.</span> <span class="pre">``scale</span></code> scales the data to the axes, rather
+other axis scales. <code class="docutils literal notranslate"><span class="pre">main</span></code> causes the axes ticks, labels and limits to
+be set for the plot, so turning it off doesn’t interfere with the
+current configuration. <code class="docutils literal notranslate"><span class="pre">scale</span></code> scales the data to the axes, rather
 than the axes to the data, so everything is visible. If both <code class="docutils literal notranslate"><span class="pre">main</span></code>
 and <code class="docutils literal notranslate"><span class="pre">scale</span></code> are set, the y-axis (or x, if <code class="docutils literal notranslate"><span class="pre">invert</span></code>) is scaled to
 percent.</p>
@@ -252,7 +253,7 @@ reversed with some helper functions: <code class="docutils literal notranslate">
 scales and tick locators for each axis, and also has a DoS argument,
 which removes the ticks and tick labels and the y axis label, while all
 the default labels can be accessed with <code class="docutils literal notranslate"><span class="pre">settings.labels</span></code>. These will
-be covered more in <code class="docutils literal notranslate"><span class="pre">05-helper-functions</span></code>.</p>
+be covered more in <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html">Tutorial-05</a>.</p>
 </div>
 </div>
 
