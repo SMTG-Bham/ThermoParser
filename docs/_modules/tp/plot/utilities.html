@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.plot.utilities &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.plot.utilities &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,6 +35,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
@@ -220,15 +221,20 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="n">colour</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span> <span class="c1"># rgb</span>
+                <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="c1"># hex or named</span>
+                <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">*</span><span class="n">colour</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">**</span><span class="n">colour</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;colour must be a colourmap, colourmap &#39;</span>
-                            <span class="s1">&#39;name, single #rrggbb highlight colour or &#39;</span>
-                            <span class="s1">&#39;highlight, min, max #rrggbb colours in &#39;</span>
-                            <span class="s1">&#39;that order, or a dictionary with cmid and &#39;</span>
-                            <span class="s1">&#39;cmin and/or cmax keys.&#39;</span><span class="p">)</span>
+                            <span class="s1">&#39;name, single highlight colour or &#39;</span>
+                            <span class="s1">&#39;highlight, min, max colours in that &#39;</span>
+                            <span class="s1">&#39;order, or a dictionary with cmid and &#39;</span>
+                            <span class="s1">&#39;cmin and/or cmax keys. Colour format must &#39;</span>
+                            <span class="s1">&#39;be hex rgb (array) or a named colour &#39;</span>
+                            <span class="s1">&#39;recognised by matplotlib. &#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cmap</span></div>
 

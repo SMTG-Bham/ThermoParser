@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp package &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>tp package &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -37,6 +37,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
@@ -50,6 +51,8 @@
 <li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.plot.html">tp.plot package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.cli.html">tp.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.setup.html">tp.setup package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -104,20 +107,16 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tp.axes.html">tp.axes package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tp.axes.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.four">tp.axes.four module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.small">tp.axes.small module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tp.axes.html#functions">Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.one">tp.axes.one module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.large">tp.axes.large module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tp.axes.html#id1">Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.three">tp.axes.three module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.legend">tp.axes.legend module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tp.axes.html#id2">Functions</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes.two">tp.axes.two module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tp.axes.html#id3">Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-tp.axes">Module contents</a><ul>
@@ -128,12 +127,11 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tp.data.html">tp.data package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tp.data.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tp.data.html#tp-data-aniso-module">tp.data.aniso module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-tp.data.load">tp.data.load module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tp.data.html#functions">Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-tp.data.resolve">tp.data.resolve module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-tp.data.utilities">tp.data.utilities module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tp.data.html#id1">Functions</a></li>
 </ul>
 </li>
@@ -141,7 +139,10 @@
 <li class="toctree-l3"><a class="reference internal" href="tp.data.html#id2">Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-tp.data.save">tp.data.save module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-tp.data.save">tp.data.save module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tp.data.html#id3">Functions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-tp.data">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tp.data.html#modules">Modules</a></li>
 </ul>
@@ -180,6 +181,34 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tp.cli.html">tp.cli package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#module-tp.cli.cli">tp.cli.cli module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tp.cli.html#functions">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#module-tp.cli.options">tp.cli.options module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tp.cli.html#id1">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#module-tp.cli">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tp.cli.html#modules">Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tp.setup.html">tp.setup package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.setup.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.setup.html#module-tp.setup.vasp">tp.setup.vasp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tp.setup.html#functions">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tp.setup.html#module-tp.setup">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tp.setup.html#modules">Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -196,7 +225,9 @@
 <div><dl class="simple">
 <dt>cumulate:</dt><dd><p>sorts and cumulates.</p>
 </dd>
-<dt>lorentzian:</dt><dd><p>lorentzian curve.</p>
+<dt>gaussian:</dt><dd><p>gaussian distribution of height 1.</p>
+</dd>
+<dt>lorentzian:</dt><dd><p>area conserved lorentzian distribution.</p>
 </dd>
 <dt>lifetime:</dt><dd><p>particle lifetime.</p>
 </dd>
@@ -205,6 +236,8 @@
 <dt>be_occupation:</dt><dd><p>boson occupation.</p>
 </dd>
 <dt>dfdde:</dt><dd><p>derivative of the Fermi-Dirac distribution.</p>
+</dd>
+<dt>thermal_conductivity:</dt><dd><p>total thermal conductivity.</p>
 </dd>
 <dt>power_factor:</dt><dd><p>power factor.</p>
 </dd>
@@ -271,7 +304,7 @@
 <dl class="py function">
 <dt id="tp.calculate.dfdde">
 <code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">dfdde</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">fermi_level</span></em>, <em class="sig-param"><span class="n">temperature</span></em>, <em class="sig-param"><span class="n">doping</span></em>, <em class="sig-param"><span class="n">amset_order</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_tprc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#dfdde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.dfdde" title="Permalink to this definition">¶</a></dt>
-<dd><p>Derivative of the Fermi-Dirac distribution.</p>
+<dd><p>Derivative of the Fermi-Dirac distribution wrt energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -305,6 +338,27 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>converted values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.calculate.gaussian">
+<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">gaussian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">x0</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">sigma</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gaussian function with height 1 centered on x0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like</em>) – x-values.</p></li>
+<li><p><strong>x0</strong> (<em>float</em>) – origin of function.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – standard deviation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Gaussian</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -430,7 +484,7 @@ in W m-1 K-1).</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>lorentzian</p>
+<dd class="field-even"><p>Lorentzian</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -506,6 +560,27 @@ group velocity.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.calculate.thermal_conductivity">
+<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">thermal_conductivity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">etc</span></em>, <em class="sig-param"><span class="n">ltc</span></em>, <em class="sig-param"><span class="n">use_tprc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#thermal_conductivity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.thermal_conductivity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates ZT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>etc</strong> (<em>array-like</em>) – electronic thermal conductivities (by default in W m-1 K-1).</p></li>
+<li><p><strong>ltc</strong> (<em>array-like</em>) – lattice thermal conductivities (by default in W m-1 K-1).</p></li>
+<li><p><strong>use_tprc</strong> (<em>bool</em><em>, </em><em>optional</em>) – use custom unit conversions. Default: True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>thermal conductivity.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -671,7 +746,7 @@ that.</p>
 <dl class="py function">
 <dt id="tp.settings.labels">
 <code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">labels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.labels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the default labels for use in tp.</p>
+<dd><p>Get the default labels for small axes in tp.</p>
 </dd></dl>
 
 <dl class="py function">

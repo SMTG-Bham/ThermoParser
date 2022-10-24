@@ -10,13 +10,14 @@ Functions
         add markers lines to a linear plot.
 """
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import tp.settings
 import warnings
 import yaml
-from tp.data import resolve
+from tp.data import utilities
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
@@ -194,7 +195,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
     for dat in data:
         for d in direction:
-            data2 = resolve.resolve(dat, ['mode_kappa', 'mean_free_path'],
+            data2 = utilities.resolve(dat, ['mode_kappa', 'mean_free_path'],
                                     temperature=temperature, direction=d)
             k = np.ravel(data2['mode_kappa'])
             mfp = np.abs(np.ravel(data2['mean_free_path']))
@@ -223,7 +224,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
             linestyle1 = linestyle[i % len(linestyle)]
             marker1 = marker[i % len(marker)]
             if label is not None:
-                label1 = "${}$".format(label[i % len(label)])
+                label1 = label[i % len(label)]
             else:
                 label1 = None
 
@@ -232,7 +233,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
 
             if fill:
                 try:
-                    fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
+                    fillcolour2 = mpl.colors.to_rgba(colour1, fillcolour1)
                 except ValueError:
                     if isinstance(colour1, list) and \
                        isinstance(fillcolour1, (float, int)) and \

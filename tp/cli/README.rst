@@ -12,7 +12,9 @@ practical differences for the user:
    information at every step.
 2. Multiple arguments must use the ``--thing`` every time, i.e. in
    ``argparse`` you may type ``-d a b c``, but in ``click`` you must
-   type ``-d a -d b -d c``.
+   type ``-d a -d b -d c``. The exception is in ``ztdiff``, where kappa
+   and colour take exactly two arguments and are labelled only once
+   (i.e. --c red blue).
 
 .. _click: https://click.palletsprojects.com/en/8.0.x/
 
@@ -36,7 +38,8 @@ Generates inputs for VASP.
 Gets specific data points from a data file. Rounds dependent variables
 to the nearest datum in the file and doesn't interpolate, but will tell
 you the exact conditions it used (as opposed to the ones you inputted).
-Based around the ``tp.data.resolve.resolve`` function.
+``get zt`` additionally has a ``--max`` option for max ZT.
+Based around the ``tp.data.utilities.resolve`` function.
 
 - ``tp get amset``
 - ``tp get boltztrap``
@@ -72,15 +75,19 @@ Plotting tools.
   represent doping concentration, direction or files. Auto-generates
   legend.
 - ``tp plot waterfall``: third-order phonon properties per band and
-  qpoint. Can have an optional quantitt projected on the colour axis,
+  qpoint. Can have an optional quantity projected on the colour axis,
   or be converted to a density map. Python:
   ``tp.plot.frequency.add_waterfall`` or
   ``tp.plot.frequency.add_projected_waterfall`` or
   ``tp.plot.frequency.add_density``.
 - ``tp plot wideband``: broadened phonon dispersion, indicating
   scattering. Python: ``tp.plot.phonons.add_wideband``.
-- ``tp plot ztmap``: heatmap of zt against temperature and carrier
-  concentration. Python: ``tp.plot.heatmap.add_ztmap``.
+- ``tp plot ztmap``: heatmap of ZT or power factor against temperature
+  and carrier concentration. Python: ``tp.plot.heatmap.add_ztmap``. or
+  ``tp.plot.heatmap.add_pfmap``.
+- ``tp plot ztdiff``: heatmap of the difference of two ZTs or power
+  factors against temperature and carrier concentration. Python:
+  ``tp.plot.heatmap.add_ztdiff`` or ``tp.plot.heatmap.add_pfdiff``.
 
 ----------
 ``tp run``

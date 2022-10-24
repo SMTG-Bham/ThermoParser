@@ -45,10 +45,10 @@ except yaml.parser.ParserError:
 except FileNotFoundError:
     conf = None
 
-def add_dos(ax, data, projected=True, total=False, totallabel='Total',
-            main=True, invert=False, scale=False, colour='tab10',
-            totalcolour=None, fill=True, fillalpha=0.2, line=True,
-            linestyle='-', marker=None, **kwargs):
+def add_dos(ax, data, sigma=None, projected=True, total=False,
+            totallabel='Total', main=True, invert=False, scale=False,
+            colour='tab10', totalcolour=None, fill=True, fillalpha=0.2,
+            line=True, linestyle='-', marker=None, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments
@@ -58,6 +58,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             axes to plot on.
         data : dict
             DoS data.
+        sigma : float
+            Gaussian broadening. 0.2 is a good place to start. Does not
+            know if you've already broadened it. Default: None.
 
         projected : bool, optional
             plot atom-projected DoS. Default: True.
@@ -143,6 +146,42 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
     f = data.pop('frequency')
     if 'meta' in data: del data['meta']
     if not total: del data['total']
+
+    # find the true ends of the data and truncate to there
+    n = int(np.ceil(0.9*len(f)))
+    for key in data:
+        while n < len(f) - 1 and data[key][n] != 0:
+            n += 1
+    n += 1
+    f = f[:n]
+    for key in data:
+        data[key] = data[key][:n]
+
+    n = int(np.ceil(0.1*len(f)))
+    for key in data:
+        while n > 0 and data[key][n] != 0:
+            n -= 1
+    f = f[n:]
+    for key in data:
+        data[key] = data[key][n:]
+
+    fmin, fmax = f[0], f[-1]
+    fstep = f[1] - f[0]
+
+    if sigma is not None:
+        # extend the data to 3 sigma above and below
+        while f[-1] < fmax + 3 * sigma:
+            f = np.append(f, f[-1] + fstep)
+
+        while f[0] > fmin - 3 * sigma:
+            f = np.insert(f, 0, f[0] - fstep)
+
+        data2 = {}
+        for key in data:
+            data2[key] = np.zeros(len(f))
+            for i, d in enumerate(data[key]):
+                data2[key] += d * tp.calculate.gaussian(f, f[i], sigma)
+        data = data2
 
     if scale:
         axscale = [0, 100] if main else None
@@ -272,34 +311,39 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
                 if fill and line:
                     ax.fill_between(data[key], f, facecolor=colour[key],
                                     linewidth=0, alpha=fillalpha)
-                    ax.plot(data[key], f, label=key, color=colour[key],
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(data[key], f, label='${}$'.format(key),
+                            color=colour[key], linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
                 elif fill and not line:
-                    ax.fill_between(data[key], f, label=key,
+                    ax.fill_between(data[key], f, label='${}$'.format(key),
                                     facecolor=colour[key], linewidth=0,
                                     alpha=fillalpha)
                 else:
-                    ax.plot(data[key], f, label=key, color=colour[key],
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(data[key], f, label='${}$'.format(key),
+                            color=colour[key], linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
             else:
                 if fill and line:
                     ax.fill_between(f, data[key], facecolor=colour[key],
                                     linewidth=0, alpha=fillalpha)
-                    ax.plot(f, data[key], color=colour[key], label=key,
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(f, data[key], color=colour[key],
+                            label='${}$'.format(key), linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
                 elif fill and not line:
-                    ax.fill_between(f, data[key], label=key,
+                    ax.fill_between(f, data[key], label='${}$'.format(key),
                                     facecolor=colour[key], linewidth=0,
                                     alpha=fillalpha)
                 else:
-                    ax.plot(f, data[key], label=key, color=colour[key],
-                            linestyle=linestyles[key], marker=markers[key],
-                            **kwargs)
+                    ax.plot(f, data[key], label='${}$'.format(key),
+                            color=colour[key], linestyle=linestyles[key],
+                            marker=markers[key], **kwargs)
 
     # axes formatting
+
+    if sigma is not None:
+        fmax += sigma
+    else:
+        fmax *= 1.01
 
     if main:
         if invert:
@@ -308,6 +352,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             ax.set_xlabel(axlabels['dos'], labelpad=pad)
             ax.tick_params(axis='y', labelleft=False)
             ax.set_xlim(left=0)
+            ax.set_ylim(top=fmax)
+            if round(fmin, 1) >= 0.:
+                ax.set_ylim(bottom=0)
             tp.plot.utilities.set_locators(ax, x='null', y='linear')
         else:
             axlabels = tp.settings.labels()
@@ -315,6 +362,9 @@ def add_dos(ax, data, projected=True, total=False, totallabel='Total',
             ax.set_xlabel(axlabels['frequency'])
             ax.set_ylabel(axlabels['dos'], labelpad=pad)
             ax.set_ylim(bottom=0)
+            ax.set_xlim(right=fmax)
+            if round(fmin, 1) >= 0.:
+                ax.set_xlim(left=0)
             tp.plot.utilities.set_locators(ax, y='null', x='linear')
 
     return
@@ -368,7 +418,8 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
             Default: True.
 
         colour : str or list, optional
-            (list of) RGB line colour(s). Default: default colour cycle.
+            (list of) hex or named line colour(s).
+            Default: default colour cycle.
         fill : bool, optional
             fill below lines. Default: False.
         fillcolour : int or str or list, optional
@@ -450,7 +501,7 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
 
     for dat in data:
         for d in direction:
-            data2 = tp.data.resolve.resolve(dat, 'mode_kappa',
+            data2 = tp.data.utilities.resolve(dat, 'mode_kappa',
                                             temperature=temperature,
                                             direction=d)
             k = np.ravel(data2['mode_kappa'])
@@ -475,14 +526,14 @@ def add_cum_kappa(ax, data, temperature=300, direction='avg', label=None,
             fillcolour1 = fillcolour[i % len(fillcolour)]
             linestyle1 = linestyle[i % len(linestyle)]
             marker1 = marker[i % len(marker)]
-            label1 = "${}$".format(label[i % len(label)])
+            label1 = label[i % len(label)]
 
             # colour
             # Tries to read the colour as an rgb code, then alpha value.
 
             if fill:
                 try:
-                    fillcolour2 = tp.plot.colour.rgb2array(colour1, fillcolour1)
+                    fillcolour2 = mpl.colors.to_rgba(colour1, fillcolour1)
                 except ValueError:
                     if isinstance(colour1, list) and \
                        isinstance(fillcolour1, (float, int)) and \
@@ -591,9 +642,10 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
         colour : colourmap or str or array-like or dict, optional
             colourmap or colourmap name or list of colours (one for
-            each band or one for each point) or two colours for a linear
-            colourmap or a dictionary with cmin and cmax keys or a
-            single colour. Default: viridis.
+            each band or one for each point) or two colours for a
+            linear colourmap (required hex or rgb or named colours) or
+            a dictionary with cmin and cmax keys or a single colour.
+            Default: viridis.
 
         verbose : bool, optional
             Write actual temperature used if applicable.
@@ -642,14 +694,14 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     # data formatting
 
-    if quantity == 'kappa': quantity = 'mode_kappa'
-    if xquantity == 'kappa': xquantity = 'mode_kappa'
     tnames = tp.settings.to_tp()
     if invert: quantity, xquantity = xquantity, quantity
     quantity = tnames[quantity] if quantity in tnames else quantity
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
+    if quantity == 'lattice_thermal_conductivity': quantity = 'mode_kappa'
+    if xquantity == 'lattice_thermal_conductivity': xquantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+    data = tp.data.utilities.resolve(data, [quantity, xquantity],
                                    temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
@@ -759,9 +811,11 @@ def add_projected_waterfall(ax, data, quantity, projected,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or #rrggbb highlight colour or
+            colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with cmid and cmin and/or cmax keys. Default: viridis.
+            with cmid and cmin and/or cmax keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: viridis.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -832,7 +886,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
     projected = tnames[projected] if projected in tnames else projected
 
-    data = tp.data.resolve.resolve(data, [quantity, xquantity, projected],
+    data = tp.data.utilities.resolve(data, [quantity, xquantity, projected],
                                    temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
@@ -909,9 +963,11 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
             invert x- and y-axes. Default: False.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or #rrggbb highlight colour or
+            colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with cmid and cmin and/or cmax keys. Default: Blues.
+            with cmid and cmin and/or cmax keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: Blues.
 
         verbose : bool, optional
             Write actual temperature used if applicable.
@@ -935,7 +991,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
 
     # defaults
 
-    defkwargs = {'s':      1,
+    defkwargs = {'s':      20,
                  'rasterized': True}
 
     if conf is None or 'density_kwargs' not in conf or \
@@ -959,7 +1015,7 @@ def add_density(ax, data, quantity, xquantity='frequency', temperature=300,
     quantity = tnames[quantity] if quantity in tnames else quantity
     xquantity = tnames[xquantity] if xquantity in tnames else xquantity
 
-    data = tp.data.resolve.resolve(data, [quantity, xquantity],
+    data = tp.data.utilities.resolve(data, [quantity, xquantity],
                                    temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
@@ -1033,7 +1089,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
     if invert:
         xquantity, yquantity = yquantity, xquantity
         
-    data2 = tp.data.resolve.resolve(data, [xquantity, yquantity],
+    data2 = tp.data.utilities.resolve(data, [xquantity, yquantity],
                                     temperature=temperature,
                                     direction=direction)
     data2 = {'x': np.ravel(data2[xquantity]), 'y': np.ravel(data2[yquantity])}

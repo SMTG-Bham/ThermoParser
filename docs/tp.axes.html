@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.axes package &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>tp.axes package &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -50,6 +50,8 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">tp.axes package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.plot.html">tp.plot package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.cli.html">tp.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.setup.html">tp.setup package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
@@ -93,21 +95,33 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-tp.axes.four">
-<span id="tp-axes-four-module"></span><h2>tp.axes.four module<a class="headerlink" href="#module-tp.axes.four" title="Permalink to this headline">¶</a></h2>
-<p>Provides pre-sized figures with four axes.</p>
-<p>Each function returns a figure and an array of sets of axes. Those with
-legend space also return a function to add a pre-positioned legend.
-Designed for papers.</p>
+<div class="section" id="module-tp.axes.small">
+<span id="tp-axes-small-module"></span><h2>tp.axes.small module<a class="headerlink" href="#module-tp.axes.small" title="Permalink to this headline">¶</a></h2>
+<p>Provides pre-sized figures for paper-sized figures.</p>
+<p>Each function returns a figure, a set of axes or an array of sets of
+axes and an add_legend function. The legend function comes with a
+choice of positions and takes normal ax.legend arguments.</p>
 <div class="section" id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>square
-square_legend</p>
+<div><p>one
+one_colourbar
+one_dos
+one_dos_colourbar
+two_h
+two_h_colourbars
+two_v
+two_v_colourbars
+three_h
+three_h_colourbars
+three_square
+three_square_colourbars
+four_square
+four_square_colourbars</p>
 </div></blockquote>
 <dl class="py function">
-<dt id="tp.axes.four.square">
-<code class="sig-prename descclassname">tp.axes.four.</code><code class="sig-name descname">square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/four.html#square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.four.square" title="Permalink to this definition">¶</a></dt>
+<dt id="tp.axes.small.four_square">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">four_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#four_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.four_square" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure with four sets of axes in a square.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -117,6 +131,7 @@ square_legend</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>list</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
 </dd>
@@ -124,76 +139,17 @@ square_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.four.square_legend">
-<code class="sig-prename descclassname">tp.axes.four.</code><code class="sig-name descname">square_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/four.html#square_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.four.square_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with four sets of axes in a square.</p>
+<dt id="tp.axes.small.four_square_colourbars">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">four_square_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#four_square_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.four_square_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with four sets of axes with colourbars in a square.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp-large.</p>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>list</em> – axes.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-</div>
-<div class="section" id="module-tp.axes.one">
-<span id="tp-axes-one-module"></span><h2>tp.axes.one module<a class="headerlink" href="#module-tp.axes.one" title="Permalink to this headline">¶</a></h2>
-<p>Provides pre-sized figures with one set of primary axes.</p>
-<p>Each function returns a figure and a set of axes, or an array of sets of
-axes for those with DoSs. Those with legend space also return a function
-to add a pre-positioned legend. Designed for papers.</p>
-<div class="section" id="id1">
-<h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>plain
-colourbar
-colourbar_small_legend
-dos
-dos_colourbar
-dos_colourbar_small_legend
-dos_small_legend
-small_legend
-medium_legend
-wide
-wide_large_legend</p>
-</div></blockquote>
-<dl class="py function">
-<dt id="tp.axes.one.colourbar">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">colourbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#colourbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.colourbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with a set of axes and colourbar space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.colourbar_small_legend">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">colourbar_small_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#colourbar_small_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.colourbar_small_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with one set of axes and space for a colourbar and legend.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
 <li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
@@ -202,101 +158,8 @@ wide_large_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.one.dos">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">dos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#dos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.dos" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with a set of axes and a DoS-style attachment.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.dos_colourbar">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">dos_colourbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#dos_colourbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.dos_colourbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with axes, DoS-style attachment and colourbar space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.dos_colourbar_small_legend">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">dos_colourbar_small_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#dos_colourbar_small_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.dos_colourbar_small_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with axes, DoS-style attachment and legend space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.dos_small_legend">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">dos_small_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#dos_small_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.dos_small_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with axes, DoS-style attachment and legend space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.medium_legend">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">medium_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#medium_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.medium_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with one set of axes and space for a legend.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.plain">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">plain</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#plain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.plain" title="Permalink to this definition">¶</a></dt>
+<dt id="tp.axes.small.one">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.one" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure with a set of axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -306,6 +169,7 @@ wide_large_legend</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
 </dd>
@@ -313,9 +177,9 @@ wide_large_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.one.small_legend">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">small_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#small_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.small_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with one set of axes and space for a legend.</p>
+<dt id="tp.axes.small.one_colourbar">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">one_colourbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#one_colourbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.one_colourbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with a set of axes and colourbar space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
@@ -332,27 +196,9 @@ wide_large_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.one.wide">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">wide</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#wide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.wide" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with one set of axes and more space on the left.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.one.wide_large_legend">
-<code class="sig-prename descclassname">tp.axes.one.</code><code class="sig-name descname">wide_large_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/one.html#wide_large_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.one.wide_large_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with one set of axes and space for a legend.</p>
+<dt id="tp.axes.small.one_dos">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">one_dos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#one_dos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.one_dos" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with a set of axes and a DoS-style attachment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
@@ -368,28 +214,28 @@ wide_large_legend</p>
 </dl>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="module-tp.axes.three">
-<span id="tp-axes-three-module"></span><h2>tp.axes.three module<a class="headerlink" href="#module-tp.axes.three" title="Permalink to this headline">¶</a></h2>
-<p>Provides pre-sized figures with three sets of axes.</p>
-<p>Each function returns a figure and an array of sets of axes. Those with
-legend space also return a function to add a pre-positioned legend.
-Designed for papers.</p>
-<div class="section" id="id2">
-<h3>Functions<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>h
-h_top_legend
-h_bottom_legend</p>
-<p>square_q1_legend
-square_q2_legend
-square_q3_legend
-square_q4_legend</p>
-</div></blockquote>
 <dl class="py function">
-<dt id="tp.axes.three.h">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.h" title="Permalink to this definition">¶</a></dt>
+<dt id="tp.axes.small.one_dos_colourbar">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">one_dos_colourbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#one_dos_colourbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.one_dos_colourbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with axes, DoS-style attachment and colourbar space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.small.three_h">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">three_h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#three_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.three_h" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure with three sets of axes horizontally.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -399,6 +245,7 @@ square_q4_legend</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
 </dd>
@@ -406,9 +253,9 @@ square_q4_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.three.h_bottom_legend">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">h_bottom_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#h_bottom_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.h_bottom_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with three sets of axes horizontally and a legend.</p>
+<dt id="tp.axes.small.three_h_colourbars">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">three_h_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#three_h_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.three_h_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with three sets of axes horizontally and colourbars.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
@@ -417,7 +264,7 @@ square_q4_legend</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-posistioned legend.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
 </dd>
@@ -425,31 +272,16 @@ square_q4_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.three.h_top_legend">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">h_top_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#h_top_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.h_top_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with three sets of axes horizontally and a legend.</p>
+<dt id="tp.axes.small.three_square">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">three_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">blank</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#three_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.three_square" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axes in a square with one missing.</p>
+<p>The legend is placed in the blank space by default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-posistioned legend.</p></li>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p></li>
+<li><p><strong>blank</strong> (<em>int</em><em>, </em><em>optional</em>) – empty quadrant (numbered left to right then top to bottom).</p></li>
 </ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.three.square_q1_legend">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">square_q1_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#square_q1_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.square_q1_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Axes in a square with a legend in the first quadrant.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
@@ -463,12 +295,16 @@ square_q4_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.three.square_q2_legend">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">square_q2_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#square_q2_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.square_q2_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Axes in a square with a legend in the second quadrant.</p>
+<dt id="tp.axes.small.three_square_colourbars">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">three_square_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">blank</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#three_square_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.three_square_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axes with colourbars in a square with one missing.</p>
+<p>The legend is placed in the blank space by default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p></li>
+<li><p><strong>blank</strong> (<em>int</em><em>, </em><em>optional</em>) – empty quadrant (numbered left to right then top to bottom).</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
@@ -482,62 +318,8 @@ square_q4_legend</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.three.square_q3_legend">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">square_q3_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#square_q3_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.square_q3_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Axes in a square with a legend in the third quadrant.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>list</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.three.square_q4_legend">
-<code class="sig-prename descclassname">tp.axes.three.</code><code class="sig-name descname">square_q4_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/three.html#square_q4_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.three.square_q4_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Axes in a square with a legend in the fourth quadrant.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>list</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-</div>
-<div class="section" id="module-tp.axes.two">
-<span id="tp-axes-two-module"></span><h2>tp.axes.two module<a class="headerlink" href="#module-tp.axes.two" title="Permalink to this headline">¶</a></h2>
-<p>Provides pre-sized figures with two sets of axes.</p>
-<p>Each function returns a figure and an array of sets of axes. Those with
-legend space also return a function to add a pre-positioned legend.
-Designed for papers.</p>
-<div class="section" id="id3">
-<h3>Functions<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>h
-h_small_legend
-h_medium_legend
-v</p>
-</div></blockquote>
-<dl class="py function">
-<dt id="tp.axes.two.h">
-<code class="sig-prename descclassname">tp.axes.two.</code><code class="sig-name descname">h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/two.html#h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.two.h" title="Permalink to this definition">¶</a></dt>
+<dt id="tp.axes.small.two_h">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">two_h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#two_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.two_h" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure with two sets of axes horizontally.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -547,6 +329,7 @@ v</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
 </dd>
@@ -554,9 +337,9 @@ v</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.two.h_medium_legend">
-<code class="sig-prename descclassname">tp.axes.two.</code><code class="sig-name descname">h_medium_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/two.html#h_medium_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.two.h_medium_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with two sets of axes horizontally and space for a legend.</p>
+<dt id="tp.axes.small.two_h_colourbars">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">two_h_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#two_h_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.two_h_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with two sets of axes horizontally with colourbars.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
@@ -565,7 +348,7 @@ v</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-posistioned legend.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
 </ul>
 </p>
 </dd>
@@ -573,27 +356,8 @@ v</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.axes.two.h_small_legend">
-<code class="sig-prename descclassname">tp.axes.two.</code><code class="sig-name descname">h_small_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/two.html#h_small_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.two.h_small_legend" title="Permalink to this definition">¶</a></dt>
-<dd><p>A figure with two sets of axes horizontally and space for a legend.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>figure</em> – figure.</p></li>
-<li><p><em>axes</em> – axes.</p></li>
-<li><p><em>function</em> – function to add a pre-posistioned legend.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.axes.two.v">
-<code class="sig-prename descclassname">tp.axes.two.</code><code class="sig-name descname">v</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/two.html#v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.two.v" title="Permalink to this definition">¶</a></dt>
+<dt id="tp.axes.small.two_v">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">two_v</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#two_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.two_v" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure with two sets of axes vertically.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -603,6 +367,429 @@ v</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>figure</em> – figure.</p></li>
 <li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.small.two_v_colourbars">
+<code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">two_v_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#two_v_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.two_v_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with two sets of axes vertically with colourbars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-tp.axes.large">
+<span id="tp-axes-large-module"></span><h2>tp.axes.large module<a class="headerlink" href="#module-tp.axes.large" title="Permalink to this headline">¶</a></h2>
+<p>Provides pre-sized figures for presentation-sized figures.</p>
+<p>Each function returns a figure, a set of axes or an array of sets of
+axes and an add_legend function. The legend function comes with a
+choice of positions and takes normal ax.legend arguments. Drawing large
+figures is significantly slower than small ones.</p>
+<div class="section" id="id1">
+<h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>one
+one_colourbar
+one_dos
+one_dos_colourbar
+two_h
+two_h_colourbars
+two_v
+two_v_colourbars
+three_h
+three_h_colourbars
+three_square
+three_square_colourbars
+four_square
+four_square_colourbars</p>
+</div></blockquote>
+<dl class="py function">
+<dt id="tp.axes.large.four_square">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">four_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#four_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.four_square" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with four sets of axes in a square.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>list</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.four_square_colourbars">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">four_square_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#four_square_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.four_square_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with four sets of axes with colourbars in a square.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>list</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.one">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.one" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with a set of axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.one_colourbar">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">one_colourbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#one_colourbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.one_colourbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with a set of axes and colourbar space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.one_dos">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">one_dos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#one_dos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.one_dos" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with a set of axes and a DoS-style attachment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.one_dos_colourbar">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">one_dos_colourbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#one_dos_colourbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.one_dos_colourbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with axes, DoS-style attachment and colourbar space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.three_h">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">three_h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#three_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.three_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with three sets of axes horizontally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.three_h_colourbars">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">three_h_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#three_h_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.three_h_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with three sets of axes horizontally and colourbars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.three_square">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">three_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">blank</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#three_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.three_square" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axes in a square with one missing.</p>
+<p>The legend is placed in the blank space by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p></li>
+<li><p><strong>blank</strong> (<em>int</em><em>, </em><em>optional</em>) – empty quadrant (numbered left to right then top to bottom).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>list</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.three_square_colourbars">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">three_square_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">blank</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#three_square_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.three_square_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axes with colourbars in a square with one missing.</p>
+<p>The legend is placed in the blank space by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p></li>
+<li><p><strong>blank</strong> (<em>int</em><em>, </em><em>optional</em>) – empty quadrant (numbered left to right then top to bottom).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>list</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.two_h">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">two_h</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#two_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.two_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with two sets of axes horizontally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.two_h_colourbars">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">two_h_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#two_h_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.two_h_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with two sets of axes horizontally with colourbars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.two_v">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">two_v</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#two_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.two_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with two sets of axes vertically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.large.two_v_colourbars">
+<code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">two_v_colourbars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#two_v_colourbars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.two_v_colourbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>A figure with two sets of axes vertically with colourbars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>style</strong> (<em>str</em><em> or </em><em>array</em><em>, </em><em>optional</em>) – style sheet(s). Default: tp.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>figure</em> – figure.</p></li>
+<li><p><em>axes</em> – axes.</p></li>
+<li><p><em>function</em> – function to add a pre-positioned legend.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-tp.axes.legend">
+<span id="tp-axes-legend-module"></span><h2>tp.axes.legend module<a class="headerlink" href="#module-tp.axes.legend" title="Permalink to this headline">¶</a></h2>
+<p>Functions for dealing with legends.</p>
+<div class="section" id="id2">
+<h3>Functions<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>consolidate</dt><dd><p>combine legends.</p>
+</dd>
+<dt>add_add_legend</dt><dd><p>add add_legend function.</p>
+</dd>
+<dt>alphabetise</dt><dd><p>alphabetises or enumerates axes.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py function">
+<dt id="tp.axes.legend.add_add_legend">
+<code class="sig-prename descclassname">tp.axes.legend.</code><code class="sig-name descname">add_add_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">locations</span></em>, <em class="sig-param"><span class="n">names</span></em>, <em class="sig-param"><span class="n">defloc</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/legend.html#add_add_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.legend.add_add_legend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an add_legend function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>list</em><em> or </em><em>axes</em>) – axes to add add_legend to.</p></li>
+<li><p><strong>locations</strong> (<em>list of dicts</em>) – outside-axes legend arguments (loc and bbox_to_anchor) and
+axes ordinal (e.g. ‘axes’: 0, if there is more than one) in
+a flat array in the order of the flattened axes array by row.</p></li>
+<li><p><strong>names</strong> (<em>list of lists</em>) – names of locations in an flat array in the order of the
+flattened axes array by row, with additional locations in
+order at the end. Ordinal integers added automatically.</p></li>
+<li><p><strong>defloc</strong> (<em>str</em>) – default location name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>add_legend.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.legend.alphabetise">
+<code class="sig-prename descclassname">tp.axes.legend.</code><code class="sig-name descname">alphabetise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preset</span><span class="o">=</span><span class="default_value">'latin'</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">1.01</span></em>, <em class="sig-param"><span class="n">label_dos</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/legend.html#alphabetise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.legend.alphabetise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumerates or alphabetises plot axes</p>
+<p>Can manually define, or some presets are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>axes</em><em> or </em><em>list</em>) – axes to enumerate.</p></li>
+<li><p><strong>labels</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – manually defined labels. Overrides preset.</p></li>
+<li><p><strong>preset</strong> (<em>str</em>) – <p>preset label sequence. Options:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>latin</dt><dd><p>a, b, c… (default)</p>
+</dd>
+<dt>Latin</dt><dd><p>A, B, C…</p>
+</dd>
+<dt>arabic</dt><dd><p>1, 2, 3…</p>
+</dd>
+<dt>roman</dt><dd><p>i, ii, iii…</p>
+</dd>
+<dt>Roman</dt><dd><p>I, II, III…</p>
+</dd>
+<dt>greek</dt><dd><p>alpha, beta, gamma…</p>
+</dd>
+<dt>Greek</dt><dd><p>Alpha, Beta, Gamma…</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – prefix to all labels, e.g. “(“. Default: None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – suffix to all labels, e.g. “)”. Default: None.</p></li>
+<li><p><strong>x</strong> (<em>float</em><em>, </em><em>optional</em>) – x-position, where the axis is a scale from 0-1. Default: 0.</p></li>
+<li><p><strong>y</strong> (<em>float</em><em>, </em><em>optional</em>) – y-position, where the axis is a scale from 0-1. Default: 1.01.</p></li>
+<li><p><strong>label_dos</strong> (<em>bool</em><em>, </em><em>optional</em>) – label DoS axes. Only works with tp axes. Default: True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.axes.legend.consolidate">
+<code class="sig-prename descclassname">tp.axes.legend.</code><code class="sig-name descname">consolidate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">axes</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/legend.html#consolidate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.legend.consolidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine legends.</p>
+<p>Also removes duplicates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>axes</strong> (<em>array-like</em>) – axes to combine the legends for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>array-like</em> – legend handles.</p></li>
+<li><p><em>array-like</em> – legend labels.</p></li>
 </ul>
 </p>
 </dd>
@@ -614,28 +801,26 @@ v</p>
 <div class="section" id="module-tp.axes">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.axes" title="Permalink to this headline">¶</a></h2>
 <p>Provides pre-sized axes.</p>
-<p>The default style is based somewhat on the Nature guidelines (we can all
-dream!), where the axes.one figure has a width of 8.6 cm. All axes are
-square, and subsequent figures maintain the height of axes.one per plot
-(single height plots have a height of 8.3 cm whilst double height plots
-have a height of 16.6 cm, which more effectively maintains relative
-scale, as legends etc. are normally added on the side). As per the
-guidelines, font size is 8 pt.
-The large style uses larger axes and relatively even larger fonts, which
-is better suited for presentations, posters and non-columnated text.
-legend is for legend handling.</p>
+<p>The name convention is tp.axes.[size].[number](_[description]), where
+decription starts with a shape if the number is greater than one, and
+lists the additional things (dos, colourbar) from left to right.
+The small style is based somewhat on the Nature guidelines (we can all
+dream!), where the axes.small.one figure has a width of 8.6 cm. All
+axes are square, and subsequent figures maintain the height of axes.one
+per plot (single height plots have a height of 8.3 cm whilst double
+height plots have a height of 16.6 cm, which more effectively maintains
+relative scale, as colourbars etc. are normally added on the side). As
+per the guidelines, font size is 8 pt. The large style uses larger axes
+and relatively even larger fonts, which is better suited for
+presentations, posters and non-columnated text. legend is for legend
+handling, which is primarily used internally but may be useful if you
+make your own axes from scratch.</p>
 <div class="section" id="modules">
 <h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>one
-two
-three
-four</p>
-<p>one_large
-two_large
-three_large
-four_large</p>
-<p>legend</p>
+<div><p>small
+large
+legend</p>
 </div></blockquote>
 </div>
 </div>

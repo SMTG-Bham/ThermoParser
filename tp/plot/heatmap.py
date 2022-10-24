@@ -93,7 +93,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         colour : colourmap or str or array-like or dict, optional
             colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with mid and min and/or max keys. Default: Blues.
+            with mid and min and/or max keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: Blues.
         undercolour : str or array-like, optional
             colour for values under cmin. Default: None.
         overcolour : str or array-like, optional
@@ -181,10 +183,12 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             colours = tp.plot.colour.uniform(**colour)
         else:
             raise Exception('colour must be a colourmap, colourmap '
-                            'name, single #rrggbb highlight colour or '
-                            'highlight, min, max #rrggbb colours in '
-                            'that order, or a dictionary with mid and '
-                            'min and/or max keys.')
+                            'name, single highlight colour or '
+                            'highlight, min, max colours in that '
+                            'order, or a dictionary with mid and min '
+                            'and/or max keys. Colour format must be '
+                            'hex or rgb (array) or a named colour '
+                            'recognised by matplotlib.')
     if undercolour is not None:
         colours.set_under(undercolour)
     if overcolour is not None:
@@ -279,7 +283,9 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
             override ZT maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
-            RGB colours to generate a colour map. Default: viridis.
+            RGB colours to generate a colour map. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: viridis.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -312,9 +318,9 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
     # data formatting
 
     if 'power_factor' in data:
-        data = tp.data.resolve.resolve(data, 'power_factor', direction=direction)
+        data = tp.data.utilities.resolve(data, 'power_factor', direction=direction)
     else:
-        data = tp.data.resolve.resolve(data, equants, direction=direction)
+        data = tp.data.utilities.resolve(data, equants, direction=direction)
         data = tp.calculate.power_factor_fromdict(data, use_tprc=True)
 
     # plotting
@@ -376,7 +382,9 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
         cmax : float, optional
             override ZT maximum. Default: None.
         colour(1,2) : str, optional
-            #RRGGBB colours for data(1,2). Default: #800080, #FF8000.
+            colours for data(1,2). Colour format must be hex or rgb
+            (array) or a named colour recognised by matplotlib.
+            Deault: #800080, #FF8000.
         midcolour : str, optional
             colour at 0 difference. Default: #FFFFFF.
         label(1,2) : str, optional
@@ -420,10 +428,10 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
     for i in [0, 1]:
         data[i]['doping'] = np.abs(data[i]['doping'])
         if 'power_factor' in data[i]:
-            data[i] = tp.data.resolve.resolve(data[i], 'power_factor',
+            data[i] = tp.data.utilities.resolve(data[i], 'power_factor',
                                               direction=direction)
         else:
-            data[i] = tp.data.resolve.resolve(data[i], equants,
+            data[i] = tp.data.utilities.resolve(data[i], equants,
                                               direction=direction)
             data[i] = tp.calculate.power_factor_fromdict(data[i], use_tprc=True)
 
@@ -515,7 +523,9 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
             override ZT maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
-            RGB colours to generate a colour map. Default: viridis.
+            colours to generate a colour map. Colour format must be hex
+            or rgb (array) or a named colour recognised by matplotlib.
+            Default: viridis.
 
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
@@ -549,12 +559,12 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
     # data formatting
 
     if 'zt' in data:
-        data = tp.data.resolve.resolve(data, 'zt', direction=direction)
+        data = tp.data.utilities.resolve(data, 'zt', direction=direction)
     else:
-        data = tp.data.resolve.resolve(data, equants, direction=direction)
+        data = tp.data.utilities.resolve(data, equants, direction=direction)
 
         if not isinstance(kdata, (int, float)):
-            kdata = tp.data.resolve.resolve(kdata, ltc, direction=direction)
+            kdata = tp.data.utilities.resolve(kdata, ltc, direction=direction)
             data, kdata = tp.calculate.interpolate(data, kdata, 'temperature',
                                                    equants, ltc, kind='cubic')
             data[ltc] = kdata[ltc]
@@ -629,7 +639,9 @@ def add_ztdiff(ax, data1, data2, kdata1=None, kdata2=None, direction='avg',
         cmax : float, optional
             override ZT maximum. Default: None.
         colour(1,2) : str, optional
-            #RRGGBB colours for data(1,2). Default: #800080, #FF8000.
+            colours for data(1,2). Colour format must be hex or rgb
+            (array) or a named colour recognised by matplotlib.
+            Default: #800080, #FF8000.
         midcolour : str, optional
             colour at 0 difference. Default: #FFFFFF.
         label(1,2) : str, optional
@@ -675,13 +687,13 @@ def add_ztdiff(ax, data1, data2, kdata1=None, kdata2=None, direction='avg',
     for i in [0, 1]:
         data[i]['doping'] = np.abs(data[i]['doping'])
         if 'zt' in data[i]:
-            data[i] = tp.data.resolve.resolve(data[i], 'zt',
+            data[i] = tp.data.utilities.resolve(data[i], 'zt',
                                               direction=direction)
         else:
-            data[i] = tp.data.resolve.resolve(data[i], equants,
+            data[i] = tp.data.utilities.resolve(data[i], equants,
                                               direction=direction)
             if not isinstance(kdata[i], (int, float)):
-                kdata[i] = tp.data.resolve.resolve(kdata[i], ltc,
+                kdata[i] = tp.data.utilities.resolve(kdata[i], ltc,
                                                    direction=direction)
                 data[i], kdata[i] = tp.calculate.interpolate(data[i], kdata[i],
                                                              'temperature',
@@ -782,7 +794,9 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
             override kappa maximum. Default: None.
         colour : colourmap or str or array-like, optional
             colourmap or colourmap name; or key colour or min and max
-            RGB colours to generate a colour map. Default: viridis.
+            RGB colours to generate a colour map. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: viridis.
         negativecolour : str or array-like, optional
             colour for values under cmin. Default: grey.
 
@@ -816,7 +830,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
     # data formatting
 
-    data = tp.data.resolve.resolve(data, equants, direction=direction)
+    data = tp.data.utilities.resolve(data, equants, direction=direction)
     data['zt'] = zt
 
     data = tp.calculate.kl_fromdict(data, use_tprc=False)

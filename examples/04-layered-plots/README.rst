@@ -1,4 +1,8 @@
-.. image:: phonons.png
+--------------------------
+Tutorial-04: Layered Plots
+--------------------------
+
+.. image:: tutorial-04.png
    :alt: Phonon dispersion convergence, density of states  and mean free path of BaSnO<sub>3</sub>.
 
 As well as plotting graphs on neighbouring axes, it can be informative
@@ -9,17 +13,22 @@ with supercell size. Although this can start to make scripts more
 complicated, and is not yet supported by the CLI, it is often worth the
 effort.
 
-----
-Axes
-----
+The python version of this code is:
+
+.. literalinclude:: tutorial-04.py
+   :language: python
+   :linenos:
+   :emphasize-lines: 29,32,38-44,48-51
+
+Axes (line 29)
+--------------
 
 Here we use ``two_h``. h stands for horizontal, and there is a
 corresponding vertical set of axes, ``two_v``. They also come with
 space for colourbars, by adding ``_colourbars`` to their names.
 
-----
-Load
-----
+Load (line 32)
+--------------
 
 We need lists of files here, we've used list comprehensions to generate
 the file names and load them, but you could also use something like:
@@ -31,13 +40,12 @@ the file names and load them, but you could also use something like:
 
 Although in that case, you would also need to define the labels.
 
-----
-Plot
-----
+Plot (lines 38-44)
+------------------
 
 ``add_dos`` and ``add_cumkappa`` have the arguments ``main`` and
 ``scale``, which enable them to be used on the same axes as plots with
-other axis scales. ``main``causes the axes ticks, labels and limits to
+other axis scales. ``main`` causes the axes ticks, labels and limits to
 be set for the plot, so turning it off doesn't interfere with the
 current configuration. ``scale`` scales the data to the axes, rather
 than the axes to the data, so everything is visible. If both ``main``
@@ -51,9 +59,8 @@ the waterfall plot. Running ``format_waterfall``, then ``add_dos``,
 then ``add_waterfall`` solves this, however it doesn't work properly if
 ``line=True``.
 
-----------
-Formatting
-----------
+Formatting (lines 48-51)
+------------------------
 
 Setting ``invert`` removes the y-axis labels and shortens the x-axis
 one in anticipation of being a DoS-style set of axes, but this can be
@@ -61,4 +68,6 @@ reversed with some helper functions: ``set_locators`` sets the axis
 scales and tick locators for each axis, and also has a DoS argument,
 which removes the ticks and tick labels and the y axis label, while all
 the default labels can be accessed with ``settings.labels``. These will
-be covered more in ``05-helper-functions``.
+be covered more in `Tutorial-05`_.
+
+.. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html

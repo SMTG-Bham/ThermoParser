@@ -7,8 +7,10 @@ Functions
 
     cumulate:
         sorts and cumulates.
+    gaussian:
+        gaussian distribution of height 1.
     lorentzian:
-        lorentzian curve.
+        area conserved lorentzian distribution.
     lifetime:
         particle lifetime.
     mfp:
@@ -17,6 +19,8 @@ Functions
         boson occupation.
     dfdde:
         derivative of the Fermi-Dirac distribution.
+    thermal_conductivity:
+        total thermal conductivity.
     power_factor:
         power factor.
     zt:
@@ -72,6 +76,30 @@ def cumulate(x, y):
 
     return xsort, ycum
 
+def gaussian(x, x0=0, sigma=1):
+    """Gaussian function with height 1 centered on x0.
+
+    Arguments
+    ---------
+
+       x : array-like
+           x-values.
+       x0 : float
+           origin of function.
+       sigma :float
+           standard deviation.
+
+    Returns
+    -------
+
+        np.array
+            Gaussian
+    """
+
+    x = np.array(x)
+    
+    return np.exp(-np.power(x - x0, 2) / (2 * sigma**2))
+
 def lorentzian(x, x0=0, fwhm=1):
     """Area conserved Lorentzian function centered on x0.
 
@@ -89,7 +117,7 @@ def lorentzian(x, x0=0, fwhm=1):
     -------
 
         np.array
-            lorentzian
+            Lorentzian
     """
 
     x = np.array(x)
@@ -201,7 +229,7 @@ def be_occupation(frequency, temperature, use_tprc=True):
 
 def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
           use_tprc=True):
-    """Derivative of the Fermi-Dirac distribution.
+    """Derivative of the Fermi-Dirac distribution wrt energy.
 
     Arguments
     ---------

@@ -13,4 +13,4 @@ Modules
         saves data (currently hdf5).
 """
 
-from . import load, resolve, run, save
+from . import load, run, save, utilities

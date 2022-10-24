@@ -13,7 +13,7 @@
     | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
     | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
     | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.0.0\
+    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.3.0\
     |_________________________________:______________________________________:_____/
 
 
@@ -72,6 +72,12 @@ longer process is required:
 
 Using conda may circumvent this process.
 
+Command Line Usage
+------------------
+
+ThermoPlotter uses `click`_, which has an easily navigable structure
+from the command-line, detailed in the `tutorials`_.
+
 Python Usage
 ------------
 
@@ -90,13 +96,15 @@ As ThermoPlotter is dependent on matplotlib, each stage can be
 substituted with bespoke code, e.g. using ``matplotlib.pyplot.subplots``
 or ``matplotlib.axes.Axes.scatter``. These can still be supplemented
 with ThermoPlotter helper functions, such as default labels which the
-user can set in ``tp.settings`` or colourmap generators in
-``tp.plot.colour``.
+user can set in ``tp.settings``, colourmap generators in
+``tp.plot.colour`` or legend helpers such as ``tp.axes.legend.alphabetise``.
 
 The best way to get a feel for ThermoPlotter is to see it in action:
-Take a look at our  `examples <https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples>`_ scripts.
+Take a look at our  `examples`_ and `tutorials`_. Currently supported
+codes are:
 
-Currently supported codes are:
+.. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
+.. _tutorials: https://smtg-ucl.github.io/ThermoPlotter/tutorials.html
 
 * Phononic properties:
 
@@ -126,8 +134,8 @@ Current plotting modes are split into four areas.
   concentration; and one which plots the lattice thermal conductivity
   required to reach a target ZT, again against temperature and doping.
 
-A set of example scripts is provided in the ``tp/examples`` folder, and
-there is `documentation`_.
+A set of example scripts is provided in the ``tp/examples`` folder and
+in our online `examples`_, and there is `documentation`_.
 
 Contributing
 ------------
@@ -142,11 +150,10 @@ while contributions can be made using the `fork and pull`_ approach.
 Contributions should include comprehensive docstrings, and where
 appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
 appreciated. Documentation uses the `sphinx`_ package, and can be built from
-the docs directory with ``sphinx-build -b html src/ .``.
+the ``docs`` directory with ``sphinx-build -b html src/ .``.
 
 .. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
 .. _fork and pull: https://guides.github.com/activities/forking
-.. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
 .. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
 .. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
 
@@ -172,6 +179,7 @@ Roughly chronologically, they are so far:
 * Sean R. Kavanagh
 * Warda Rahim
 * Katarina Brlec
+* Joe Willis
 
 License
 -------
@@ -193,4 +201,3 @@ ThermoPlotter uses the following open-source packages:
 * `scipy <https://www.scipy.org>`_
 * `sphinx <https://www.sphinx-doc.org>`_
 * `yaml <https://pyyaml.org/>`_
-

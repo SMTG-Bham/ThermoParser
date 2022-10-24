@@ -4,7 +4,7 @@ import tp
 
 scs = '222 333 444 555'.split()
 files = ['../data/basno3/band-{}.yaml'.format(s) for s in scs]
-label = [s.split('\ x\ ') for s in scs]
+label = [' x '.join(list(s)) for s in scs]
 legend_title = 'Supercell Size'
 
 # Axes

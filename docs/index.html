@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Installation &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -83,7 +83,7 @@
 <span class="o">|</span> <span class="o">|</span>   <span class="o">|</span><span class="n">__</span>   <span class="n">__</span>  <span class="o">|</span><span class="n">___</span>  <span class="o">|</span><span class="n">_____</span>   <span class="n">__</span> <span class="p">:</span><span class="o">|</span><span class="n">___</span><span class="o">/</span> <span class="o">|</span>    <span class="n">___</span>  <span class="n">__</span><span class="o">|</span><span class="n">__</span> <span class="n">__</span><span class="o">|</span><span class="n">__</span>  <span class="n">__</span>  <span class="o">|</span><span class="n">__</span>  \
 <span class="o">|</span> <span class="o">|</span>   <span class="o">|</span>  <span class="o">|</span> <span class="o">/</span>  \ <span class="o">|</span>   \ <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span> <span class="o">/</span>  \<span class="p">:</span><span class="o">|</span>     <span class="o">|</span>   <span class="o">/</span>   \   <span class="o">|</span>     <span class="o">|</span>   <span class="o">/</span>  \ <span class="o">|</span>  \ <span class="o">/</span>
 <span class="o">|</span> <span class="o">|</span>   <span class="o">|</span>  <span class="o">|</span> <span class="o">|</span><span class="n">__</span><span class="o">/</span> <span class="o">|</span>     <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span> <span class="o">|</span>  <span class="o">|</span><span class="p">:</span><span class="o">|</span>     <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>   <span class="o">|</span>     <span class="o">|</span>   <span class="o">|</span><span class="n">__</span><span class="o">/</span> <span class="o">|</span>    \<span class="n">_____</span>
-<span class="o">|</span> <span class="o">|</span>   <span class="o">|</span>  <span class="o">|</span> \<span class="n">__</span>  <span class="o">|</span>     <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span> \<span class="n">__</span><span class="o">/</span><span class="p">:</span><span class="o">|</span>     \<span class="n">__</span> \<span class="n">___</span><span class="o">/</span>   \<span class="n">__</span>   \<span class="n">__</span> \<span class="n">__</span>  <span class="o">|</span>    <span class="p">:</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span>\
+<span class="o">|</span> <span class="o">|</span>   <span class="o">|</span>  <span class="o">|</span> \<span class="n">__</span>  <span class="o">|</span>     <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span> \<span class="n">__</span><span class="o">/</span><span class="p">:</span><span class="o">|</span>     \<span class="n">__</span> \<span class="n">___</span><span class="o">/</span>   \<span class="n">__</span>   \<span class="n">__</span> \<span class="n">__</span>  <span class="o">|</span>    <span class="p">:</span><span class="mf">2.3</span><span class="o">.</span><span class="mi">0</span>\
 <span class="o">|</span><span class="n">_________________________________</span><span class="p">:</span><span class="n">______________________________________</span><span class="p">:</span><span class="n">_____</span><span class="o">/</span>
 </pre></div>
 </div>
@@ -125,6 +125,7 @@ longer process is required:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">ThermoPlotter</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
 </ol>
+<p>Using conda may circumvent this process.</p>
 </div>
 </div>
 <div class="section" id="python-usage">
@@ -154,10 +155,10 @@ longer process is required:</p>
 </ol>
 <p>As ThermoPlotter is dependent on matplotlib, each stage can be
 substituted with bespoke code, e.g. using <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.subplots</span></code>
-or <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.scatter</span></code>. These can still be
-supplemented with ThermoPlotter helper functions, such as default labels
-which the user can set in <code class="docutils literal notranslate"><span class="pre">tp.settings</span></code>
-or colourmap generators in <code class="docutils literal notranslate"><span class="pre">tp.plot.colour</span></code>.</p>
+or <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.scatter</span></code>. These can still be supplemented
+with ThermoPlotter helper functions, such as default labels which the
+user can set in <code class="docutils literal notranslate"><span class="pre">tp.settings</span></code> or colourmap generators in
+<code class="docutils literal notranslate"><span class="pre">tp.plot.colour</span></code>.</p>
 <p>The best way to get a feel for ThermoPlotter is to see it in action:
 Take a look at our  <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples">examples</a> scripts.</p>
 <p>Currently supported codes are:</p>
@@ -206,8 +207,8 @@ independent of the others.</p>
 while contributions can be made using the <a class="reference external" href="https://guides.github.com/activities/forking">fork and pull</a> approach.
 Contributions should include comprehensive docstrings, and where
 appropriate <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples">examples</a>, further <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">documentation</a> and <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests">tests</a> are greatly
-appreciated. Documentation uses the <a class="reference external" href="https://www.sphinx-doc.org">sphinx</a> package, and can be built from the docs
-directory with <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">src/</span> <span class="pre">.</span></code>.</p>
+appreciated. Documentation uses the <a class="reference external" href="https://www.sphinx-doc.org">sphinx</a> package, and can be built from
+the docs directory with <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">src/</span> <span class="pre">.</span></code>.</p>
 </div>
 <div class="section" id="testing">
 <h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
@@ -227,6 +228,7 @@ Roughly chronologically, they are so far:</p>
 <li><p>Sean R. Kavanagh</p></li>
 <li><p>Warda Rahim</p></li>
 <li><p>Katarina Brlec</p></li>
+<li><p>Joe Willis</p></li>
 </ul>
 </div>
 <div class="section" id="license">

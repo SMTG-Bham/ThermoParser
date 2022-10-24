@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tp.cli.options &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter<img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>tp.cli.options</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tp.cli.options</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Provides groups of options to streamline the CLI</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    direction_option</span>
+<span class="sd">    directions_option</span>
+<span class="sd">    doping_type_option</span>
+<span class="sd">    doping_option</span>
+<span class="sd">    dopings_option</span>
+<span class="sd">    dos_function</span>
+<span class="sd">    input_argument</span>
+<span class="sd">    inputs_function</span>
+<span class="sd">    interpolate_options</span>
+<span class="sd">    kpoints_options</span>
+<span class="sd">    legend_options</span>
+<span class="sd">    line_options</span>
+<span class="sd">    fill_options</span>
+<span class="sd">    plot_io_function</span>
+<span class="sd">    temperature_option</span>
+<span class="sd">    verbose_option</span>
+<span class="sd">    xy_limit_options</span>
+<span class="sd">    c_limit_options</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">click</span>
+
+<div class="viewcode-block" id="direction_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.direction_option">[docs]</a><span class="k">def</span> <span class="nf">direction_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for singular option for anisotropic data.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--direction&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction(s) for anisotropic data.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                                       <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="directions_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.directions_option">[docs]</a><span class="k">def</span> <span class="nf">directions_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for multiple directions for anisotropic data.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--direction&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction(s) for anisotropic data.&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                                       <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">],</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="doping_type_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.doping_type_option">[docs]</a><span class="k">def</span> <span class="nf">doping_type_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for doping type.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--type&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Type of doping.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">]),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="doping_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.doping_option">[docs]</a><span class="k">def</span> <span class="nf">doping_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for a doping concentration.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--concentration&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Doping concentration (will be rounded).&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="mf">1.e19</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="dopings_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.dopings_option">[docs]</a><span class="k">def</span> <span class="nf">dopings_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for doping concentrations.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--concentration&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Doping concentration(s) (will be rounded).&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mf">1.e19</span><span class="p">],</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="dos_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.dos_function">[docs]</a><span class="k">def</span> <span class="nf">dos_function</span><span class="p">(</span><span class="n">dosargs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--colour&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dosargs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">dosargs</span> <span class="o">=</span> <span class="p">[</span><span class="n">dosargs</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">dos_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Options for DoS plots.&quot;&quot;&quot;</span>
+    
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--poscar&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;POSCAR path. Ignored if --atoms specified.&#39;</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                         <span class="n">default</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span> <span class="s1">&#39;--atoms&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Atoms in POSCAR order. Repeated names have &#39;</span>
+                              <span class="s1">&#39;their contributions summed, or different names &#39;</span>
+                              <span class="s1">&#39;can be used to separate environments. E.g. &#39;</span>
+                              <span class="s1">&#39;&quot;Ba 1 Sn 1 O 3&quot;, &quot;Ba Sn O O O&quot; and &quot;Ba Sn O 3&quot; &#39;</span>
+                              <span class="s1">&#39;are all valid and equivalent. &#39;</span>
+                              <span class="s1">&#39;Overrides --poscar.&#39;</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--sigma&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Standard deviation of Gaussian broadening. 0.2 &#39;</span>
+                              <span class="s1">&#39;is a good place to start. Does not know if &#39;</span>
+                              <span class="s1">&#39;you</span><span class="se">\&#39;</span><span class="s1">ve already broadened it. Off by default.&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--projected/--notprojected&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Plot atom-projected DoS.  [default: projected]&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="o">*</span><span class="n">dosargs</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Colour(s) in POSCAR order with total at the &#39;</span>
+                              <span class="s1">&#39;end or colourmap name. If --notprojected, a &#39;</span>
+                              <span class="s1">&#39;single colour can be specified. Total colour &#39;</span>
+                              <span class="s1">&#39;is overridden by --total-colour.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tab10&#39;</span><span class="p">],</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--total/--nototal&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Plot total DoS.  [default: nototal]&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--total-label&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Label for the total line.&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--total-colour&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Colour for the total line. Overrides --colour.&#39;</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">dos_options</span></div>
+
+<div class="viewcode-block" id="inputs_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.inputs_function">[docs]</a><span class="k">def</span> <span class="nf">inputs_function</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;filenames&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inputs_argument</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Option for input files.&quot;&quot;&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+                           <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                           <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                           <span class="n">nargs</span><span class="o">=</span><span class="n">nargs</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">inputs_argument</span></div>
+
+<div class="viewcode-block" id="interpolate_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.interpolate_options">[docs]</a><span class="k">def</span> <span class="nf">interpolate_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Options for interpolation.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--interpolate&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of points to interpolate to on each axis.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">IntRange</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--kind&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Interpolation kind.&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="kpoints_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.kpoints_options">[docs]</a><span class="k">def</span> <span class="nf">kpoints_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Group of options for handling KPOINTS files.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="s1">&#39;--kpoints&#39;</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--ibzkpt&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;KPOINTS/IBZKPT file. Overrides --mesh.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">))(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;--mesh&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;k-point mesh. Overridden by --kpoints.&#39;</span><span class="p">,</span>
+                     <span class="n">nargs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--poscar&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;POSCAR path.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="legend_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.legend_function">[docs]</a><span class="k">def</span> <span class="nf">legend_function</span><span class="p">(</span><span class="n">toggle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">legend_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Group of options for plot legends.&quot;&quot;&quot;</span>
+    
+        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--label&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Legend label(s).&#39;</span><span class="p">,</span>
+                             <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                             <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--legend_title&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Legend title.&#39;</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">toggle</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--legend/--nolegend&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Show legend.  [default: legend]&#39;</span><span class="p">,</span>
+                             <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--location&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Legend location. Accepts strings such as &#39;</span>
+                              <span class="s1">&#39;above and below, as well as 1-indexed &#39;</span>
+                              <span class="s1">&#39;ordinals corresponding to inside those axes&#39;</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">legend_options</span></div>
+
+<div class="viewcode-block" id="line_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.line_options">[docs]</a><span class="k">def</span> <span class="nf">line_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Group of options for line plots&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--linestyle&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;linestyle(s).&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;solid&#39;</span><span class="p">],</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;--marker&#39;</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Marker(s).&#39;</span><span class="p">,</span>
+                    <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="fill_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.fill_options">[docs]</a><span class="k">def</span> <span class="nf">fill_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Group of options for fillable line plots&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="s1">&#39;--fill/--nofill&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Fill under line.  [default: fill]&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--fillalpha&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Fill opacity (0-1). Only works if --colour is #RRGGBB.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">FloatRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--line/--noline&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Plot line.  [default: line]&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="plot_io_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.plot_io_function">[docs]</a><span class="k">def</span> <span class="nf">plot_io_function</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">plot_io_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Group of options for plot file I/O.&quot;&quot;&quot;</span>
+    
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="s1">&#39;--style&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Style sheet to overlay. Later ones override &#39;</span>
+                              <span class="s1">&#39;earlier ones.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--large/--small&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Axes size.  [default: small]&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--save/--nosave&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Write to file.  [default: save]&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--show/--noshow&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Show plot.  [default: noshow]&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--extension&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output extension(s). Requires --save.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pdf&#39;</span><span class="p">],</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output filename, sans extension.&#39;</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">plot_io_options</span></div>
+
+<div class="viewcode-block" id="temperature_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.temperature_option">[docs]</a><span class="k">def</span> <span class="nf">temperature_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for temperature selection.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--temperature&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Temperature (by default in K).&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">FloatRange</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                     <span class="n">default</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="verbose_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.verbose_option">[docs]</a><span class="k">def</span> <span class="nf">verbose_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Option for verbose output.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--verbose/--notverbose&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output plot conditions.  [default: verbose]&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="xy_limit_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.xy_limit_options">[docs]</a><span class="k">def</span> <span class="nf">xy_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Options for x and y axes limits.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmin&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmax&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymin&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymax&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="c_limit_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.c_limit_options">[docs]</a><span class="k">def</span> <span class="nf">c_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Options for colour axes limits.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmin&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour value.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmax&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour value.&#39;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.plot.heatmap &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.plot.heatmap &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,6 +35,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
@@ -81,8 +82,14 @@
 
 <span class="sd">    add_heatmap:</span>
 <span class="sd">        heatmap.</span>
+<span class="sd">    add_pfmap:</span>
+<span class="sd">        power factor vs temperature and carrier concentration.</span>
+<span class="sd">    add_pfdiff:</span>
+<span class="sd">        power factor difference vs temperature and carrier concentration.</span>
 <span class="sd">    add_ztmap:</span>
 <span class="sd">        ZT vs temperature and carrier concentration.</span>
+<span class="sd">    add_ztdiff:</span>
+<span class="sd">        ZT difference vs temperature and carrier concentration.</span>
 <span class="sd">    add_kappa_target:</span>
 <span class="sd">        kappa_l needed to reach a given ZT.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -95,7 +102,7 @@
 <span class="kn">import</span> <span class="nn">tp</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp2d</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">)</span>
 
@@ -159,7 +166,9 @@
 <span class="sd">        colour : colourmap or str or array-like or dict, optional</span>
 <span class="sd">            colourmap or colourmap name or highlight colour or</span>
 <span class="sd">            highlight, min, max colours in that order, or dictionary</span>
-<span class="sd">            with mid and min and/or max keys. Default: Blues.</span>
+<span class="sd">            with mid and min and/or max keys. Colour format must be</span>
+<span class="sd">            hex or rgb (array) or a named colour recognised by</span>
+<span class="sd">            matplotlib. Default: Blues.</span>
 <span class="sd">        undercolour : str or array-like, optional</span>
 <span class="sd">            colour for values under cmin. Default: None.</span>
 <span class="sd">        overcolour : str or array-like, optional</span>
@@ -247,10 +256,12 @@
             <span class="n">colours</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">**</span><span class="n">colour</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;colour must be a colourmap, colourmap &#39;</span>
-                            <span class="s1">&#39;name, single #rrggbb highlight colour or &#39;</span>
-                            <span class="s1">&#39;highlight, min, max #rrggbb colours in &#39;</span>
-                            <span class="s1">&#39;that order, or a dictionary with mid and &#39;</span>
-                            <span class="s1">&#39;min and/or max keys.&#39;</span><span class="p">)</span>
+                            <span class="s1">&#39;name, single highlight colour or &#39;</span>
+                            <span class="s1">&#39;highlight, min, max colours in that &#39;</span>
+                            <span class="s1">&#39;order, or a dictionary with mid and min &#39;</span>
+                            <span class="s1">&#39;and/or max keys. Colour format must be &#39;</span>
+                            <span class="s1">&#39;hex or rgb (array) or a named colour &#39;</span>
+                            <span class="s1">&#39;recognised by matplotlib.&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">undercolour</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">colours</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">undercolour</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">overcolour</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -288,7 +299,12 @@
 
     <span class="c1"># plotting</span>
     <span class="n">heat</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;dos&#39;</span> <span class="ow">in</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">and</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;dos&#39;</span><span class="p">]:</span>
+        <span class="c1"># place colourbar outside dos</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">xscale</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yscale</span><span class="p">)</span>
@@ -299,12 +315,12 @@
 
     <span class="k">return</span> <span class="n">cbar</span></div>
 
-<div class="viewcode-block" id="add_ztmap"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_ztmap">[docs]</a><span class="k">def</span> <span class="nf">add_ztmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">kdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-              <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convenience wrapper for plotting ZT heatmaps.</span>
+<div class="viewcode-block" id="add_pfmap"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_pfmap">[docs]</a><span class="k">def</span> <span class="nf">add_pfmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+              <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convenience wrapper for plotting power factor heatmaps.</span>
 
-<span class="sd">    Calculates ZT, plots and formats labels etc.</span>
+<span class="sd">    Calculates power factor, plots and formats labels etc.</span>
 
 <span class="sd">    Arguments</span>
 <span class="sd">    ---------</span>
@@ -312,13 +328,9 @@
 <span class="sd">        ax : axes</span>
 <span class="sd">            axes to plot on.</span>
 <span class="sd">        data : dict</span>
-<span class="sd">            dictionary containing temperature and doping, and either zt</span>
-<span class="sd">            or conductivity, seebeck and electronic_thermal_conductivity.</span>
+<span class="sd">            dictionary containing temperature and doping, and either</span>
+<span class="sd">            power_factor or conductivity and seebeck.</span>
 
-<span class="sd">        kdata : dict, optional</span>
-<span class="sd">            dictionary containing lattice_thermal_conductivity and</span>
-<span class="sd">            temperature. Ignored if zt in data, if not ignored and None,</span>
-<span class="sd">            defaults to 1 at all temperatures.</span>
 <span class="sd">        direction : str, optional</span>
 <span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
 <span class="sd">            Default: average.</span>
@@ -344,7 +356,249 @@
 <span class="sd">            override ZT maximum. Default: None.</span>
 <span class="sd">        colour : colourmap or str or array-like, optional</span>
 <span class="sd">            colourmap or colourmap name; or key colour or min and max</span>
-<span class="sd">            RGB colours to generate a colour map. Default: viridis.</span>
+<span class="sd">            RGB colours to generate a colour map. Colour format must be</span>
+<span class="sd">            hex or rgb (array) or a named colour recognised by</span>
+<span class="sd">            matplotlib. Default: viridis.</span>
+
+<span class="sd">        kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        colourbar</span>
+<span class="sd">            colourbar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;pfmap_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;pfmap_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;pfmap_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="n">equants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">]</span>
+
+    <span class="c1"># data formatting</span>
+
+    <span class="k">if</span> <span class="s1">&#39;power_factor&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;power_factor&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">equants</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">power_factor_fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">use_tprc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># plotting</span>
+
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">add_heatmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])),</span>
+                       <span class="n">data</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">],</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span>
+                       <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span>
+                       <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span>
+                       <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">cbar</span></div>
+
+<div class="viewcode-block" id="add_pfdiff"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_pfdiff">[docs]</a><span class="k">def</span> <span class="nf">add_pfdiff</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+               <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour1</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span> <span class="n">colour2</span><span class="o">=</span><span class="s1">&#39;#FF8000&#39;</span><span class="p">,</span>
+               <span class="n">midcolour</span><span class="o">=</span><span class="s1">&#39;#FFFFFF&#39;</span><span class="p">,</span> <span class="n">label1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a difference of two power factors heatmap.</span>
+
+<span class="sd">    Calculates power factor, plots and formats labels etc.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data(1,2) : dict</span>
+<span class="sd">            dictionaries containing temperature and doping, and either</span>
+<span class="sd">            power_factor or conductivity and seebeck. The result is</span>
+<span class="sd">            data1 - data2.</span>
+
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
+<span class="sd">            Default: average.</span>
+
+<span class="sd">        xinterp : int, optional</span>
+<span class="sd">            density of interpolation. None turns it off. Default: 200.</span>
+<span class="sd">        yinterp : int, optional</span>
+<span class="sd">            density of interpolation. None turns it off. Default: 200.</span>
+<span class="sd">        kind : str, optional</span>
+<span class="sd">            interpolation kind. Default: linear.</span>
+
+<span class="sd">        xmin : float, optional</span>
+<span class="sd">            override temperature minimum. Default: None.</span>
+<span class="sd">        xmax : float, optional</span>
+<span class="sd">            override temperature maximum. Default: None.</span>
+<span class="sd">        ymin : float, optional</span>
+<span class="sd">            override doping minimum. Default: None.</span>
+<span class="sd">        ymax : float, optional</span>
+<span class="sd">            override doping maximum. Default: None.</span>
+<span class="sd">        cmin : float, optional</span>
+<span class="sd">            override ZT minimum. Default: None.</span>
+<span class="sd">        cmax : float, optional</span>
+<span class="sd">            override ZT maximum. Default: None.</span>
+<span class="sd">        colour(1,2) : str, optional</span>
+<span class="sd">            colours for data(1,2). Colour format must be hex or rgb</span>
+<span class="sd">            (array) or a named colour recognised by matplotlib.</span>
+<span class="sd">            Deault: #800080, #FF8000.</span>
+<span class="sd">        midcolour : str, optional</span>
+<span class="sd">            colour at 0 difference. Default: #FFFFFF.</span>
+<span class="sd">        label(1,2) : str, optional</span>
+<span class="sd">            labels for data(1,2) to go in a legend. Default: None.</span>
+
+<span class="sd">        kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        colourbar</span>
+<span class="sd">            colourbar.</span>
+<span class="sd">        list</span>
+<span class="sd">            legend handles.</span>
+<span class="sd">        list</span>
+<span class="sd">            legend labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;pfdiff_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;pfdiff_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;pfdiff_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="n">equants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">]</span>
+
+    <span class="c1"># data formatting</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;power_factor&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;power_factor&#39;</span><span class="p">,</span>
+                                              <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">equants</span><span class="p">,</span>
+                                              <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">power_factor_fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">use_tprc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">dependent</span><span class="o">=</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
+                                                <span class="n">keys1</span><span class="o">=</span><span class="s1">&#39;power_factor&#39;</span><span class="p">,</span>
+                                                <span class="n">keys2</span><span class="o">=</span><span class="s1">&#39;power_factor&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">dependent</span><span class="o">=</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span>
+                                                <span class="n">keys1</span><span class="o">=</span><span class="s1">&#39;power_factor&#39;</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                <span class="n">keys2</span><span class="o">=</span><span class="s1">&#39;power_factor&#39;</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;power_factor&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;power_factor&#39;</span><span class="p">])</span>
+    <span class="n">dmin</span><span class="p">,</span> <span class="n">dmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="n">dmin</span> <span class="o">/</span> <span class="p">(</span><span class="n">dmin</span> <span class="o">-</span> <span class="n">dmax</span><span class="p">)</span>
+
+    <span class="c1"># colours</span>
+
+    <span class="c1"># legend handles and labels</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">colour1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label1</span><span class="p">),</span>
+         <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">colour2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">)]</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">]</span>
+
+    <span class="c1"># if one is uniformly less than the other, its colour doesn&#39;t show</span>
+    <span class="k">if</span> <span class="n">dmin</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">colour2</span> <span class="o">=</span> <span class="n">midcolour</span>
+    <span class="k">elif</span> <span class="n">dmax</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">colour1</span> <span class="o">=</span> <span class="n">midcolour</span>
+
+    <span class="n">colour</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">elbow</span><span class="p">(</span><span class="n">cmin</span><span class="o">=</span><span class="n">colour2</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">colour1</span><span class="p">,</span> <span class="n">cmid</span><span class="o">=</span><span class="n">midcolour</span><span class="p">,</span>
+                                  <span class="n">midpoint</span><span class="o">=</span><span class="n">mid</span><span class="p">)</span>
+                            
+    <span class="c1"># plotting</span>
+
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">add_heatmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]),</span>
+                       <span class="n">diff</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
+                       <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
+                       <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;$\Delta$ &#39;</span><span class="o">+</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">cbar</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">l</span></div>
+
+<div class="viewcode-block" id="add_ztmap"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_ztmap">[docs]</a><span class="k">def</span> <span class="nf">add_ztmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">kdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+              <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convenience wrapper for plotting ZT heatmaps.</span>
+
+<span class="sd">    Calculates ZT, plots and formats labels etc.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            dictionary containing temperature and doping, and either zt</span>
+<span class="sd">            or conductivity, seebeck and electronic_thermal_conductivity.</span>
+
+<span class="sd">        kdata : dict or int or float, optional</span>
+<span class="sd">            dictionary containing lattice_thermal_conductivity and</span>
+<span class="sd">            temperature. Ignored if zt in data. Can specify a constant</span>
+<span class="sd">            value instead. Default: 1.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
+<span class="sd">            Default: average.</span>
+
+<span class="sd">        xinterp : int, optional</span>
+<span class="sd">            density of interpolation. None turns it off. Default: 200.</span>
+<span class="sd">        yinterp : int, optional</span>
+<span class="sd">            density of interpolation. None turns it off. Default: 200.</span>
+<span class="sd">        kind : str, optional</span>
+<span class="sd">            interpolation kind. Default: linear.</span>
+
+<span class="sd">        xmin : float, optional</span>
+<span class="sd">            override temperature minimum. Default: None.</span>
+<span class="sd">        xmax : float, optional</span>
+<span class="sd">            override temperature maximum. Default: None.</span>
+<span class="sd">        ymin : float, optional</span>
+<span class="sd">            override doping minimum. Default: None.</span>
+<span class="sd">        ymax : float, optional</span>
+<span class="sd">            override doping maximum. Default: None.</span>
+<span class="sd">        cmin : float, optional</span>
+<span class="sd">            override ZT minimum. Default: None.</span>
+<span class="sd">        cmax : float, optional</span>
+<span class="sd">            override ZT maximum. Default: None.</span>
+<span class="sd">        colour : colourmap or str or array-like, optional</span>
+<span class="sd">            colourmap or colourmap name; or key colour or min and max</span>
+<span class="sd">            colours to generate a colour map. Colour format must be hex</span>
+<span class="sd">            or rgb (array) or a named colour recognised by matplotlib.</span>
+<span class="sd">            Default: viridis.</span>
 
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
@@ -378,22 +632,19 @@
     <span class="c1"># data formatting</span>
 
     <span class="k">if</span> <span class="s1">&#39;zt&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;zt&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;zt&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">equants</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">equants</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;meta&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="k">if</span> <span class="n">kdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="n">ltc</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="n">ltc</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
             <span class="n">data</span><span class="p">,</span> <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
                                                    <span class="n">equants</span><span class="p">,</span> <span class="n">ltc</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span>
 
-        <span class="k">else</span><span class="p">:</span> <span class="c1"># if no kappa_lat, set to 1</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Set to 1 W m^-1 K^-1&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">kdata</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Set to </span><span class="si">{}</span><span class="s1"> W m^-1 K^-1&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kdata</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">zt_fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">use_tprc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -414,6 +665,163 @@
 
     <span class="k">return</span> <span class="n">cbar</span></div>
 
+<div class="viewcode-block" id="add_ztdiff"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_ztdiff">[docs]</a><span class="k">def</span> <span class="nf">add_ztdiff</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">kdata1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kdata2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+               <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour1</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span>
+               <span class="n">colour2</span><span class="o">=</span><span class="s1">&#39;#FF8000&#39;</span><span class="p">,</span> <span class="n">midcolour</span><span class="o">=</span><span class="s1">&#39;#FFFFFF&#39;</span><span class="p">,</span> <span class="n">label1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">label2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a difference of two ZTs heatmap.</span>
+
+<span class="sd">    Calculates ZT, plots and formats labels etc.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        ax : axes</span>
+<span class="sd">            axes to plot on.</span>
+<span class="sd">        data(1,2) : dict</span>
+<span class="sd">            dictionaries containing temperature and doping, and either</span>
+<span class="sd">            zt or conductivity, seebeck and electronic_thermal_conductivity.</span>
+<span class="sd">            The result is data1 - data2.</span>
+
+<span class="sd">        kdata(1,2) : dict or int or float, optional</span>
+<span class="sd">            dictionaries containing lattice_thermal_conductivity and</span>
+<span class="sd">            temperature. Ignored if zt in data. Can specify constant</span>
+<span class="sd">            values instead. Default: 1.</span>
+<span class="sd">        direction : str, optional</span>
+<span class="sd">            crystal direction, accepts x-z/ a-c or average/ avg.</span>
+<span class="sd">            Default: average.</span>
+
+<span class="sd">        xinterp : int, optional</span>
+<span class="sd">            density of interpolation. None turns it off. Default: 200.</span>
+<span class="sd">        yinterp : int, optional</span>
+<span class="sd">            density of interpolation. None turns it off. Default: 200.</span>
+<span class="sd">        kind : str, optional</span>
+<span class="sd">            interpolation kind. Default: linear.</span>
+
+<span class="sd">        xmin : float, optional</span>
+<span class="sd">            override temperature minimum. Default: None.</span>
+<span class="sd">        xmax : float, optional</span>
+<span class="sd">            override temperature maximum. Default: None.</span>
+<span class="sd">        ymin : float, optional</span>
+<span class="sd">            override doping minimum. Default: None.</span>
+<span class="sd">        ymax : float, optional</span>
+<span class="sd">            override doping maximum. Default: None.</span>
+<span class="sd">        cmin : float, optional</span>
+<span class="sd">            override ZT minimum. Default: None.</span>
+<span class="sd">        cmax : float, optional</span>
+<span class="sd">            override ZT maximum. Default: None.</span>
+<span class="sd">        colour(1,2) : str, optional</span>
+<span class="sd">            colours for data(1,2). Colour format must be hex or rgb</span>
+<span class="sd">            (array) or a named colour recognised by matplotlib.</span>
+<span class="sd">            Default: #800080, #FF8000.</span>
+<span class="sd">        midcolour : str, optional</span>
+<span class="sd">            colour at 0 difference. Default: #FFFFFF.</span>
+<span class="sd">        label(1,2) : str, optional</span>
+<span class="sd">            labels for data(1,2) to go in a legend. Default: None.</span>
+
+<span class="sd">        kwargs</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
+<span class="sd">            Defaults are defined below, which are overridden by those in</span>
+<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
+<span class="sd">            arguments passed to this function.</span>
+<span class="sd">            Defaults:</span>
+
+<span class="sd">                rasterized: True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        colourbar</span>
+<span class="sd">            colourbar.</span>
+<span class="sd">        list</span>
+<span class="sd">            legend handles.</span>
+<span class="sd">        list</span>
+<span class="sd">            legend labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># defaults</span>
+
+    <span class="n">defkwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rasterized&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s1">&#39;ztdiff_kwargs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">or</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;ztdiff_kwargs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;ztdiff_kwargs&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+    <span class="n">ltc</span> <span class="o">=</span> <span class="s1">&#39;lattice_thermal_conductivity&#39;</span>
+    <span class="n">equants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">,</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">]</span>
+
+    <span class="c1"># data formatting</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">]</span>
+    <span class="n">kdata</span> <span class="o">=</span> <span class="p">[</span><span class="n">kdata1</span><span class="p">,</span> <span class="n">kdata2</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;zt&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;zt&#39;</span><span class="p">,</span>
+                                              <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">equants</span><span class="p">,</span>
+                                              <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ltc</span><span class="p">,</span>
+                                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                             <span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
+                                                             <span class="n">equants</span><span class="p">,</span> <span class="n">ltc</span><span class="p">,</span>
+                                                             <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ltc</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">ltc</span><span class="p">]</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Set to </span><span class="si">{}</span><span class="s1"> W m^-1 K^-1&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">zt_fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">use_tprc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">dependent</span><span class="o">=</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
+                                                <span class="n">keys1</span><span class="o">=</span><span class="s1">&#39;zt&#39;</span><span class="p">,</span> <span class="n">keys2</span><span class="o">=</span><span class="s1">&#39;zt&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">dependent</span><span class="o">=</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span>
+                                                <span class="n">keys1</span><span class="o">=</span><span class="s1">&#39;zt&#39;</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                <span class="n">keys2</span><span class="o">=</span><span class="s1">&#39;zt&#39;</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;zt&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;zt&#39;</span><span class="p">])</span>
+    <span class="n">dmin</span><span class="p">,</span> <span class="n">dmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="n">dmin</span> <span class="o">/</span> <span class="p">(</span><span class="n">dmin</span> <span class="o">-</span> <span class="n">dmax</span><span class="p">)</span>
+
+    <span class="c1"># colours</span>
+
+    <span class="c1"># legend handles and labels</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">colour1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label1</span><span class="p">),</span>
+         <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">colour2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">)]</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">]</span>
+
+    <span class="c1"># if one is uniformly less than the other, its colour doesn&#39;t show</span>
+    <span class="k">if</span> <span class="n">dmin</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">colour2</span> <span class="o">=</span> <span class="n">midcolour</span>
+    <span class="k">elif</span> <span class="n">dmax</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">colour1</span> <span class="o">=</span> <span class="n">midcolour</span>
+
+    <span class="n">colour</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">elbow</span><span class="p">(</span><span class="n">cmin</span><span class="o">=</span><span class="n">colour2</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">colour1</span><span class="p">,</span> <span class="n">cmid</span><span class="o">=</span><span class="n">midcolour</span><span class="p">,</span>
+                                  <span class="n">midpoint</span><span class="o">=</span><span class="n">mid</span><span class="p">)</span>
+                            
+    <span class="c1"># plotting</span>
+
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">add_heatmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]),</span>
+                       <span class="n">diff</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
+                       <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
+                       <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># axes formatting</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;$\Delta$ &#39;</span><span class="o">+</span><span class="n">labels</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">cbar</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">l</span></div>
+    
 <div class="viewcode-block" id="add_kappa_target"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_kappa_target">[docs]</a><span class="k">def</span> <span class="nf">add_kappa_target</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">zt</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                      <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
@@ -459,7 +867,9 @@
 <span class="sd">            override kappa maximum. Default: None.</span>
 <span class="sd">        colour : colourmap or str or array-like, optional</span>
 <span class="sd">            colourmap or colourmap name; or key colour or min and max</span>
-<span class="sd">            RGB colours to generate a colour map. Default: viridis.</span>
+<span class="sd">            RGB colours to generate a colour map. Colour format must be</span>
+<span class="sd">            hex or rgb (array) or a named colour recognised by</span>
+<span class="sd">            matplotlib. Default: viridis.</span>
 <span class="sd">        negativecolour : str or array-like, optional</span>
 <span class="sd">            colour for values under cmin. Default: grey.</span>
 
@@ -493,7 +903,7 @@
     <span class="n">equants</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">,</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">]</span>
     <span class="c1"># data formatting</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">equants</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">equants</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zt</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">kl_fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">use_tprc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

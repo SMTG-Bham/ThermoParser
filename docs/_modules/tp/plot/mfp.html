@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.plot.mfp &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.plot.mfp &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,6 +35,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
@@ -89,7 +90,7 @@
 <span class="kn">import</span> <span class="nn">tp.settings</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">tp.data</span> <span class="kn">import</span> <span class="n">resolve</span>
+<span class="kn">from</span> <span class="nn">tp.data</span> <span class="kn">import</span> <span class="n">utilities</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">)</span>
 
@@ -107,7 +108,7 @@
                   <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmarkers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymarkers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">add_xticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">add_yticks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fillcolour</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-                  <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">markerkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                  <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">markerkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cumulates and plots kappa against mean free path.</span>
 
 <span class="sd">    Can plot data from multiple data dictionaries and directions.</span>
@@ -178,6 +179,9 @@
 <span class="sd">        marker : str or list, optional</span>
 <span class="sd">            (list of) markers. Default: None.</span>
 
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 <span class="sd">        markerkwargs : dict, optional</span>
 <span class="sd">            keyword arguments for the markers, passed to</span>
 <span class="sd">            matplotlib.pyplot.plot.</span>
@@ -188,7 +192,6 @@
 
 <span class="sd">                color:      black</span>
 <span class="sd">                rasterized: False</span>
-
 <span class="sd">        kwargs</span>
 <span class="sd">            keyword arguments passed to matplotlib.pyplot.fill_between</span>
 <span class="sd">            if filled or matplotlib.pyplot.plot otherwise.</span>
@@ -231,20 +234,26 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="p">[</span><span class="n">direction</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="n">colour</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">colour</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">by_key</span><span class="p">()[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">colour</span> <span class="o">=</span> <span class="p">[</span><span class="n">colour</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="n">fillcolour</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fillcolour</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">by_key</span><span class="p">()[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fillcolour</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
         <span class="n">fillcolour</span> <span class="o">=</span> <span class="p">[</span><span class="n">fillcolour</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">linestyle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">linestyle</span> <span class="o">=</span> <span class="p">[</span><span class="n">linestyle</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="n">marker</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">marker</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">marker</span> <span class="o">=</span> <span class="p">[</span><span class="n">marker</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\mathregular{\kappa_l}$&#39;</span><span class="p">]</span>
@@ -259,7 +268,7 @@
 
     <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
-            <span class="n">data2</span> <span class="o">=</span> <span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">],</span>
+            <span class="n">data2</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">],</span>
                                     <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
             <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;mode_kappa&#39;</span><span class="p">])</span>
             <span class="n">mfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]))</span>
@@ -288,7 +297,7 @@
             <span class="n">linestyle1</span> <span class="o">=</span> <span class="n">linestyle</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">linestyle</span><span class="p">)]</span>
             <span class="n">marker1</span> <span class="o">=</span> <span class="n">marker</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">marker</span><span class="p">)]</span>
             <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">label1</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)])</span>
+                <span class="n">label1</span> <span class="o">=</span> <span class="n">label</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">label1</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -297,7 +306,7 @@
 
             <span class="k">if</span> <span class="n">fill</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">fillcolour2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">rgb2array</span><span class="p">(</span><span class="n">colour1</span><span class="p">,</span> <span class="n">fillcolour1</span><span class="p">)</span>
+                    <span class="n">fillcolour2</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">colour1</span><span class="p">,</span> <span class="n">fillcolour1</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour1</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> \
                        <span class="nb">isinstance</span><span class="p">(</span><span class="n">fillcolour1</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">and</span> \
@@ -331,6 +340,10 @@
                 <span class="n">yticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ytick</span><span class="p">)</span>
 
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                        <span class="n">data2</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
 
     <span class="c1"># axes formatting</span>
 
