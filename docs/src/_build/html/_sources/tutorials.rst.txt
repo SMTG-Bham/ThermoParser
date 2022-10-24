@@ -8,14 +8,14 @@ Tutorials
 .. toctree::
    :hidden:
 
-   tutorial-00 <Tutorial-00: CLI Fundamentals>
-   tutorial-01 <Tutorial-01: Python Foundations>
-   tutorial-02 <Tutorial-02: Individual Customaisation>
-   tutorial-03 <Tutorial-03: Compound Axes>
-   tutorial-04 <Tutorial-04: Layered Plots>
-   tutorial-05 <Tutorial-05: Helper Functions>
-   tutorial-06 <Tutorial-06: Package Customaisation>
-   tutorial-0X <Tutorial-0X: VASP Assists>
+    Tutorial-00: CLI Fundamentals <tutorial-00>
+    Tutorial-01: Python Foundations <tutorial-01>
+    Tutorial-02: Individual Customisation <tutorial-02>
+    Tutorial-03: Compound Axes <tutorial-03>
+    Tutorial-04: Layered Plots <tutorial-04>
+    Tutorial-05: Helper Functions <tutorial-05>
+    Tutorial-06: Package Customaisation <tutorial-06>
+    Tutorial-0X: VASP Assists <tutorial-0X>
 
 Here we have compiled a series of tutorials hoping to introduce the
 structure of tp (particularly tutorials 01-04), as well as more

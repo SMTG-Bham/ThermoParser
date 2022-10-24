@@ -6,10 +6,16 @@ Tutorials
     At some point these could be replaced by a Jupyter binder
 
 .. toctree::
-   :glob:
    :hidden:
 
-   tutorial-??
+    Tutorial-00: CLI Fundamentals <tutorial-00>
+    Tutorial-01: Python Foundations <tutorial-01>
+    Tutorial-02: Individual Customisation <tutorial-02>
+    Tutorial-03: Compound Axes <tutorial-03>
+    Tutorial-04: Layered Plots <tutorial-04>
+    Tutorial-05: Helper Functions <tutorial-05>
+    Tutorial-06: Package Customaisation <tutorial-06>
+    Tutorial-0X: VASP Assists <tutorial-0X>
 
 Here we have compiled a series of tutorials hoping to introduce the
 structure of tp (particularly tutorials 01-04), as well as more
