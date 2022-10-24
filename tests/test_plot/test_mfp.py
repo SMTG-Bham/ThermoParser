@@ -1,7 +1,5 @@
 """Tests the tp.plot.mfp module."""
 
-from glob import glob 
-from os import remove
 import unittest
 import tp
 from unittest.mock import MagicMock, patch
@@ -15,11 +13,7 @@ class CumKappaTest(unittest.TestCase):
                      'meta':           {'temperature': 0}}
         self.ax = MagicMock()
 
-    def tearDown(self):
-        dat = glob("cumkappa-mfp-*.dat")
-        for f in dat: remove(f)
-
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_default(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -33,7 +27,7 @@ class CumKappaTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_fill(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -47,7 +41,7 @@ class CumKappaTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_not_main(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -61,7 +55,7 @@ class CumKappaTest(unittest.TestCase):
         self.ax.set_ylim.assert_not_called()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_markers(self, mock_resolve):
         mock_resolve.return_value = self.data
 

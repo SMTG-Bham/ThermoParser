@@ -1,0 +1,1 @@
+.. include:: ../../examples/03-compound-axes/README.rst

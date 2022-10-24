@@ -1,4 +1,12 @@
-from . import calculate, settings
-from .axes import one, two, three, four, one_large, two_large, three_large, four_large, legend
-from .data import aniso, load, resolve, run, save
-from .plot import colour, frequency, heatmap, mfp, phonons, utilities
+"""Everything.
+
+Modules
+-------
+
+    calculate
+        tools for calculating derived properties and interpolating
+    settings
+        default values and metadata
+"""
+
+from . import settings, axes, calculate, data, plot, setup, cli

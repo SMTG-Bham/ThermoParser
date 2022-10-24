@@ -1,72 +1,30 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>tp.data.run &mdash; ThermoPlotter 1.0.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>tp.data.run &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter
-          
-
-          
-            
-            <img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
-          
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter<img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,24 +32,13 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html#id2">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
@@ -99,69 +46,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../contents.html">ThermoPlotter</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
       <li>tp.data.run</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for tp.data.run</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Code running tools.</span>
 
@@ -172,16 +80,17 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tp</span>
 
 <div class="viewcode-block" id="boltztrap"><a class="viewcode-back" href="../../../tp.data.html#tp.data.run.boltztrap">[docs]</a><span class="k">def</span> <span class="nf">boltztrap</span><span class="p">(</span><span class="n">tmax</span><span class="o">=</span><span class="mi">1001</span><span class="p">,</span> <span class="n">tstep</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span>
               <span class="n">ke_mode</span><span class="o">=</span><span class="s1">&#39;boltzmann&#39;</span><span class="p">,</span> <span class="n">vasprun</span><span class="o">=</span><span class="s1">&#39;vasprun.xml&#39;</span><span class="p">,</span> <span class="n">kpoints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">relaxation_time</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">,</span> <span class="n">lpfac</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">analyse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-              <span class="n">output</span><span class="o">=</span><span class="s1">&#39;boltztrap.hdf5&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+              <span class="n">output</span><span class="o">=</span><span class="s1">&#39;boltztrap.hdf5&#39;</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Runs BoltzTraP from a VASP density of states (DoS).</span>
 
-<span class="sd">    Runs quicker and more robustly than the pymatgen from_files version,</span>
-<span class="sd">    and outputs an hdf5 file.</span>
+<span class="sd">    Wrapper for pymatgen.electronic_structure.boltztrap but runs faster than </span>
+<span class="sd">    using the built in from_files method and outputs an hdf5 file.</span>
 <span class="sd">    Note: BoltzTraP can be a fickle friend, so if you&#39;re getting errors,</span>
 <span class="sd">    it may be worth reinstalling or trying on a different machine.</span>
 
@@ -229,6 +138,10 @@
 <span class="sd">            analyse BoltzTraP. Default: True.</span>
 <span class="sd">        output : str, optional</span>
 <span class="sd">            output hdf5 filename. Default: boltztrap.hdf5.</span>
+<span class="sd">        run_dir : str, optional</span>
+<span class="sd">            path to run boltztrap in. Default: current directory.</span>
+<span class="sd">        clean : bool, optional</span>
+<span class="sd">            remove boltztrap directory post-run. Default: False.</span>
 
 <span class="sd">        kwargs</span>
 <span class="sd">            passed to pymatgen.electronic.structure.boltztrap.BoltztrapRunner.</span>
@@ -287,7 +200,6 @@
 <span class="sd">                    units of each property above.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">import</span> <span class="nn">h5py</span>
     <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">from</span> <span class="nn">pymatgen.electronic_structure.boltztrap</span> \
          <span class="kn">import</span> <span class="nn">BoltztrapRunner</span><span class="o">,</span> <span class="nn">BoltztrapAnalyzer</span><span class="o">,</span> <span class="nn">BoltztrapError</span>
@@ -296,14 +208,16 @@
 
     <span class="c1"># check inputs</span>
 
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;analyse&#39;</span><span class="p">],</span>
-                           <span class="p">[</span> <span class="n">run</span><span class="p">,</span>   <span class="n">analyse</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;analyse&#39;</span><span class="p">,</span> <span class="s1">&#39;clean&#39;</span><span class="p">],</span>
+                           <span class="p">[</span> <span class="n">run</span><span class="p">,</span>   <span class="n">analyse</span><span class="p">,</span>   <span class="n">clean</span><span class="p">]):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="n">ke_mode</span> <span class="o">=</span> <span class="n">ke_mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">ke_modes</span> <span class="o">=</span>  <span class="p">[</span><span class="s1">&#39;boltzmann&#39;</span><span class="p">,</span> <span class="s1">&#39;wiedemann&#39;</span><span class="p">,</span> <span class="s1">&#39;snyder&#39;</span><span class="p">]</span>
     <span class="k">assert</span> <span class="n">ke_mode</span> <span class="ow">in</span> <span class="n">ke_modes</span><span class="p">,</span> <span class="s1">&#39;ke_mode must be </span><span class="si">{}</span><span class="s1"> or </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                 <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ke_modes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">ke_modes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">run_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">run_dir</span><span class="p">)</span>
 
     <span class="n">tmax</span> <span class="o">+=</span> <span class="n">tstep</span>
     <span class="n">tmin</span> <span class="o">=</span> <span class="n">tstep</span> <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">tmin</span>
@@ -319,31 +233,29 @@
             <span class="n">btr</span> <span class="o">=</span> <span class="n">BoltztrapRunner</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">nelect</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span>
                                   <span class="n">tgrid</span><span class="o">=</span><span class="n">tstep</span><span class="p">,</span> <span class="n">soc</span><span class="o">=</span><span class="n">soc</span><span class="p">,</span> <span class="n">lpfac</span><span class="o">=</span><span class="n">lpfac</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running Boltztrap...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">btr_dir</span> <span class="o">=</span> <span class="n">btr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">path_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+            <span class="n">btr_dir</span> <span class="o">=</span> <span class="n">btr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">path_dir</span><span class="o">=</span><span class="n">run_dir</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">BoltztrapError</span><span class="p">:</span>
             <span class="n">bs</span> <span class="o">=</span> <span class="n">vr</span><span class="o">.</span><span class="n">get_band_structure</span><span class="p">(</span><span class="n">line_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">kpoints_filename</span><span class="o">=</span><span class="n">kpoints</span><span class="p">)</span>
             <span class="n">nelect</span> <span class="o">=</span> <span class="n">vr</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;NELECT&#39;</span><span class="p">]</span>
             <span class="n">btr</span> <span class="o">=</span> <span class="n">BoltztrapRunner</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">nelect</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span>
                                   <span class="n">tgrid</span><span class="o">=</span><span class="n">tstep</span><span class="p">,</span> <span class="n">soc</span><span class="o">=</span><span class="n">soc</span><span class="p">,</span> <span class="n">lpfac</span><span class="o">=</span><span class="n">lpfac</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">btr_dir</span> <span class="o">=</span> <span class="n">btr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">path_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+            <span class="n">btr_dir</span> <span class="o">=</span> <span class="n">btr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">path_dir</span><span class="o">=</span><span class="n">run_dir</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
-
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Detects whether the BoltzTraP build on this computer writes the</span>
 <span class="sd">        doping concentrations correctly, and if it doesn&#39;t, writes them.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;boltztrap/boltztrap.outputtrans&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">btr_dir</span><span class="p">,</span> <span class="s1">&#39;boltztrap.outputtrans&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">23</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[:</span><span class="mi">23</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39; Calling FermiIntegrals&#39;</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">btr_dir</span><span class="p">,</span> <span class="s1">&#39;boltztrap.outputtrans&#39;</span><span class="p">),</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">doping</span><span class="p">,</span> <span class="o">-</span><span class="n">doping</span><span class="p">))):</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                    <span class="s1">&#39;Doping level number </span><span class="si">{}</span><span class="s1"> n = </span><span class="si">{}</span><span class="s1"> carriers/cm3</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
-
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">btr_dir</span> <span class="o">=</span> <span class="s1">&#39;boltztrap&#39;</span>
+        <span class="n">btr_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;boltztrap&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">analyse</span><span class="p">:</span> <span class="c1"># run boltztrap from boltztrap directory -&gt; hdf5 file</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Analysing Boltztrap...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -358,14 +270,22 @@
                 <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="p">{},</span>
                 <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="n">temperature</span><span class="p">,</span>
                 <span class="s1">&#39;meta&#39;</span><span class="p">:</span>
-                    <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="s1">&#39;S m-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="s1">&#39;cm-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="s1">&#39;S m-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="s1">&#39;cm-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">},</span>
+                     <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]},</span>
                    <span class="s1">&#39;interpolation_factor&#39;</span><span class="p">:</span> <span class="n">lpfac</span><span class="p">,</span>
                    <span class="s1">&#39;ke_mode&#39;</span><span class="p">:</span>              <span class="n">ke_mode</span><span class="p">,</span>
                    <span class="s1">&#39;relaxation_time&#39;</span><span class="p">:</span>      <span class="n">relaxation_time</span><span class="p">,</span>
@@ -398,7 +318,8 @@
             <span class="n">data</span><span class="p">[</span><span class="s1">&#39;seebeck&#39;</span><span class="p">][</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="mf">1e6</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">][</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">power_factor</span><span class="p">(</span>
                                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">][</span><span class="n">d</span><span class="p">],</span>
-                                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;seebeck&#39;</span><span class="p">][</span><span class="n">d</span><span class="p">])</span>
+                                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;seebeck&#39;</span><span class="p">][</span><span class="n">d</span><span class="p">],</span>
+                                                   <span class="n">use_tprc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ke_mode</span> <span class="o">==</span> <span class="s1">&#39;boltztrap&#39;</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">][</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> \
                       <span class="n">k</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">*</span> <span class="n">relaxation_time</span> \
@@ -416,50 +337,38 @@
 
         <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">hdf5</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">btr_dir</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;boltztrap.out&#39;</span><span class="p">))</span>
+
     <span class="k">return</span></div>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Scanlon Materials Theory Group.
-
-    </p>
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

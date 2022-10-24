@@ -1,7 +1,5 @@
 """Tests the tp.plot.frequency module."""
 
-from glob import glob
-from os import remove
 import numpy as np
 import unittest
 import tp
@@ -29,7 +27,7 @@ class DosTest(unittest.TestCase):
         self.assertEqual(self.ax.plot.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_not_called()
+        self.assertEqual(self.ax.set_xlim.call_count, 2)
         self.ax.set_ylim.assert_called_once()
 
     def test_fill(self):
@@ -40,7 +38,7 @@ class DosTest(unittest.TestCase):
         self.assertEqual(self.ax.fill_between.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_not_called()
+        self.assertEqual(self.ax.set_xlim.call_count, 2)
         self.ax.set_ylim.assert_called_once()
 
     def test_not_main(self):
@@ -62,7 +60,7 @@ class DosTest(unittest.TestCase):
         self.assertEqual(self.ax.plot.call_count, 3)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_not_called()
+        self.assertEqual(self.ax.set_xlim.call_count, 2)
         self.ax.set_ylim.assert_called_once()
 
     def test_invert(self):
@@ -75,7 +73,7 @@ class DosTest(unittest.TestCase):
         self.ax.set_ylabel.assert_not_called()
         self.ax.tick_params.assert_called_once()
         self.ax.set_xlim.assert_called_once()
-        self.ax.set_ylim.assert_not_called()
+        self.assertEqual(self.ax.set_ylim.call_count, 2)
 
     @patch.object(np, 'log10')
     def test_linear_scale(self, mock_log10):
@@ -129,11 +127,7 @@ class CumKappaTest(unittest.TestCase):
                      'meta':        {'temperature': 0}}
         self.ax = Mock()
 
-    def tearDown(self):
-        dat = glob("cumkappa-frequency-*.dat")
-        for f in dat: remove(f)
-
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_default(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -147,7 +141,7 @@ class CumKappaTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(0, 2)
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_fill(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -161,7 +155,7 @@ class CumKappaTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(0, 2)
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_not_main(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -175,7 +169,7 @@ class CumKappaTest(unittest.TestCase):
         self.ax.set_ylim.assert_not_called()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_invert(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -191,7 +185,7 @@ class CumKappaTest(unittest.TestCase):
         mock_resolve.assert_called_once()
 
     @patch.object(np, 'log10')
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_linear_scale(self, mock_resolve, mock_log10):
         mock_resolve.return_value = self.data
         mock_log10.side_effect = np.log10
@@ -215,7 +209,7 @@ class CumKappaTest(unittest.TestCase):
         mock_log10.assert_not_called()
 
     @patch.object(np, 'log10')
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_log_scale(self, mock_resolve, mock_log10):
         mock_resolve.return_value = self.data
         mock_log10.return_value = [0, 1]
@@ -245,7 +239,7 @@ class WaterfallTest(unittest.TestCase):
                      'meta':        {}}
         self.ax = Mock()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_default(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -259,7 +253,7 @@ class WaterfallTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(11, 999)
         self.assertEqual(mock_resolve.call_count, 2)
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_not_main(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -273,7 +267,7 @@ class WaterfallTest(unittest.TestCase):
         self.ax.set_ylim.assert_not_called()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_invert(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -297,7 +291,7 @@ class DensityTest(unittest.TestCase):
         self.data['lifetime'][0][500] = self.data['lifetime'][0][501]
         self.ax = Mock() 
  
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_default(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -311,7 +305,7 @@ class DensityTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(11, 999)
         self.assertEqual(mock_resolve.call_count, 2)
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_not_main(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -325,7 +319,7 @@ class DensityTest(unittest.TestCase):
         self.ax.set_ylim.assert_not_called()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     def test_invert(self, mock_resolve):
         mock_resolve.return_value = self.data
 
@@ -348,7 +342,7 @@ class ProjectedWaterfallTest(unittest.TestCase):
                      'meta':        {}}
         self.ax = Mock()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve):
         mock_colourbar().ax.yaxis.get_scale.return_value = 'log'
@@ -367,7 +361,7 @@ class ProjectedWaterfallTest(unittest.TestCase):
         mock_colourbar.assert_called_once()
         self.assertEqual(mock_resolve.call_count, 2)
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_not_main(self, mock_colourbar, mock_resolve):
         mock_colourbar().ax.yaxis.get_scale.return_value = 'log'
@@ -386,7 +380,7 @@ class ProjectedWaterfallTest(unittest.TestCase):
         mock_colourbar.assert_called_once()
         mock_resolve.assert_called_once()
 
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_invert(self, mock_colourbar, mock_resolve):
         mock_colourbar().ax.yaxis.get_scale.return_value = 'log'

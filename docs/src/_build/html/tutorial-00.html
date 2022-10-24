@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial-00: CLI Fundamentals &mdash; ThermoPlotter 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial-01: Python Foundations" href="tutorial-01.html" />
+    <link rel="prev" title="Tutorials" href="tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial-00: CLI Fundamentals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html">Tutorial-01: Python Foundations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html">Tutorial-02: Individual Customisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html">Tutorial-03: Compound Axes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-04.html">Tutorial-04: Layered Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html">Tutorial-05: Helper Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-06.html">Tutorial-06: Package Customisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html">Tutorial-0X: VASP Assists</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
+      <li>Tutorial-00: CLI Fundamentals</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial-00.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tutorial-00-cli-fundamentals">
+<h1>Tutorial-00: CLI Fundamentals<a class="headerlink" href="#tutorial-00-cli-fundamentals" title="Permalink to this headline"></a></h1>
+<p>The simplest way to use ThermoPlotter is via the command-line interface
+(CLI). This is easily navigable due to its modular structure. To get
+started, simply type <code class="docutils literal notranslate"><span class="pre">tp</span></code> into the command line, and a list of
+modules will be returned along with short descriptions. Pick one and
+type the full thing in, e.g. <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span></code>, to get a similar list of the
+available functions. Then type in all three parts and <code class="docutils literal notranslate"><span class="pre">--help</span></code> to get
+a detailed description of how to use the function, e.g.
+<code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span> <span class="pre">--help</span></code>. Note <code class="docutils literal notranslate"><span class="pre">-h</span></code> is <em>not</em> a substitute for
+<code class="docutils literal notranslate"><span class="pre">--help</span></code>.</p>
+<p>Typically, you will need one or more data files, which are inputted
+directly after the command, e.g. <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span> <span class="pre">mesh.h5</span></code>. Then
+there is a list of optional inputs for customisation. Options with a
+slash, e.g. <code class="docutils literal notranslate"><span class="pre">--total/--nototal</span></code> are toggles, which can be appended
+by themselves, while other options normally require something else
+written afterwards, e.g. <code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">1e19</span></code>. If there is a list in square
+brackets, the appended text must be from that list. Many options can
+take multiple values, in which case the tag will need to be repeated:
+<code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">'*'</span> <span class="pre">-m</span> <span class="pre">'o'</span></code>.</p>
+<p>Later tutorials will mention if the CLI can be used instead, but will
+focus on the python interface.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial-01.html" class="btn btn-neutral float-right" title="Tutorial-01: Python Foundations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
