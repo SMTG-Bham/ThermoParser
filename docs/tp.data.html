@@ -37,6 +37,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
@@ -117,7 +118,7 @@ phonopy_dos</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.data.load.amset">
-<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['seebeck', 'conductivity', 'electronic_thermal_conductivity']</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#amset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.amset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#amset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.amset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads AMSET transport data.</p>
 <p>Includes unit conversion and outputs units (see tp.settings).
 Swaps temperature and doping indices so temperature is first, for
@@ -129,8 +130,9 @@ compatibility with amset 0.1.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
 <li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts AMSET keys and power_factor.
-Loads dependent properties. Default: seebeck, conductivity,
-electronic_thermal_conductivity.</p></li>
+All loads the whole file, power factor can be added if it
+is not in the file. Loads dependent properties.
+Default: all.</p></li>
 <li><p><strong>doping</strong> (<em>str</em><em>, </em><em>optional</em>) – doing type (n or p). If there is more than one, defaults to
 n, else this is ignored.</p></li>
 </ul>
@@ -146,7 +148,7 @@ n, else this is ignored.</p></li>
 
 <dl class="py function">
 <dt id="tp.data.load.amset_mesh">
-<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset_mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'scattering_rates'</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em>, <em class="sig-param"><span class="n">spin</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#amset_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.amset_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset_mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em>, <em class="sig-param"><span class="n">spin</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#amset_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.amset_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads AMSET mesh data.</p>
 <p>Can also weight rates. Includes unit conversion and outputs units
 (see tp.settings). Swaps temperature and doping indices so
@@ -161,8 +163,9 @@ Also accepts ibz_weights, the weights of the irreducible
 k-points, fd_weights, the weights of the energies wrt the
 derivative of the Fermi-Dirac distribution, and
 weighted_rates, scattering_rates weighted by fd_weights
-and averaged over kpoints. Loads dependent properties.
-Default: scattering_rates.</p></li>
+and averaged over kpoints. “all” loads all quantities in
+the file, which does not include ibz_weights, fd_weights or
+weighted_rates. Loads dependent properties. Default: all.</p></li>
 <li><p><strong>doping</strong> (<em>str</em><em>, </em><em>optional</em>) – doing type (n or p). If there is more than one, defaults to
 n, else this is ignored.</p></li>
 <li><p><strong>spin</strong> (<em>str</em><em>, </em><em>optional</em>) – spin. Accepts up, down or avg. If avg and there is only one
@@ -180,16 +183,15 @@ spin channel, selects that, else averages both. Default: avg.</p></li>
 
 <dl class="py function">
 <dt id="tp.data.load.boltztrap">
-<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['temperature', 'doping', 'seebeck', 'conductivity', 'electronic_thermal_conductivity']</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#boltztrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.boltztrap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">boltztrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#boltztrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.boltztrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads BoltzTraP data from the tp boltztrap.hdf5 file.</p>
 <p>Includes unit conversion and outputs units (see tp.settings).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
-<li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts boltztrap.hdf5 keys.
-Default: temperature, doping, seebeck, conductivity,
-electronic_thermal_conductivity.</p></li>
+<li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts boltztrap.hdf5 keys or all.
+Default: all.</p></li>
 <li><p><strong>doping</strong> (<em>str</em><em>, </em><em>optional</em>) – doping.  Default: n.</p></li>
 </ul>
 </dd>
@@ -223,7 +225,7 @@ electronic_thermal_conductivity.</p></li>
 
 <dl class="py function">
 <dt id="tp.data.load.phono3py">
-<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phono3py</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">['kappa', 'temperature']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#phono3py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.phono3py" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phono3py</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#phono3py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.phono3py" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads Phono3py data.</p>
 <p>Can also calculate lifetimes, mean free paths and occupations.
 Includes unit conversions and outputs units and index order for all
@@ -235,7 +237,9 @@ into 3x3 ones for compatability with other codes.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
 <li><p><strong>quantities</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts Phono3py keys, lifetime,
-mean_free_path and occupation. Default: kappa, temperature.</p></li>
+mean_free_path and occupation. ‘all’ loads all Phono3py
+keys, but lifetime etc. must be loaded separately.
+Default: all.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -302,19 +306,48 @@ Default: read from POSCAR.</p></li>
 
 </div>
 </div>
-<div class="section" id="module-tp.data.resolve">
-<span id="tp-data-resolve-module"></span><h2>tp.data.resolve module<a class="headerlink" href="#module-tp.data.resolve" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tp.data.utilities">
+<span id="tp-data-utilities-module"></span><h2>tp.data.utilities module<a class="headerlink" href="#module-tp.data.utilities" title="Permalink to this headline">¶</a></h2>
 <p>Resolves quantities by temperature and/ or direction.</p>
 <p>Reads variables and selects specific conditions. Requires
 [‘meta’][‘dimensions’] subdictionaries provided by tp load modules.</p>
 <div class="section" id="id1">
 <h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>resolve</p>
+<div><dl class="simple">
+<dt>merge:</dt><dd><p>merge data from multiple files.</p>
+</dd>
+<dt>resolve:</dt><dd><p>selects data based on dependent variables.</p>
+</dd>
+</dl>
 </div></blockquote>
 <dl class="py function">
-<dt id="tp.data.resolve.resolve">
-<code class="sig-prename descclassname">tp.data.resolve.</code><code class="sig-name descname">resolve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantities</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/resolve.html#resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.resolve.resolve" title="Permalink to this definition">¶</a></dt>
+<dt id="tp.data.utilities.merge">
+<code class="sig-prename descclassname">tp.data.utilities.</code><code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">dependent</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/utilities.html#merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.utilities.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges data dictionaries with shared dependent variables.</p>
+<p>Particularly with amset in mind, to relieve memory constraints.
+Currently works for one dependent variable, so looping will often
+be required. An output in the form [ab,cd] would require three
+merges: a to b, c to d and ab to cd (or a to c etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list of dicts</em>) – data to merge. Requires tp metadata and dependent variable.</p></li>
+<li><p><strong>dependent</strong> (<em>string</em>) – dependent variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>merged data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.utilities.resolve">
+<code class="sig-prename descclassname">tp.data.utilities.</code><code class="sig-name descname">resolve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">quantities</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/utilities.html#resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.utilities.resolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Selects particular values of arbitrary quantities.</p>
 <p>Requires the meta/dimensions dictionaries found in later versions
 of tp. Currently cannot accept dictionary keys (e.g. dtype=’n’) if
@@ -332,14 +365,15 @@ Common options include:</p>
 average/ avg/ mean/ arithmetic/ arith,  or
 norm/ normal or harmonic/ harm.</p>
 </dd>
-<dt>dtype</dt><dd><p>n or p</p>
+<dt>dtype</dt><dd><p>n or p.</p>
 </dd>
-<dt>stype</dt><dd><p>codes from amset, e.g. IMP, or overall</p>
+<dt>stype</dt><dd><p>codes from amset, e.g. IMP, or overall.</p>
 </dd>
-<dt>doping</dt><dd><p>concentration, not to be confused with dtype</p>
+<dt>doping</dt><dd><p>concentration, not to be confused with dtype.</p>
+</dd>
+<dt>temperature</dt><dd><p>temperature.</p>
 </dd>
 </dl>
-<p>temperature</p>
 </div></blockquote>
 </p></li>
 </ul>
@@ -474,15 +508,24 @@ of shape (temperatures, concentrations, 3, 3).</p>
 <div class="section" id="module-tp.data.save">
 <span id="tp-data-save-module"></span><h2>tp.data.save module<a class="headerlink" href="#module-tp.data.save" title="Permalink to this headline">¶</a></h2>
 <p>Utilities to save data</p>
-<dl>
-<dt>Functions:</dt><dd><p>phono3py: save calculated properties to hdf5.
-zt: save zt to hdf5 and highlights to yaml.
-kappa_target: save kappa to hdf5.
-cumkappa: save cumkappa to text.</p>
-<p>hdf5: save nested dictionaries to hdf5 (up to depth 3).
-prompt: prompt before overwriting input</p>
+<div class="section" id="id3">
+<h3>Functions<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>phono3py:</dt><dd><p>save calculated properties to hdf5.</p>
+</dd>
+<dt>zt:</dt><dd><p>save zt to hdf5 and highlights to yaml.</p>
+</dd>
+<dt>kappa_target:</dt><dd><p>save kappa to hdf5.</p>
+</dd>
+<dt>cumkappa:</dt><dd><p>save cumkappa to text.</p>
+</dd>
+<dt>hdf5:</dt><dd><p>save nested dictionaries to hdf5 (up to depth 3).</p>
+</dd>
+<dt>prompt:</dt><dd><p>prompt before overwriting input</p>
 </dd>
 </dl>
+</div></blockquote>
 <dl class="py function">
 <dt id="tp.data.save.cumkappa">
 <code class="sig-prename descclassname">tp.data.save.</code><code class="sig-name descname">cumkappa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">mfp</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">'avg'</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">'tp-cumkappa'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">'dat'</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/save.html#cumkappa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.save.cumkappa" title="Permalink to this definition">¶</a></dt>
@@ -637,6 +680,7 @@ Default: 200.</p></li>
 </dl>
 </dd></dl>
 
+</div>
 </div>
 <div class="section" id="module-tp.data">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.data" title="Permalink to this headline">¶</a></h2>

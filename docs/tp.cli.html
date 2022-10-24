@@ -37,6 +37,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
@@ -126,7 +127,8 @@ phonons
 transport
 waterfall
 wideband
-ztmap</p>
+ztmap
+ztdiff</p>
 </dd>
 </dl>
 </dd>
@@ -145,27 +147,20 @@ directions_option
 doping_type_option
 doping_option
 dopings_option
-dos_options
+dos_function
 input_argument
-inputs_argument
+inputs_function
 interpolate_options
 kpoints_options
 legend_options
-auto_legend_options
 line_options
 fill_options
-plot_io_options
+plot_io_function
 temperature_option
 verbose_option
 xy_limit_options
 c_limit_options</p>
 </div></blockquote>
-<dl class="py function">
-<dt id="tp.cli.options.auto_legend_options">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">auto_legend_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#auto_legend_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.auto_legend_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Group of options for auto-generating plot legends.</p>
-</dd></dl>
-
 <dl class="py function">
 <dt id="tp.cli.options.c_limit_options">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">c_limit_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#c_limit_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.c_limit_options" title="Permalink to this definition">¶</a></dt>
@@ -203,11 +198,9 @@ c_limit_options</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.cli.options.dos_options">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">dos_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#dos_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.dos_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Options for DoS plots.</p>
-<p>Doesn’t contain colour as this must be renamed.</p>
-</dd></dl>
+<dt id="tp.cli.options.dos_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">dos_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dosargs</span><span class="o">=</span><span class="default_value">['-c', '--colour']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#dos_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.dos_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.fill_options">
@@ -216,16 +209,9 @@ c_limit_options</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.cli.options.input_argument">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">input_argument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#input_argument"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.input_argument" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for an input file.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.cli.options.inputs_argument">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">inputs_argument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#inputs_argument"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.inputs_argument" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for an input file.</p>
-</dd></dl>
+<dt id="tp.cli.options.inputs_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">inputs_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'filenames'</span></em>, <em class="sig-param"><span class="n">nargs</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#inputs_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.inputs_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.interpolate_options">
@@ -240,10 +226,9 @@ c_limit_options</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.cli.options.legend_options">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">legend_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#legend_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.legend_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Group of options for plot legends.</p>
-</dd></dl>
+<dt id="tp.cli.options.legend_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">legend_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">toggle</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#legend_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.legend_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.line_options">
@@ -252,10 +237,9 @@ c_limit_options</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.cli.options.plot_io_options">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">plot_io_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#plot_io_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.plot_io_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Group of options for plot file I/O.</p>
-</dd></dl>
+<dt id="tp.cli.options.plot_io_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">plot_io_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#plot_io_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.plot_io_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.temperature_option">

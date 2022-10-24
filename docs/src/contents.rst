@@ -9,7 +9,8 @@ ThermoPlotter
 .. toctree::
    :maxdepth: 3
 
-   gallery
+   Gallery <gallery>
+   Tutorials <tutorials>
    Introduction <index>
    Python Package <modules>
 

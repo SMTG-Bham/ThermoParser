@@ -12,10 +12,10 @@ tp.data.load module
    :undoc-members:
    :show-inheritance:
 
-tp.data.resolve module
-----------------------
+tp.data.utilities module
+------------------------
 
-.. automodule:: tp.data.resolve
+.. automodule:: tp.data.utilities
    :members:
    :undoc-members:
    :show-inheritance:

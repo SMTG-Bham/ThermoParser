@@ -10,7 +10,6 @@ Functions
         add markers lines to a linear plot.
 """
 
-from tkinter import W
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np

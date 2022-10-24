@@ -35,6 +35,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
@@ -163,14 +164,14 @@
             <span class="n">weighted</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="c1"># automatic mesh</span>
-                <span class="n">_</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">gen_ibz</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">poscar</span><span class="p">)</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">gen_ibz</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">poscar</span><span class="p">,</span> <span class="n">symprec</span><span class="p">)</span>
                 <span class="n">weighted</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span> <span class="c1"># unweighted kpoints</span>
                 <span class="n">weighted</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Kpoints</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">kpoints</span><span class="p">)</span><span class="o">.</span><span class="n">kpts</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">kpoints</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># mesh</span>
-        <span class="n">kpoints</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">gen_ibz</span><span class="p">(</span><span class="n">kpoints</span><span class="p">,</span> <span class="n">poscar</span><span class="p">)</span>
+        <span class="n">kpoints</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">gen_ibz</span><span class="p">(</span><span class="n">kpoints</span><span class="p">,</span> <span class="n">poscar</span><span class="p">,</span> <span class="n">symprec</span><span class="p">)</span>
         <span class="n">weighted</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">kpoints</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># list...</span>

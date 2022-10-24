@@ -2,8 +2,8 @@
 Tutorial-05: Helper Functions
 -----------------------------
 
-.. image:: transport.png
-   :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO<sub>3</sub>.
+.. image:: tutorial-05.png
+   :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`
 
 ThermoPlotter contains a number of helper functions that may be useful
 even when not using the core functionality. We will cover several of
@@ -14,7 +14,7 @@ CLI:
 
     tp plot transport ../data/basno3/transport_75x75x75.json -k ../data/basno3/kappa-m363636.hdf5 -q conductivity -q seebeck -q lattice_thermal_conductivity -n 1e18 -n 1e19 -n 1e20 -n 1e21 --tmin 0 --location 3
 
-The full script is long and mostly irrelevant, but can be found `here <https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/05-helper-functions/plot-transport.py>`_.
+The full script is long and mostly irrelevant, but can be found `here <https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/05-helper-functions/tutorial-05.py>`_.
 
 Axes (line 20)
 --------------
@@ -95,5 +95,5 @@ to the axes. ``preset``s are available for ``latin`` and ``greek``
 alphabetisation, and ``arabic`` and ``roman`` enumeration.
 Capitalising the first letter (e.g. ``Greek``) will capitalise the
 labels where applicable. Fully custom labels can also be specified
-using the ``labels`` argument, along with ``prefix``es and
-``suffix``es, and the position can be modified with ``x`` and ``y``.
+using the ``labels`` argument, along with ``prefix``\ es and
+``suffix``\ es, and the position can be modified with ``x`` and ``y``.

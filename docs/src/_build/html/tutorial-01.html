@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial-01: Python Foundations &mdash; ThermoPlotter 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial-02: Individual Customisation" href="tutorial-02.html" />
+    <link rel="prev" title="Tutorial-00: CLI Fundamentals" href="tutorial-00.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html">Tutorial-00: CLI Fundamentals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial-01: Python Foundations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#axes-line-6">Axes (line 6)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-line-9">Load (line 9)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-line-12">Plot (line 12)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-line-15">Save (line 15)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-help">More Help</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html">Tutorial-02: Individual Customisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html">Tutorial-03: Compound Axes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-04.html">Tutorial-04: Layered Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html">Tutorial-05: Helper Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-06.html">Tutorial-06: Package Customisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html">Tutorial-0X: VASP Assists</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
+      <li>Tutorial-01: Python Foundations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial-01.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tutorial-01-python-foundations">
+<h1>Tutorial-01: Python Foundations<a class="headerlink" href="#tutorial-01-python-foundations" title="Permalink to this headline"></a></h1>
+<img alt="Phonon dispersion of ZnO." src="_images/tutorial-01.png" />
+<p>The most basic plots in ThermoPlotter consist of four commands:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>axes</p></li>
+<li><p>load</p></li>
+<li><p>plot</p></li>
+<li><p>save</p></li>
+</ol>
+</div></blockquote>
+<p>ThermoPlotter offers ways to do the first three (the last is trivial),
+but each part can be replaced by your own code if you prefer.</p>
+<p>The CLI version of this code is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml
+</pre></div>
+</div>
+<p>And the python version is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/usr/bin/env python3</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">tp</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Axes</span>
+<span class="hll"><span class="linenos"> 6</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+</span><span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1"># Load</span>
+<span class="hll"><span class="linenos"> 9</span><span class="n">dispersion</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dispersion</span><span class="p">(</span><span class="s1">&#39;../data/zno/band.yaml&#39;</span><span class="p">)</span>
+</span><span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1"># Plot</span>
+<span class="hll"><span class="linenos">12</span><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">phonons</span><span class="o">.</span><span class="n">add_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">dispersion</span><span class="p">)</span>
+</span><span class="linenos">13</span>
+<span class="linenos">14</span><span class="c1"># Save</span>
+<span class="hll"><span class="linenos">15</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tutorial-01.png&#39;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="section" id="axes-line-6">
+<h2>Axes (line 6)<a class="headerlink" href="#axes-line-6" title="Permalink to this headline"></a></h2>
+<p>ThermoPlotter offers a number of pre-sized axes in the <code class="docutils literal notranslate"><span class="pre">axes</span></code> module.
+Within, there is a <code class="docutils literal notranslate"><span class="pre">large</span></code> module, which provides presentation-
+oriented figures, but these take relatively long to load so here we use
+<code class="docutils literal notranslate"><span class="pre">small</span></code>, which is better for papers. The functions consist of the
+number of primary axes, and a description where necessary. In this
+case, we use the most basic <code class="docutils literal notranslate"><span class="pre">one</span></code>.</p>
+<p>Every function returns three things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>figure: The whole plot area, used in step 4.</p></li>
+<li><p>axes: Where the data goes, used in step 3.</p></li>
+<li><p>add_legend: Adds a legend. We don’t use it here, so we’ve thrown it
+away by assigning it to <code class="docutils literal notranslate"><span class="pre">_</span></code>. Giving it any name and not using it
+has the same effect. Legends will be discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-03.html">Tutorial-03</a>.</p></li>
+</ol>
+</div></blockquote>
+<p>This command can easily be replaced with <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> commands
+such as <code class="docutils literal notranslate"><span class="pre">figure</span></code> and <code class="docutils literal notranslate"><span class="pre">subfigs</span></code>.</p>
+</div>
+<div class="section" id="load-line-9">
+<h2>Load (line 9)<a class="headerlink" href="#load-line-9" title="Permalink to this headline"></a></h2>
+<p>ThermoPlotter contains several data loading functions for different
+inputs in the <code class="docutils literal notranslate"><span class="pre">data.load</span></code> module. At their most basic, these take a
+file to read from, and return a dictionary of the data.</p>
+<p>While you can load your own data, ThermoPlotter takes several steps to
+ensure consistent format and units between codes and also with some
+old versions of these codes; and with the plotting functions. It also
+consistently applies custom unit conversions and provides metadata
+including array shapes, units and data sources, so care should be
+taken if this step is done manually.</p>
+</div>
+<div class="section" id="plot-line-12">
+<h2>Plot (line 12)<a class="headerlink" href="#plot-line-12" title="Permalink to this headline"></a></h2>
+<p>ThermoPlotter contains a number of plotting functions in the <code class="docutils literal notranslate"><span class="pre">plot</span></code>
+module. At their most basic, they take a set of axes to plot on, and a
+data dictionary to read from. All plot functions also take a number of
+customisation option, including all the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the underlying
+<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> function.</p>
+<p>This stage can be replaced with ordinary <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> functions such
+as <code class="docutils literal notranslate"><span class="pre">ax.plot</span></code>, which can be assisted by a number of ancillary
+ThermoPlotter functions discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html">Tutorial-05</a>.</p>
+</div>
+<div class="section" id="save-line-15">
+<h2>Save (line 15)<a class="headerlink" href="#save-line-15" title="Permalink to this headline"></a></h2>
+<p>Simply <code class="docutils literal notranslate"><span class="pre">figure.savefig(name.extension)</span></code>.</p>
+</div>
+<div class="section" id="more-help">
+<h2>More Help<a class="headerlink" href="#more-help" title="Permalink to this headline"></a></h2>
+<p>ThermoPlotter has extensive docs. Docstrings are available throughout
+the code itself, if you are using IPython or Jupyter and you can access
+them by typing the command name followed by two question marks, and
+IDEs normally have options too. If you are on the master branch,
+they can also be found <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">here</a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial-00.html" class="btn btn-neutral float-left" title="Tutorial-00: CLI Fundamentals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial-02.html" class="btn btn-neutral float-right" title="Tutorial-02: Individual Customisation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

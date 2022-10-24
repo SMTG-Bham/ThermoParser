@@ -2,7 +2,7 @@
 Tutorial-03: Compound Axes
 --------------------------
 
-.. image:: phonons.png
+.. image:: tutorial-03.png
    :alt: Phonon dispersion and density of states of ZnO.
 
 Often, a good way to draw links between data is to position them
@@ -18,7 +18,7 @@ The CLI version of this code is:
 
 And the python version is:
 
-.. literalinclude:: plot-phonons.py
+.. literalinclude:: tutorial-03.py
    :language: python
    :linenos:
    :emphasize-lines: 15,22,23,27
@@ -63,4 +63,6 @@ into one legend, with duplicates removed, which uses up the ``handles``
 and ``labels`` arguments, so in order to specify your own, you must set
 ``custom=True`` (not necessary for single-axes figures).
 ``tp.axes.legend.consolidate`` may also be useful for non-ThermoPlotter
-endaevors, as will be discussed in ``05-helper-functions``.
+endaevors, as will be discussed in `Tutorial-05`_.
+
+.. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html

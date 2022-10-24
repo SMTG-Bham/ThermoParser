@@ -15,7 +15,7 @@ to add markers has been included, e.g. here you can see nanostructuring
 to 100 nanometers may reduce the lattice thermal conductivity by around
 40 %.
 
-.. _density of states: https://smtg-ucl.github.io/ThermoPlotter/dos.html
+.. _density of states: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/
 
 The right plot can be plotted at the command line with:
 

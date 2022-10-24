@@ -35,6 +35,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#contributing">Contributing</a></li>
@@ -79,8 +80,10 @@
 
 <span class="sd">    cumulate:</span>
 <span class="sd">        sorts and cumulates.</span>
+<span class="sd">    gaussian:</span>
+<span class="sd">        gaussian distribution of height 1.</span>
 <span class="sd">    lorentzian:</span>
-<span class="sd">        lorentzian curve.</span>
+<span class="sd">        area conserved lorentzian distribution.</span>
 <span class="sd">    lifetime:</span>
 <span class="sd">        particle lifetime.</span>
 <span class="sd">    mfp:</span>
@@ -89,6 +92,8 @@
 <span class="sd">        boson occupation.</span>
 <span class="sd">    dfdde:</span>
 <span class="sd">        derivative of the Fermi-Dirac distribution.</span>
+<span class="sd">    thermal_conductivity:</span>
+<span class="sd">        total thermal conductivity.</span>
 <span class="sd">    power_factor:</span>
 <span class="sd">        power factor.</span>
 <span class="sd">    zt:</span>
@@ -144,6 +149,30 @@
 
     <span class="k">return</span> <span class="n">xsort</span><span class="p">,</span> <span class="n">ycum</span></div>
 
+<div class="viewcode-block" id="gaussian"><a class="viewcode-back" href="../../tp.html#tp.calculate.gaussian">[docs]</a><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Gaussian function with height 1 centered on x0.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">       x : array-like</span>
+<span class="sd">           x-values.</span>
+<span class="sd">       x0 : float</span>
+<span class="sd">           origin of function.</span>
+<span class="sd">       sigma :float</span>
+<span class="sd">           standard deviation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        np.array</span>
+<span class="sd">            Gaussian</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="lorentzian"><a class="viewcode-back" href="../../tp.html#tp.calculate.lorentzian">[docs]</a><span class="k">def</span> <span class="nf">lorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fwhm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Area conserved Lorentzian function centered on x0.</span>
 
@@ -161,7 +190,7 @@
 <span class="sd">    -------</span>
 
 <span class="sd">        np.array</span>
-<span class="sd">            lorentzian</span>
+<span class="sd">            Lorentzian</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -273,7 +302,7 @@
 
 <div class="viewcode-block" id="dfdde"><a class="viewcode-back" href="../../tp.html#tp.calculate.dfdde">[docs]</a><span class="k">def</span> <span class="nf">dfdde</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">fermi_level</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">doping</span><span class="p">,</span> <span class="n">amset_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
           <span class="n">use_tprc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Derivative of the Fermi-Dirac distribution.</span>
+    <span class="sd">&quot;&quot;&quot;Derivative of the Fermi-Dirac distribution wrt energy.</span>
 
 <span class="sd">    Arguments</span>
 <span class="sd">    ---------</span>

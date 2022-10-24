@@ -44,3 +44,11 @@ While not related to VASP, here seems a good point to mention the
 kappa-target plot, which shows what lattice thermal conductivity would
 be required to achieve a specified ZT. If its too low, you may not want
 to bother with the expensive third-order+ phonon caculations!
+
+Merge
+-----
+
+Bonus 2: ``tp.data.utilities.merge`` uses the tp metadata to combine
+multiple data dictionaries, so one can obtain denser data for memory-
+intensive calculations (such as AMSET) by running multiple times and
+merging the data dictionaries before plotting.

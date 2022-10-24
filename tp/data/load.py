@@ -18,7 +18,6 @@ Functions
         gets high path from phonopy dispersion data.
 """
 
-from re import L
 import numpy as np
 import tp
 from tp import settings

@@ -22,5 +22,5 @@ brackets, the appended text must be from that list. Many options can
 take multiple values, in which case the tag will need to be repeated:
 ``-m '*' -m 'o'``.
 
-Later examples will mention if the CLI can be used instead, but will
+Later tutorials will mention if the CLI can be used instead, but will
 focus on the python interface.

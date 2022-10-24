@@ -27,7 +27,7 @@ class DosTest(unittest.TestCase):
         self.assertEqual(self.ax.plot.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_not_called()
+        self.assertEqual(self.ax.set_xlim.call_count, 2)
         self.ax.set_ylim.assert_called_once()
 
     def test_fill(self):
@@ -38,7 +38,7 @@ class DosTest(unittest.TestCase):
         self.assertEqual(self.ax.fill_between.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_not_called()
+        self.assertEqual(self.ax.set_xlim.call_count, 2)
         self.ax.set_ylim.assert_called_once()
 
     def test_not_main(self):
@@ -60,7 +60,7 @@ class DosTest(unittest.TestCase):
         self.assertEqual(self.ax.plot.call_count, 3)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_not_called()
+        self.assertEqual(self.ax.set_xlim.call_count, 2)
         self.ax.set_ylim.assert_called_once()
 
     def test_invert(self):
@@ -73,7 +73,7 @@ class DosTest(unittest.TestCase):
         self.ax.set_ylabel.assert_not_called()
         self.ax.tick_params.assert_called_once()
         self.ax.set_xlim.assert_called_once()
-        self.ax.set_ylim.assert_not_called()
+        self.assertEqual(self.ax.set_ylim.call_count, 2)
 
     @patch.object(np, 'log10')
     def test_linear_scale(self, mock_log10):

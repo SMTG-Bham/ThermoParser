@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tp package &mdash; ThermoPlotter 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tp.axes package" href="tp.axes.html" />
+    <link rel="prev" title="tp" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tp package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.plot.html">tp.plot package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.cli.html">tp.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tp.setup.html">tp.setup package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tp-calculate-module">tp.calculate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tp.settings">tp.settings module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">tp</a> &raquo;</li>
+      <li>tp package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tp-package">
+<h1>tp package<a class="headerlink" href="#tp-package" title="Permalink to this headline"></a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tp.axes.html">tp.axes package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#tp-axes-small-module">tp.axes.small module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#tp-axes-large-module">tp.axes.large module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#tp-axes-legend-module">tp.axes.legend module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.axes.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tp.data.html">tp.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#tp-data-load-module">tp.data.load module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#tp-data-utilities-module">tp.data.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#tp-data-run-module">tp.data.run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#tp-data-save-module">tp.data.save module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.data.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tp.plot.html">tp.plot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#tp-plot-colour-module">tp.plot.colour module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#tp-plot-frequency-module">tp.plot.frequency module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#tp-plot-heatmap-module">tp.plot.heatmap module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#tp-plot-mfp-module">tp.plot.mfp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#tp-plot-phonons-module">tp.plot.phonons module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#tp-plot-utilities-module">tp.plot.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.plot.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tp.cli.html">tp.cli package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#tp-cli-cli-module">tp.cli.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#tp-cli-options-module">tp.cli.options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.cli.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tp.setup.html">tp.setup package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tp.setup.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.setup.html#tp-setup-vasp-module">tp.setup.vasp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tp.setup.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="tp-calculate-module">
+<h2>tp.calculate module<a class="headerlink" href="#tp-calculate-module" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="module-tp.settings">
+<span id="tp-settings-module"></span><h2>tp.settings module<a class="headerlink" href="#module-tp.settings" title="Permalink to this headline"></a></h2>
+<p>Settings and defaults.</p>
+<p>This module sets the default style sheet, tick locators and axis labels;
+as well as providing a means to automatically convert the units
+presented and add abbreviations that can be used when loading data.
+Custom defaults can be set by saving a copy of tprc.yaml (found in the
+main ThermoPlotter directory) to <code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code> and editing
+that.</p>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>style:</dt><dd><p>default style sheet.</p>
+</dd>
+<dt>large_style:</dt><dd><p>style sheet for large axes.</p>
+</dd>
+<dt>locator:</dt><dd><p>default tick locators.</p>
+</dd>
+<dt>to_tp:</dt><dd><p>convert names to tp conventions.</p>
+</dd>
+<dt>to_amset:</dt><dd><p>convert names to amset conventions.</p>
+</dd>
+<dt>to_boltztrap:</dt><dd><p>convert names to boltztrap conventions.</p>
+</dd>
+<dt>to_phono3py:</dt><dd><p>convert names to phono3py conventions.</p>
+</dd>
+<dt>conversions:</dt><dd><p>default unit conversions.</p>
+</dd>
+<dt>amset_conversions:</dt><dd><p>unit conversions.</p>
+</dd>
+<dt>boltztrap_conversions:</dt><dd><p>unit conversions.</p>
+</dd>
+<dt>phonopy_conversions:</dt><dd><p>unit conversions.</p>
+</dd>
+<dt>phono3py_conversions:</dt><dd><p>unit conversions.</p>
+</dd>
+<dt>units:</dt><dd><p>default units used.</p>
+</dd>
+<dt>dimensions:</dt><dd><p>dimensions of each variable.</p>
+</dd>
+<dt>boltztrap_dimensions:</dt><dd><p>updated dimensions for BoltzTraP.</p>
+</dd>
+<dt>labels:</dt><dd><p>default axis labels.</p>
+</dd>
+<dt>inverted_labels:</dt><dd><p>default labels for a dos-style axis.</p>
+</dd>
+<dt>large_labels:</dt><dd><p>default labels for a large axis.</p>
+</dd>
+<dt>long_labels:</dt><dd><p>list of long axis labels.</p>
+</dd>
+<dt>medium_labels:</dt><dd><p>list of slightly abbreviated axis labels.</p>
+</dd>
+<dt>short_labels:</dt><dd><p>list of fully contracted axis labels.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.amset_conversions">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">amset_conversions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#amset_conversions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.amset_conversions" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of unit conversions for amset to tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.boltztrap_conversions">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">boltztrap_conversions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#boltztrap_conversions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.boltztrap_conversions" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of unit conversions for boltztrap to tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.inverted_labels">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">inverted_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#inverted_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.inverted_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Get the default labels for inverted axes in tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.labels">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.labels" title="Permalink to this definition"></a></dt>
+<dd><p>Get the default labels for small axes in tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.locator">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">locator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#locator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.locator" title="Permalink to this definition"></a></dt>
+<dd><p>Get default locators.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.long_labels">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">long_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#long_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.long_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Get a dictionary of long-form axis labels.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.phono3py_conversions">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">phono3py_conversions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#phono3py_conversions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.phono3py_conversions" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of unit conversions for phono3py to tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.phonopy_conversions">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">phonopy_conversions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#phonopy_conversions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.phonopy_conversions" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of unit conversions for phonopy to tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.short_labels">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">short_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#short_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.short_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of short-form axis labels.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.to_amset">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">to_amset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#to_amset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.to_amset" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary to translate to amset.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.to_boltztrap">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">to_boltztrap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#to_boltztrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.to_boltztrap" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary to translate to boltztrap.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.to_phono3py">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">to_phono3py</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#to_phono3py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.to_phono3py" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary to convert to phono3py.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.to_tp">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">to_tp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#to_tp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.to_tp" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary to translate to tp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tp.settings.units">
+<span class="sig-prename descclassname"><span class="pre">tp.settings.</span></span><span class="sig-name descname"><span class="pre">units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_tprc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tp.settings.units" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of units of quantities used in tp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>use_tprc</strong> (<em>bool</em><em>, </em><em>optional</em>) – read custom units from tprc.yaml if present. Default: True.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="tp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tp.axes.html" class="btn btn-neutral float-right" title="tp.axes package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
