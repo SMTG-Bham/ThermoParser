@@ -21,7 +21,7 @@ dos = tp.data.load.phonopy_dos(dosfile, poscar=poscar)
 tp.plot.phonons.add_dispersion(ax[0], dispersion, colour=colour)
 tp.plot.frequency.add_dos(ax[1], dos, colour=colours, invert=True, line=True)
 
-ax[0].set_ylim(ax[1].get_ylim())
+ax[1].set_ylim(ax[0].get_ylim())
 add_legend()
 
 # Save
