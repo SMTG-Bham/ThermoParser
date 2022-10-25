@@ -1,0 +1,77 @@
+# This is a counterpart to the ThermoPlotter/tp/settings.py module for
+# saving cutom values. If you want to edit ThermoPlotter, save a copy of
+# this file as ``~/.config/tprc.yaml``, and edit it there. Only that
+# file will be checked and any changes made in the ThermoPlotter
+# directory will be overwritten on upgrading.
+
+# style sheet names or lists of names
+style:       null # default style sheet
+large_style: null # large style sheet
+
+# Locator settings
+locator:
+    # Unlike other parts of this file, rather than whole arguments, this
+    # should give integers to pass to MaxNLocator and AutoMinorLocator,
+    # respectively.
+    major: null
+    minor: null
+
+# The to_xxx, conversions, units and long_, medium_ and short_labels
+# functions should contain dictionaries, e.g.
+# to_xxx:
+#     energies: 'energy'
+# and if you change a conversion, remember to change the units and
+# labels as well and vice versa!
+
+# aliases for quantities
+to_tp:                null
+to_amset:             null
+to_boltztrap:         null
+to_phono3py:          null
+
+# unit conversions from the tp standards (see settings.py for reference)
+conversions:
+    conductivity: 1.e-2
+
+# updated units
+units:
+    conductivity: 'S cm-1'
+
+# updated axis labels`
+long_labels:
+    conductivity: 'Conductivity (S cm$\mathregular{^{-1}}$)'
+medium_labels:
+    conductivity: 'Conductivity (S cm$\mathregular{^{-1}}$)'
+short_labels:
+    conductivity: '$\mathregular{\sigma\ (S\ cm^{-1}}$)'
+
+# The following should contain either long, medium or short, to point to
+# the dictionaries of long_, medium_ or short_labels.
+labels:          null # for paper-style (small) axes
+inverted_labels: null # for dos-style axes
+large_labels:    null # for presentation-style (large) axes
+
+# The following are default kwargs for each plot type. These will
+# override those specified in the module, but will be overridden by
+# those specified when the function is called.
+# Frequency:
+dos_kwargs:                      null
+frequency_cum_kappa_kwargs:      null
+waterfall_kwargs:                null
+projected_waterfall_kwargs:      null
+density_kwargs:                  null
+# Heatmap:
+heatmap_kwargs:                  null
+ztmap_kwargs:                    null
+kappa_target_kwargs:             null
+# MFP:
+mfp_cum_kappa_kwargs:            null
+marker_kwargs:                   null
+# Phonons:
+dispersion_kwargs:               null
+multi_kwargs:                    null
+alt_dispersion_kwargs:           null
+projected_dispersion_kwargs:     null
+alt_projected_dispersion_kwargs: null
+wideband_kwargs:                 null
+xmarkkwargs:                     null

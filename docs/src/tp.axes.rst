@@ -4,34 +4,26 @@ tp.axes package
 Submodules
 ----------
 
-tp.axes.four module
--------------------
-
-.. automodule:: tp.axes.four
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-tp.axes.one module
-------------------
-
-.. automodule:: tp.axes.one
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-tp.axes.three module
+tp.axes.small module
 --------------------
 
-.. automodule:: tp.axes.three
+.. automodule:: tp.axes.small
    :members:
    :undoc-members:
    :show-inheritance:
 
-tp.axes.two module
-------------------
+tp.axes.large module
+--------------------
 
-.. automodule:: tp.axes.two
+.. automodule:: tp.axes.large
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tp.axes.legend module
+---------------------
+
+.. automodule:: tp.axes.legend
    :members:
    :undoc-members:
    :show-inheritance:

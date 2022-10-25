@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.data.load &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.data.load &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,7 +35,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-usage">Command Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
@@ -94,8 +96,7 @@
 <span class="kn">import</span> <span class="nn">tp</span>
 <span class="kn">from</span> <span class="nn">tp</span> <span class="kn">import</span> <span class="n">settings</span>
 
-<div class="viewcode-block" id="amset"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset">[docs]</a><span class="k">def</span> <span class="nf">amset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;seebeck&#39;</span><span class="p">,</span> <span class="s1">&#39;conductivity&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">],</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="amset"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset">[docs]</a><span class="k">def</span> <span class="nf">amset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads AMSET transport data.</span>
 
 <span class="sd">    Includes unit conversion and outputs units (see tp.settings).</span>
@@ -112,9 +113,9 @@
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts AMSET keys and power_factor.</span>
-<span class="sd">            Loads dependent properties. Default: seebeck, conductivity,</span>
-<span class="sd">            electronic_thermal_conductivity.</span>
-
+<span class="sd">            All loads the whole file, power factor can be added if it</span>
+<span class="sd">            is not in the file. Loads dependent properties.</span>
+<span class="sd">            Default: all.</span>
 <span class="sd">        doping : str, optional</span>
 <span class="sd">            doing type (n or p). If there is more than one, defaults to</span>
 <span class="sd">            n, else this is ignored.</span>
@@ -162,9 +163,17 @@
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;all&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;power_factor&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+            <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s1">&#39;power_factor&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="s1">&#39;doping&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
             <span class="n">doping</span> <span class="o">=</span> <span class="s1">&#39;n&#39;</span>
             <span class="n">di</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -207,6 +216,8 @@
                 <span class="k">if</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]:</span>
                     <span class="n">data2</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">dimensions</span> <span class="ow">and</span> <span class="s1">&#39;stype&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">q2</span> <span class="o">==</span> <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="s1">&#39;Total&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;overall&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="s1">&#39;stype&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
                 <span class="n">data2</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="c1"># for consistency with the format in the mesh data</span>
@@ -221,19 +232,18 @@
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">aconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">aconversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">aconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="s1">&#39;power_factor&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
         <span class="n">data2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">power_factor_fromdict</span><span class="p">(</span><span class="n">data2</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">data2</span></div>
 
-<div class="viewcode-block" id="amset_mesh"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset_mesh">[docs]</a><span class="k">def</span> <span class="nf">amset_mesh</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span>
-               <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="amset_mesh"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset_mesh">[docs]</a><span class="k">def</span> <span class="nf">amset_mesh</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads AMSET mesh data.</span>
 
 <span class="sd">    Can also weight rates. Includes unit conversion and outputs units</span>
@@ -253,8 +263,9 @@
 <span class="sd">            k-points, fd_weights, the weights of the energies wrt the</span>
 <span class="sd">            derivative of the Fermi-Dirac distribution, and</span>
 <span class="sd">            weighted_rates, scattering_rates weighted by fd_weights</span>
-<span class="sd">            and averaged over kpoints. Loads dependent properties.</span>
-<span class="sd">            Default: scattering_rates.</span>
+<span class="sd">            and averaged over kpoints. &quot;all&quot; loads all quantities in</span>
+<span class="sd">            the file, which does not include ibz_weights, fd_weights or</span>
+<span class="sd">            weighted_rates. Loads dependent properties. Default: all.</span>
 
 <span class="sd">        doping : str, optional</span>
 <span class="sd">            doing type (n or p). If there is more than one, defaults to</span>
@@ -285,14 +296,19 @@
     <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">anames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
     <span class="c1"># list of abbriviations and dependent quantites</span>
-    <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">]}</span>
+    <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]}</span>
     <span class="n">hasspin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;vb_index&#39;</span><span class="p">,</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">]</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">quantities</span><span class="p">)):</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantities</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">:</span>
-            <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">subs</span><span class="p">[</span><span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
-
-    <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">quantities</span><span class="p">))</span>
+            <span class="n">quantities</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subs</span><span class="p">[</span><span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="k">del</span> <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">l</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="c1"># add dependent variables</span>
 
@@ -341,6 +357,12 @@
         <span class="k">return</span> <span class="n">resolved</span>
 
     <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;all&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="n">quantities</span>
+            <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">q2</span><span class="p">:</span>
+                    <span class="n">quantities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;doping&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">][()])</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
@@ -377,6 +399,8 @@
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> unrecognised. Quantity must be </span><span class="si">{}</span><span class="s1">, &#39;</span>
                                 <span class="s1">&#39;ibz_weights, fd_weights weighted_rates&#39;</span>
                                 <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))]</span>
             <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
                 <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ir_to_full_kpoint_mapping&#39;</span><span class="p">],</span>
                                                    <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -387,7 +411,8 @@
                                                          <span class="n">f</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
                                                          <span class="n">amset_order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
-                <span class="n">rates</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
+                <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+                <span class="n">rates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]))</span>
                 <span class="n">rates</span><span class="p">[</span><span class="n">rates</span> <span class="o">&gt;</span> <span class="mf">1e20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e15</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">]</span> <span class="o">/</span> \
@@ -400,14 +425,14 @@
             <span class="n">q</span> <span class="o">=</span> <span class="n">anames</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q2</span>
             <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">dimensions</span> <span class="ow">and</span> <span class="s1">&#39;doping&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]:</span>
                 <span class="c1"># temperature in first index for consistency with other codes</span>
-                <span class="k">if</span> <span class="s1">&#39;stype&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s1">&#39;stype&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]:</span>
                         <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
                         <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">])[:,:,</span><span class="n">di</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">])[:,</span><span class="n">di</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]:</span>
                         <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
                         <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">])[:,</span><span class="n">di</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -421,21 +446,20 @@
         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])[</span><span class="n">di</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="s1">&#39;stype&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]</span> <span class="o">=</span> \
-                         <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Total&#39;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">aconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">aconversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">aconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="boltztrap"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.boltztrap">[docs]</a><span class="k">def</span> <span class="nf">boltztrap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">],</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="boltztrap"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.boltztrap">[docs]</a><span class="k">def</span> <span class="nf">boltztrap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads BoltzTraP data from the tp boltztrap.hdf5 file.</span>
 
 <span class="sd">    Includes unit conversion and outputs units (see tp.settings).</span>
@@ -447,9 +471,8 @@
 <span class="sd">            filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
-<span class="sd">            values to extract. Accepts boltztrap.hdf5 keys.</span>
-<span class="sd">            Default: temperature, doping, seebeck, conductivity,</span>
-<span class="sd">            electronic_thermal_conductivity.</span>
+<span class="sd">            values to extract. Accepts boltztrap.hdf5 keys or all.</span>
+<span class="sd">            Default: all.</span>
 
 <span class="sd">        doping : str, optional</span>
 <span class="sd">            doping.  Default: n.</span>
@@ -474,23 +497,27 @@
     <span class="n">units</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">boltztrap_dimensions</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="n">quantities</span> <span class="o">=</span> <span class="n">quantities</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">bnames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">bnames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;all&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+        <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">bnames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">bnames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
-    <span class="c1"># add dependent variables</span>
+        <span class="c1"># add dependent variables</span>
 
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tnames</span><span class="p">:</span>
-                    <span class="n">q</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">dimensions</span> <span class="ow">and</span> \
-                   <span class="p">(</span><span class="n">d</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="n">d</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="ow">and</span> <span class="n">tnames</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">])):</span>
-                    <span class="n">quantities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-                    <span class="k">break</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tnames</span><span class="p">:</span>
+                        <span class="n">q</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">dimensions</span> <span class="ow">and</span> \
+                       <span class="p">(</span><span class="n">d</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="n">d</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="ow">and</span> <span class="n">tnames</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">])):</span>
+                        <span class="n">quantities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+                        <span class="k">break</span>
 
     <span class="c1"># load data</span>
 
     <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;all&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+            <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">quantities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;doping_type&#39;</span><span class="p">:</span>       <span class="n">doping</span><span class="p">,</span>
                          <span class="s1">&#39;electronic_source&#39;</span><span class="p">:</span> <span class="s1">&#39;boltztrap&#39;</span><span class="p">,</span>
                          <span class="s1">&#39;units&#39;</span><span class="p">:</span>             <span class="p">{},</span>
@@ -511,15 +538,15 @@
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">bconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">bconversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">bconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="phono3py"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.phono3py">[docs]</a><span class="k">def</span> <span class="nf">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">]):</span>
+<div class="viewcode-block" id="phono3py"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.phono3py">[docs]</a><span class="k">def</span> <span class="nf">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads Phono3py data.</span>
 
 <span class="sd">    Can also calculate lifetimes, mean free paths and occupations.</span>
@@ -536,7 +563,9 @@
 
 <span class="sd">        quantities : str or list, optional</span>
 <span class="sd">            values to extract. Accepts Phono3py keys, lifetime,</span>
-<span class="sd">            mean_free_path and occupation. Default: kappa, temperature.</span>
+<span class="sd">            mean_free_path and occupation. &#39;all&#39; loads all Phono3py</span>
+<span class="sd">            keys, but lifetime etc. must be loaded separately.</span>
+<span class="sd">            Default: all.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -567,8 +596,13 @@
                <span class="s1">&#39;occupation&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]}</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">quantities</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">:</span>
-            <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">subs</span><span class="p">[</span><span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">:</span>
+                <span class="n">quantities</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subs</span><span class="p">[</span><span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+                <span class="k">del</span> <span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+        
     <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">derived</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">derived</span><span class="p">[</span><span class="n">q</span><span class="p">]:</span>
@@ -591,6 +625,12 @@
     <span class="c1"># load and calculate data</span>
 
     <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;all&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="n">quantities</span>
+            <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">derived</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">q2</span><span class="p">:</span>
+                    <span class="n">quantities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;kappa_source&#39;</span><span class="p">:</span> <span class="s1">&#39;phono3py&#39;</span><span class="p">,</span>
                          <span class="s1">&#39;units&#39;</span><span class="p">:</span>        <span class="p">{},</span>
                          <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span>   <span class="p">{}}}</span>
@@ -607,16 +647,17 @@
                    <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> unrecognised. Quantity must be in </span><span class="si">{}</span><span class="s1"> or </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">,</span>
                    <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">qs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">qs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">q</span><span class="p">][()]</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]):</span>
-                <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">5</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">4</span><span class="p">]],</span>
-                                <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">5</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">3</span><span class="p">]],</span>
-                                <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">4</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">2</span><span class="p">]]]</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-                    <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
-                    <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">5</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">4</span><span class="p">]],</span>
+                                    <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">5</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">3</span><span class="p">]],</span>
+                                    <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">4</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="mi">2</span><span class="p">]]]</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+                        <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
         <span class="c1"># check mode_kappa and correct for certain phono3py versions</span>
         <span class="k">if</span> <span class="s1">&#39;mode_kappa&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
@@ -642,7 +683,7 @@
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="s1">&#39;lifetime&#39;</span> <span class="ow">in</span> <span class="n">quantities</span> <span class="ow">or</span> <span class="s1">&#39;mean_free_path&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;lifetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">lifetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">],</span> <span class="n">use_tprc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -657,7 +698,7 @@
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
 
@@ -727,11 +768,11 @@
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">data2</span></div>
 
@@ -809,11 +850,11 @@
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">data2</span></div>
 

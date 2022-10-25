@@ -2,44 +2,65 @@
 Gallery
 -------
 
+This is a gallery of some things you can do in ThermoPlotter with brief
+explanations. More details on each of the plots, including the scripts
+and specific commands used are available in the `examples`_, and we
+also have `tutorials`_!
+
+.. _examples: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/
+.. _tutorials: https://smtg-ucl.github.io/ThermoPlotter/tutorials.html
+
 .. hint::
     Click on the images to see the script which generated them.
 
 At its simplest, ``ThermoPlotter`` is a way to quickly plot useful data
-from either a python script or the command line.
+from either a python script or the command line, such as the classic
+``ztmap`` heatmap (the power factor ``pfmap`` is also available):
 
 .. image:: figures/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/ztmap/plot-zt.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-zt.py
 
 Click on the plot to see the script, or one could use
 
 .. code-block:: bash
 
-   tp-ztmap boltztrap.hdf5 -k kappa-m<xxx>.hdf5 -c #800080 -d x
+   tp plot ztmap boltztrap.hdf5 -k kappa-m<xxx>.hdf5 -c '#800080' -d x
 
-A related plot we hope people find useful is the kappa-target plot,
-which calculates the lattice thermal conductivity required to reach a
+A related plot we hope people find useful for screening materials to
+run three+ phonon calculations on is the ``kappa-target`` plot, which
+calculates the lattice thermal conductivity required to reach a given
 ZT, in this case 2.
 
 .. image:: figures/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/kappa-target/plot-kappa-target.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-kappa-target.py
 
 .. code-block:: bash
 
-   tp-kappa-target boltztrap.hdf5 -c #008080 -d x
+   tp plot kappa-target boltztrap.hdf5 -c '#008080' -d x
+
+Or on the analytical end of the process, ``zdiff`` and ``pfdiff`` allow
+comparison among different datasets.
+
+.. image:: figures/ztdiff.png
+   :alt: A heatmap of differentce in ZT against carrier concentration and temperature
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-ztdiff.py
+
+.. code-block:: bash
+
+   tp plot ztdiff <x>/boltztrap.hdf5 <y>/boltztrap.hdf5 -k <x>/kappa-m<xxx>.hdf5 <y>/kappa-m<yyy>.hdf5 -l <x> <y>
 
 Slightly more complex plots also with command line scripts are the
-phonon dispersions:
+phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/multiphon/plot-multiphon.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-multiphon.py
 
 .. code-block:: bash
 
-   tp-converge-phonons <list of band.yamls> -l 111 222 333 444 555 -t Supercell\ Size
+   tp plot phonons <list of band.yamls> -l <list of labels> -t 'Supercell\ Size'
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
@@ -47,24 +68,21 @@ phonon dispersions:
 
 .. code-block:: bash
 
-   tp-phonons band.yaml -c #ff8000 -d projected_dos.dat --doscolour #ffff00 #00ffff
+   tp plot phonons band.yaml -c '#ff8000' -d projected_dos.dat --doscolour '#ffff00' '#00ffff'
 
 This is where some of the more useful functions of ``ThermoPlotter``
 come in, e.g. the rescaling of the x axis in the former plot, and the
-simplicity of compund plots in the latter.
+simplicity of compound axes in the latter.
 
-There are other `command-line scripts`_, but the main functionality is
+There are  command-line script, but the main functionality is
 intended as a python package, which enables much more customisable
-plotting, to enable nicely formatted multi-axes plots
-
-.. _command-line scripts: https://github.com/SMTG-UCL/ThermoPlotter/tree/master/scripts
+plotting, to enable nicely formatted multi-axes plots...
 
 .. image:: figures/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/cumkappa/plot-cumkappa.py
 
-and ones where multiple plots are on the same axes, to highlight
-particular interactions.
+\...and multi-plot axes, to highlight particular interactions.
 
 .. image:: figures/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
@@ -78,19 +96,38 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/wideband/plot-wideband.py
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-wideband.py
 
 .. code-block:: bash
 
-   tp-wideband band.yaml kappa-m<xxx>.hdf5 -c #000000 #ff0000 -s dark_background
+   tp plot wideband band.yaml kappa-m<xxx>.hdf5 -c '#000000' '#ff0000' -s dark_background
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
    :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-projected-phonons.py
 
-Through the python interface it is also possible to use individual parts
-of the code in ones own packages, for example the custom colourmaps,
-outside the scope of the package at large.
+Besides plotting, ThermoPlotter offers a number of ways to streamline
+trnasport property workflows, from generating more efficent input files
+(``tp gen``) to data consolidation (``tp.utilities.merge``) and
+retrieval (``tp.utilities.resolve`` and ``tp get``), many of which are
+outlined in the `tutorials`_. Most of these don't lend themselves to a
+gallery, except the ability to add gaussian smearing to a DoS plot
+during plotting, removing the need to rerun e.g. Phonopy or maintain
+multiple data files.
+
+.. image:: figures/dos.png
+   :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
+   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/plot-dos.py
+
+The right-hand plot can be plotted with:
+
+.. code-block:: bash
+
+   tp plot dos projected_dos.dat --atoms "Ba Sn O O_2 2" --sigma 0.2 --location 1 -c magenta -c cyan -c red -c orange
+
+There are also a number of cosmetic options in the python interface,
+which may be of interest outside the main scope of ThermoPlotter, e.g.
+the custom colourmaps, legend formatting tools and axes labels.
 
 Reference
 ---------

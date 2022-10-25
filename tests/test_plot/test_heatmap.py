@@ -166,14 +166,14 @@ class ZTMapTest(unittest.TestCase):
 
     @patch.object(tp.calculate, 'zt_fromdict')
     @patch.object(tp.calculate, 'interpolate')
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve, mock_interpolate, mock_zt):
         mock_zt.return_value = self.data2
         mock_interpolate.return_value = (self.data, self.data)
         mock_resolve.return_value = self.data
-        cbar = heatmap.add_ztmap(self.ax, self.data, xinterp=None,
-                                 yinterp=None)
+        cbar = heatmap.add_ztmap(self.ax, self.data, kdata=self.data,
+                                 xinterp=None, yinterp=None)
 
         self.ax.pcolormesh.assert_called_once()
         self.ax.set_xscale.assert_called_once_with('linear')
@@ -187,7 +187,7 @@ class ZTMapTest(unittest.TestCase):
         mock_zt.assert_called_once()
 
     @patch.object(tp.calculate, 'zt_fromdict')
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_precalculated(self, mock_colourbar, mock_resolve, mock_zt):
         mock_resolve.return_value = self.data2
@@ -226,7 +226,7 @@ class TargetKLTest(unittest.TestCase):
         self.ax = Mock()
 
     @patch.object(tp.calculate, 'kl_fromdict')
-    @patch.object(tp.data.resolve, 'resolve')
+    @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve, mock_kl):
         mock_resolve.return_value = self.data

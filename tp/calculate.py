@@ -7,8 +7,10 @@ Functions
 
     cumulate:
         sorts and cumulates.
+    gaussian:
+        gaussian distribution of height 1.
     lorentzian:
-        lorentzian curve.
+        area conserved lorentzian distribution.
     lifetime:
         particle lifetime.
     mfp:
@@ -17,6 +19,8 @@ Functions
         boson occupation.
     dfdde:
         derivative of the Fermi-Dirac distribution.
+    thermal_conductivity:
+        total thermal conductivity.
     power_factor:
         power factor.
     zt:
@@ -72,6 +76,30 @@ def cumulate(x, y):
 
     return xsort, ycum
 
+def gaussian(x, x0=0, sigma=1):
+    """Gaussian function with height 1 centered on x0.
+
+    Arguments
+    ---------
+
+       x : array-like
+           x-values.
+       x0 : float
+           origin of function.
+       sigma :float
+           standard deviation.
+
+    Returns
+    -------
+
+        np.array
+            Gaussian
+    """
+
+    x = np.array(x)
+    
+    return np.exp(-np.power(x - x0, 2) / (2 * sigma**2))
+
 def lorentzian(x, x0=0, fwhm=1):
     """Area conserved Lorentzian function centered on x0.
 
@@ -89,7 +117,7 @@ def lorentzian(x, x0=0, fwhm=1):
     -------
 
         np.array
-            lorentzian
+            Lorentzian
     """
 
     x = np.array(x)
@@ -201,7 +229,7 @@ def be_occupation(frequency, temperature, use_tprc=True):
 
 def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
           use_tprc=True):
-    """Derivative of the Fermi-Dirac distribution.
+    """Derivative of the Fermi-Dirac distribution wrt energy.
 
     Arguments
     ---------
@@ -477,11 +505,11 @@ def zt_fromdict(data, use_tprc=True):
             dictionary with ZTs.
     """
 
+    tc = 'thermal_conductivity'
+    etc, ltc = 'electronic_' + tc, 'lattice_' + tc
     if 'power_factor' not in data:
         data = power_factor_fromdict(data, use_tprc=use_tprc)
     if 'thermal_conductivity' not in data:
-        tc = 'thermal_conductivity'
-        etc, ltc = 'electronic_' + tc, 'lattice_' + tc
         data[tc] = thermal_conductivity(data[etc], data[ltc])
         data['meta']['units'][tc] = tp.settings.units(use_tprc=use_tprc)[tc]
         data['meta']['dimensions'][tc] = tp.settings.dimensions()[tc]
@@ -554,7 +582,7 @@ def to_tp(name, value):
 
     conversions = tp.settings.conversions()
     if name in conversions and conversions[name] is not None:
-        value = np.divide(value, conversions[name])
+        value = np.divide(value, float(conversions[name]))
 
     return value
 
@@ -578,7 +606,7 @@ def from_tp(name, value):
 
     conversions = tp.settings.conversions()
     if name in conversions and conversions[name] is not None:
-        value = np.multiply(value, conversions[name])
+        value = np.multiply(value, float(conversions[name]))
 
     return value
 
@@ -621,23 +649,31 @@ def interpolate(data1, data2, dependent, keys1, keys2, axis1=0, axis2=0,
     if isinstance(keys2, str):
         keys2 = [keys2]
 
-    dmin = np.nanmax([data1[dependent][0], data2[dependent][0]])
-    dmax = np.nanmin([data1[dependent][-1], data2[dependent][-1]])
-    index1 = np.where((data1[dependent]<=dmax) & (data1[dependent]>=dmin))[0]
-    index2 = np.where((data2[dependent]<=dmax) & (data2[dependent]>=dmin))[0]
+    # interpolate onto the densest dataset covered by both
+    dmin = np.nanmax([np.nanmin(data1[dependent]), np.nanmin(data2[dependent])])
+    dmax = np.nanmin([np.nanmax(data1[dependent]), np.nanmax(data2[dependent])])
+    invert = len(np.where((data1[dependent]<=dmax) & (data1[dependent]>=dmin))[0]) < \
+             len(np.where((data2[dependent]<=dmax) & (data2[dependent]>=dmin))[0])
+    if invert:
+        data1, data2 = data2, data1
+        keys1, keys2 = keys2, keys1
+        axis1, axis2 = axis2, axis1
+    index = np.where((data1[dependent]>=data2[dependent][0]) & (data1[dependent]<=data2[dependent][-1]))[0]
 
-    data1[dependent] = np.array(data1[dependent])[index1]
+    data1[dependent] = np.array(data1[dependent])[index]
     for key in keys1:
         data1[key] = np.swapaxes(data1[key], 0, axis1)
-        data1[key] = np.array(data1[key])[index1]
+        data1[key] = np.array(data1[key])[index]
         data1[key] = np.swapaxes(data1[key], 0, axis1)
 
-    data2[dependent] = np.array(data2[dependent])[index2]
     for key in keys2:
-        data2[key] = np.swapaxes(data2[key], 0, axis2)
-        data2[key] = np.array(data2[key])[index2]
-        interp = interp1d(data2[dependent], data2[key], kind=kind, axis=0)
+        interp = interp1d(data2[dependent], data2[key], kind=kind, axis=axis2)
         data2[key] = interp(data1[dependent])
-        data2[key] = np.swapaxes(data2[key], 0, axis2)
+    data2[dependent] = data1[dependent]
+
+    if invert:
+        data1, data2 = data2, data1
+        keys1, keys2 = keys2, keys1
+        axis1, axis2 = axis2, axis1
 
     return data1, data2

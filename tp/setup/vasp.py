@@ -91,14 +91,14 @@ def get_kpar(kpoints, poscar='POSCAR', symprec=1e-5):
             weighted = len(np.array(weights).nonzero()[0])
         else:
             if np.shape(mesh) == (1, 3): # automatic mesh
-                _, weights = gen_ibz(mesh, poscar)
+                _, weights = gen_ibz(mesh, poscar, symprec)
                 weighted = len(weights)
 
             else: # unweighted kpoints
                 weighted = len(Kpoints.from_file(kpoints).kpts)
 
     elif len(np.shape(kpoints)) == 1: # mesh
-        kpoints, weights = gen_ibz(kpoints, poscar)
+        kpoints, weights = gen_ibz(kpoints, poscar, symprec)
         weighted = len(weights.nonzero()[0])
 
     elif len(np.shape(kpoints)) == 2: # list...

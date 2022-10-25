@@ -3,8 +3,6 @@
 Modules
 -------
 
-    aniso
-        resolves data by direction or averages.
     resolve
         resolves named data by direction and/or temperature.
     load
@@ -15,4 +13,4 @@ Modules
         saves data (currently hdf5).
 """
 
-from . import load, resolve, run, save
+from . import load, run, save, utilities

@@ -10,6 +10,8 @@ Subpackages
    tp.axes
    tp.data
    tp.plot
+   tp.cli
+   tp.setup
 
 Submodules
 ----------
