@@ -478,7 +478,7 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
 
     return cbar, h, l
 
-def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
+def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
               yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
               ymax=None, cmin=None, cmax=None, colour='viridis', **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
@@ -562,6 +562,8 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
         data = tp.data.utilities.resolve(data, 'zt', direction=direction)
     else:
         data = tp.data.utilities.resolve(data, equants, direction=direction)
+        if kdata is None:
+            kdata = 1.
 
         if not isinstance(kdata, (int, float)):
             kdata = tp.data.utilities.resolve(kdata, ltc, direction=direction)
@@ -592,7 +594,7 @@ def add_ztmap(ax, data, kdata=None, direction='avg', xinterp=200,
 
     return cbar
 
-def add_ztdiff(ax, data1, data2, kdata1=None, kdata2=None, direction='avg',
+def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
                xinterp=200, yinterp=200, kind='linear', xmin=None, xmax=None,
                ymin=None, ymax=None, cmin=None, cmax=None, colour1='#800080',
                colour2='#FF8000', midcolour='#FFFFFF', label1=None,
@@ -692,6 +694,8 @@ def add_ztdiff(ax, data1, data2, kdata1=None, kdata2=None, direction='avg',
         else:
             data[i] = tp.data.utilities.resolve(data[i], equants,
                                               direction=direction)
+            if kdata[i] is None:
+                kdata[i] = 1.
             if not isinstance(kdata[i], (int, float)):
                 kdata[i] = tp.data.utilities.resolve(kdata[i], ltc,
                                                    direction=direction)
