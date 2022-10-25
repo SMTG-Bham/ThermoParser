@@ -172,8 +172,8 @@ class ZTMapTest(unittest.TestCase):
         mock_zt.return_value = self.data2
         mock_interpolate.return_value = (self.data, self.data)
         mock_resolve.return_value = self.data
-        cbar = heatmap.add_ztmap(self.ax, self.data, xinterp=None,
-                                 yinterp=None)
+        cbar = heatmap.add_ztmap(self.ax, self.data, kdata=self.data,
+                                 xinterp=None, yinterp=None)
 
         self.ax.pcolormesh.assert_called_once()
         self.ax.set_xscale.assert_called_once_with('linear')
