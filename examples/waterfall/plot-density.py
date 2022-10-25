@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
-from os import path
 import tp
 
 kfile = '../data/basno3/kappa-m363636.hdf5'
+# <ignore>
+from os import path
 if not path.isfile(kfile) or (path.getsize(kfile) < 1024*1024*100):
     raise Exception('File not found, please use get-data.sh')
+# </ignore>
 
 direction = 'avg'
 temperature = 300
@@ -13,9 +15,6 @@ waterfall = 'mean_free_path'
 quantities = ['waterfall', waterfall]
 # waterfall is an alias for frequency
 
-colours = {'Ba': '#ffcf06',
-           'Sn': '#59c605',
-           'O':  '#00b1f7'}
 colour = 'Blues'
 
 # Axes

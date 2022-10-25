@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial-03: Compound Axes &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial-04: Layered Plots" href="tutorial-04.html" />
+    <link rel="prev" title="Tutorial-02: Individual Customisation" href="tutorial-02.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html"> Tutorial-00: CLI Fundamentals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html"> Tutorial-01: Python Foundations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-02.html"> Tutorial-02: Individual Customisation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Tutorial-03: Compound Axes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#axes-line-15">Axes (line 15)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-lines-22-23">Plot (lines 22-23)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#legend-line-27">Legend (line 27)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-04.html"> Tutorial-04: Layered Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html"> Tutorial-05: Helper Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-06.html"> Tutorial-06: Package Customaisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
+      <li>Tutorial-03: Compound Axes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial-03.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tutorial-03-compound-axes">
+<h1>Tutorial-03: Compound Axes<a class="headerlink" href="#tutorial-03-compound-axes" title="Permalink to this headline">¶</a></h1>
+<img alt="Phonon dispersion and density of states of ZnO." src="_images/tutorial-03.png" />
+<p>Often, a good way to draw links between data is to position them
+together. Here, the DoS shows which atoms affect which parts of the
+phonon dispersion. ThermoPlotter offers a number of ways to streamline
+comparing graphs, including compound axes and enhanced legend handling.</p>
+<p>The CLI version of this code is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml -c <span class="s1">&#39;#f0901f&#39;</span> --dos ../data/zno/projected_dos.dat --doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> --legend_title ZnO --location <span class="m">2</span>
+</pre></div>
+</div>
+<p>And the python version is:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">tp</span>
+
+<span class="n">pfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/band.yaml&#39;</span>
+<span class="n">dfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/projected_dos.dat&#39;</span>
+<span class="n">poscar</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/POSCAR&#39;</span>
+
+<span class="n">colour</span> <span class="o">=</span> <span class="s1">&#39;#f0901f&#39;</span>
+<span class="n">colours</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Zn&#39;</span><span class="p">:</span> <span class="s1">&#39;#d46ef9&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;O&#39;</span><span class="p">:</span>  <span class="s1">&#39;#7b8eff&#39;</span><span class="p">}</span>
+<span class="n">location</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1"># Axes</span>
+<span class="hll"><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">add_legend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">one_dos</span><span class="p">()</span>
+</span>
+<span class="c1"># Load</span>
+<span class="n">dispersion</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dispersion</span><span class="p">(</span><span class="n">pfile</span><span class="p">)</span>
+<span class="n">dos</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dos</span><span class="p">(</span><span class="n">dfile</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="n">poscar</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">phonons</span><span class="o">.</span><span class="n">add_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dispersion</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">)</span>
+</span><span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">frequency</span><span class="o">.</span><span class="n">add_dos</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dos</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span>
+<span class="c1"># Formatting</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">())</span>
+<span class="hll"><span class="n">add_legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ZnO&#39;</span><span class="p">)</span>
+</span>
+<span class="c1"># Save</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tutorial-03.png&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="axes-line-15">
+<h2>Axes (line 15)<a class="headerlink" href="#axes-line-15" title="Permalink to this headline">¶</a></h2>
+<p>Rather than discard the <code class="docutils literal notranslate"><span class="pre">add_legend</span></code> function, we now need to keep
+it. We also a different axes function, <code class="docutils literal notranslate"><span class="pre">one_dos</span></code>, which contains a
+standard set of axes and a small ancillary one for the DoS. As there
+are multiple axes, <code class="docutils literal notranslate"><span class="pre">ax</span></code> is now a list of axes.</p>
+</div>
+<div class="section" id="plot-lines-22-23">
+<h2>Plot (lines 22-23)<a class="headerlink" href="#plot-lines-22-23" title="Permalink to this headline">¶</a></h2>
+<p>As <code class="docutils literal notranslate"><span class="pre">ax</span></code> is a list, we need to index it with <code class="docutils literal notranslate"><span class="pre">[]</span></code> to select which
+one we want to plot on. The order is always the same as they appear on
+the plot. As we want the DoS plot to share the frequency axes with the
+dispersion, the <code class="docutils literal notranslate"><span class="pre">invert</span></code> argument is used. All plotting functions in
+the <code class="docutils literal notranslate"><span class="pre">frequency</span></code> module have this argument. We also need to match the
+axes together, which is done on line 26.</p>
+<p>As an aside, in this case we have used a POSCAR to specify which atoms
+are shown in the DoS, but this can also be specified manually with the
+<code class="docutils literal notranslate"><span class="pre">atoms</span></code> argument. This takes a string of space-delimited items, which
+are either atom names (e.g. Zn) or numbers corresponding to the
+previous atom name. In this way, atoms in different environments can be
+separated, or multiple unalike atoms can be plotted as one.</p>
+</div>
+<div class="section" id="legend-line-27">
+<h2>Legend (line 27)<a class="headerlink" href="#legend-line-27" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">add_legend</span></code> places a legend at one of several pre-designed places,
+depending on the axes function. The default is usually to the right of,
+or above the axes, which could be specified by <code class="docutils literal notranslate"><span class="pre">right</span></code> or <code class="docutils literal notranslate"><span class="pre">above</span></code>
+respectively, but it can also be placed inside a set of axes using
+numbers, from left to right then top to bottom. Here, there is space in
+the second (DoS) axes, so we have specified place <code class="docutils literal notranslate"><span class="pre">2</span></code>. It also takes
+most normal <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> legend arguments, such as <code class="docutils literal notranslate"><span class="pre">title</span></code> here.
+For figures with more than one set of axes, the labels are consolidated
+into one legend, with duplicates removed, which uses up the <code class="docutils literal notranslate"><span class="pre">handles</span></code>
+and <code class="docutils literal notranslate"><span class="pre">labels</span></code> arguments, so in order to specify your own, you must set
+<code class="docutils literal notranslate"><span class="pre">custom=True</span></code> (not necessary for single-axes figures).
+<code class="docutils literal notranslate"><span class="pre">tp.axes.legend.consolidate</span></code> may also be useful for non-ThermoPlotter
+endaevors, as will be discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html">Tutorial-05</a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial-02.html" class="btn btn-neutral float-left" title="Tutorial-02: Individual Customisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial-04.html" class="btn btn-neutral float-right" title="Tutorial-04: Layered Plots" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

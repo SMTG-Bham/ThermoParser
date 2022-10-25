@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
-from os import path
 import tp
 
 kfile = '../data/basno3/kappa-m363636.hdf5'
 dfile = '../data/basno3/projected_dos.dat'
 poscar = '../data/basno3/POSCAR'
+
+# <ignore>
+from os import path
 if not path.isfile(kfile) or (path.getsize(kfile) < 1024*1024*100):
     raise Exception('File not found, please use get-data.sh')
+# </ignore>
 
 direction = 'avg'
 temperature = 300

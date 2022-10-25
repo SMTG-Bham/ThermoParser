@@ -148,15 +148,20 @@ def parse_colours(colour):
         elif isinstance(colour, str):
             cmap = tp.plot.colour.uniform(colour)
         elif isinstance(colour, list):
-            cmap = tp.plot.colour.uniform(*colour)
+            try: # rgb
+                cmap = tp.plot.colour.uniform(colour)
+            except ValueError: # hex or named
+                cmap = tp.plot.colour.uniform(*colour)
         elif isinstance(colour, dict):
             cmap = tp.plot.colour.uniform(**colour)
         else:
             raise Exception('colour must be a colourmap, colourmap '
-                            'name, single #rrggbb highlight colour or '
-                            'highlight, min, max #rrggbb colours in '
-                            'that order, or a dictionary with cmid and '
-                            'cmin and/or cmax keys.')
+                            'name, single highlight colour or '
+                            'highlight, min, max colours in that '
+                            'order, or a dictionary with cmid and '
+                            'cmin and/or cmax keys. Colour format must '
+                            'be hex rgb (array) or a named colour '
+                            'recognised by matplotlib. ')
 
     return cmap
 

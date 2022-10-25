@@ -1,12 +1,23 @@
 Data handling modules.
 
---------------
-``resolve.py``
---------------
+----------------
+``utilities.py``
+----------------
 
-``resolve.py`` uses the metadata stored by ThermoPlotter to break data
-down by its dependent variables, such as selecting ZT at a certain
-temperature.
+``utilities.py`` uses the metadata stored by ThermoPlotter to
+manipulate data.
+
+* ``tp.data.utilities.resolve`` breaks down data by dependent variable,
+  such as by temperature or direction.
+* ``tp.data.utilities.merge`` merges data dictionaries along a common
+  axis. This is particularly useful for codes that have heavy memory
+  requirements, such as AMSET, so you can run them on the first half of
+  temperatures and the second, and then stitch them together here to
+  get denser data along a large temperature range. Only merges along
+  one direction at a time, so a two-dimensional merge would require
+  multiple merges: one along the horizontal axis for each set of data
+  along the vertical axis, and then a final merge along the vertical
+  axis, or vice versa.
 
 -----------
 ``load.py``
@@ -21,7 +32,8 @@ units.
 * `AMSET`_
 
   * ``tp.data.load.amset`` loads transport properties from ``json``.
-  * ``tp.data.load.amset_mesh`` loads scattering properties from ``hdf5``.
+  * ``tp.data.load.amset_mesh`` loads scattering properties from ``hdf5``,
+    including derived properties such as weighted rates.
 
 * BoltzTraP:
 

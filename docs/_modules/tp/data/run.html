@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.data.run &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.data.run &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,7 +35,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-usage">Command Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
@@ -79,7 +81,6 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tp</span>
 
@@ -89,8 +90,8 @@
               <span class="n">output</span><span class="o">=</span><span class="s1">&#39;boltztrap.hdf5&#39;</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Runs BoltzTraP from a VASP density of states (DoS).</span>
 
-<span class="sd">    Runs quicker and more robustly than the pymatgen from_files version,</span>
-<span class="sd">    and outputs an hdf5 file.</span>
+<span class="sd">    Wrapper for pymatgen.electronic_structure.boltztrap but runs faster than </span>
+<span class="sd">    using the built in from_files method and outputs an hdf5 file.</span>
 <span class="sd">    Note: BoltzTraP can be a fickle friend, so if you&#39;re getting errors,</span>
 <span class="sd">    it may be worth reinstalling or trying on a different machine.</span>
 
@@ -200,7 +201,6 @@
 <span class="sd">                    units of each property above.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">import</span> <span class="nn">h5py</span>
     <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">from</span> <span class="nn">pymatgen.electronic_structure.boltztrap</span> \
          <span class="kn">import</span> <span class="nn">BoltztrapRunner</span><span class="o">,</span> <span class="nn">BoltztrapAnalyzer</span><span class="o">,</span> <span class="nn">BoltztrapError</span>
@@ -271,14 +271,22 @@
                 <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="p">{},</span>
                 <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="n">temperature</span><span class="p">,</span>
                 <span class="s1">&#39;meta&#39;</span><span class="p">:</span>
-                    <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="s1">&#39;S m-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="s1">&#39;cm-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="s1">&#39;S m-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="s1">&#39;cm-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">},</span>
+                     <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]},</span>
                    <span class="s1">&#39;interpolation_factor&#39;</span><span class="p">:</span> <span class="n">lpfac</span><span class="p">,</span>
                    <span class="s1">&#39;ke_mode&#39;</span><span class="p">:</span>              <span class="n">ke_mode</span><span class="p">,</span>
                    <span class="s1">&#39;relaxation_time&#39;</span><span class="p">:</span>      <span class="n">relaxation_time</span><span class="p">,</span>

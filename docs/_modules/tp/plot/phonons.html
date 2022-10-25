@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.plot.phonons &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.plot.phonons &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,7 +35,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-usage">Command Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
@@ -109,6 +111,7 @@
 <span class="kn">import</span> <span class="nn">yaml</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">/.config/tprc.yaml&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">))</span>
@@ -230,17 +233,12 @@
     <span class="n">marker</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">marker</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
 
     <span class="c1"># prevents unintentionally repeated legend entries</span>
-    <span class="n">label2</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">)])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">label</span><span class="p">]</span>
-            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">label</span><span class="p">])</span>
-    <span class="n">label2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">label2</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
+    <span class="n">label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
 
     <span class="c1"># data scaling</span>
 
@@ -261,7 +259,7 @@
 
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
-                <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -308,12 +306,12 @@
 <span class="sd">            legend labels. Default: None</span>
 
 <span class="sd">        colour : colourmap or str or array-like or dict, optional</span>
-<span class="sd">            colourmap or colourmap name or list of colours, one for each</span>
-<span class="sd">                dispersion or a min and max colour to generate a linear</span>
-<span class="sd">                colourmap between or a dictionary with cmin and cmax</span>
-<span class="sd">                keys. Note [r,g,b] format colours should be enclosed in</span>
-<span class="sd">                and additional [], i.e. [[[r,g,b]],...].</span>
-<span class="sd">                Default: winter_r.</span>
+<span class="sd">            colourmap or colourmap name or list of colours, one for</span>
+<span class="sd">            each dispersion or a min and max colour to generate a</span>
+<span class="sd">            linear colourmap between or a dictionary with cmin and cmax</span>
+<span class="sd">            keys. Note [r,g,b] format colours should be enclosed in an</span>
+<span class="sd">            additional [], i.e. [[[r,g,b]],...].</span>
+<span class="sd">            Default: winter_r.</span>
 <span class="sd">        linestyle : str or array-like, optional</span>
 <span class="sd">            linestyle(s) (&#39;-&#39;, &#39;--&#39;, &#39;.-&#39;, &#39;:&#39;). Default: solid.</span>
 <span class="sd">        marker : str or array-like, optional</span>
@@ -378,6 +376,8 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">colour</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="o">**</span><span class="n">colour</span><span class="p">)</span>
             <span class="n">colours</span> <span class="o">=</span> <span class="p">[[</span><span class="n">colour</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="p">[</span><span class="n">colour</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
 
@@ -411,6 +411,7 @@
             <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+        
         <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
@@ -431,7 +432,8 @@
                        <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="n">interpolate</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;#44ffff&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;#ff8044&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff4444&#39;</span><span class="p">,</span> <span class="s1">&#39;#00000010&#39;</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-                       <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                       <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phono3py quantity on a high-symmetry path.</span>
 
 <span class="sd">    Labels, colours and linestyles can be given one for the whole</span>
@@ -509,6 +511,9 @@
 
 <span class="sd">        workers : int, optional</span>
 <span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 
 <span class="sd">        xmarkkwargs : dict, optional</span>
 <span class="sd">            keyword arguments for x markers passed to</span>
@@ -542,7 +547,6 @@
     <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
     <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
     <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
-    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
     <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 
     <span class="c1"># defaults</span>
@@ -567,7 +571,11 @@
     <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
@@ -609,7 +617,7 @@
     <span class="c1"># interpolate</span>
 
     <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">interpolate</span><span class="p">)</span>
-    <span class="n">yinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">yinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="n">ysort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
@@ -623,24 +631,14 @@
     <span class="n">marker</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">marker</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
 
     <span class="c1"># prevents unintentionally repeated legend entries</span>
-
-    <span class="n">label2</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">)])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">label</span><span class="p">]</span>
-            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">label2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">label</span><span class="p">])</span>
-    <span class="n">label2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">label2</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
+    <span class="n">label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">tile_properties</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">,</span> <span class="n">bandmax</span><span class="p">)</span>
 
     <span class="c1"># plotting</span>
 
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
-                <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -655,7 +653,7 @@
                              <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
                              <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-                             <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                             <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with projected colour.</span>
 
 <span class="sd">    Plots a phonon dispersion, and projects a quantity onto the colour</span>
@@ -713,9 +711,11 @@
 <span class="sd">            Default: 500.</span>
 
 <span class="sd">        colour : colourmap or str or array-like or dict, optional</span>
-<span class="sd">            colourmap or colourmap name or #rrggbb highlight colour or</span>
+<span class="sd">            colourmap or colourmap name or highlight colour or</span>
 <span class="sd">            highlight, min, max colours in that order, or dictionary</span>
-<span class="sd">            with cmid and cmin and/or cmax keys. Default: viridis_r.</span>
+<span class="sd">            with cmid and cmin and/or cmax keys. Colour format must be</span>
+<span class="sd">            hex or rgb (array) or a named colour recognised by</span>
+<span class="sd">            matplotlib. Default: viridis_r.</span>
 <span class="sd">        cmin : float, optional</span>
 <span class="sd">            colour scale minimum. Default: display 99 % data.</span>
 <span class="sd">        cmax : float, optional</span>
@@ -729,6 +729,9 @@
 
 <span class="sd">        workers : int, optional</span>
 <span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 
 <span class="sd">        xmarkkwargs : dict, optional</span>
 <span class="sd">            keyword arguments for x markers passed to</span>
@@ -763,8 +766,6 @@
     <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
     <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
     <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
-    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
-    <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
     <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 
     <span class="c1"># defaults</span>
@@ -788,7 +789,11 @@
     <span class="n">quantity</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span> <span class="k">if</span> <span class="n">quantity</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">quantity</span>
     <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">quantity</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
@@ -835,7 +840,7 @@
         <span class="n">f2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">finterp</span><span class="p">(</span><span class="n">xtemp</span><span class="p">))</span>
 
         <span class="n">cinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">c</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-                           <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
+                           <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
         <span class="n">c2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">xtemp</span><span class="p">)))</span>
 
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">parse_colours</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
@@ -852,7 +857,12 @@
     <span class="c1"># axes formatting</span>
 
     <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
-    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;dos&#39;</span> <span class="ow">in</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">and</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;dos&#39;</span><span class="p">]:</span>
+        <span class="c1"># place colourbar outside dos</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">quantity</span><span class="p">])</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">())</span>
@@ -871,7 +881,7 @@
                                  <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                                  <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-                                 <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                                 <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phono3py quantity on a high-symmetry path and projection.</span>
 
 <span class="sd">    Just because you can, doesn&#39;t mean you should. A maxim I may fail to</span>
@@ -933,9 +943,11 @@
 <span class="sd">            every n points to sample. Default: 10.</span>
 
 <span class="sd">        colour : colourmap or str or array-like or dict, optional</span>
-<span class="sd">            colourmap or colourmap name or #rrggbb highlight colour or</span>
+<span class="sd">            colourmap or colourmap name or highlight colour or</span>
 <span class="sd">            highlight, min, max colours in that order, or dictionary</span>
-<span class="sd">            with cmid and cmin and/or cmax keys. Default: viridis_r.</span>
+<span class="sd">            with cmid and cmin and/or cmax keys. Colour format must be</span>
+<span class="sd">            hex or rgb (array) or a named colour recognised by</span>
+<span class="sd">            matplotlib. Default: viridis_r.</span>
 <span class="sd">        cmin : float, optional</span>
 <span class="sd">            colour scale minimum. Default: display 99 % data.</span>
 <span class="sd">        cmax : float, optional</span>
@@ -949,6 +961,9 @@
 
 <span class="sd">        workers : int, optional</span>
 <span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 
 <span class="sd">        xmarkkwargs : dict, optional</span>
 <span class="sd">            keyword arguments for x markers passed to</span>
@@ -983,8 +998,6 @@
     <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
     <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
     <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
-    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
-    <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
     <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 
     <span class="c1"># defaults</span>
@@ -1013,7 +1026,11 @@
     <span class="k">if</span> <span class="n">projected</span> <span class="o">==</span> <span class="s1">&#39;kappa&#39;</span><span class="p">:</span> <span class="n">projected</span> <span class="o">=</span> <span class="s1">&#39;mode_kappa&#39;</span>
     <span class="n">qs</span> <span class="o">=</span> <span class="n">quantity</span> <span class="k">if</span> <span class="n">quantity</span> <span class="o">==</span> <span class="n">projected</span> <span class="k">else</span> <span class="p">[</span><span class="n">quantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">]</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                   <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="s1">&#39;temperature&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">quantity</span><span class="p">]</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">projected</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1080,7 +1097,12 @@
     <span class="c1"># axes formatting</span>
 
     <span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
-    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;dos&#39;</span> <span class="ow">in</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">and</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;dos&#39;</span><span class="p">]:</span>
+        <span class="c1"># place colourbar outside dos</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">projected</span><span class="p">])</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">())</span>
@@ -1094,7 +1116,7 @@
 
 <div class="viewcode-block" id="add_wideband"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_wideband">[docs]</a><span class="k">def</span> <span class="nf">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with broadened bands.</span>
 
 <span class="sd">    Requires a POSCAR.</span>
@@ -1140,12 +1162,16 @@
 <span class="sd">            every n points to sample. Default: 5.</span>
 
 <span class="sd">        colour : colormap or str or list, optional</span>
-<span class="sd">            colourmap or colourmap name or max #RRGGBB colour (fades to</span>
-<span class="sd">            white) or min and max #RRGGBB colours or dictionary with</span>
-<span class="sd">            cmin and cmax keys. Default: viridis.</span>
+<span class="sd">            colourmap or colourmap name or max colour (fades to white)</span>
+<span class="sd">            or min and max colours or dictionary with cmin and cmax</span>
+<span class="sd">            keys. Colour format must be hex or rgb (array) or a named</span>
+<span class="sd">            colour recognised by matplotlib. Default: viridis.</span>
 
 <span class="sd">        workers : int, optional</span>
 <span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Write actual temperature used if applicable.</span>
+<span class="sd">            Default: False.</span>
 
 <span class="sd">        xmarkkwargs : dict, optional</span>
 <span class="sd">            keyword arguments for x markers passed to</span>
@@ -1180,7 +1206,6 @@
     <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
     <span class="kn">from</span> <span class="nn">pymatgen.analysis.structure_analyzer</span> <span class="kn">import</span> <span class="n">SpacegroupAnalyzer</span>
     <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Poscar</span>
-    <span class="kn">import</span> <span class="nn">pymatgen.symmetry.analyzer</span> <span class="k">as</span> <span class="nn">pmg</span>
     <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
     <span class="kn">from</span> <span class="nn">tp.calculate</span> <span class="kn">import</span> <span class="n">lorentzian</span>
 
@@ -1204,7 +1229,10 @@
 
     <span class="c1"># Phono3py data formatting</span>
 
-    <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">resolve</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+    <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                    <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="s1">&#39;temperature&#39;</span><span class="p">]))</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">])</span>
     <span class="n">qk</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
 
@@ -1261,7 +1289,7 @@
         <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
-            <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">colour</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>

@@ -1,5 +1,9 @@
-.. image:: transport.png
-   :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO<sub>3</sub>.
+-----------------------------
+Tutorial-05: Helper Functions
+-----------------------------
+
+.. image:: tutorial-05.png
+   :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`
 
 ThermoPlotter contains a number of helper functions that may be useful
 even when not using the core functionality. We will cover several of
@@ -10,19 +14,27 @@ CLI:
 
     tp plot transport ../data/basno3/transport_75x75x75.json -k ../data/basno3/kappa-m363636.hdf5 -q conductivity -q seebeck -q lattice_thermal_conductivity -n 1e18 -n 1e19 -n 1e20 -n 1e21 --tmin 0 --location 3
 
-----
-Axes
-----
+The full script is long and mostly irrelevant, but can be found `here <https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/05-helper-functions/tutorial-05.py>`_.
+
+Axes (line 20)
+--------------
+
+.. code-block:: python
+
+    plt.style.use('tp')
 
 ThermoPlotter comes with two ``matplotlib`` styles, ``tp`` and
 ``tp-large``, for small and large axes respectively, which are
 accessible any time using ``plt.style.use``.
 
--------
-Resolve
--------
+Resolve (lines 36 and 41)
+-------------------------
 
-``tp.data.resolve.resolve`` resolves a data array by dependent
+.. code-block:: python
+
+    tp.data.utilities.resolve(adata, q, direction=direction, doping=d)
+
+``tp.data.utilities.resolve`` resolves a data array by dependent
 properties. As arguments, it takes a data dictionary, an array of the
 names of the quantities to be resolved, and the dependent variable
 values. This can be used easily with data loaded through ThermoPlotter,
@@ -45,20 +57,34 @@ point, which it saves to ``['meta']['variable_name']``, so you can be
 sure what the data is. This is also useful in setting legend labels, as
 on line 38.
 
---------------------------
-Locators, Ticks and Labels
---------------------------
+Locators, Ticks and Labels (lines 45-49)
+----------------------------------------
+
+.. code-block:: python
+
+   axlabels = tp.settings.labels()
+   for i, q in enumerate([*quantities, q]):
+       ax[i].set_xlabel(axlabels['temperature'])
+       ax[i].set_ylabel(axlabels[q])
+       tp.plot.utilities.set_locators(ax[i], x='linear', y=scale[i])
 
 There are several functions to aid in formatting axes.
 ``tp.settings.labels``, and its variations ``large_``, ``long_``,
 ``medium_`` and ``short_labels`` return a dictionary of axes labels
-(more on these in example 06). ``tp.plot.utilities.set_locators`` sets
-the locators, if you provide a set of axes and set ``x`` and ``y`` to
-either ``'linear'`` or ``'log'`` as appropriate.
+(more on these in ``06-package-customisation``).
+``tp.plot.utilities.set_locators`` sets the locators, if you provide a
+set of axes and set ``x`` and ``y`` to either ``'linear'`` or ``'log'``
+as appropriate.
 
--------
-Legends
--------
+Legends (lines 51-54)
+---------------------
+
+.. code-block:: python
+
+   handles, labels = tp.axes.legend.consolidate(ax)
+   ax[2].legend(loc='best', title=axlabels['doping'], handles=handles,
+                labels=labels)
+   tp.axes.legend.alphabetise(ax, preset='roman', suffix=')', x=-0.12)
 
 ``tp.axes.legend.consolidate`` consolidates the legends of a list of
 axes into one, ensuring no duplicates, and returns the handles and
@@ -69,5 +95,5 @@ to the axes. ``preset``s are available for ``latin`` and ``greek``
 alphabetisation, and ``arabic`` and ``roman`` enumeration.
 Capitalising the first letter (e.g. ``Greek``) will capitalise the
 labels where applicable. Fully custom labels can also be specified
-using the ``labels`` argument, along with ``prefix``es and
-``suffix``es, and the position can be modified with ``x`` and ``y``.
+using the ``labels`` argument, along with ``prefix``\ es and
+``suffix``\ es, and the position can be modified with ``x`` and ``y``.

@@ -1,18 +1,26 @@
 """Utilities to save data
 
-Functions:
-    phono3py: save calculated properties to hdf5.
-    zt: save zt to hdf5 and highlights to yaml.
-    kappa_target: save kappa to hdf5.
-    cumkappa: save cumkappa to text.
+Functions
+---------
 
-    hdf5: save nested dictionaries to hdf5 (up to depth 3).
-    prompt: prompt before overwriting input
+    phono3py:
+        save calculated properties to hdf5.
+    zt:
+        save zt to hdf5 and highlights to yaml.
+    kappa_target:
+        save kappa to hdf5.
+    cumkappa:
+        save cumkappa to text.
+
+    hdf5:
+        save nested dictionaries to hdf5 (up to depth 3).
+    prompt:
+        prompt before overwriting input
 """
 
 import h5py
 import numpy as np
-from scipy.interpolate import interp1d, interp2d
+from scipy.interpolate import interp2d
 from sys import exit
 import tp
 import yaml
@@ -101,11 +109,11 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
 
     equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
     ltc = 'lattice_thermal_conductivity'
-    edata = tp.data.resolve.resolve(edata, equants, direction=direction)
+    edata = tp.data.utilities.resolve(edata, equants, direction=direction)
 
     if kfile is not None:
         kdata = tp.data.load.phono3py(kfile)
-        kdata = tp.data.resolve.resolve(kdata, ltc, direction=direction)
+        kdata = tp.data.utilities.resolve(kdata, ltc, direction=direction)
         edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
                                                 equants, ltc, kind='cubic')
         edata[ltc] = kdata[ltc]
@@ -225,7 +233,7 @@ def kappa_target(filename, zt=2, direction='avg', doping='n', tinterp=None,
         data = tp.data.load.amset(filename)
     except UnicodeDecodeError:
         data = tp.data.load.boltztrap(filename, doping=doping)
-    data = tp.data.resolve.resolve(data, ['conductivity', 'seebeck',
+    data = tp.data.utilities.resolve(data, ['conductivity', 'seebeck',
                                    'electronic_thermal_conductivity'],
                                    direction=direction)
     data['zt'] = zt
@@ -316,7 +324,7 @@ def cumkappa(filename, mfp=False, temperature=300, direction='avg',
 
     quantity = 'mean_free_path' if mfp else 'frequency'
     data = tp.data.load.phono3py(filename, ['mode_kappa', quantity])
-    data = tp.data.resolve.resolve(data, ['mode_kappa', quantity],
+    data = tp.data.utilities.resolve(data, ['mode_kappa', quantity],
                                    temperature=temperature, direction=direction)
     k = np.ravel(data['mode_kappa'])
     q = np.ravel(data[quantity])
@@ -343,7 +351,7 @@ def hdf5(data, output):
     Arguments
     ---------
 
-        data: dict
+        data : dict
             data to save.
         output : str
             output filename.

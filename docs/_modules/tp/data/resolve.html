@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.data.resolve &mdash; ThermoPlotter 1.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.data.resolve &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -35,7 +35,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-usage">Command Line Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
@@ -82,7 +84,6 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">tp.settings</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
@@ -107,7 +108,8 @@
 
 <span class="sd">                direction</span>
 <span class="sd">                    direction to resolve, accepts x-z/, a-c,</span>
-<span class="sd">                    average/ avg or normal/ norm.</span>
+<span class="sd">                    average/ avg/ mean/ arithmetic/ arith,  or</span>
+<span class="sd">                    norm/ normal or harmonic/ harm.</span>
 <span class="sd">                dtype</span>
 <span class="sd">                    n or p</span>
 <span class="sd">                stype</span>
@@ -161,7 +163,11 @@
                         <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
                             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                                 <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-                                <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">val</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                                    <span class="n">pos</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">pos</span><span class="p">]</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">val</span><span class="p">]</span>
                                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
                                 <span class="k">break</span>
                             <span class="k">else</span><span class="p">:</span>
@@ -191,7 +197,7 @@
                             <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                             <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
                                 <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">direction</span><span class="p">[</span><span class="n">val</span><span class="p">]]</span>
-                            <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">]:</span>
+                            <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;arithmetic&#39;</span><span class="p">,</span> <span class="s1">&#39;arith&#39;</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">]:</span>
                                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> \
                                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                                     <span class="c1"># if this is a 3x3 array</span>
@@ -204,8 +210,10 @@
                                 <span class="k">else</span><span class="p">:</span>
                                     <span class="c1"># if this is a 3x1 or 6x1 array</span>
                                     <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;arithmetic mean&#39;</span>
                             <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;normal&#39;</span><span class="p">]:</span>
-                                <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> \
+                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                                     <span class="c1"># if this is a 3x3 array</span>
                                     <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
                                     <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -219,7 +227,24 @@
                                             <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> \
                                             <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
                                     <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
-                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;norm&#39;</span>
+                            <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;harmonic&#39;</span><span class="p">,</span> <span class="s1">&#39;harm&#39;</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> \
+                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x3 array</span>
+                                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]],</span>
+                                                           <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x1 or 6x1 array</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">]],</span>
+                                                           <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;harmonic mean&#39;</span>
                             <span class="k">break</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">break</span>

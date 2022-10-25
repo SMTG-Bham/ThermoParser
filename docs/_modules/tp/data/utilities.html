@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tp.data.utilities &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter<img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>tp.data.utilities</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tp.data.utilities</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Resolves quantities by temperature and/ or direction.</span>
+
+<span class="sd">Reads variables and selects specific conditions. Requires</span>
+<span class="sd">[&#39;meta&#39;][&#39;dimensions&#39;] subdictionaries provided by tp load modules.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    merge:</span>
+<span class="sd">        merge data from multiple files.</span>
+<span class="sd">    resolve:</span>
+<span class="sd">        selects data based on dependent variables.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<div class="viewcode-block" id="merge"><a class="viewcode-back" href="../../../tp.data.html#tp.data.utilities.merge">[docs]</a><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dependent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merges data dictionaries with shared dependent variables.</span>
+
+<span class="sd">    Particularly with amset in mind, to relieve memory constraints.</span>
+<span class="sd">    Currently works for one dependent variable, so looping will often</span>
+<span class="sd">    be required. An output in the form [ab,cd] would require three</span>
+<span class="sd">    merges: a to b, c to d and ab to cd (or a to c etc.).</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        data : list of dicts</span>
+<span class="sd">            data to merge. Requires tp metadata and dependent variable.</span>
+<span class="sd">        dependent : string</span>
+<span class="sd">            dependent variable.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        dict</span>
+<span class="sd">            merged data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">depi</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">dependent</span><span class="p">])))]</span>
+    <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="n">dependent</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">dependent</span><span class="p">],</span>
+             <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;meta&#39;</span><span class="p">]}</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">depi</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="n">dependent</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span> <span class="k">for</span> <span class="n">d2</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="n">dependent</span><span class="p">]</span>\
+                     <span class="k">if</span> <span class="n">d2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">dependent</span><span class="p">]])</span>
+        <span class="n">data2</span><span class="p">[</span><span class="n">dependent</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">dependent</span><span class="p">])[</span><span class="n">depi</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dependent</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">present</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">present</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">present</span> <span class="ow">and</span> <span class="n">dependent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]:</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">dependent</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">axis</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">key</span><span class="p">])[</span><span class="n">depi</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data2</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+            
+    <span class="k">return</span> <span class="n">data2</span></div>
+
+<div class="viewcode-block" id="resolve"><a class="viewcode-back" href="../../../tp.data.html#tp.data.utilities.resolve">[docs]</a><span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">quantities</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Selects particular values of arbitrary quantities.</span>
+
+<span class="sd">    Requires the meta/dimensions dictionaries found in later versions</span>
+<span class="sd">    of tp. Currently cannot accept dictionary keys (e.g. dtype=&#39;n&#39;) if</span>
+<span class="sd">    they are not in the 0th index.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        data : dict</span>
+<span class="sd">            data with meta/dimensions dictionaries and quantities.</span>
+<span class="sd">        quantities : array-like or str</span>
+<span class="sd">            quantities to resolve</span>
+
+<span class="sd">        kwargs</span>
+<span class="sd">            dimesions to resolve. Rounds to nearest available value.</span>
+<span class="sd">            Common options include:</span>
+
+<span class="sd">                direction</span>
+<span class="sd">                    direction to resolve, accepts x-z/, a-c,</span>
+<span class="sd">                    average/ avg/ mean/ arithmetic/ arith,  or</span>
+<span class="sd">                    norm/ normal or harmonic/ harm.</span>
+<span class="sd">                dtype</span>
+<span class="sd">                    n or p.</span>
+<span class="sd">                stype</span>
+<span class="sd">                    codes from amset, e.g. IMP, or overall.</span>
+<span class="sd">                doping</span>
+<span class="sd">                    concentration, not to be confused with dtype.</span>
+<span class="sd">                temperature</span>
+<span class="sd">                    temperature.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        dict</span>
+<span class="sd">            resolved data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># sever the link to enable the original data to be reused</span>
+    <span class="k">if</span> <span class="s1">&#39;meta&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">or</span> <span class="s1">&#39;dimensions&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;data must have a meta subdictionary with a &#39;</span>
+                        <span class="s1">&#39;dimensions subdictionary.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">quantities</span> <span class="o">=</span> <span class="n">quantities</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                 <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+    <span class="c1"># make sure dictionaries are dealt with first</span>
+    <span class="n">keys</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;direction&#39;</span><span class="p">:</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> not in dimensions. Skipping.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;direction&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;stype&#39;</span><span class="p">]:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> not in data. Skipping.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">]):</span>
+                        <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                                    <span class="n">pos</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">pos</span><span class="p">]</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">val</span><span class="p">]</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                                <span class="k">break</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Does not currently work &#39;</span>
+                                              <span class="s1">&#39;unless strings are in &#39;</span>
+                                              <span class="s1">&#39;the 0th index.&#39;</span><span class="p">)</span>
+                                <span class="k">break</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">val</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">val</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">]):</span>
+                        <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                            <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+                            <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># if key == &#39;direction&#39;:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">]):</span>
+                        <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
+                            <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                            <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">direction</span><span class="p">:</span>
+                                <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">direction</span><span class="p">[</span><span class="n">val</span><span class="p">]]</span>
+                            <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;arithmetic&#39;</span><span class="p">,</span> <span class="s1">&#39;arith&#39;</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> \
+                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x3 array</span>
+                                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                          <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                                          <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]],</span>
+                                                         <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x1 or 6x1 array</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;arithmetic mean&#39;</span>
+                            <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;normal&#39;</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> \
+                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x3 array</span>
+                                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> \
+                                            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> \
+                                            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x1 or 6x1 array</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> \
+                                            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> \
+                                            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;norm&#39;</span>
+                            <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;harmonic&#39;</span><span class="p">,</span> <span class="s1">&#39;harm&#39;</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> \
+                                   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x3 array</span>
+                                    <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]],</span>
+                                                           <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># if this is a 3x1 or 6x1 array</span>
+                                    <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                                            <span class="mi">1</span><span class="o">/</span><span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="mi">2</span><span class="p">]],</span>
+                                                           <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;harmonic mean&#39;</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

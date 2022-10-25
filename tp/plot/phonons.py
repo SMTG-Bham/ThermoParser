@@ -159,17 +159,12 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
-    label2 = []
-    if isinstance(label, str):
-        label2.extend(['$\mathregular{{{}}}$'.format(label)])
-    else:
-        try:
-            label = ['$\mathregular{{{}}}$'.format(l) for l in label]
-            label2.extend(label)
-        except Exception:
-            label2.extend([label])
-    label2.append(None)
-    label2 = tile_properties(label2, bandmin, bandmax)
+    if isinstance(label, np.ndarray):
+        label = list(label)
+    elif not isinstance(label, list):
+        label = [label]
+    label.append(None)
+    label = tile_properties(label, bandmin, bandmax)
 
     # data scaling
 
@@ -190,7 +185,7 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     for n in range(len(f[0])):
         ax.plot(x, f[:,n], color=colour[n], linestyle=linestyle[n],
-                marker=marker[n], label=label2[n], **kwargs)
+                marker=marker[n], label=label[n], **kwargs)
 
     # axes formatting
 
@@ -237,12 +232,12 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             legend labels. Default: None
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or list of colours, one for each
-                dispersion or a min and max colour to generate a linear
-                colourmap between or a dictionary with cmin and cmax
-                keys. Note [r,g,b] format colours should be enclosed in
-                and additional [], i.e. [[[r,g,b]],...].
-                Default: winter_r.
+            colourmap or colourmap name or list of colours, one for
+            each dispersion or a min and max colour to generate a
+            linear colourmap between or a dictionary with cmin and cmax
+            keys. Note [r,g,b] format colours should be enclosed in an
+            additional [], i.e. [[[r,g,b]],...].
+            Default: winter_r.
         linestyle : str or array-like, optional
             linestyle(s) ('-', '--', '.-', ':'). Default: solid.
         marker : str or array-like, optional
@@ -307,6 +302,8 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         elif isinstance(colour, dict):
             colour = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
+        elif isinstance(colour, str):
+            colours = [colour]
         else:
             colours = colour
 
@@ -340,6 +337,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             bandmin = 0
         else:
             bandmin = np.amax([0, bandmin])
+        
         if bandmax is None:
             bandmax = len(data[0]['frequency'][0])
         else:
@@ -499,7 +497,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     if quantity in tnames: quantity = tnames[quantity]
     if quantity == 'kappa': quantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, quantity, temperature=temperature,
+    data = tp.data.utilities.resolve(data, quantity, temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
         print('Using {} {}.'.format(data['meta']['temperature'],
@@ -559,24 +557,14 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     marker = tile_properties(marker, bandmin, bandmax)
 
     # prevents unintentionally repeated legend entries
-
-    label2 = []
-    if isinstance(label, str):
-        label2.extend(['$\mathregular{{{}}}$'.format(label)])
-    else:
-        try:
-            label = ['$\mathregular{{{}}}$'.format(l) for l in label]
-            label2.extend(label)
-        except Exception:
-            label2.extend([label])
-    label2.append(None)
-    label2 = tile_properties(label2, bandmin, bandmax)
+    label.append(None)
+    label = tile_properties(label, bandmin, bandmax)
 
     # plotting
 
     for n in range(len(y2[0])):
         ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
-                label=label2[n], marker=marker[n], **kwargs)
+                label=label[n], marker=marker[n], **kwargs)
 
     # axes formatting
 
@@ -649,9 +637,11 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
             Default: 500.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or #rrggbb highlight colour or
+            colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with cmid and cmin and/or cmax keys. Default: viridis_r.
+            with cmid and cmin and/or cmax keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: viridis_r.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -725,7 +715,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     quantity = tnames[quantity] if quantity in tnames else quantity
     if quantity == 'kappa': quantity = 'mode_kappa'
 
-    data = tp.data.resolve.resolve(data, quantity, temperature=temperature,
+    data = tp.data.utilities.resolve(data, quantity, temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
         print('Using {} {}.'.format(data['meta']['temperature'],
@@ -879,9 +869,11 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
             every n points to sample. Default: 10.
 
         colour : colourmap or str or array-like or dict, optional
-            colourmap or colourmap name or #rrggbb highlight colour or
+            colourmap or colourmap name or highlight colour or
             highlight, min, max colours in that order, or dictionary
-            with cmid and cmin and/or cmax keys. Default: viridis_r.
+            with cmid and cmin and/or cmax keys. Colour format must be
+            hex or rgb (array) or a named colour recognised by
+            matplotlib. Default: viridis_r.
         cmin : float, optional
             colour scale minimum. Default: display 99 % data.
         cmax : float, optional
@@ -960,7 +952,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     if projected == 'kappa': projected = 'mode_kappa'
     qs = quantity if quantity == projected else [quantity, projected]
 
-    data = tp.data.resolve.resolve(data, qs, temperature=temperature,
+    data = tp.data.utilities.resolve(data, qs, temperature=temperature,
                                    direction=direction)
     if verbose and 'temperature' in data['meta']:
         print('Using {} {}.'.format(data['meta']['temperature'],
@@ -1096,9 +1088,10 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
             every n points to sample. Default: 5.
 
         colour : colormap or str or list, optional
-            colourmap or colourmap name or max #RRGGBB colour (fades to
-            white) or min and max #RRGGBB colours or dictionary with
-            cmin and cmax keys. Default: viridis.
+            colourmap or colourmap name or max colour (fades to white)
+            or min and max colours or dictionary with cmin and cmax
+            keys. Colour format must be hex or rgb (array) or a named
+            colour recognised by matplotlib. Default: viridis.
 
         workers : int, optional
             number of workers for paralellised section. Default: 32.
@@ -1162,7 +1155,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
     # Phono3py data formatting
 
-    kdata = tp.data.resolve.resolve(kdata, 'gamma', temperature=temperature)
+    kdata = tp.data.utilities.resolve(kdata, 'gamma', temperature=temperature)
     if verbose:
         print('Using {} {}.'.format(kdata['meta']['temperature'],
                                     kdata['meta']['units']['temperature']))

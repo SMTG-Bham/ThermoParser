@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial-02: Individual Customisation &mdash; ThermoPlotter 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial-03: Compound Axes" href="tutorial-03.html" />
+    <link rel="prev" title="Tutorial-01: Python Foundations" href="tutorial-01.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorial-00.html"> Tutorial-00: CLI Fundamentals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-01.html"> Tutorial-01: Python Foundations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Tutorial-02: Individual Customisation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#variables-lines-6-9">Variables (lines 6-9)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#axes-line-20">Axes (line 20)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-lines-23-24">Load (lines 23-24)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-lines-27-28">Plot (lines 27-28)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-03.html"> Tutorial-03: Compound Axes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-04.html"> Tutorial-04: Layered Plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-05.html"> Tutorial-05: Helper Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-06.html"> Tutorial-06: Package Customaisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
+      <li>Tutorial-02: Individual Customisation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial-02.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tutorial-02-individual-customisation">
+<h1>Tutorial-02: Individual Customisation<a class="headerlink" href="#tutorial-02-individual-customisation" title="Permalink to this headline"></a></h1>
+<img alt="Finite bandwidth phonon dispersion of ZnO." src="_images/tutorial-02.png" />
+<p>In most cases, plotting scripts will be more complex than <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-01.html">Tutorial-01</a>.
+Many functions require more inputs, and most users will want to
+customise plots with colours and stuff.</p>
+<p>The CLI version of this code is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 --large -s dark_background -c <span class="s1">&#39;#000000&#39;</span> -c <span class="s1">&#39;#ff0000&#39;</span> --poscar ../data/zno/POSCAR
+</pre></div>
+</div>
+<p>And the python version is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="ch">#!/usr/bin/env python3</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">tp</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Variables</span>
+<span class="hll"><span class="linenos"> 6</span><span class="n">pfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/band.yaml&#39;</span>
+</span><span class="hll"><span class="linenos"> 7</span><span class="n">kfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/kappa-m404021.hdf5&#39;</span>
+</span><span class="hll"><span class="linenos"> 8</span><span class="n">poscar</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/POSCAR&#39;</span>
+</span><span class="hll"><span class="linenos"> 9</span><span class="n">temperature</span> <span class="o">=</span> <span class="mi">300</span>
+</span><span class="linenos">10</span>
+<span class="linenos">11</span><span class="n">colour</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#000000&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff0000&#39;</span><span class="p">]</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="c1"># You can ignore down to line 20!</span>
+<span class="linenos">14</span><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="linenos">15</span><span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
+<span class="linenos">16</span>    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+<span class="linenos">17</span><span class="c1"># Stop ignoring!</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="c1"># Axes</span>
+<span class="hll"><span class="linenos">20</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">large</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
+</span><span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1"># Load</span>
+<span class="hll"><span class="linenos">23</span><span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;wideband&#39;</span><span class="p">)</span>
+</span><span class="hll"><span class="linenos">24</span><span class="n">pdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dispersion</span><span class="p">(</span><span class="n">pfile</span><span class="p">)</span>
+</span><span class="linenos">25</span>
+<span class="linenos">26</span><span class="c1"># Plot</span>
+<span class="hll"><span class="linenos">27</span><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">phonons</span><span class="o">.</span><span class="n">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+</span><span class="hll"><span class="linenos">28</span>                             <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="n">poscar</span><span class="p">)</span>
+</span><span class="linenos">29</span>
+<span class="linenos">30</span><span class="c1"># Save</span>
+<span class="linenos">31</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tutorial-02.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="variables-lines-6-9">
+<h2>Variables (lines 6-9)<a class="headerlink" href="#variables-lines-6-9" title="Permalink to this headline"></a></h2>
+<p>It’s handy to put variables you might want to edit at the top of the
+script, and also tidy in the case of long paths like here, so all
+future examples will be written this way.</p>
+</div>
+<div class="section" id="axes-line-20">
+<h2>Axes (line 20)<a class="headerlink" href="#axes-line-20" title="Permalink to this headline"></a></h2>
+<p>All axes can take a style sheet or list of style sheets as arguments.
+<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> comes with many preinstalled, and you can also make your
+own and put them in <code class="docutils literal notranslate"><span class="pre">~/.config/matplotlib/stylelib/</span></code>. I’ve installed
+a couple for you already. You can list them by importing pyplot
+and typing <code class="docutils literal notranslate"><span class="pre">print(plt.style.available)</span></code> in Python.</p>
+</div>
+<div class="section" id="load-lines-23-24">
+<h2>Load (lines 23-24)<a class="headerlink" href="#load-lines-23-24" title="Permalink to this headline"></a></h2>
+<p>Several plot functions, including all of the projected phonon
+dispersions such as this, require multiple data inputs, so multiple
+load steps are required. Most load functions also take a <code class="docutils literal notranslate"><span class="pre">quantities</span></code>
+argument, which tells them exactly what to load, and can be a list or a
+space-delimited string. In this case, there is a shorthand,
+<code class="docutils literal notranslate"><span class="pre">wideband</span></code>, which stands in for <code class="docutils literal notranslate"><span class="pre">'frequency</span> <span class="pre">gamma'</span></code>.</p>
+</div>
+<div class="section" id="plot-lines-27-28">
+<h2>Plot (lines 27-28)<a class="headerlink" href="#plot-lines-27-28" title="Permalink to this headline"></a></h2>
+<p>Plot commands take a wide range of arguments, from the standard
+matplotlib kwargs such as <code class="docutils literal notranslate"><span class="pre">alpha</span></code> (transparency) and calculation
+conditions, such as <code class="docutils literal notranslate"><span class="pre">temperature</span></code>, to custom ThermoPlotter inputs,
+like here where we’ve provided two colours (black and red respectively)
+which ThermoPlotter can use to generate a custom colourmap. DoS plots
+and all projected phonon plots also require a POSCAR file.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial-01.html" class="btn btn-neutral float-left" title="Tutorial-01: Python Foundations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial-03.html" class="btn btn-neutral float-right" title="Tutorial-03: Compound Axes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
