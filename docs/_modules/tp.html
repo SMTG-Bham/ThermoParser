@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview: module code &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>tp &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -61,7 +61,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../contents.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Overview: module code</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>tp</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -70,27 +71,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="tp.html">tp</a></li>
-<ul><li><a href="tp/axes/large.html">tp.axes.large</a></li>
-<li><a href="tp/axes/legend.html">tp.axes.legend</a></li>
-<li><a href="tp/axes/small.html">tp.axes.small</a></li>
-<li><a href="tp/calculate.html">tp.calculate</a></li>
-<li><a href="tp/cli/options.html">tp.cli.options</a></li>
-<li><a href="tp/data/load.html">tp.data.load</a></li>
-<li><a href="tp/data/resolve.html">tp.data.resolve</a></li>
-<li><a href="tp/data/run.html">tp.data.run</a></li>
-<li><a href="tp/data/save.html">tp.data.save</a></li>
-<li><a href="tp/data/utilities.html">tp.data.utilities</a></li>
-<li><a href="tp/plot/colour.html">tp.plot.colour</a></li>
-<li><a href="tp/plot/frequency.html">tp.plot.frequency</a></li>
-<li><a href="tp/plot/heatmap.html">tp.plot.heatmap</a></li>
-<li><a href="tp/plot/mfp.html">tp.plot.mfp</a></li>
-<li><a href="tp/plot/phonons.html">tp.plot.phonons</a></li>
-<li><a href="tp/plot/utilities.html">tp.plot.utilities</a></li>
-<li><a href="tp/settings.html">tp.settings</a></li>
-<li><a href="tp/setup/vasp.html">tp.setup.vasp</a></li>
-</ul></ul>
+  <h1>Source code for tp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Everything.</span>
+
+<span class="sd">Modules</span>
+<span class="sd">-------</span>
+
+<span class="sd">    calculate</span>
+<span class="sd">        tools for calculating derived properties and interpolating</span>
+<span class="sd">    settings</span>
+<span class="sd">        default values and metadata</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="docstring_replace"><a class="viewcode-back" href="../tp.html#tp.docstring_replace">[docs]</a><span class="k">def</span> <span class="nf">docstring_replace</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">d</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">d</span></div>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">settings</span> <span class="c1"># required for other imports, prevents circularity</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">axes</span><span class="p">,</span> <span class="n">calculate</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">cli</span>
+</pre></div>
 
            </div>
           </div>

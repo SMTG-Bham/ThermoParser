@@ -49,6 +49,8 @@ except yaml.parser.ParserError:
 except FileNotFoundError:
     conf = None
 
+workers = tp.settings.get_workers()
+
 def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
                    label=None, colour='#800080', linestyle='solid',
                    marker=None, xmarkkwargs={}, **kwargs):
@@ -352,13 +354,14 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
 
     return
 
+@tp.docstring_replace(workers=str(workers))
 def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
                        temperature=300, direction='avg', label=['Longitudinal',
                        'Transverse_1', 'Transverse_2', 'Optic'],
                        poscar='POSCAR', main=True, log=False,
                        interpolate=10000, smoothing=5, colour=['#44ffff',
                        '#ff8044', '#ff4444', '#00000010'], linestyle='-',
-                       marker=None, workers=32, xmarkkwargs={}, verbose=False,
+                       marker=None, workers=workers, xmarkkwargs={}, verbose=False,
                        **kwargs):
     """Plots a phono3py quantity on a high-symmetry path.
 
@@ -436,7 +439,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
             marker(s). Default: None.
 
         workers : int, optional
-            number of workers for paralellised section. Default: 32.
+            number of workers for paralellised section. Default: {workers}.
         verbose : bool, optional
             Write actual temperature used if applicable.
             Default: False.
@@ -574,11 +577,12 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     return
 
+@tp.docstring_replace(workers=str(workers))
 def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
                              bandmax=None, temperature=300, direction='avg',
                              poscar='POSCAR', main=True, interpolate=500,
                              colour='viridis_r', cmin=None, cmax=None,
-                             cscale=None, unoccupied='grey', workers=32,
+                             cscale=None, unoccupied='grey', workers=workers,
                              xmarkkwargs={}, verbose=False, **kwargs):
     """Plots a phonon dispersion with projected colour.
 
@@ -654,7 +658,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
             this feature is turned off. Default: grey.
 
         workers : int, optional
-            number of workers for paralellised section. Default: 32.
+            number of workers for paralellised section. Default: {workers}.
         verbose : bool, optional
             Write actual temperature used if applicable.
             Default: False.
@@ -801,13 +805,15 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
 
     return cbar
 
+@tp.docstring_replace(workers=str(workers))
 def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
                                  bandmin=None, bandmax=None, temperature=300,
                                  direction='avg', poscar='POSCAR', main=True,
                                  log=False, interpolate=10000, smoothing=10,
                                  colour='viridis_r', cmin=None, cmax=None,
-                                 cscale=None, unoccupied='grey', workers=32,
-                                 xmarkkwargs={}, verbose=False, **kwargs):
+                                 cscale=None, unoccupied='grey',
+                                 workers=workers, xmarkkwargs={},
+                                 verbose=False, **kwargs):
     """Plots a phono3py quantity on a high-symmetry path and projection.
 
     Just because you can, doesn't mean you should. A maxim I may fail to
@@ -886,7 +892,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
             this feature is turned off. Default: grey.
 
         workers : int, optional
-            number of workers for paralellised section. Default: 32.
+            number of workers for paralellised section. Default: {workers}.
         verbose : bool, optional
             Write actual temperature used if applicable.
             Default: False.
@@ -1040,9 +1046,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
 
     return cbar
 
+@tp.docstring_replace(workers=str(workers))
 def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
-                 smoothing=5, colour='viridis', workers=32, xmarkkwargs={},
-                 verbose=False, **kwargs):
+                 smoothing=5, colour='viridis', workers=workers,
+                 xmarkkwargs={}, verbose=False, **kwargs):
     """Plots a phonon dispersion with broadened bands.
 
     Requires a POSCAR.
@@ -1094,7 +1101,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
             colour recognised by matplotlib. Default: viridis.
 
         workers : int, optional
-            number of workers for paralellised section. Default: 32.
+            number of workers for paralellised section. Default: {workers}.
         verbose : bool, optional
             Write actual temperature used if applicable.
             Default: False.

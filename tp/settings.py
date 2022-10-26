@@ -59,6 +59,9 @@ Functions
         list of slightly abbreviated axis labels.
     short_labels:
         list of fully contracted axis labels.
+
+    get_workers:
+        number of workers for parallelisation
 """
 
 import os
@@ -643,3 +646,17 @@ def short_labels():
         labels = {**labels, **conf['short_labels']}
 
     return labels
+
+def get_workers():
+    """Get default number of workers for parallelisation.
+    
+    Defaults to number of cores.
+    """
+
+    workers = os.cpu_count()
+
+    if conf is not None and 'workers' in conf and \
+       conf['workers'] is not None:
+        workers = int(conf['workers'])
+
+    return workers

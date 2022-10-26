@@ -62,6 +62,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../contents.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
+          <li><a href="../tp.html">tp</a> &raquo;</li>
       <li>tp.settings</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -133,6 +134,9 @@
 <span class="sd">        list of slightly abbreviated axis labels.</span>
 <span class="sd">    short_labels:</span>
 <span class="sd">        list of fully contracted axis labels.</span>
+
+<span class="sd">    get_workers:</span>
+<span class="sd">        number of workers for parallelisation</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -717,6 +721,20 @@
         <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">labels</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;short_labels&#39;</span><span class="p">]}</span>
 
     <span class="k">return</span> <span class="n">labels</span></div>
+
+<span class="k">def</span> <span class="nf">get_workers</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get default number of workers for parallelisation.</span>
+<span class="sd">    </span>
+<span class="sd">    Defaults to number of cores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;workers&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;workers&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">workers</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;workers&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">workers</span>
 </pre></div>
 
            </div>
