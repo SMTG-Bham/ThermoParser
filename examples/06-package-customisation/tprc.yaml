@@ -75,3 +75,6 @@ projected_dispersion_kwargs:     null
 alt_projected_dispersion_kwargs: null
 wideband_kwargs:                 null
 xmarkkwargs:                     null
+
+# Override default workers (= number of cores) for parallelisation
+workers: null

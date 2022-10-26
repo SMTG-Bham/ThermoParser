@@ -688,12 +688,13 @@ def plot():
 @line_options
 
 @xy_limit_options
+@legend_function(label=False)
 @plot_io_function('tp-avg-rates')
 @verbose_option
 
 def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
-              marker, xmin, xmax, ymin, ymax, style, large, save, show,
-              extension, output, verbose):
+              marker, xmin, xmax, ymin, ymax, legend_title, legend, location,
+              style, large, save, show, extension, output, verbose):
     """Plots averaged scattering rates.
 
     Requires AMSET mesh files. Plots scattering rates averaged over
@@ -795,7 +796,13 @@ def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
         dax.set_ylabel(labels['scattering_rates'])
         tp.plot.utilities.set_locators(dax, x='log', y='log')
 
-    add_legend(title='Rate')
+    if legend:
+        if legend_title is None:
+            legend_title = 'Rate'
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     if x != 'both':
         if xmin is not None:
