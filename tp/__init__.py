@@ -9,4 +9,11 @@ Modules
         default values and metadata
 """
 
-from . import settings, axes, calculate, data, plot, setup, cli
+def docstring_replace(**kwargs):
+    def d(f):
+        f.__doc__ = f.__doc__.format(**kwargs)
+        return f
+    return d
+
+from . import settings # required for other imports, prevents circularity
+from . import axes, calculate, data, plot, setup, cli
