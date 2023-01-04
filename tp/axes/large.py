@@ -9,18 +9,31 @@ Functions
 ---------
 
     one
+
     one_colourbar
+
     one_dos
+    
     one_dos_colourbar
+    
     two_h
+    
     two_h_colourbars
+    
     two_v
+    
     two_v_colourbars
+    
     three_h
+    
     three_h_colourbars
+    
     three_square
+    
     three_square_colourbars
+    
     four_square
+    
     four_square_colourbars
 """
 

@@ -1,6 +1,14 @@
 tp.axes package
 ===============
 
+Module contents
+---------------
+
+.. automodule:: tp.axes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   
 Submodules
 ----------
 
@@ -24,14 +32,6 @@ tp.axes.legend module
 ---------------------
 
 .. automodule:: tp.axes.legend
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: tp.axes
    :members:
    :undoc-members:
    :show-inheritance:

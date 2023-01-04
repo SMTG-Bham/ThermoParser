@@ -432,7 +432,7 @@ def kl(conductivity, seebeck, electronic_thermal_conductivity, zt, temperature,
         zt = to_tp('zt', zt)
         temperature = to_tp('temperature', temperature)
 
-    mid = np.divide(pf * np.array(temperature)[:, None], zt)
+    mid = np.apply_along_axis(np.multiply, 0, pf, temperature) / zt
     kl = np.subtract(mid, electronic_thermal_conductivity)
 
     if use_tprc:
@@ -558,7 +558,8 @@ def kl_fromdict(data, use_tprc=True):
                  data['electronic_thermal_conductivity'], data['zt'],
                  data['temperature'], use_tprc=use_tprc)
     data['meta']['units'][q] = tp.settings.units(use_tprc=use_tprc)[q]
-    data['meta']['dimensions'][q] = tp.settings.dimensions()[q]
+    data['meta']['dimensions'][q] = data['meta']['dimensions']['seebeck']
+
 
     return data
 
@@ -658,7 +659,8 @@ def interpolate(data1, data2, dependent, keys1, keys2, axis1=0, axis2=0,
         data1, data2 = data2, data1
         keys1, keys2 = keys2, keys1
         axis1, axis2 = axis2, axis1
-    index = np.where((data1[dependent]>=data2[dependent][0]) & (data1[dependent]<=data2[dependent][-1]))[0]
+    index = np.where((np.array(data1[dependent])>=data2[dependent][0]) & \
+                     (np.array(data1[dependent])<=data2[dependent][-1]))[0]
 
     data1[dependent] = np.array(data1[dependent])[index]
     for key in keys1:

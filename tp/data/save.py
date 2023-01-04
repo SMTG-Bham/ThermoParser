@@ -69,8 +69,8 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
         efile : str
             electronic data filepath.
 
-        kfile : str
-            phononic data filepath.
+        kfile : str or float or int
+            phononic data filepath or lattice thermal conductivity value.
         direction : str, optional
             crystal direction, accepts x-z/ a-c or average/ avg.
             Default: average.
@@ -111,16 +111,23 @@ def zt(efile, kfile=None, direction='avg', doping='n', tinterp=None,
     ltc = 'lattice_thermal_conductivity'
     edata = tp.data.utilities.resolve(edata, equants, direction=direction)
 
-    if kfile is not None:
+    if kfile is None:
+        kfile = 1.
+    if not isinstance(kfile, (int, float)):
         kdata = tp.data.load.phono3py(kfile)
         kdata = tp.data.utilities.resolve(kdata, ltc, direction=direction)
         edata, kdata = tp.calculate.interpolate(edata, kdata, 'temperature',
                                                 equants, ltc, kind='cubic')
         edata[ltc] = kdata[ltc]
+        edata['meta']['dimensions'][ltc] = kdata['meta']['dimensions'][ltc]
+        edata['meta']['units'][ltc] = kdata['meta']['units'][ltc]
         edata['meta']['kappa_source'] = kdata['meta']['kappa_source']
-    else: # if lattice thermal conductivity not supplied, set to 1 W m-1 K-1
-        edata[ltc] = np.ones(len(edata['temperature']))
-        edata['meta']['kappa_source'] = 'Set to 1 W m^-1 K^-1'
+    else:
+        edata[ltc] = kfile * np.ones(len(edata['temperature']))
+        edata['meta']['dimensions'][ltc] = ['temperature']
+        edata['meta']['units'][ltc] = tp.settings.units()[ltc]
+        edata['meta']['kappa_source'] = 'Set to {} {}'.format(kfile,
+                                                  edata['meta']['units'][ltc])
     edata = tp.calculate.zt_fromdict(edata)
 
     ztdata = {'meta': {**edata['meta'],

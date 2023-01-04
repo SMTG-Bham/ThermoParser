@@ -14,14 +14,15 @@ CLI:
 
     tp plot transport ../data/basno3/transport_75x75x75.json -k ../data/basno3/kappa-m363636.hdf5 -q conductivity -q seebeck -q lattice_thermal_conductivity -n 1e18 -n 1e19 -n 1e20 -n 1e21 --tmin 0 --location 3
 
-The full script is long and mostly irrelevant, but can be found `here <https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/05-helper-functions/tutorial-05.py>`_.
+In Python, it is:
+
+.. literalinclude:: tutorial-05.py
+   :language: python
+   :linenos:
+   :emphasize-lines: 20,36,38,41,45-49,51-54
 
 Axes (line 20)
 --------------
-
-.. code-block:: python
-
-    plt.style.use('tp')
 
 ThermoPlotter comes with two ``matplotlib`` styles, ``tp`` and
 ``tp-large``, for small and large axes respectively, which are
@@ -29,10 +30,6 @@ accessible any time using ``plt.style.use``.
 
 Resolve (lines 36 and 41)
 -------------------------
-
-.. code-block:: python
-
-    tp.data.utilities.resolve(adata, q, direction=direction, doping=d)
 
 ``tp.data.utilities.resolve`` resolves a data array by dependent
 properties. As arguments, it takes a data dictionary, an array of the
@@ -60,14 +57,6 @@ on line 38.
 Locators, Ticks and Labels (lines 45-49)
 ----------------------------------------
 
-.. code-block:: python
-
-   axlabels = tp.settings.labels()
-   for i, q in enumerate([*quantities, q]):
-       ax[i].set_xlabel(axlabels['temperature'])
-       ax[i].set_ylabel(axlabels[q])
-       tp.plot.utilities.set_locators(ax[i], x='linear', y=scale[i])
-
 There are several functions to aid in formatting axes.
 ``tp.settings.labels``, and its variations ``large_``, ``long_``,
 ``medium_`` and ``short_labels`` return a dictionary of axes labels
@@ -78,13 +67,6 @@ as appropriate.
 
 Legends (lines 51-54)
 ---------------------
-
-.. code-block:: python
-
-   handles, labels = tp.axes.legend.consolidate(ax)
-   ax[2].legend(loc='best', title=axlabels['doping'], handles=handles,
-                labels=labels)
-   tp.axes.legend.alphabetise(ax, preset='roman', suffix=')', x=-0.12)
 
 ``tp.axes.legend.consolidate`` consolidates the legends of a list of
 axes into one, ensuring no duplicates, and returns the handles and

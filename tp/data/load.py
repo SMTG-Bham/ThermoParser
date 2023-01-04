@@ -7,12 +7,18 @@ array dimensions and the data source.
 Functions
 ---------
 
-    amset
-    amset_mesh
-    boltztrap
-    phono3py
-    phonopy_dispersion
-    phonopy_dos
+    amset:
+        from the amset transport json.
+    amset_mesh:
+        from the amset mesh h5.
+    boltztrap:
+        from the tp boltztrap hdf5.
+    phono3py:
+        from the phono3py kappa hdf5.
+    phonopy_dispersion:
+        from the phonopy or sumo band.yaml.
+    phonopy_dos:
+        from the phonopy projected_dos.dat.
 
     get_path:
         gets high path from phonopy dispersion data.
@@ -23,7 +29,7 @@ import tp
 from tp import settings
 
 def amset(filename, quantities='all', doping='n'):
-    """Loads AMSET transport data.
+    """Loads AMSET transport data from json.
 
     Includes unit conversion and outputs units (see tp.settings).
     Swaps temperature and doping indices so temperature is first, for
@@ -35,7 +41,7 @@ def amset(filename, quantities='all', doping='n'):
     ---------
 
         filename : str
-            filepath.
+            amset transport json filepath.
 
         quantites : str or list, optional
             values to extract. Accepts AMSET keys and power_factor.
@@ -170,7 +176,7 @@ def amset(filename, quantities='all', doping='n'):
     return data2
 
 def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
-    """Loads AMSET mesh data.
+    """Loads AMSET mesh data from h5.
 
     Can also weight rates. Includes unit conversion and outputs units
     (see tp.settings). Swaps temperature and doping indices so
@@ -180,7 +186,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     ---------
 
         filename : str
-            filepath.
+            amset mesh h5 filepath.
 
         quantites : str or list, optional
             values to extract. Accepts AMSET keys, without spin
@@ -222,8 +228,10 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     quantities = [anames[q] if q in anames else q for q in quantities]
 
     # list of abbriviations and dependent quantites
-    subs = {'weights': ['ibz_weights', 'fd_weights'],
-            'weighted_rates': ['scattering_rates', 'weighted_rates']}
+    subs = {'weights':        ['ibz_weights', 'fd_weights'],
+            'weighted_rates': ['scattering_rates', 'weighted_rates'],
+            'mean_free_path': ['scattering_rates', 'velocities', 'mean_free_path'],
+            'weighted_mfp':   ['scattering_rates', 'velocities', 'mean_free_path', 'weighted_mfp']}
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
     l = len(quantities)
@@ -321,30 +329,42 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 data[q2] = resolve_spin(f, q, spin)
             elif q in f:
                 data[q2] = f[q][()]
-            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates']:
+            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates',
+                           'mean_free_path', 'weighted_mfp']:
                 raise Exception('{} unrecognised. Quantity must be {}, '
-                                'ibz_weights, fd_weights weighted_rates'
+                                'ibz_weights, fd_weights, weighted_rates, '
+                                'mean_free_path or weighted_mfp.'
                                 ''.format(q, ', '.join(f)))
             if q == 'scattering_rates':
                 data[q2] = [*list(data[q2]), list(np.sum(data[q2], axis=0))]
-            if q in ['ibz_weights', 'weighted_rates']:
+            if q in ['ibz_weights', 'weighted_rates', 'weighted_mfp']:
                 _, data['ibz_weights'] = np.unique(f['ir_to_full_kpoint_mapping'],
                                                    return_counts=True)
-            if q in ['fd_weights', 'weighted_rates']:
+            if q in ['fd_weights', 'weighted_rates', 'weighted_mfp']:
                 e = resolve_spin(f, 'energies', spin)
                 data['fd_weights'] = -tp.calculate.dfdde(e, f['fermi_levels'],
                                                          f['temperatures'],
                                                          f['doping'],
                                                          amset_order=True)
-            if q == 'weighted_rates':
-                from copy import deepcopy
-                rates = np.array(deepcopy(data['scattering_rates']))
-                rates[rates > 1e20] = 1e15
+            if q in ['mean_free_path', 'weighted_mfp']:
+                data['velocities'] = np.array(data['velocities'])
+                data['scattering_rates'] = np.array(data['scattering_rates'])
+                data['mean_free_path'] = data['velocities'][None, None, None, :, :, :] / \
+                                         data['scattering_rates'][:, :, :, :, :, None]
+            if q in ['weighted_rates', 'weighted_mfp']:
                 data['total_weights'] = data['fd_weights'] * data['ibz_weights']
                 data['normalised_weights'] = data['total_weights'] / \
                                              np.sum(data['total_weights'],
                                                     axis=(2,3))[:,:,None,None]
+            if q =='weighted_rates':
+                from copy import deepcopy
+                rates = np.array(deepcopy(data['scattering_rates']))
+                rates[rates > 1e20] = 1e15
                 data[q2] = rates * data['normalised_weights']
+                data[q2] = data[q2].sum(axis=(3,4))
+            if q == 'weighted_mfp':
+                data[q2] = data['mean_free_path'] * \
+                           data['normalised_weights'][None, :, :, :, :, None]
                 data[q2] = data[q2].sum(axis=(3,4))
 
         for q2 in data:
@@ -394,7 +414,7 @@ def boltztrap(filename, quantities='all', doping='n'):
     ---------
 
         filename : str
-            filepath.
+            boltztrap.hdf5 filepath.
 
         quantites : str or list, optional
             values to extract. Accepts boltztrap.hdf5 keys or all.
@@ -473,7 +493,7 @@ def boltztrap(filename, quantities='all', doping='n'):
     return data
 
 def phono3py(filename, quantities='all'):
-    """Loads Phono3py data.
+    """Loads Phono3py data from kappa hdf5.
 
     Can also calculate lifetimes, mean free paths and occupations.
     Includes unit conversions and outputs units and index order for all
@@ -485,7 +505,7 @@ def phono3py(filename, quantities='all'):
     ---------
 
         filename : str
-            filepath.
+            phono3py kappa hdf5 filepath.
 
         quantities : str or list, optional
             values to extract. Accepts Phono3py keys, lifetime,
@@ -638,7 +658,7 @@ def phonopy_dispersion(filename, xdata=None):
     ---------
 
         filename : str
-            filepath.
+            phonopy or sumo band.yaml filepath.
 
         xdata : dict, optional
             data for the dispersion to scale this to. Should have the

@@ -14,6 +14,8 @@ Modules
         plots frequency on the x-axis.
     heatmap
         generic heatmap plotter and specific wrappers.
+    mfp
+        cumulative lattice thermal conductivitity vs. mean free path.
     phonons
         plots q-points on the x axis.
     utilities
