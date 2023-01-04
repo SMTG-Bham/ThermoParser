@@ -1,6 +1,14 @@
 tp.data package
 ===============
 
+Module contents
+---------------
+
+.. automodule:: tp.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -32,14 +40,6 @@ tp.data.save module
 -------------------
 
 .. automodule:: tp.data.save
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: tp.data
    :members:
    :undoc-members:
    :show-inheritance:

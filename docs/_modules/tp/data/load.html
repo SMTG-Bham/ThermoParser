@@ -82,12 +82,18 @@
 <span class="sd">Functions</span>
 <span class="sd">---------</span>
 
-<span class="sd">    amset</span>
-<span class="sd">    amset_mesh</span>
-<span class="sd">    boltztrap</span>
-<span class="sd">    phono3py</span>
-<span class="sd">    phonopy_dispersion</span>
-<span class="sd">    phonopy_dos</span>
+<span class="sd">    amset:</span>
+<span class="sd">        from the amset transport json.</span>
+<span class="sd">    amset_mesh:</span>
+<span class="sd">        from the amset mesh h5.</span>
+<span class="sd">    boltztrap:</span>
+<span class="sd">        from the tp boltztrap hdf5.</span>
+<span class="sd">    phono3py:</span>
+<span class="sd">        from the phono3py kappa hdf5.</span>
+<span class="sd">    phonopy_dispersion:</span>
+<span class="sd">        from the phonopy or sumo band.yaml.</span>
+<span class="sd">    phonopy_dos:</span>
+<span class="sd">        from the phonopy projected_dos.dat.</span>
 
 <span class="sd">    get_path:</span>
 <span class="sd">        gets high path from phonopy dispersion data.</span>
@@ -98,7 +104,7 @@
 <span class="kn">from</span> <span class="nn">tp</span> <span class="kn">import</span> <span class="n">settings</span>
 
 <div class="viewcode-block" id="amset"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset">[docs]</a><span class="k">def</span> <span class="nf">amset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads AMSET transport data.</span>
+    <span class="sd">&quot;&quot;&quot;Loads AMSET transport data from json.</span>
 
 <span class="sd">    Includes unit conversion and outputs units (see tp.settings).</span>
 <span class="sd">    Swaps temperature and doping indices so temperature is first, for</span>
@@ -110,7 +116,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            amset transport json filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts AMSET keys and power_factor.</span>
@@ -245,7 +251,7 @@
     <span class="k">return</span> <span class="n">data2</span></div>
 
 <div class="viewcode-block" id="amset_mesh"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset_mesh">[docs]</a><span class="k">def</span> <span class="nf">amset_mesh</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads AMSET mesh data.</span>
+    <span class="sd">&quot;&quot;&quot;Loads AMSET mesh data from h5.</span>
 
 <span class="sd">    Can also weight rates. Includes unit conversion and outputs units</span>
 <span class="sd">    (see tp.settings). Swaps temperature and doping indices so</span>
@@ -255,7 +261,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            amset mesh h5 filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts AMSET keys, without spin</span>
@@ -297,8 +303,10 @@
     <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">anames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
     <span class="c1"># list of abbriviations and dependent quantites</span>
-    <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]}</span>
+    <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>   <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]}</span>
     <span class="n">hasspin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;vb_index&#39;</span><span class="p">,</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">]</span>
 
     <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantities</span><span class="p">)</span>
@@ -396,30 +404,42 @@
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">q</span><span class="p">][()]</span>
-            <span class="k">elif</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> unrecognised. Quantity must be </span><span class="si">{}</span><span class="s1">, &#39;</span>
-                                <span class="s1">&#39;ibz_weights, fd_weights weighted_rates&#39;</span>
+                                <span class="s1">&#39;ibz_weights, fd_weights, weighted_rates, &#39;</span>
+                                <span class="s1">&#39;mean_free_path or weighted_mfp.&#39;</span>
                                 <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))]</span>
-            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ir_to_full_kpoint_mapping&#39;</span><span class="p">],</span>
                                                    <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">e</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">dfdde</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;fermi_levels&#39;</span><span class="p">],</span>
                                                          <span class="n">f</span><span class="p">[</span><span class="s1">&#39;temperatures&#39;</span><span class="p">],</span>
                                                          <span class="n">f</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
                                                          <span class="n">amset_order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-                <span class="n">rates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]))</span>
-                <span class="n">rates</span><span class="p">[</span><span class="n">rates</span> <span class="o">&gt;</span> <span class="mf">1e20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e15</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">/</span> \
+                                         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">][:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">]</span> <span class="o">/</span> \
                                              <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">],</span>
                                                     <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))[:,:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span><span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+                <span class="n">rates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]))</span>
+                <span class="n">rates</span><span class="p">[</span><span class="n">rates</span> <span class="o">&gt;</span> <span class="mf">1e20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e15</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">rates</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]</span> <span class="o">*</span> \
+                           <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
@@ -469,7 +489,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            boltztrap.hdf5 filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts boltztrap.hdf5 keys or all.</span>
@@ -548,7 +568,7 @@
     <span class="k">return</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="phono3py"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.phono3py">[docs]</a><span class="k">def</span> <span class="nf">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads Phono3py data.</span>
+    <span class="sd">&quot;&quot;&quot;Loads Phono3py data from kappa hdf5.</span>
 
 <span class="sd">    Can also calculate lifetimes, mean free paths and occupations.</span>
 <span class="sd">    Includes unit conversions and outputs units and index order for all</span>
@@ -560,7 +580,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            phono3py kappa hdf5 filepath.</span>
 
 <span class="sd">        quantities : str or list, optional</span>
 <span class="sd">            values to extract. Accepts Phono3py keys, lifetime,</span>
@@ -713,7 +733,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            phonopy or sumo band.yaml filepath.</span>
 
 <span class="sd">        xdata : dict, optional</span>
 <span class="sd">            data for the dispersion to scale this to. Should have the</span>

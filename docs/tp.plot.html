@@ -48,6 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
@@ -59,7 +60,6 @@
 <li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -94,6 +94,33 @@
              
   <div class="section" id="tp-plot-package">
 <h1>tp.plot package<a class="headerlink" href="#tp-plot-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-tp.plot">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.plot" title="Permalink to this headline">¶</a></h2>
+<p>Plotting tools.</p>
+<p>The main tools are called <code class="docutils literal notranslate"><span class="pre">add_</span></code> something, which take a set of axes
+and data dictionaries as inputs, amoung other things; these are
+accompanied by ancillary scripts including formatting scripts and a
+module of colourmap generators.</p>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>colour</dt><dd><p>colourmap generators and colour converters.</p>
+</dd>
+<dt>frequency</dt><dd><p>plots frequency on the x-axis.</p>
+</dd>
+<dt>heatmap</dt><dd><p>generic heatmap plotter and specific wrappers.</p>
+</dd>
+<dt>mfp</dt><dd><p>cumulative lattice thermal conductivitity vs. mean free path.</p>
+</dd>
+<dt>phonons</dt><dd><p>plots q-points on the x axis.</p>
+</dd>
+<dt>utilities</dt><dd><p>ancillary scripts.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -1154,7 +1181,7 @@ tp.plot.phonons.add_dispersion(…, colour=[colour[0]], …)
 Default: [‘#44ffff’, ‘#ff8044’, ‘#ff4444’, ‘#00000010’].</p></li>
 <li><p><strong>linestyle</strong> (<em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – linestyle(s) (‘-‘, ‘–’, ‘.-‘, ‘:’). Default: solid.</p></li>
 <li><p><strong>marker</strong> (<em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – marker(s). Default: None.</p></li>
-<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: {workers}.</p></li>
+<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 8.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Write actual temperature used if applicable.
 Default: False.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
@@ -1249,7 +1276,7 @@ matplotlib. Default: viridis_r.</p></li>
 <li><p><strong>unoccupied</strong> (<em>str</em><em>, </em><em>optional</em>) – if the colour variable is occuption, values below 1 are
 coloured in this colour. Id set to None, or cmin is set,
 this feature is turned off. Default: grey.</p></li>
-<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: {workers}.</p></li>
+<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 8.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Write actual temperature used if applicable.
 Default: False.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
@@ -1479,7 +1506,7 @@ matplotlib. Default: viridis_r.</p></li>
 <li><p><strong>unoccupied</strong> (<em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – if the colour variable is occuption, values below 1 are
 coloured in this colour. If set to None, or cmin is set,
 this feature is turned off. Default: grey.</p></li>
-<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: {workers}.</p></li>
+<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 8.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Write actual temperature used if applicable.
 Default: False.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
@@ -1556,7 +1583,7 @@ rasterized: True</p>
 or min and max colours or dictionary with cmin and cmax
 keys. Colour format must be hex or rgb (array) or a named
 colour recognised by matplotlib. Default: viridis.</p></li>
-<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: {workers}.</p></li>
+<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section. Default: 8.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Write actual temperature used if applicable.
 Default: False.</p></li>
 <li><p><strong>xmarkkwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>keyword arguments for x markers passed to
@@ -1804,31 +1831,6 @@ plots using x=’log’. Default: False.</p></li>
 </dl>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="module-tp.plot">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.plot" title="Permalink to this headline">¶</a></h2>
-<p>Plotting tools.</p>
-<p>The main tools are called <code class="docutils literal notranslate"><span class="pre">add_</span></code> something, which take a set of axes
-and data dictionaries as inputs, amoung other things; these are
-accompanied by ancillary scripts including formatting scripts and a
-module of colourmap generators.</p>
-<div class="section" id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>colour</dt><dd><p>colourmap generators and colour converters.</p>
-</dd>
-<dt>frequency</dt><dd><p>plots frequency on the x-axis.</p>
-</dd>
-<dt>heatmap</dt><dd><p>generic heatmap plotter and specific wrappers.</p>
-</dd>
-<dt>phonons</dt><dd><p>plots q-points on the x axis.</p>
-</dd>
-<dt>utilities</dt><dd><p>ancillary scripts.</p>
-</dd>
-</dl>
-</div></blockquote>
 </div>
 </div>
 </div>
