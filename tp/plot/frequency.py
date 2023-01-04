@@ -143,27 +143,9 @@ def add_dos(ax, data, sigma=None, projected=True, total=False,
     # data scaling
 
     data = dict(data)
-    f = data.pop('frequency')
+    f = np.array(data.pop('frequency'))
     if 'meta' in data: del data['meta']
     if not total: del data['total']
-
-    # find the true ends of the data and truncate to there
-    n = int(np.ceil(0.9*len(f)))
-    for key in data:
-        while n < len(f) - 1 and data[key][n] != 0:
-            n += 1
-    n += 1
-    f = f[:n]
-    for key in data:
-        data[key] = data[key][:n]
-
-    n = int(np.ceil(0.1*len(f)))
-    for key in data:
-        while n > 0 and data[key][n] != 0:
-            n -= 1
-    f = f[n:]
-    for key in data:
-        data[key] = data[key][n:]
 
     fmin, fmax = f[0], f[-1]
     fstep = f[1] - f[0]

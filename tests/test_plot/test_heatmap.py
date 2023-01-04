@@ -158,7 +158,9 @@ class ZTMapTest(unittest.TestCase):
                      'lattice_thermal_conductivity':    ltc,
                      'temperature':                     t,
                      'doping':                          d,
-                     'meta':                            {'units': {}}}
+                     'meta':                            {'units':        {'lattice_thermal_conductivity': ['']},
+                                                         'dimensions':   {'lattice_thermal_conductivity': ['']},
+                                                         'kappa_source': ''}}
         self.data2 = dict(self.data)
         self.data2['zt'] = [[1, 2],
                             [4, 8]]
@@ -182,7 +184,7 @@ class ZTMapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(10, 1000)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
-        self.assertEqual(mock_resolve.call_count, 2)
+        mock_resolve.assert_called_once()
         mock_interpolate.assert_called_once()
         mock_zt.assert_called_once()
 
@@ -229,7 +231,7 @@ class TargetKLTest(unittest.TestCase):
     @patch.object(tp.data.utilities, 'resolve')
     @patch.object(plt, 'colorbar')
     def test_default(self, mock_colourbar, mock_resolve, mock_kl):
-        mock_resolve.return_value = self.data
+        mock_resolve.return_value = self.data2
         mock_kl.return_value = self.data2
         cbar = heatmap.add_kappa_target(self.ax, self.data, xinterp=None,
                                         yinterp=None)

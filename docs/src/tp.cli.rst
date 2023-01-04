@@ -1,6 +1,14 @@
 tp.cli package
 ==============
 
+Module contents
+---------------
+
+.. automodule:: tp.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -16,14 +24,6 @@ tp.cli.options module
 ---------------------
 
 .. automodule:: tp.cli.options
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: tp.cli
    :members:
    :undoc-members:
    :show-inheritance:

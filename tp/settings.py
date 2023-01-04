@@ -294,6 +294,7 @@ def units(use_tprc=True):
              'effective_mass':                  'm_e',
              'electronic_thermal_conductivity': 'W m-1 K-1',
              'energy':                          'eV',
+             'fd_weights':                      '',
              'fermi_level':                     'eV',
              'frequency':                       'THz',
              'gamma':                           'THz',
@@ -301,6 +302,7 @@ def units(use_tprc=True):
              'gv_by_gv':                        'm2 s-2',
              'hall_carrier_concentration':      'cm-3',
              'heat_capacity':                   'J K-1',
+             'ibz_weights':                     '',
              'kpoint':                          '',
              'lattice_thermal_conductivity':    'W m-1 K-1',
              'lifetime':                        's',
@@ -308,6 +310,7 @@ def units(use_tprc=True):
              'mobility':                        'cm^2 V-1 s-1',
              'mode_kappa':                      'W m-1 K-1',
              'mu_bounds':                       'eV',
+             'normalised_weights':              '',
              'occupation':                      'phonons',
              'ph_ph_strength':                  'eV2',
              'power_factor':                    'W m-1 K-2',
@@ -317,6 +320,9 @@ def units(use_tprc=True):
              'seebeck_effective_mass':          'm_e',
              'temperature':                     'K',
              'thermal_conductivity':            'W m-1 K-1',
+             'total_weights':                   '',
+             'velocities':                      'm s-1',
+             'weighted_mfp':                    'm',
              'weighted_rates':                  's-1',
              'zt':                              ''}
 
@@ -337,6 +343,7 @@ def dimensions():
             'effective_mass':                  ['temperature', 'doping', 3, 3],
             'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
             'energy':                          ['band', 'kpoint'],
+            'fd_weights':                      ['temperature', 'doping', 'band', 'kpoint'],
             'fermi_level':                     ['temperature', 'doping'],
             'frequency':                       ['qpoint', 'band'],
             'gamma':                           ['temperature', 'qpoint', 'band'],
@@ -344,6 +351,7 @@ def dimensions():
             'gv_by_gv':                        ['qpoint', 'band', 6],
             'hall_carrier_concentration':      [],
             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
+            'ibz_weights':                     ['kpoint'],
             'kpoint':                          ['kpoint', 3],
             'lattice_thermal_conductivity':    ['temperature', 6],
             'lifetime':                        ['temperature', 'qpoint', 'band'],
@@ -352,6 +360,7 @@ def dimensions():
             'mobility':                        ['stype', 'temperature', 'doping', 3, 3],
             'mode_kappa':                      ['temperature', 'qpoint', 'band', 6],
             'mu_bounds':                       [],
+            'normalised_weights':              ['temperature', 'doping', 'band', 'kpoint'],
             'occupation':                      ['temperature', 'qpoint', 'band'],
             'ph_ph_strength':                  ['qpoint', 'band'],
             'power_factor':                    ['temperature', 'doping', 3, 3],
@@ -362,6 +371,9 @@ def dimensions():
             'seebeck_effective_mass':          [],
             'temperature':                     ['temperature'],
             'thermal_conductivity':            ['temperature', 'doping', 3, 3],
+            'total_weights':                   ['stype', 'temperature', 'doping'],
+            'velocities':                      ['band', 'kpoint', 3],
+            'weighted_mfp':                    ['stype', 'temperature', 'doping', 3],
             'weighted_rates':                  ['stype', 'temperature', 'doping'],
             'zt':                              ['temperature', 'doping', 3, 3]}
 
@@ -486,8 +498,12 @@ def long_labels():
                   'Temperature (K)',
               'thermal_conductivity':
                   'Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'velocities':
+                  'Velocity (m s$\mathregular{^{-1}})',
               'wavevector':
                   'Wavevector',
+              'weighted_mfp':
+                  'Mean Free Path (m)',
               'weighted_rates':
                   'Scattering Rates (s$\mathregular{^{-1}}$)',
               'zt':
@@ -560,8 +576,12 @@ def medium_labels():
                   'Temperature (K)',
               'thermal_conductivity':
                   'Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+              'velocities':
+                  'Velocity (m s$\mathregular{^{-1}})',
               'wavevector':
                   'Wavevector',
+              'weighted_mfp':
+                  'Mean Free Path (m)',
               'weighted_rates':
                   'Scattering Rates (s$\mathregular{^{-1}}$)',
               'zt':
@@ -634,8 +654,12 @@ def short_labels():
                   'T (K)',
               'thermal_conductivity':
                   '$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)',
+              'velocities':
+                  'v (m s$\mathregular{^{-1}})',
               'wavevector':
                   'q',
+              'weighted_mfp':
+                  '$\mathregular{\Lambda}$ (m)',
               'weighted_rates':
                   '$\mathregular{\\tau^{-1}\ (s^{-1})}$',
               'zt':

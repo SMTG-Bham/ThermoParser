@@ -58,4 +58,23 @@ like here where we've provided two colours (black and red respectively)
 which ThermoPlotter can use to generate a custom colourmap. DoS plots
 and all projected phonon plots also require a POSCAR file.
 
+Colourmaps
+----------
+
+Some functions, including heatmaps and projected dispersions such as
+the wideband plot above, accept single colours which are passed to
+ThermoPlotter's `colourmap generators`_. These can also be accessed
+directly, allowing greater control of the output or use on non-tp
+applications. The colourmap used here could be generated with:
+
+.. codeblock:: python
+   tp.plot.colour.linear(cmin='black', cmax='red')
+
+``linear`` interpolates linearly between the colours, and is used for
+projected dispersions. ``elbow`` provides two linear sections with a
+midpoint you specify, and ``uniform`` calculates the midpoint position
+based on the relative compositions of the colours, which is used for
+heatmaps.
+
 .. _Tutorial-01: https://smtg-ucl.github.io/ThermoPlotter/tutorial-01.html
+.. _colourmap generators: https://smtg-ucl.github.io/ThermoPlotter/tp.plot.html#module-tp.plot.colour

@@ -2,12 +2,22 @@
 Gallery
 -------
 
+.. toctree::
+   :hidden:
+
+   Heatmaps <heatmaps>
+   Phonons <phonons>
+   Density of States (DoS) <dos>
+   Cumulative Kappa <cumkappa>
+   Waterfalls <waterfalls>
+   Projected Phonons <prophon>
+   Average Scattering Rates <avg-rates>
+
 This is a gallery of some things you can do in ThermoPlotter with brief
 explanations. More details on each of the plots, including the scripts
-and specific commands used are available in the `examples`_, and we
+and specific commands used are available by clicking on the figures, and we
 also have `tutorials`_!
 
-.. _examples: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/
 .. _tutorials: https://smtg-ucl.github.io/ThermoPlotter/tutorials.html
 
 .. hint::
@@ -19,7 +29,7 @@ from either a python script or the command line, such as the classic
 
 .. image:: figures/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-zt.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/heatmaps.html
 
 Click on the plot to see the script, or one could use
 
@@ -34,7 +44,7 @@ ZT, in this case 2.
 
 .. image:: figures/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-kappa-target.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/heatmaps.html
 
 .. code-block:: bash
 
@@ -45,7 +55,7 @@ comparison among different datasets.
 
 .. image:: figures/ztdiff.png
    :alt: A heatmap of differentce in ZT against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-ztdiff.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/heatmaps.html
 
 .. code-block:: bash
 
@@ -56,7 +66,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-multiphon.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/phonons.html
 
 .. code-block:: bash
 
@@ -64,7 +74,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-phonons.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/phonons.html
 
 .. code-block:: bash
 
@@ -72,21 +82,33 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 This is where some of the more useful functions of ``ThermoPlotter``
 come in, e.g. the rescaling of the x axis in the former plot, and the
-simplicity of compound axes in the latter.
+simplicity of compound axes in the latter. Another example is the ability to
+add gaussian smearing to a DoS plot during plotting, removing the need to rerun
+e.g. Phonopy or maintain multiple data files.
 
-There are  command-line script, but the main functionality is
+.. image:: figures/dos.png
+   :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
+   :target: https://smtg-ucl.github.io/ThermoPlotter/dos.html
+
+The right-hand plot can be plotted with:
+
+.. code-block:: bash
+
+   tp plot dos projected_dos.dat --atoms "Ba Sn O O_2 2" --sigma 0.2 --location 1 -c magenta -c cyan -c red -c orange
+
+There are command-line scripts, but the main functionality is
 intended as a python package, which enables much more customisable
 plotting, to enable nicely formatted multi-axes plots...
 
 .. image:: figures/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/cumkappa/plot-cumkappa.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/cumkappa.html
 
 \...and multi-plot axes, to highlight particular interactions.
 
 .. image:: figures/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/waterfall/plot-waterfall.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/waterfall.html
 
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
@@ -96,7 +118,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-wideband.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/prophon.html
 
 .. code-block:: bash
 
@@ -104,30 +126,29 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-projected-phonons.py
+   :target: https://smtg-ucl.github.io/ThermoPlotter/prophon.html
 
 Besides plotting, ThermoPlotter offers a number of ways to streamline
-trnasport property workflows, from generating more efficent input files
-(``tp gen``) to data consolidation (``tp.utilities.merge``) and
-retrieval (``tp.utilities.resolve`` and ``tp get``), many of which are
-outlined in the `tutorials`_. Most of these don't lend themselves to a
-gallery, except the ability to add gaussian smearing to a DoS plot
-during plotting, removing the need to rerun e.g. Phonopy or maintain
-multiple data files.
+transport property workflows, from generating more efficent input files
+(``tp gen``), to data consolidation (``tp.utilities.merge``) and
+retrieval (``tp.utilities.resolve`` and ``tp get``), to pre-typed axis labels,
+because thats long... many of these outlined in the `tutorials`_, and some are
+demonstrated in this line plot, which is not available as a python command,
+but is easily scripted or plotted at the command line:
 
-.. image:: figures/dos.png
-   :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/plot-dos.py
+.. image:: avg-rates.png
+   :alt: A plot of weighted average scattering rates against temperature and carrier concnetration.
+   :target: https://smtg-ucl.github.io/ThermoPlotter/avg-rates.html
 
-The right-hand plot can be plotted with:
+It shows the k-point and Fermi-Dirac weighted scattering rates against
+temperature and carrier concentration, to give an accurate picture of their
+effect on the electrical conductivity. This can also be done for the electron
+mean free paths.
 
-.. code-block:: bash
-
-   tp plot dos projected_dos.dat --atoms "Ba Sn O O_2 2" --sigma 0.2 --location 1 -c magenta -c cyan -c red -c orange
-
-There are also a number of cosmetic options in the python interface,
-which may be of interest outside the main scope of ThermoPlotter, e.g.
-the custom colourmaps, legend formatting tools and axes labels.
+There are also a number of cosmetic options in
+the python interface, which may be of interest outside the main scope of
+ThermoPlotter, e.g. the custom colourmaps, legend formatting tools and axes
+labels.
 
 Reference
 ---------

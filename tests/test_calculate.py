@@ -86,9 +86,11 @@ class PowerFactorZTTest(unittest.TestCase):
              'zt':                              self.zt,
              'temperature':                     self.t,
              'meta':                            {'units':      {},
-                                                 'dimensions': {}}}
+                                                 'dimensions': {'seebeck': ['t', 'd']}}}
         d = calculate.kl_fromdict(d)
         self.assertEqual(d['zt'], self.zt)
+        self.assertEqual(d['meta']['dimensions']['lattice_thermal_conductivity'],
+                         d['meta']['dimensions']['seebeck'])
 
 if __name__ == '__main__':
     unittest.main()
