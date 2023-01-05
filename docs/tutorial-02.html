@@ -45,6 +45,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#axes-line-20">Axes (line 20)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load-lines-23-24">Load (lines 23-24)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plot-lines-27-28">Plot (lines 27-28)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colourmaps">Colourmaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial-03.html"> Tutorial-03: Compound Axes</a></li>
@@ -195,6 +196,19 @@ conditions, such as <code class="docutils literal notranslate"><span class="pre"
 like here where we’ve provided two colours (black and red respectively)
 which ThermoPlotter can use to generate a custom colourmap. DoS plots
 and all projected phonon plots also require a POSCAR file.</p>
+</div>
+<div class="section" id="colourmaps">
+<h2>Colourmaps<a class="headerlink" href="#colourmaps" title="Permalink to this headline">¶</a></h2>
+<p>Some functions, including heatmaps and projected dispersions such as
+the wideband plot above, accept single colours which are passed to
+ThermoPlotter’s <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tp.plot.html#module-tp.plot.colour">colourmap generators</a>. These can also be accessed
+directly, allowing greater control of the output or use on non-tp
+applications. The colourmap used here could be generated with:</p>
+<p><code class="docutils literal notranslate"><span class="pre">linear</span></code> interpolates linearly between the colours, and is used for
+projected dispersions. <code class="docutils literal notranslate"><span class="pre">elbow</span></code> provides two linear sections with a
+midpoint you specify, and <code class="docutils literal notranslate"><span class="pre">uniform</span></code> calculates the midpoint position
+based on the relative compositions of the colours, which is used for
+heatmaps.</p>
 </div>
 </div>
 

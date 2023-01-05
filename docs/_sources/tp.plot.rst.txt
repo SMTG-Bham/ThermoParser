@@ -1,6 +1,14 @@
 tp.plot package
 ===============
 
+Module contents
+---------------
+
+.. automodule:: tp.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   
 Submodules
 ----------
 
@@ -48,14 +56,6 @@ tp.plot.utilities module
 ------------------------
 
 .. automodule:: tp.plot.utilities
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: tp.plot
    :members:
    :undoc-members:
    :show-inheritance:

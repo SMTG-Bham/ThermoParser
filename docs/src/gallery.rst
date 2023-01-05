@@ -140,6 +140,9 @@ but is easily scripted or plotted at the command line:
    :alt: A plot of weighted average scattering rates against temperature and carrier concnetration.
    :target: https://smtg-ucl.github.io/ThermoPlotter/avg-rates.html
 
+.. codeblock::
+   tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t 1000 -n -1e19 --location 2 --large -c red -c blue -c magenta
+
 It shows the k-point and Fermi-Dirac weighted scattering rates against
 temperature and carrier concentration, to give an accurate picture of their
 effect on the electrical conductivity. This can also be done for the electron

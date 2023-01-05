@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Density of States (DoS) &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cumulative Lattice Thermal Conductivity" href="cumkappa.html" />
+    <link rel="prev" title="Phonons" href="phonons.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="heatmaps.html">Heatmaps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phonons.html">Phonons</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Density of States (DoS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cumkappa.html">Cumulative Kappa</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waterfalls.html">Waterfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prophon.html">Projected Phonons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="avg-rates.html">Average Scattering Rates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">ThermoPlotter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="gallery.html">Gallery</a> &raquo;</li>
+      <li>Density of States (DoS)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dos.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="density-of-states-dos">
+<h1>Density of States (DoS)<a class="headerlink" href="#density-of-states-dos" title="Permalink to this headline">¶</a></h1>
+<img alt="Two densities of states demonstrating customisablility options." src="_images/dos1.png" />
+<p>This shows a two densities of states (DoSs), which show the density of phonon
+modes at particular frequencies.</p>
+<p>The left plot can be generated by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">dos</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">projected_dos</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">total</span> <span class="o">--</span><span class="n">nolegend</span> <span class="o">-</span><span class="n">c</span> <span class="n">pink</span> <span class="o">-</span><span class="n">c</span> <span class="n">cyan</span> <span class="o">-</span><span class="n">c</span> <span class="n">red</span> <span class="o">-</span><span class="n">p</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">POSCAR</span>
+</pre></div>
+</div>
+<p>And the right plot by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">dos</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">projected_dos</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">atoms</span> <span class="s2">&quot;Ba Sn O O_2 2&quot;</span> <span class="o">--</span><span class="n">sigma</span> <span class="mf">0.2</span> <span class="o">--</span><span class="n">location</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="n">magenta</span> <span class="o">-</span><span class="n">c</span> <span class="n">cyan</span> <span class="o">-</span><span class="n">c</span> <span class="n">red</span> <span class="o">-</span><span class="n">c</span> <span class="n">orange</span>
+</pre></div>
+</div>
+<p>Or the whole thing in python with:</p>
+<p>The most foolproof way of specifying colours is through a dictionary
+(lines 8-11), but colours, linestyles etc. as well as atoms can also be
+specified in POSCAR order.</p>
+<p>Manually specifying <code class="docutils literal notranslate"><span class="pre">atoms</span></code> (line 20) rather than reading from
+the POSCAR enables the separation of different environments of the same atom,
+and in this instance no POSCAR is required. The default for the <code class="docutils literal notranslate"><span class="pre">poscar</span></code>
+argument is POSCAR, so often this will not need to be specified anyway.</p>
+<p>If desired, the atom-projected dos can be disabled entirely by setting
+<code class="docutils literal notranslate"><span class="pre">projected</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>, and in the same way the <code class="docutils literal notranslate"><span class="pre">total</span></code> can be enabled
+or disabled (line 17).</p>
+<p>To recreated experimental data more closely, Gaussian smearing can be applied
+with <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (line 21). This option may be quicker and easier than rerunning
+phonopy to compare, but beware it does not detect if smearing is already
+applied. A good starting value is 0.2, as used here.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="phonons.html" class="btn btn-neutral float-left" title="Phonons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cumkappa.html" class="btn btn-neutral float-right" title="Cumulative Lattice Thermal Conductivity" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

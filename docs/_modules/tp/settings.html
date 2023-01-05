@@ -369,6 +369,7 @@
              <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>                  <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
              <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;energy&#39;</span><span class="p">:</span>                          <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;fd_weights&#39;</span><span class="p">:</span>                      <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
              <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>                       <span class="s1">&#39;THz&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>                           <span class="s1">&#39;THz&#39;</span><span class="p">,</span>
@@ -376,6 +377,7 @@
              <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="s1">&#39;m2 s-2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="s1">&#39;cm-3&#39;</span><span class="p">,</span>
              <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="s1">&#39;J K-1&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ibz_weights&#39;</span><span class="p">:</span>                     <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;kpoint&#39;</span><span class="p">:</span>                          <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>    <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>                        <span class="s1">&#39;s&#39;</span><span class="p">,</span>
@@ -383,6 +385,7 @@
              <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>                        <span class="s1">&#39;cm^2 V-1 s-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>                      <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;mu_bounds&#39;</span><span class="p">:</span>                       <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;normalised_weights&#39;</span><span class="p">:</span>              <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>                      <span class="s1">&#39;phonons&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>                  <span class="s1">&#39;eV2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
@@ -392,6 +395,9 @@
              <span class="s1">&#39;seebeck_effective_mass&#39;</span><span class="p">:</span>          <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
              <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">,</span>
              <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>            <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;total_weights&#39;</span><span class="p">:</span>                   <span class="s1">&#39;&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>                      <span class="s1">&#39;m s-1&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>                    <span class="s1">&#39;m&#39;</span><span class="p">,</span>
              <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>                  <span class="s1">&#39;s-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;zt&#39;</span><span class="p">:</span>                              <span class="s1">&#39;&#39;</span><span class="p">}</span>
 
@@ -412,6 +418,7 @@
             <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;energy&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;fd_weights&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
             <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
             <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>                       <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>                           <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
@@ -419,6 +426,7 @@
             <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
             <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="p">[],</span>
             <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;ibz_weights&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
             <span class="s1">&#39;kpoint&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;kpoint&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
             <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
@@ -427,6 +435,7 @@
             <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
             <span class="s1">&#39;mu_bounds&#39;</span><span class="p">:</span>                       <span class="p">[],</span>
+            <span class="s1">&#39;normalised_weights&#39;</span><span class="p">:</span>              <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
             <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
@@ -437,6 +446,9 @@
             <span class="s1">&#39;seebeck_effective_mass&#39;</span><span class="p">:</span>          <span class="p">[],</span>
             <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
             <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>            <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;total_weights&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
             <span class="s1">&#39;zt&#39;</span><span class="p">:</span>                              <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
 
@@ -561,8 +573,12 @@
                   <span class="s1">&#39;Temperature (K)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Velocity (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Wavevector&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Mean Free Path (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
@@ -635,8 +651,12 @@
                   <span class="s1">&#39;Temperature (K)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Velocity (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Wavevector&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Mean Free Path (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
@@ -709,8 +729,12 @@
                   <span class="s1">&#39;T (K)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;v (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;q&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;$\mathregular{\Lambda}$ (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau^{-1}\ (s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
@@ -732,7 +756,7 @@
 
     <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;workers&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
        <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;workers&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">workers</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;workers&#39;</span><span class="p">]</span>
+        <span class="n">workers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;workers&#39;</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">workers</span>
 </pre></div>
