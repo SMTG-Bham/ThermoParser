@@ -8,12 +8,13 @@ Heatmaps
 This shows the classic ZT against carrier concentration and temperature
 heatmap. This can be plotted at the command line with:
 
-.. codeblock::
+.. code-block::
+
    tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c '#800080' -d x
 
 and in python with:
 
-.. literalinclude:: plot-ztmap.py
+.. literalinclude:: plot-zt.py
    :language: python
    :linenos:
    :emphasize-lines: 22
@@ -42,7 +43,8 @@ lattice thermal conductivity required to reach a specified ZT. We hope
 this is a valuable tool to help decide wether to run expensive lattice
 thermal conductivity calculations on a material. The CLI is:
 
-.. codeblock::
+.. code-block::
+
    tp plot kappa-target ../data/zno/boltztrap.hdf5 -c '#008080' -d x
 
 and python:
@@ -63,7 +65,8 @@ conditions (e.g. different degrees of nanostructuring), although this
 method is most appropriate for closely related materials with similar
 dopabilities. At the command line:
 
-.. codeblock::
+.. code-block::
+   
    tp plot ztdiff ../data/zno/boltztrap.hdf5  ../data/basno3/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/basno3/kappa-m363636.hdf5 -l ZnO -l 'BaSnO$_3$'
 
 and in python:

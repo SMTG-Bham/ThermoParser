@@ -67,7 +67,7 @@ ThermoPlotter's `colourmap generators`_. These can also be accessed
 directly, allowing greater control of the output or use on non-tp
 applications. The colourmap used here could be generated with:
 
-.. codeblock:: python
+.. code-block:: python
    tp.plot.colour.linear(cmin='black', cmax='red')
 
 ``linear`` interpolates linearly between the colours, and is used for

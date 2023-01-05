@@ -89,7 +89,63 @@
 <img alt="ZT against carrier concentration and temperature." src="_images/ztmap1.png" />
 <p>This shows the classic ZT against carrier concentration and temperature
 heatmap. This can be plotted at the command line with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">ztmap</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;#800080&#39;</span> <span class="o">-</span><span class="n">d</span> <span class="n">x</span>
+</pre></div>
+</div>
 <p>and in python with:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">import</span> <span class="nn">tp</span>
+
+<span class="n">bfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/boltztrap.hdf5&#39;</span>
+<span class="n">kfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/kappa-m404021.hdf5&#39;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+
+<span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+<span class="n">colour</span> <span class="o">=</span> <span class="s1">&#39;#800080&#39;</span>
+
+<span class="c1"># Axes</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">add_legend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">one_colourbar</span><span class="p">()</span>
+
+<span class="c1"># Load</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">boltztrap</span><span class="p">(</span><span class="n">bfile</span><span class="p">)</span>
+<span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span>
+
+<span class="c1"># Add</span>
+<span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">heatmap</span><span class="o">.</span><span class="n">add_ztmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">adata</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">)</span>
+</span>
+<span class="c1"># Save</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ztmap.pdf&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ztmap.png&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 <p>This uses the <code class="docutils literal notranslate"><span class="pre">tp.plot.heatmap.add_ztmap</span></code> function (line 22), which
 calculates the ZT and sets the axes labels. All the other functionality
 is wrapped within the <code class="docutils literal notranslate"><span class="pre">tp.plot.heatmap.add_heatmap</span></code> function, which
@@ -110,6 +166,9 @@ numbers can be specified). The above is an alternative, which plots the
 lattice thermal conductivity required to reach a specified ZT. We hope
 this is a valuable tool to help decide wether to run expensive lattice
 thermal conductivity calculations on a material. The CLI is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">kappa</span><span class="o">-</span><span class="n">target</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;#008080&#39;</span> <span class="o">-</span><span class="n">d</span> <span class="n">x</span>
+</pre></div>
+</div>
 <p>and python:</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -166,6 +225,9 @@ BaSnO&lt;sub&gt;3&lt;/sub&gt; and ZnO here) to the same material under different
 conditions (e.g. different degrees of nanostructuring), although this
 method is most appropriate for closely related materials with similar
 dopabilities. At the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">ztdiff</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span>  <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="n">ZnO</span> <span class="o">-</span><span class="n">l</span> <span class="s1">&#39;BaSnO$_3$&#39;</span>
+</pre></div>
+</div>
 <p>and in python:</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
