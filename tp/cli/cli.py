@@ -1593,13 +1593,15 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
     fig, ax, add_legend =  axf[len(quantity) - 1](style)
     if len(quantity) == 4:
         ax = [ax[0][0], ax[0][1], ax[1][0], ax[1][1]]
+    elif len(quantity) == 1:
+        ax = [ax]
 
     edata = []
     for f in transport_file:
         try:
-            edata.append(tp.data.load.amset(f))
+            edata.append(tp.data.load.amset(f, quantity))
         except UnicodeDecodeError:
-            edata.append(tp.data.load.boltztrap(f, doping=dtype))
+            edata.append(tp.data.load.boltztrap(f, quantity, doping=dtype))
     if ltc in quantity or tc in quantity:
         if len(kfile) != 0:
             kdata = []
@@ -1646,7 +1648,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     data[i].append({'temperature': kdata3['temperature'],
                                     q:             kdata3[ltc] + edata2[etc]})
                 defleg['labels'] = dopelist
-            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+            elif q in edata[0] and \
+                 'temperature' in edata[0]['meta']['dimensions'][q]:
                 dopelist = []
                 for d in doping:
                     edata2 = deepcopy(edata[0])
@@ -1656,7 +1659,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
                 defleg['labels'] = dopelist
-            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+            elif kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 kdata2 = deepcopy(kdata[0])
                 kdata2 = tp.data.utilities.resolve(kdata2, q,
                                                    direction=direction[0])
@@ -1681,7 +1685,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                               kind='cubic')
                     data[i].append({'temperature': kdata2['temperature'],
                                     q:             kdata2[ltc] + edata2[etc]})
-            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+            elif q in edata[0] and \
+                 'temperature' in edata[0]['meta']['dimensions'][q]:
                 for d in direction:
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.utilities.resolve(edata2, q,
@@ -1689,7 +1694,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                        direction=d)
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
-            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+            elif kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
                     kdata2 = tp.data.utilities.resolve(kdata2, q,
@@ -1766,7 +1772,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                        direction=direction[0])
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
-            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+            elif kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 if len(kdata) > 1:
                     lendata = len(kdata)
                     defleg['title'] = 'Phononic Data'
