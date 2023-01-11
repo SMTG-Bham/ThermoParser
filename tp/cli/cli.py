@@ -1628,13 +1628,10 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
     # compared to putting one in every if statement :shrug:
     lendata = 1
     for i, q in enumerate(quantity):
-        print(q)
         if len(doping) > 1: # one line per doping
-            print(1)
             lendata = len(doping)
             defleg['title'] = axlabels['doping']
             if q == tc:
-                print(1)
                 kdata2 = deepcopy(kdata[0])
                 kdata2 = tp.data.utilities.resolve(kdata2, ltc,
                                                    direction=direction[0])
@@ -1653,7 +1650,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                 defleg['labels'] = dopelist
             elif q in edata[0] and \
                  'temperature' in edata[0]['meta']['dimensions'][q]:
-                print(2)
                 dopelist = []
                 for d in doping:
                     edata2 = deepcopy(edata[0])
@@ -1665,19 +1661,16 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                 defleg['labels'] = dopelist
             elif kdata is not None and q in kdata[0] and \
                  'temperature' in kdata[0]['meta']['dimensions'][q]:
-                print(3)
                 kdata2 = deepcopy(kdata[0])
                 kdata2 = tp.data.utilities.resolve(kdata2, q,
                                                    direction=direction[0])
                 data[i].append({'temperature': kdata2['temperature'],
                                 q:             kdata2[q]})
         elif len(direction) > 1: # one line per direction
-            print(2)
             lendata = len(direction)
             defleg['title'] = 'Direction'
             defleg['labels'] = direction
             if q == tc:
-                print(1)
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
                     kdata2 = tp.data.utilities.resolve(kdata2, ltc,
@@ -1694,7 +1687,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                     q:             kdata2[ltc] + edata2[etc]})
             elif q in edata[0] and \
                  'temperature' in edata[0]['meta']['dimensions'][q]:
-                print(2)
                 for d in direction:
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.utilities.resolve(edata2, q,
@@ -1704,7 +1696,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                     q:             edata2[q]})
             elif kdata is not None and q in kdata[0] and \
                  'temperature' in kdata[0]['meta']['dimensions'][q]:
-                print(3)
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
                     kdata2 = tp.data.utilities.resolve(kdata2, q,
@@ -1712,9 +1703,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     data[i].append({'temperature': kdata2['temperature'],
                                     q:             kdata2[q]})
         else: # one line per file/ one line
-            print(3)
             if q == tc:
-                print(1)
                 lendata = len(kdata)
                 if len(kdata) == len(edata):
                     defleg['title'] = 'Electronic Data'
@@ -1769,7 +1758,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                         data[i].append({'temperature': kdata2['temperature'],
                                         q:             kdata2[ltc] + edata2[etc]})
             elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
-                print(2)
                 if len(edata) > 1:
                     lendata = len(edata)
                     defleg['title'] = 'Electronic Data'
@@ -1786,7 +1774,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                     q:             edata2[q]})
             elif kdata is not None and q in kdata[0] and \
                  'temperature' in kdata[0]['meta']['dimensions'][q]:
-                print(3)
                 if len(kdata) > 1:
                     lendata = len(kdata)
                     defleg['title'] = 'Phononic Data'
