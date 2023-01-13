@@ -684,33 +684,25 @@ def phonopy_dispersion(filename, xdata=None):
 
     x = [d['distance'] for d in data['phonon']]
     qp = [q['q-position'] for q in data['phonon']]
-    d2, ticks = get_path(data)
-    eigs = [[b['frequency'] for b in p['band']] for p in data['phonon']]
-
-    # scale data to other path
+    tickpos, ticks = get_path(data)
+    f = [[b['frequency'] for b in p['band']] for p in data['phonon']]
 
     if xdata is not None:
-        d1 = xdata['tick_position']
-        n = 0
-        for i, d0 in enumerate(x):
-            while n <= len(d2) and not (d0 >= d2[n] and d0 <= d2[n+1]):
-                n += 1
-            x[i] = d1[n] + ((d0 - d2[n]) * (d1[n+1] - d1[n]) / \
-                                           (d2[n+1] - d2[n]))
-    else:
-        d1 = d2
+        # scale data to other path
+        x = scale_to_path(x, tickpos, xdata['tick_position'])
+        tickpos = xdata['tick_position']
 
     units = tp.settings.units()
     dimensions = settings.dimensions()
     data2 = {'x':             x,
              'qpoint':        qp,
-             'frequency':     eigs,
-             'tick_position': d1,
+             'frequency':     f,
+             'tick_position': tickpos,
              'tick_label':    ticks,
              'meta':
                  {'phonon_dispersion_source': 'phonopy',
-                     'units':      {'frequency': units['frequency']},
-                     'dimensions': {'frequency': dimensions['frequency']}}}
+                  'units':      {'frequency': units['frequency']},
+                  'dimensions': {'frequency': dimensions['frequency']}}}
 
     for c in pconversions:
         if c in data2:
@@ -804,6 +796,61 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
 
     return data2
 
+def phonopy_gruneisen(filename):
+    """Loads phonopy gruneisen data.
+
+    Does not load path data, but can load from files with a q-point
+    path, which will often be preferable if projecting onto a phonon
+    dispersion.
+
+    Arguments
+    ---------
+
+        filename : str
+            phonopy gruneisen.yaml filepath.
+
+    Returns
+    -------
+
+        dict
+            gruneisen data.
+    """
+
+    import yaml
+
+    pconversions = settings.phonopy_conversions()
+    conversions = settings.conversions()
+
+    # load data
+
+    with open(filename, 'r') as f:
+        data = yaml.safe_load(f)
+    
+    x = np.ravel([[q['distance'] for q in path['phonon']] for path in data['path']])
+    qp = np.ravel([[q['q-position'] for q in path['phonon']] for path in data['path']])
+    g = [[[band['gruneisen'] for band in q['band']] for q in path['phonon']] for path in data['path']]
+    g = np.reshape(g, (-1, np.shape(g)[-1]))
+
+    units = tp.settings.units()
+    dimensions = settings.dimensions()
+    data2 = {'x':             x,
+             'qpoint':        qp,
+             'gruneisen':     g,
+             'meta':
+                 {'gruneisen_source': 'phonopy',
+                  'units':      {'gruneisen': units['gruneisen']},
+                  'dimensions': {'gruneisen': dimensions['gruneisen']}}}
+
+    for c in pconversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], float(pconversions[c]))
+
+    for c in conversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], float(conversions[c]))
+
+    return data2
+
 def get_path(yamldata):
     """Extracts the path from a phonopy yaml.
 
@@ -837,3 +884,38 @@ def get_path(yamldata):
              '$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
 
     return tickpos, ticks
+
+def scale_to_path(x, tickpos, scalepos):
+    """Scales data to a path.
+
+    Useful to make different phonopy runs fit together or to map
+    gruneisen data on a phonon dispersion.
+
+    Arguments
+    ---------
+
+        x : list
+            wavevector ordinates.
+        tickpos : list
+            tick wavevectors for scaling.
+        scalepos : list
+            scale tick wavevectors.
+
+    Returns
+    -------
+
+        list
+            wavevector ordinates.
+    """
+
+    n = 0
+    # for each x, while within data and between two high-symmetry
+    # points, interpolate onto scale data
+    for i in range(len(x)):
+        while n <= len(tickpos) and \
+              not (x[i] >= tickpos[n] and x[i] <= tickpos[n+1]):
+            n += 1
+        x[i] = scalepos[n] + ((x[i] - tickpos[n]) * (scalepos[n+1] - scalepos[n]) / \
+                             (tickpos[n+1] - tickpos[n]))
+
+    return x

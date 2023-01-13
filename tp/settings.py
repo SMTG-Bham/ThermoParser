@@ -299,6 +299,7 @@ def units(use_tprc=True):
              'frequency':                       'THz',
              'gamma':                           'THz',
              'group_velocity':                  'm s-1',
+             'gruneisen':                       '',
              'gv_by_gv':                        'm2 s-2',
              'hall_carrier_concentration':      'cm-3',
              'heat_capacity':                   'J K-1',
@@ -348,6 +349,7 @@ def dimensions():
             'frequency':                       ['qpoint', 'band'],
             'gamma':                           ['temperature', 'qpoint', 'band'],
             'group_velocity':                  ['qpoint', 'band', 3],
+            'gruneisen':                       ['qpoint', 'band'],
             'gv_by_gv':                        ['qpoint', 'band', 6],
             'hall_carrier_concentration':      [],
             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
@@ -470,6 +472,8 @@ def long_labels():
                   'Imaginary Self Energy (THz)',
               'group_velocity':
                   'Group Velocity (m s$\mathregular{^{-1}}$)',
+              'gruneisen':
+                  'Gruneisen Parameter',
               'gv_by_gv':
                   'Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)',
               'heat_capacity':
@@ -548,6 +552,8 @@ def medium_labels():
                   'Imaginary Self Energy (THz)',
               'group_velocity':
                   'Group Velocity (m s$\mathregular{^{-1}}$)',
+              'gruneisen':
+                  'Gruneisen Parameter',
               'gv_by_gv':
                   'Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)',
               'heat_capacity':
@@ -626,6 +632,8 @@ def short_labels():
                   '$\mathregular{\Gamma}$ (THz)',
               'group_velocity':
                   '$\mathregular{g_v\ (m\ s^{-1})}$',
+              'gruneisen':
+                  '$\gamma$',
               'gv_by_gv':
                   '$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$',
               'heat_capacity':
