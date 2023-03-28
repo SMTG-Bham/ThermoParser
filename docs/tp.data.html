@@ -330,6 +330,49 @@ Default: read from POSCAR.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="tp.data.load.phonopy_gruneisen">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phonopy_gruneisen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#phonopy_gruneisen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.phonopy_gruneisen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads phonopy gruneisen data.</p>
+<p>Does not load path data, but can load from files with a q-point
+path, which will often be preferable if projecting onto a phonon
+dispersion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – phonopy gruneisen.yaml filepath.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>gruneisen data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.scale_to_path">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">scale_to_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">tickpos</span></em>, <em class="sig-param"><span class="n">scalepos</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#scale_to_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.scale_to_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales data to a path.</p>
+<p>Useful to make different phonopy runs fit together or to map
+gruneisen data on a phonon dispersion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em>) – wavevector ordinates.</p></li>
+<li><p><strong>tickpos</strong> (<em>list</em>) – tick wavevectors for scaling.</p></li>
+<li><p><strong>scalepos</strong> (<em>list</em>) – scale tick wavevectors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>wavevector ordinates.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="module-tp.data.utilities">

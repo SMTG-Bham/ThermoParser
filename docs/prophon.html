@@ -225,6 +225,16 @@ plot. It can be plotted in python with:</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;prophon.png&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
+<p>Another similar function is <code class="docutils literal notranslate"><span class="pre">tp.plot.phonons.add_alt_dispersion</span></code>,
+which plots other phonon properties onto the y-axis along the high-
+symmetry path provided by Phonopy. This will work with Phono3py
+data, but also Gruneisen data from Phonopy
+(<code class="docutils literal notranslate"><span class="pre">tp.data.load.phonopy_gruneisen</span></code>). Some useful tags for making the
+Gruneisen data clearer include <code class="docutils literal notranslate"><span class="pre">scatter=True</span></code> (to clean up the bits
+around &amp;Gamma;), <code class="docutils literal notranslate"><span class="pre">bandmax=3</span></code> (only acoustic phonons) and manually
+setting the y-limit (some outliers are automatically hidden, but
+especially if only the acoustic modes are shown, it can be useful to
+cut some of the data off the top).</p>
 </div>
 
 

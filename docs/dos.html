@@ -98,6 +98,57 @@ modes at particular frequencies.</p>
 </pre></div>
 </div>
 <p>Or the whole thing in python with:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">tp</span>
+
+<span class="n">dosfile</span> <span class="o">=</span> <span class="s1">&#39;../data/basno3/projected_dos.dat&#39;</span>
+<span class="n">poscar</span> <span class="o">=</span> <span class="s1">&#39;../data/basno3/POSCAR&#39;</span>
+
+<span class="hll"><span class="n">colours</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Ba&#39;</span><span class="p">:</span>  <span class="s1">&#39;#ff00ff&#39;</span><span class="p">,</span>
+</span><span class="hll">           <span class="s1">&#39;Sn&#39;</span><span class="p">:</span>  <span class="s1">&#39;#00ffff&#39;</span><span class="p">,</span>
+</span><span class="hll">           <span class="s1">&#39;O&#39;</span><span class="p">:</span>   <span class="s1">&#39;#ff0000&#39;</span><span class="p">,</span>
+</span><span class="hll">           <span class="s1">&#39;O_2&#39;</span><span class="p">:</span> <span class="s1">&#39;#ff8000&#39;</span><span class="p">}</span>
+</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">add_legend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">two_h</span><span class="p">()</span>
+
+<span class="c1"># Unsmeared, read from POSCAR with total</span>
+<span class="n">dos1</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dos</span><span class="p">(</span><span class="n">dosfile</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="n">poscar</span><span class="p">)</span>
+<span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">frequency</span><span class="o">.</span><span class="n">add_dos</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dos1</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colours</span><span class="p">)</span>
+</span>
+<span class="c1"># Smeared (sigma=0.2), custom atoms with no total</span>
+<span class="hll"><span class="n">dos2</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dos</span><span class="p">(</span><span class="n">dosfile</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="s1">&#39;Ba Sn O O_2 2&#39;</span><span class="p">)</span>
+</span><span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">frequency</span><span class="o">.</span><span class="n">add_dos</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dos2</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colours</span><span class="p">)</span>
+</span>
+<span class="n">add_legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;$BaSnO_3$&#39;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;dos.png&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 <p>The most foolproof way of specifying colours is through a dictionary
 (lines 8-11), but colours, linestyles etc. as well as atoms can also be
 specified in POSCAR order.</p>
