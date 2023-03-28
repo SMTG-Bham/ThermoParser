@@ -374,6 +374,7 @@
              <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>                       <span class="s1">&#39;THz&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>                           <span class="s1">&#39;THz&#39;</span><span class="p">,</span>
              <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>                  <span class="s1">&#39;m s-1&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>                       <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="s1">&#39;m2 s-2&#39;</span><span class="p">,</span>
              <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="s1">&#39;cm-3&#39;</span><span class="p">,</span>
              <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="s1">&#39;J K-1&#39;</span><span class="p">,</span>
@@ -423,6 +424,7 @@
             <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>                       <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>                           <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>                       <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
             <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="p">[],</span>
             <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
@@ -545,6 +547,8 @@
                   <span class="s1">&#39;Imaginary Self Energy (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Group Velocity (m s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Gruneisen Parameter&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
@@ -623,6 +627,8 @@
                   <span class="s1">&#39;Imaginary Self Energy (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Group Velocity (m s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;Gruneisen Parameter&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
@@ -701,6 +707,8 @@
                   <span class="s1">&#39;$\mathregular{\Gamma}$ (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{g_v\ (m\ s^{-1})}$&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>
+                  <span class="s1">&#39;$\gamma$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>

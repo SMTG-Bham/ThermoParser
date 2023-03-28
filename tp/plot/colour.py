@@ -89,7 +89,7 @@ def uniform(cmid, cmin='white', cmax='#333333', alpha=1.,
     cmid = np.array(to_rgba(cmid, alpha))
     cnorm = (cmid[:3] - cmin[:3]) / (cmax[:3] - cmin[:3])
     # pythagoras
-    midpoint = np.sqrt((cnorm[0]**2 + cnorm[1]**2 + cnorm[2]**2)/3)
+    midpoint = np.sqrt(cnorm[0]**2 + cnorm[1]**2 + cnorm[2]**2)/3
     x = [0, midpoint, 1]
     y = [cmin, cmid, cmax]
     x2 = np.linspace(0, 1, density)
