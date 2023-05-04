@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use ThermoPlotter, please cite it as below:"
+authors:
+- family-names: "Spooner"
+  given-names: "Kieran B."
+  orcid: "https://orcid.org/0000-0002-4078-3148"
+- family-names: "Einhorn"
+  given-names: "Maud"
+  orcid: "https://orcid.org/0000-0003-0371-0262"
+- family-names: "Davies"
+  given-names: "Daniel W."
+  orcid: "https://orcid.org/0000-0003-4094-5992"
+- family-names: "Scanlon"
+  given-names: "David O."
+  orcid: "https://orcid.org/0000-0001-9174-8601"
+title: "ThermoPlotter: Streamlined Analysis of Thermoelectric Properties"
+version: 2.3.0
+date-released: 2022-10-12
+url: "https://github.com/SMTG-UCL/ThermoPlotter"
