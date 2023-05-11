@@ -826,8 +826,8 @@ def phonopy_gruneisen(filename):
     with open(filename, 'r') as f:
         data = yaml.safe_load(f)
     
-    x = np.ravel([[q['distance'] for q in path['phonon']] for path in data['path']])
-    qp = np.ravel([[q['q-position'] for q in path['phonon']] for path in data['path']])
+    x = np.reshape([[q['distance'] for q in path['phonon']] for path in data['path']], (-1, 3))
+    qp = np.reshape([[q['q-position'] for q in path['phonon']] for path in data['path']], (-1, 3))
     g = [[[band['gruneisen'] for band in q['band']] for q in path['phonon']] for path in data['path']]
     g = np.reshape(g, (-1, np.shape(g)[-1]))
 
