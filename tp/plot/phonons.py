@@ -1208,6 +1208,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     c2 = np.abs(cinterp(x2))
     fmax = np.amax(np.add(f, c2))
     fmin = np.amin(np.subtract(f, c2))
+    c2 = np.where(c2==0, np.nanmax(c2[np.nonzero(c2)]), c2)
     f2 = np.linspace(fmin, fmax, 2500)
 
     # broadening
