@@ -187,11 +187,12 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
             channels, which are dealt with in the spin variable.
             Also accepts ibz_weights, the weights of the irreducible
             k-points, fd_weights, the weights of the energies wrt the
-            derivative of the Fermi-Dirac distribution, and
-            weighted_rates, scattering_rates weighted by fd_weights
-            and averaged over kpoints. "all" loads all quantities in
-            the file, which does not include ibz_weights, fd_weights or
-            weighted_rates. Loads dependent properties. Default: all.
+            derivative of the Fermi-Dirac distribution, weighted_rates,
+            scattering_rates weighted by fd_weights and averaged over
+            kpoints and occupation, the Fermi-Dirac occupation.
+            "all" loads all quantities in the file, which does not
+            include ibz_weights, fd_weights, weighted_rates or
+            occupation. Loads dependent properties. Default: all.
 
         doping : str, optional
             doing type (n or p). If there is more than one, defaults to
@@ -218,12 +219,14 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     tnames = settings.to_tp()
     units = settings.units()
     dimensions = settings.dimensions()
+    dimensions['occupation'] = ['temperature', 'doping', 'kpoint', 'band']
     if isinstance(quantities, str): quantities = quantities.split()
     quantities = [anames[q] if q in anames else q for q in quantities]
 
     # list of abbriviations and dependent quantites
     subs = {'weights': ['ibz_weights', 'fd_weights'],
-            'weighted_rates': ['scattering_rates', 'weighted_rates']}
+            'weighted_rates': ['scattering_rates', 'weighted_rates'],
+            'occupation': ['energies', 'fermi_levels', 'occupation']}
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
     l = len(quantities)
@@ -247,6 +250,9 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                    (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
                     quantities.append(d)
                     break
+
+    if 'temperatures' in quantities:
+        quantities.insert(0, quantities.pop(quantities.index('temperatures')))
 
     # load data
 
@@ -286,7 +292,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
         if 'all' in quantities:
             q2 = quantities
             quantities = list(f.keys())
-            for q in ['ibz_weights', 'fd_weights', 'weighted_rates']:
+            for q in ['ibz_weights', 'fd_weights', 'weighted_rates', 'occupation']:
                 if q in q2:
                     quantities.append(q)
         if 'doping' in quantities:
@@ -321,9 +327,9 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 data[q2] = resolve_spin(f, q, spin)
             elif q in f:
                 data[q2] = f[q][()]
-            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates']:
+            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates', 'occupation']:
                 raise Exception('{} unrecognised. Quantity must be {}, '
-                                'ibz_weights, fd_weights weighted_rates'
+                                'ibz_weights, fd_weights, weighted_rates or occupation'
                                 ''.format(q, ', '.join(f)))
             if q == 'scattering_rates':
                 data[q2] = [*list(data[q2]), list(np.sum(data[q2], axis=0))]
@@ -346,6 +352,10 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                                                     axis=(2,3))[:,:,None,None]
                 data[q2] = rates * data['normalised_weights']
                 data[q2] = data[q2].sum(axis=(3,4))
+            if q == 'occupation':
+                data['occupation'] = tp.calculate.fd_occupation(
+                                     data['energy'], data['temperature'],
+                                     data['fermi_level'])
 
         for q2 in data:
             q = anames[q2] if q2 in anames else q2
