@@ -200,7 +200,9 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
 
         spin : str, optional
             spin. Accepts up, down or avg. If avg and there is only one
-            spin channel, selects that, else averages both. Default: avg.
+            spin channel, selects that, else averages both. If avg,
+            assumes non-spin separated bands and so multiplies occupation
+            by 2. Default: avg.
 
     Returns
     -------
@@ -227,7 +229,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     subs = {'weights': ['ibz_weights', 'fd_weights'],
             'weighted_rates': ['scattering_rates', 'weighted_rates'],
             'occupation': ['energies', 'fermi_levels', 'occupation']}
-    hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
+    hasspin = ['energies', 'vb_idx', 'scattering_rates', 'velocities']
 
     l = len(quantities)
     i = 0
@@ -308,13 +310,14 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
             elif doping == 'p':
                 di = np.where(d > 0)[0]
 
+        # spin2 so if avg selected doubles occupation
         if spin in ['avg', 'average']:
             if 'energies_up' in f and 'energies_down' in f:
-                spin = 'avg'
+                spin2 = 'avg'
             elif 'energies_up' in f:
-                spin = 'up'
+                spin2 = 'up'
             elif 'energies_down' in f:
-                spin = 'down'
+                spin2 = 'down'
 
         data = {'meta': {'doping_type':       doping,
                          'electronic_source': 'amset',
@@ -324,7 +327,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
         for q in quantities:
             q2 = tnames[q] if q in tnames else q
             if q in hasspin:
-                data[q2] = resolve_spin(f, q, spin)
+                data[q2] = resolve_spin(f, q, spin2)
             elif q in f:
                 data[q2] = f[q][()]
             elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates', 'occupation']:
@@ -356,6 +359,8 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 data['occupation'] = tp.calculate.fd_occupation(
                                      data['energy'], data['temperature'],
                                      data['fermi_level'])
+                if spin in ['avg', 'average']:
+                    data['occupation'] *= 2
 
         for q2 in data:
             q = anames[q2] if q2 in anames else q2

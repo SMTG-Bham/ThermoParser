@@ -9,6 +9,7 @@ Functions
             kpoints
         get
             amset
+            occupation
             boltztrap
             phono3py
             zt
@@ -245,6 +246,66 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
     print('is {:.3} {}.'.format(data[quantity], tp.settings.units()[quantity]))
 
     return
+
+@get.command('occupation')
+@inputs_function('amset_mesh_file', nargs=1)
+@doping_type_option
+@doping_option
+@temperature_option
+@click.option('--spin',
+              help='Spin direction.',
+              type=click.Choice(['up', 'down', 'avg'], case_sensitive=False),
+              default='avg',
+              show_default=True)
+@click.option('-p', '--poscar',
+              help='POSCAR path. Required for --qpoint.',
+              type=click.Path(file_okay=True, dir_okay=False),
+              default='POSCAR',
+              show_default=True)
+
+
+def get_occupation(amset_mesh_file, dtype, doping, temperature, spin, poscar):
+    """Prints AMSET occupation info at given conditions.
+
+    Requires an AMSET mesh file.
+    """
+
+    from pymatgen.io.vasp.inputs import Poscar
+    from scipy.constants import physical_constants
+    kb = physical_constants['Boltzmann constant in eV/K'][0]
+    if 'energy' in tp.settings.conversions():
+        kb *= tp.settings.conversions()['energy']
+    if 'temperature' in tp.settings.conversions():
+        kb /= tp.settings.conversions()['temperature']
+
+    data = tp.data.load.amset_mesh(amset_mesh_file, 'occupation energy vb_idx',
+                                   spin=spin, doping=dtype)
+
+    v = Poscar.from_file(poscar).structure.lattice.volume
+    data = tp.data.utilities.resolve(data, 'occupation energy',
+                                     temperature=temperature, dtype=dtype,
+                                     doping=doping)
+
+    avg_factor = 2 if spin in ['average', 'avg'] else 1
+    cb = data['vb_idx'] + 1
+    occ = np.average(data['occupation'], axis=1)
+    e = np.sum(occ[cb:])
+    h = avg_factor * cb - np.sum(occ[:cb])
+    e /= v * 1e-8 ** 3
+    h /= v * 1e-8 ** 3
+    vbm = np.amax(data['energy'][cb-1])
+    cbm = np.amin(data['energy'][cb])
+    eg = cbm - vbm
+
+    print('The bandgap is {:.3f} {}, and at {:d} {} 10kbT = {:.3f} {}.'.format(
+          eg, data['meta']['units']['energy'],
+          int(np.ceil(data['meta']['temperature'])), data['meta']['units']['temperature'],
+          10 * kb * int(np.ceil(data['meta']['temperature'])), data['meta']['units']['energy']))
+    print('There are {:.3e} holes cm-3 in the valence band and {:.3e} '
+          'electrons cm-3 in the conduction band.'.format(h, e))
+
+    return
+
 
 @get.command('boltztrap')
 @inputs_function('boltztrap_hdf5', nargs=1)

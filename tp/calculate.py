@@ -15,6 +15,8 @@ Functions
         particle lifetime.
     mfp:
         particle mean free path.
+    fd_occupation:
+        fermion occupation.
     be_occupation:
         boson occupation.
     dfdde:
@@ -192,6 +194,8 @@ def mfp(gamma, group_velocity, use_tprc=True):
 
 def fd_occupation(energy, temperature, fermi_level, use_tprc=True):
     """Calculates Fermi-Dirac occupation.
+
+    Assumes singly-occupied bands: double as necessary.
 
     Arguments
     ---------
