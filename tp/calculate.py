@@ -221,7 +221,7 @@ def fd_occupation(energy, temperature, fermi_level, use_tprc=True):
         fermi_level = to_tp('fermi_level', fermi_level)
 
     occupation = (np.exp(np.divide(np.add.outer(-fermi_level, energy),
-                                   kb * temperature[:, None, None, None])) + 1) ** -1
+                                   kb * temperature[None, :, None, None])) + 1) ** -1
 
     if use_tprc:
         occupation = from_tp('occupation', occupation)
