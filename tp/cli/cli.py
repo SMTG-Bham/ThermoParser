@@ -293,16 +293,26 @@ def get_occupation(amset_mesh_file, dtype, doping, temperature, spin, poscar):
     h = avg_factor * cb - np.sum(occ[:cb])
     e /= v * 1e-8 ** 3
     h /= v * 1e-8 ** 3
+    c = tp.settings.conversions()
+    if 'doping' in c:
+        e *= c['doping']
+        h *= c['doping']
     vbm = np.amax(data['energy'][cb-1])
     cbm = np.amin(data['energy'][cb])
     eg = cbm - vbm
 
     print('The bandgap is {:.3f} {}, and at {:d} {} 10kbT = {:.3f} {}.'.format(
           eg, data['meta']['units']['energy'],
-          int(np.ceil(data['meta']['temperature'])), data['meta']['units']['temperature'],
-          10 * kb * int(np.ceil(data['meta']['temperature'])), data['meta']['units']['energy']))
-    print('There are {:.3e} holes cm-3 in the valence band and {:.3e} '
-          'electrons cm-3 in the conduction band.'.format(h, e))
+          int(np.ceil(data['meta']['temperature'])),
+          data['meta']['units']['temperature'],
+          10 * kb * int(np.ceil(data['meta']['temperature'])),
+          data['meta']['units']['energy']))
+    print('Your chosen carrier concentration is {} {}.'.format(
+          data['meta']['doping'], data['meta']['units']['doping']))
+    print('There are {:.3e} holes {} in the valence band and {:.3e} '
+          'electrons {} in the conduction band.'.format(
+          h, data['meta']['units']['doping'],
+          e, data['meta']['units']['doping']))
 
     return
 
@@ -760,7 +770,7 @@ def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
 
     Requires AMSET mesh files. Plots scattering rates averaged over
     kpoints and weighted by the derivative of the Fermi-Dirac
-    distribution against tempearture or carrier concentration or both.
+    distribution against temperature or carrier concentration or both.
     If one file is given, it will be used for both plots, or if two are
     specified the one with the most temperatures will be used for the
     temperature plot and the one with the most carrier concentrations
