@@ -561,20 +561,25 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
     if 'zt' in data:
         data = tp.data.utilities.resolve(data, 'zt', direction=direction)
     else:
-        data = tp.data.utilities.resolve(data, equants, direction=direction)
         if kdata is None:
             kdata = 1.
 
         if not isinstance(kdata, (int, float)):
-            kdata = tp.data.utilities.resolve(kdata, ltc, direction=direction)
             data, kdata = tp.calculate.interpolate(data, kdata, 'temperature',
                                                    equants, ltc, kind='cubic')
             data[ltc] = kdata[ltc]
+            data['meta']['dimensions'][ltc] = kdata['meta']['dimensions'][ltc]
+            data['meta']['units'][ltc] = kdata['meta']['units'][ltc]
+            data['meta']['kappa_source'] = kdata['meta']['kappa_source']
 
         else:
             data[ltc] = kdata * np.ones(len(data['temperature']))
-            data['meta']['kappa_source'] = 'Set to {} W m^-1 K^-1'.format(kdata)
+            data['meta']['dimensions'][ltc] = ['temperature']
+            data['meta']['units'][ltc] = tp.settings.units()[ltc]
+            data['meta']['kappa_source'] = 'Set to {} {}'.format(kdata,
+                                                   data['meta']['units'][ltc])
 
+        data = tp.data.utilities.resolve(data, [*equants, ltc], direction=direction)
         data = tp.calculate.zt_fromdict(data, use_tprc=True)
 
     # plotting
@@ -690,25 +695,29 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
         data[i]['doping'] = np.abs(data[i]['doping'])
         if 'zt' in data[i]:
             data[i] = tp.data.utilities.resolve(data[i], 'zt',
-                                              direction=direction)
+                                                direction=direction)
         else:
-            data[i] = tp.data.utilities.resolve(data[i], equants,
-                                              direction=direction)
             if kdata[i] is None:
                 kdata[i] = 1.
             if not isinstance(kdata[i], (int, float)):
-                kdata[i] = tp.data.utilities.resolve(kdata[i], ltc,
-                                                   direction=direction)
                 data[i], kdata[i] = tp.calculate.interpolate(data[i], kdata[i],
                                                              'temperature',
                                                              equants, ltc,
                                                              kind='cubic')
                 data[i][ltc] = kdata[i][ltc]
+                data[i]['meta']['dimensions'][ltc] = kdata[i]['meta']['dimensions'][ltc]
+                data[i]['meta']['units'][ltc] = kdata[i]['meta']['units'][ltc]
+                data[i]['meta']['kappa_source'] = kdata[i]['meta']['kappa_source']
 
             else:
-                data[ltc] = kdata[i] * np.ones(len(data[i]['temperature']))
-                data['meta']['kappa_source'] = 'Set to {} W m^-1 K^-1'.format(kdata[i])
+                data[i][ltc] = kdata[i] * np.ones(len(data[i]['temperature']))
+                data[i]['meta']['dimensions'][ltc] = ['temperature']
+                data[i]['meta']['units'][ltc] = tp.settings.units()[ltc]
+                data[i]['meta']['kappa_source'] = 'Set to {} {}'.format(kdata[i],
+                                                   data[i]['meta']['units'][ltc])
                         
+            data[i] = tp.data.utilities.resolve(data[i], [*equants, ltc],
+                                                direction=direction)
             data[i] = tp.calculate.zt_fromdict(data[i], use_tprc=True)
 
     data[0], data[1] = tp.calculate.interpolate(*data, dependent='temperature',
@@ -834,10 +843,10 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     equants = ['conductivity', 'seebeck', 'electronic_thermal_conductivity']
     # data formatting
 
-    data = tp.data.utilities.resolve(data, equants, direction=direction)
     data['zt'] = zt
 
-    data = tp.calculate.kl_fromdict(data, use_tprc=False)
+    data = tp.calculate.kl_fromdict(data, use_tprc=True)
+    data = tp.data.utilities.resolve(data, ltc, direction=direction)
 
     # plotting
 

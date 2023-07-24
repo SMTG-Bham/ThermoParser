@@ -7,10 +7,10 @@ Tutorial-01: Python Foundations
 
 The most basic plots in ThermoPlotter consist of four commands:
 
- 1. axes
- 2. load
- 3. plot
- 4. save
+ 1. `Axes`_
+ 2. `Load`_
+ 3. `Plot`_
+ 4. Save
 
 ThermoPlotter offers ways to do the first three (the last is trivial),
 but each part can be replaced by your own code if you prefer.
@@ -92,3 +92,6 @@ they can also be found `here <https://smtg-ucl.github.io/ThermoPlotter/>`_.
 
 .. _Tutorial-03: https://smtg-ucl.github.io/ThermoPlotter/tutorial-03.html
 .. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html
+.. _Axes: https://smtg-ucl.github.io/ThermoPlotter/tp.axes.html
+.. _Load: https://smtg-ucl.github.io/ThermoPlotter/tp.data.html#module-tp.data.load
+.. _Plot: https://smtg-ucl.github.io/ThermoPlotter/tp.plot.html
