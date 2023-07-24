@@ -148,7 +148,8 @@ def lifetime(gamma, use_tprc=True):
 
     with np.errstate(divide='ignore', invalid='ignore'):
         lifetime = np.reciprocal(np.multiply(2e12 * 2 * np.pi, gamma))
-    lifetime = np.where(np.isinf(lifetime), np.nanmax(lifetime), lifetime)
+    infmax = np.nanmax(np.where(np.isinf(lifetime), 0, lifetime))
+    lifetime = np.where(np.isinf(lifetime), infmax, lifetime)
     lifetime = np.where(np.isnan(lifetime), np.nanmin(lifetime), lifetime)
 
     if use_tprc:

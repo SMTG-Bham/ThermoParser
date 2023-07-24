@@ -167,7 +167,7 @@ def amset(filename, quantities='all', doping='n'):
             data2[c] = np.multiply(data2[c], float(aconversions[c]))
 
     if 'power_factor' in quantities:
-        data2 = tp.calculate.power_factor_fromdict(data2)
+        data2 = tp.calculate.power_factor_fromdict(data2, use_tprc=False)
 
     for c in conversions:
         if c in data2:
