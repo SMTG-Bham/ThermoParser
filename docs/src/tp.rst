@@ -1,6 +1,14 @@
 tp package
 ==========
 
+Module contents
+---------------
+
+.. automodule:: tp
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -28,14 +36,6 @@ tp.settings module
 ------------------
 
 .. automodule:: tp.settings
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: tp
    :members:
    :undoc-members:
    :show-inheritance:

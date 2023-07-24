@@ -7,12 +7,18 @@ array dimensions and the data source.
 Functions
 ---------
 
-    amset
-    amset_mesh
-    boltztrap
-    phono3py
-    phonopy_dispersion
-    phonopy_dos
+    amset:
+        from the amset transport json.
+    amset_mesh:
+        from the amset mesh h5.
+    boltztrap:
+        from the tp boltztrap hdf5.
+    phono3py:
+        from the phono3py kappa hdf5.
+    phonopy_dispersion:
+        from the phonopy or sumo band.yaml.
+    phonopy_dos:
+        from the phonopy projected_dos.dat.
 
     get_path:
         gets high path from phonopy dispersion data.
@@ -23,7 +29,7 @@ import tp
 from tp import settings
 
 def amset(filename, quantities='all', doping='n'):
-    """Loads AMSET transport data.
+    """Loads AMSET transport data from json.
 
     Includes unit conversion and outputs units (see tp.settings).
     Swaps temperature and doping indices so temperature is first, for
@@ -35,7 +41,7 @@ def amset(filename, quantities='all', doping='n'):
     ---------
 
         filename : str
-            filepath.
+            amset transport json filepath.
 
         quantites : str or list, optional
             values to extract. Accepts AMSET keys and power_factor.
@@ -170,7 +176,7 @@ def amset(filename, quantities='all', doping='n'):
     return data2
 
 def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
-    """Loads AMSET mesh data.
+    """Loads AMSET mesh data from h5.
 
     Can also weight rates. Includes unit conversion and outputs units
     (see tp.settings). Swaps temperature and doping indices so
@@ -180,7 +186,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     ---------
 
         filename : str
-            filepath.
+            amset mesh h5 filepath.
 
         quantites : str or list, optional
             values to extract. Accepts AMSET keys, without spin
@@ -226,10 +232,12 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
     quantities = [anames[q] if q in anames else q for q in quantities]
 
     # list of abbriviations and dependent quantites
-    subs = {'weights': ['ibz_weights', 'fd_weights'],
+    subs = {'weights':        ['ibz_weights', 'fd_weights'],
             'weighted_rates': ['scattering_rates', 'weighted_rates'],
-            'occupation': ['energies', 'fermi_levels', 'occupation']}
-    hasspin = ['energies', 'vb_idx', 'scattering_rates', 'velocities']
+            'mean_free_path': ['scattering_rates', 'velocities', 'mean_free_path'],
+            'weighted_mfp':   ['scattering_rates', 'velocities', 'mean_free_path', 'weighted_mfp'],
+            'occupation':     ['energies', 'fermi_levels', 'occupation']}
+    hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
     l = len(quantities)
     i = 0
@@ -330,30 +338,42 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 data[q2] = resolve_spin(f, q, spin2)
             elif q in f:
                 data[q2] = f[q][()]
-            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates', 'occupation']:
+            elif q not in ['ibz_weights', 'fd_weights', 'weighted_rates',
+                           'mean_free_path', 'weighted_mfp', 'occupation']:
                 raise Exception('{} unrecognised. Quantity must be {}, '
-                                'ibz_weights, fd_weights, weighted_rates or occupation'
+                                'ibz_weights, fd_weights, weighted_rates, '
+                                'mean_free_path or weighted_mfp or occupation.'
                                 ''.format(q, ', '.join(f)))
             if q == 'scattering_rates':
                 data[q2] = [*list(data[q2]), list(np.sum(data[q2], axis=0))]
-            if q in ['ibz_weights', 'weighted_rates']:
+            if q in ['ibz_weights', 'weighted_rates', 'weighted_mfp']:
                 _, data['ibz_weights'] = np.unique(f['ir_to_full_kpoint_mapping'],
                                                    return_counts=True)
-            if q in ['fd_weights', 'weighted_rates']:
+            if q in ['fd_weights', 'weighted_rates', 'weighted_mfp']:
                 e = resolve_spin(f, 'energies', spin)
                 data['fd_weights'] = -tp.calculate.dfdde(e, f['fermi_levels'],
                                                          f['temperatures'],
                                                          f['doping'],
                                                          amset_order=True)
-            if q == 'weighted_rates':
-                from copy import deepcopy
-                rates = np.array(deepcopy(data['scattering_rates']))
-                rates[rates > 1e20] = 1e15
+            if q in ['mean_free_path', 'weighted_mfp']:
+                data['velocities'] = np.array(data['velocities'])
+                data['scattering_rates'] = np.array(data['scattering_rates'])
+                data['mean_free_path'] = data['velocities'][None, None, None, :, :, :] / \
+                                         data['scattering_rates'][:, :, :, :, :, None]
+            if q in ['weighted_rates', 'weighted_mfp']:
                 data['total_weights'] = data['fd_weights'] * data['ibz_weights']
                 data['normalised_weights'] = data['total_weights'] / \
                                              np.sum(data['total_weights'],
                                                     axis=(2,3))[:,:,None,None]
+            if q =='weighted_rates':
+                from copy import deepcopy
+                rates = np.array(deepcopy(data['scattering_rates']))
+                rates[rates > 1e20] = 1e15
                 data[q2] = rates * data['normalised_weights']
+                data[q2] = data[q2].sum(axis=(3,4))
+            if q == 'weighted_mfp':
+                data[q2] = data['mean_free_path'] * \
+                           data['normalised_weights'][None, :, :, :, :, None]
                 data[q2] = data[q2].sum(axis=(3,4))
             if q == 'occupation':
                 data['occupation'] = tp.calculate.fd_occupation(
@@ -409,7 +429,7 @@ def boltztrap(filename, quantities='all', doping='n'):
     ---------
 
         filename : str
-            filepath.
+            boltztrap.hdf5 filepath.
 
         quantites : str or list, optional
             values to extract. Accepts boltztrap.hdf5 keys or all.
@@ -488,7 +508,7 @@ def boltztrap(filename, quantities='all', doping='n'):
     return data
 
 def phono3py(filename, quantities='all'):
-    """Loads Phono3py data.
+    """Loads Phono3py data from kappa hdf5.
 
     Can also calculate lifetimes, mean free paths and occupations.
     Includes unit conversions and outputs units and index order for all
@@ -500,7 +520,7 @@ def phono3py(filename, quantities='all'):
     ---------
 
         filename : str
-            filepath.
+            phono3py kappa hdf5 filepath.
 
         quantities : str or list, optional
             values to extract. Accepts Phono3py keys, lifetime,
@@ -653,7 +673,7 @@ def phonopy_dispersion(filename, xdata=None):
     ---------
 
         filename : str
-            filepath.
+            phonopy or sumo band.yaml filepath.
 
         xdata : dict, optional
             data for the dispersion to scale this to. Should have the
@@ -679,33 +699,25 @@ def phonopy_dispersion(filename, xdata=None):
 
     x = [d['distance'] for d in data['phonon']]
     qp = [q['q-position'] for q in data['phonon']]
-    d2, ticks = get_path(data)
-    eigs = [[b['frequency'] for b in p['band']] for p in data['phonon']]
-
-    # scale data to other path
+    tickpos, ticks = get_path(data)
+    f = [[b['frequency'] for b in p['band']] for p in data['phonon']]
 
     if xdata is not None:
-        d1 = xdata['tick_position']
-        n = 0
-        for i, d0 in enumerate(x):
-            while n <= len(d2) and not (d0 >= d2[n] and d0 <= d2[n+1]):
-                n += 1
-            x[i] = d1[n] + ((d0 - d2[n]) * (d1[n+1] - d1[n]) / \
-                                           (d2[n+1] - d2[n]))
-    else:
-        d1 = d2
+        # scale data to other path
+        x = scale_to_path(x, tickpos, xdata['tick_position'])
+        tickpos = xdata['tick_position']
 
     units = tp.settings.units()
     dimensions = settings.dimensions()
     data2 = {'x':             x,
              'qpoint':        qp,
-             'frequency':     eigs,
-             'tick_position': d1,
+             'frequency':     f,
+             'tick_position': tickpos,
              'tick_label':    ticks,
              'meta':
                  {'phonon_dispersion_source': 'phonopy',
-                     'units':      {'frequency': units['frequency']},
-                     'dimensions': {'frequency': dimensions['frequency']}}}
+                  'units':      {'frequency': units['frequency']},
+                  'dimensions': {'frequency': dimensions['frequency']}}}
 
     for c in pconversions:
         if c in data2:
@@ -799,6 +811,61 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
 
     return data2
 
+def phonopy_gruneisen(filename):
+    """Loads phonopy gruneisen data.
+
+    Does not load path data, but can load from files with a q-point
+    path, which will often be preferable if projecting onto a phonon
+    dispersion.
+
+    Arguments
+    ---------
+
+        filename : str
+            phonopy gruneisen.yaml filepath.
+
+    Returns
+    -------
+
+        dict
+            gruneisen data.
+    """
+
+    import yaml
+
+    pconversions = settings.phonopy_conversions()
+    conversions = settings.conversions()
+
+    # load data
+
+    with open(filename, 'r') as f:
+        data = yaml.safe_load(f)
+    
+    x = np.reshape([[q['distance'] for q in path['phonon']] for path in data['path']], (-1, 3))
+    qp = np.reshape([[q['q-position'] for q in path['phonon']] for path in data['path']], (-1, 3))
+    g = [[[band['gruneisen'] for band in q['band']] for q in path['phonon']] for path in data['path']]
+    g = np.reshape(g, (-1, np.shape(g)[-1]))
+
+    units = tp.settings.units()
+    dimensions = settings.dimensions()
+    data2 = {'x':             x,
+             'qpoint':        qp,
+             'gruneisen':     g,
+             'meta':
+                 {'gruneisen_source': 'phonopy',
+                  'units':      {'gruneisen': units['gruneisen']},
+                  'dimensions': {'gruneisen': dimensions['gruneisen']}}}
+
+    for c in pconversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], float(pconversions[c]))
+
+    for c in conversions:
+        if c in data2:
+            data2[c] = np.multiply(data2[c], float(conversions[c]))
+
+    return data2
+
 def get_path(yamldata):
     """Extracts the path from a phonopy yaml.
 
@@ -832,3 +899,38 @@ def get_path(yamldata):
              '$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
 
     return tickpos, ticks
+
+def scale_to_path(x, tickpos, scalepos):
+    """Scales data to a path.
+
+    Useful to make different phonopy runs fit together or to map
+    gruneisen data on a phonon dispersion.
+
+    Arguments
+    ---------
+
+        x : list
+            wavevector ordinates.
+        tickpos : list
+            tick wavevectors for scaling.
+        scalepos : list
+            scale tick wavevectors.
+
+    Returns
+    -------
+
+        list
+            wavevector ordinates.
+    """
+
+    n = 0
+    # for each x, while within data and between two high-symmetry
+    # points, interpolate onto scale data
+    for i in range(len(x)):
+        while n <= len(tickpos) and \
+              not (x[i] >= tickpos[n] and x[i] <= tickpos[n+1]):
+            n += 1
+        x[i] = scalepos[n] + ((x[i] - tickpos[n]) * (scalepos[n+1] - scalepos[n]) / \
+                             (tickpos[n+1] - tickpos[n]))
+
+    return x

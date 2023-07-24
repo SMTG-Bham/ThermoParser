@@ -82,12 +82,18 @@
 <span class="sd">Functions</span>
 <span class="sd">---------</span>
 
-<span class="sd">    amset</span>
-<span class="sd">    amset_mesh</span>
-<span class="sd">    boltztrap</span>
-<span class="sd">    phono3py</span>
-<span class="sd">    phonopy_dispersion</span>
-<span class="sd">    phonopy_dos</span>
+<span class="sd">    amset:</span>
+<span class="sd">        from the amset transport json.</span>
+<span class="sd">    amset_mesh:</span>
+<span class="sd">        from the amset mesh h5.</span>
+<span class="sd">    boltztrap:</span>
+<span class="sd">        from the tp boltztrap hdf5.</span>
+<span class="sd">    phono3py:</span>
+<span class="sd">        from the phono3py kappa hdf5.</span>
+<span class="sd">    phonopy_dispersion:</span>
+<span class="sd">        from the phonopy or sumo band.yaml.</span>
+<span class="sd">    phonopy_dos:</span>
+<span class="sd">        from the phonopy projected_dos.dat.</span>
 
 <span class="sd">    get_path:</span>
 <span class="sd">        gets high path from phonopy dispersion data.</span>
@@ -98,7 +104,7 @@
 <span class="kn">from</span> <span class="nn">tp</span> <span class="kn">import</span> <span class="n">settings</span>
 
 <div class="viewcode-block" id="amset"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset">[docs]</a><span class="k">def</span> <span class="nf">amset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads AMSET transport data.</span>
+    <span class="sd">&quot;&quot;&quot;Loads AMSET transport data from json.</span>
 
 <span class="sd">    Includes unit conversion and outputs units (see tp.settings).</span>
 <span class="sd">    Swaps temperature and doping indices so temperature is first, for</span>
@@ -110,7 +116,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            amset transport json filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts AMSET keys and power_factor.</span>
@@ -245,7 +251,7 @@
     <span class="k">return</span> <span class="n">data2</span></div>
 
 <div class="viewcode-block" id="amset_mesh"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.amset_mesh">[docs]</a><span class="k">def</span> <span class="nf">amset_mesh</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads AMSET mesh data.</span>
+    <span class="sd">&quot;&quot;&quot;Loads AMSET mesh data from h5.</span>
 
 <span class="sd">    Can also weight rates. Includes unit conversion and outputs units</span>
 <span class="sd">    (see tp.settings). Swaps temperature and doping indices so</span>
@@ -255,7 +261,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            amset mesh h5 filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts AMSET keys, without spin</span>
@@ -297,8 +303,10 @@
     <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">anames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
     <span class="c1"># list of abbriviations and dependent quantites</span>
-    <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]}</span>
+    <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>   <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]}</span>
     <span class="n">hasspin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;vb_index&#39;</span><span class="p">,</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">]</span>
 
     <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantities</span><span class="p">)</span>
@@ -396,30 +404,42 @@
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">q</span><span class="p">][()]</span>
-            <span class="k">elif</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> unrecognised. Quantity must be </span><span class="si">{}</span><span class="s1">, &#39;</span>
-                                <span class="s1">&#39;ibz_weights, fd_weights weighted_rates&#39;</span>
+                                <span class="s1">&#39;ibz_weights, fd_weights, weighted_rates, &#39;</span>
+                                <span class="s1">&#39;mean_free_path or weighted_mfp.&#39;</span>
                                 <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))]</span>
-            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ir_to_full_kpoint_mapping&#39;</span><span class="p">],</span>
                                                    <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">e</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">dfdde</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;fermi_levels&#39;</span><span class="p">],</span>
                                                          <span class="n">f</span><span class="p">[</span><span class="s1">&#39;temperatures&#39;</span><span class="p">],</span>
                                                          <span class="n">f</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
                                                          <span class="n">amset_order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-                <span class="n">rates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]))</span>
-                <span class="n">rates</span><span class="p">[</span><span class="n">rates</span> <span class="o">&gt;</span> <span class="mf">1e20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e15</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">/</span> \
+                                         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">][:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">]</span> <span class="o">/</span> \
                                              <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;total_weights&#39;</span><span class="p">],</span>
                                                     <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))[:,:,</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span><span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+                <span class="n">rates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">]))</span>
+                <span class="n">rates</span><span class="p">[</span><span class="n">rates</span> <span class="o">&gt;</span> <span class="mf">1e20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e15</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">rates</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]</span> <span class="o">*</span> \
+                           <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
@@ -469,7 +489,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            boltztrap.hdf5 filepath.</span>
 
 <span class="sd">        quantites : str or list, optional</span>
 <span class="sd">            values to extract. Accepts boltztrap.hdf5 keys or all.</span>
@@ -548,7 +568,7 @@
     <span class="k">return</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="phono3py"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.phono3py">[docs]</a><span class="k">def</span> <span class="nf">phono3py</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads Phono3py data.</span>
+    <span class="sd">&quot;&quot;&quot;Loads Phono3py data from kappa hdf5.</span>
 
 <span class="sd">    Can also calculate lifetimes, mean free paths and occupations.</span>
 <span class="sd">    Includes unit conversions and outputs units and index order for all</span>
@@ -560,7 +580,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            phono3py kappa hdf5 filepath.</span>
 
 <span class="sd">        quantities : str or list, optional</span>
 <span class="sd">            values to extract. Accepts Phono3py keys, lifetime,</span>
@@ -713,7 +733,7 @@
 <span class="sd">    ---------</span>
 
 <span class="sd">        filename : str</span>
-<span class="sd">            filepath.</span>
+<span class="sd">            phonopy or sumo band.yaml filepath.</span>
 
 <span class="sd">        xdata : dict, optional</span>
 <span class="sd">            data for the dispersion to scale this to. Should have the</span>
@@ -739,33 +759,25 @@
 
     <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span>
     <span class="n">qp</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="s1">&#39;q-position&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span>
-    <span class="n">d2</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">=</span> <span class="n">get_path</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">eigs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span>
-
-    <span class="c1"># scale data to other path</span>
+    <span class="n">tickpos</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">=</span> <span class="n">get_path</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="p">[[</span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span>
 
     <span class="k">if</span> <span class="n">xdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">d1</span> <span class="o">=</span> <span class="n">xdata</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">]</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d0</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">d0</span> <span class="o">&gt;=</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="ow">and</span> <span class="n">d0</span> <span class="o">&lt;=</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">d1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="n">d0</span> <span class="o">-</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">d1</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">d1</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">/</span> \
-                                           <span class="p">(</span><span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">d2</span><span class="p">[</span><span class="n">n</span><span class="p">]))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">d1</span> <span class="o">=</span> <span class="n">d2</span>
+        <span class="c1"># scale data to other path</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">scale_to_path</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tickpos</span><span class="p">,</span> <span class="n">xdata</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">])</span>
+        <span class="n">tickpos</span> <span class="o">=</span> <span class="n">xdata</span><span class="p">[</span><span class="s1">&#39;tick_position&#39;</span><span class="p">]</span>
 
     <span class="n">units</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
     <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span>             <span class="n">x</span><span class="p">,</span>
              <span class="s1">&#39;qpoint&#39;</span><span class="p">:</span>        <span class="n">qp</span><span class="p">,</span>
-             <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>     <span class="n">eigs</span><span class="p">,</span>
-             <span class="s1">&#39;tick_position&#39;</span><span class="p">:</span> <span class="n">d1</span><span class="p">,</span>
+             <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>     <span class="n">f</span><span class="p">,</span>
+             <span class="s1">&#39;tick_position&#39;</span><span class="p">:</span> <span class="n">tickpos</span><span class="p">,</span>
              <span class="s1">&#39;tick_label&#39;</span><span class="p">:</span>    <span class="n">ticks</span><span class="p">,</span>
              <span class="s1">&#39;meta&#39;</span><span class="p">:</span>
                  <span class="p">{</span><span class="s1">&#39;phonon_dispersion_source&#39;</span><span class="p">:</span> <span class="s1">&#39;phonopy&#39;</span><span class="p">,</span>
-                     <span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]},</span>
-                     <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]}}}</span>
+                  <span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]},</span>
+                  <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]}}}</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
@@ -859,6 +871,61 @@
 
     <span class="k">return</span> <span class="n">data2</span></div>
 
+<div class="viewcode-block" id="phonopy_gruneisen"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.phonopy_gruneisen">[docs]</a><span class="k">def</span> <span class="nf">phonopy_gruneisen</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads phonopy gruneisen data.</span>
+
+<span class="sd">    Does not load path data, but can load from files with a q-point</span>
+<span class="sd">    path, which will often be preferable if projecting onto a phonon</span>
+<span class="sd">    dispersion.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        filename : str</span>
+<span class="sd">            phonopy gruneisen.yaml filepath.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        dict</span>
+<span class="sd">            gruneisen data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">yaml</span>
+
+    <span class="n">pconversions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">phonopy_conversions</span><span class="p">()</span>
+    <span class="n">conversions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">conversions</span><span class="p">()</span>
+
+    <span class="c1"># load data</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="n">q</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">path</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]])</span>
+    <span class="n">qp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="n">q</span><span class="p">[</span><span class="s1">&#39;q-position&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">path</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]])</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">band</span><span class="p">[</span><span class="s1">&#39;gruneisen&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">q</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">path</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]]</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">g</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="n">units</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
+    <span class="n">dimensions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
+    <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span>             <span class="n">x</span><span class="p">,</span>
+             <span class="s1">&#39;qpoint&#39;</span><span class="p">:</span>        <span class="n">qp</span><span class="p">,</span>
+             <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>     <span class="n">g</span><span class="p">,</span>
+             <span class="s1">&#39;meta&#39;</span><span class="p">:</span>
+                 <span class="p">{</span><span class="s1">&#39;gruneisen_source&#39;</span><span class="p">:</span> <span class="s1">&#39;phonopy&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;gruneisen&#39;</span><span class="p">]},</span>
+                  <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span> <span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;gruneisen&#39;</span><span class="p">]}}}</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pconversions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">pconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">conversions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
+            <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">conversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">data2</span></div>
+
 <div class="viewcode-block" id="get_path"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.get_path">[docs]</a><span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="n">yamldata</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extracts the path from a phonopy yaml.</span>
 
@@ -892,6 +959,41 @@
              <span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">tickpos</span><span class="p">,</span> <span class="n">ticks</span></div>
+
+<div class="viewcode-block" id="scale_to_path"><a class="viewcode-back" href="../../../tp.data.html#tp.data.load.scale_to_path">[docs]</a><span class="k">def</span> <span class="nf">scale_to_path</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tickpos</span><span class="p">,</span> <span class="n">scalepos</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Scales data to a path.</span>
+
+<span class="sd">    Useful to make different phonopy runs fit together or to map</span>
+<span class="sd">    gruneisen data on a phonon dispersion.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        x : list</span>
+<span class="sd">            wavevector ordinates.</span>
+<span class="sd">        tickpos : list</span>
+<span class="sd">            tick wavevectors for scaling.</span>
+<span class="sd">        scalepos : list</span>
+<span class="sd">            scale tick wavevectors.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        list</span>
+<span class="sd">            wavevector ordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># for each x, while within data and between two high-symmetry</span>
+    <span class="c1"># points, interpolate onto scale data</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+        <span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tickpos</span><span class="p">)</span> <span class="ow">and</span> \
+              <span class="ow">not</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tickpos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">tickpos</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">scalepos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">tickpos</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">scalepos</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">scalepos</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="o">/</span> \
+                             <span class="p">(</span><span class="n">tickpos</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tickpos</span><span class="p">[</span><span class="n">n</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">x</span></div>
 </pre></div>
 
            </div>

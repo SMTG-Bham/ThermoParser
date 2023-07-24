@@ -91,19 +91,21 @@
 started, simply type <code class="docutils literal notranslate"><span class="pre">tp</span></code> into the command line, and a list of
 modules will be returned along with short descriptions. Pick one and
 type the full thing in, e.g. <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span></code>, to get a similar list of the
-available functions. Then type in all three parts and <code class="docutils literal notranslate"><span class="pre">--help</span></code> to get
-a detailed description of how to use the function, e.g.
-<code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span> <span class="pre">--help</span></code>. Note <code class="docutils literal notranslate"><span class="pre">-h</span></code> is <em>not</em> a substitute for
-<code class="docutils literal notranslate"><span class="pre">--help</span></code>.</p>
+available functions. Then type in all three parts to get a detailed
+description of how to use the function, e.g. <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span></code>.
+If further arguments have been given, this can be accessed with
+<code class="docutils literal notranslate"><span class="pre">--help</span></code>, but note <code class="docutils literal notranslate"><span class="pre">-h</span></code> is <em>not</em> a substitute for <code class="docutils literal notranslate"><span class="pre">--help</span></code>.</p>
 <p>Typically, you will need one or more data files, which are inputted
-directly after the command, e.g. <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span> <span class="pre">mesh.h5</span></code>. Then
-there is a list of optional inputs for customisation. Options with a
-slash, e.g. <code class="docutils literal notranslate"><span class="pre">--total/--nototal</span></code> are toggles, which can be appended
-by themselves, while other options normally require something else
-written afterwards, e.g. <code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">1e19</span></code>. If there is a list in square
-brackets, the appended text must be from that list. Many options can
-take multiple values, in which case the tag will need to be repeated:
-<code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">'*'</span> <span class="pre">-m</span> <span class="pre">'o'</span></code>.</p>
+directly after the command, e.g. <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span> <span class="pre">mesh.h5</span></code>. The
+type of file is hinted at at the top of the <code class="docutils literal notranslate"><span class="pre">--help</span></code>, e.g.
+<code class="docutils literal notranslate"><span class="pre">Usage:</span> <span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">avg-rates</span> <span class="pre">[OPTIONS]</span> <span class="pre">[MESH_H5]...</span></code>. Then there is a
+list of optional inputs for customisation. Options with a slash, e.g.
+<code class="docutils literal notranslate"><span class="pre">--total/--nototal</span></code> are toggles, which can be appended by themselves,
+while other options normally require something else written afterwards,
+e.g. <code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">1e19</span></code>. If there is a list in square brackets, the appended
+text must be from that list. Many options can take multiple values, in
+which case the tag will usually need to be repeated: <code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">'*'</span> <span class="pre">-m</span> <span class="pre">'o'</span></code>.
+A notable exception is in <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">plot</span> <span class="pre">ztdiff</span></code>.</p>
 <p>Later tutorials will mention if the CLI can be used instead, but will
 focus on the python interface.</p>
 </div>

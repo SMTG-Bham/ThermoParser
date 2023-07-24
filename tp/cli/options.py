@@ -4,22 +4,39 @@ Functions
 ---------
 
     direction_option
+    
     directions_option
+    
     doping_type_option
+    
     doping_option
+    
     dopings_option
+    
     dos_function
+    
     input_argument
+    
     inputs_function
+    
     interpolate_options
+    
     kpoints_options
+    
     legend_options
+    
     line_options
+    
     fill_options
+    
     plot_io_function
+    
     temperature_option
+    
     verbose_option
+    
     xy_limit_options
+    
     c_limit_options
 """
 
@@ -29,7 +46,7 @@ def direction_option(f):
     """Option for singular option for anisotropic data."""
 
     f = click.option('-d', '--direction',
-                     help='Direction(s) for anisotropic data.',
+                     help='Direction for anisotropic data.',
                      type=click.Choice(['a', 'b', 'c',
                                         'x', 'y', 'z',
                                         'average', 'avg',
@@ -101,7 +118,7 @@ def dos_function(dosargs=['-c', '--colour']):
                          type=click.Path(file_okay=True, dir_okay=False),
                          default='POSCAR',
                          show_default=True)(f)
-        f = click.option('-a', '--atoms',
+        f = click.option('--atoms',
                          help='Atoms in POSCAR order. Repeated names have '
                               'their contributions summed, or different names '
                               'can be used to separate environments. E.g. '
@@ -310,16 +327,16 @@ def xy_limit_options(f):
     """Options for x and y axes limits."""
 
     f = click.option('--xmin',
-                     help='Override minimum x.',
+                     help='Override minimum x-axis value.',
                      type=float)(f)
     f = click.option('--xmax',
-                     help='Override maximum x.',
+                     help='Override maximum x-axis value.',
                      type=float)(f)
     f = click.option('--ymin',
-                     help='Override minimum y.',
+                     help='Override minimum y-axis value.',
                      type=float)(f)
     f = click.option('--ymax',
-                     help='Override maximum y.',
+                     help='Override maximum y-axis value.',
                      type=float)(f)
 
     return f
@@ -328,10 +345,10 @@ def c_limit_options(f):
     """Options for colour axes limits."""
 
     f = click.option('--cmin',
-                     help='Override minimum colour value.',
+                     help='Override minimum colour-axis value.',
                      type=float)(f)
     f = click.option('--cmax',
-                     help='Override maximum colour value.',
+                     help='Override maximum colour-axis value.',
                      type=float)(f)
 
     return f

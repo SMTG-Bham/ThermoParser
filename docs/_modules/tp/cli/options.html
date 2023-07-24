@@ -79,22 +79,39 @@
 <span class="sd">---------</span>
 
 <span class="sd">    direction_option</span>
+<span class="sd">    </span>
 <span class="sd">    directions_option</span>
+<span class="sd">    </span>
 <span class="sd">    doping_type_option</span>
+<span class="sd">    </span>
 <span class="sd">    doping_option</span>
+<span class="sd">    </span>
 <span class="sd">    dopings_option</span>
+<span class="sd">    </span>
 <span class="sd">    dos_function</span>
+<span class="sd">    </span>
 <span class="sd">    input_argument</span>
+<span class="sd">    </span>
 <span class="sd">    inputs_function</span>
+<span class="sd">    </span>
 <span class="sd">    interpolate_options</span>
+<span class="sd">    </span>
 <span class="sd">    kpoints_options</span>
+<span class="sd">    </span>
 <span class="sd">    legend_options</span>
+<span class="sd">    </span>
 <span class="sd">    line_options</span>
+<span class="sd">    </span>
 <span class="sd">    fill_options</span>
+<span class="sd">    </span>
 <span class="sd">    plot_io_function</span>
+<span class="sd">    </span>
 <span class="sd">    temperature_option</span>
+<span class="sd">    </span>
 <span class="sd">    verbose_option</span>
+<span class="sd">    </span>
 <span class="sd">    xy_limit_options</span>
+<span class="sd">    </span>
 <span class="sd">    c_limit_options</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -104,7 +121,7 @@
     <span class="sd">&quot;&quot;&quot;Option for singular option for anisotropic data.&quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--direction&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction(s) for anisotropic data.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction for anisotropic data.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
                                         <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
                                         <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
@@ -176,7 +193,7 @@
                          <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
                          <span class="n">default</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span>
                          <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-a&#39;</span><span class="p">,</span> <span class="s1">&#39;--atoms&#39;</span><span class="p">,</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--atoms&#39;</span><span class="p">,</span>
                          <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Atoms in POSCAR order. Repeated names have &#39;</span>
                               <span class="s1">&#39;their contributions summed, or different names &#39;</span>
                               <span class="s1">&#39;can be used to separate environments. E.g. &#39;</span>
@@ -385,16 +402,16 @@
     <span class="sd">&quot;&quot;&quot;Options for x and y axes limits.&quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmin&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x-axis value.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmax&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x-axis value.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymin&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y-axis value.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymax&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y-axis value.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">f</span></div>
@@ -403,10 +420,10 @@
     <span class="sd">&quot;&quot;&quot;Options for colour axes limits.&quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmin&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour value.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour-axis value.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmax&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour value.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour-axis value.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">f</span></div>

@@ -48,6 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
@@ -59,7 +60,6 @@
 <li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -94,6 +94,21 @@
              
   <div class="section" id="tp-cli-package">
 <h1>tp.cli package<a class="headerlink" href="#tp-cli-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-tp.cli">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.cli" title="Permalink to this headline">¶</a></h2>
+<p>Provides CLI.</p>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>cli</dt><dd><p>Command line interface functions</p>
+</dd>
+<dt>options</dt><dd><p>Option groups for cli functions.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -105,31 +120,62 @@
 <blockquote>
 <div><dl class="simple">
 <dt>tp</dt><dd><dl class="simple">
-<dt>gen</dt><dd><p>kpar
-kpoints</p>
+<dt>gen</dt><dd><dl class="simple">
+<dt>kpar</dt><dd><p>suggest kpar ignoring zero-weighted k-points.</p>
 </dd>
-<dt>get</dt><dd><p>amset
-boltztrap
-phono3py
-zt</p>
+<dt>kpoints</dt><dd><p>generate zero-weighted KPOINTS file.</p>
 </dd>
-<dt>run</dt><dd><p>boltztrap</p>
+</dl>
 </dd>
-<dt>save</dt><dd><p>cumkappa
-kappa
-zt</p>
+<dt>get</dt><dd><dl class="simple">
+<dt>amset</dt><dd><p>get specific data from amset transport json or mesh h5.</p>
 </dd>
-<dt>plot</dt><dd><p>avg_rates
-cumkappa
-dos
-kappa
-kappa_target
-phonons
-transport
-waterfall
-wideband
-ztmap
-ztdiff</p>
+<dt>boltztrap</dt><dd><p>get specific data from tp boltztrap hdf5.</p>
+</dd>
+<dt>phono3py</dt><dd><p>get specific data from phono3py kappa hdf5.</p>
+</dd>
+<dt>zt</dt><dd><p>get zt from an electronic and a phononic file.</p>
+</dd>
+</dl>
+</dd>
+<dt>run</dt><dd><dl class="simple">
+<dt>boltztrap</dt><dd><p>efficient boltztrap runner to hdf5.</p>
+</dd>
+</dl>
+</dd>
+<dt>save</dt><dd><dl class="simple">
+<dt>cumkappa</dt><dd><p>save cumulative kappa data to dat.</p>
+</dd>
+<dt>kappa</dt><dd><p>save lattice thermal conductivity to dat.</p>
+</dd>
+<dt>zt</dt><dd><p>save zt to hdf5.</p>
+</dd>
+</dl>
+</dd>
+<dt>plot</dt><dd><dl class="simple">
+<dt>avg_rates</dt><dd><p>plot scattering rates against temperature and doping.</p>
+</dd>
+<dt>cumkappa</dt><dd><p>plot cumulative kappa against frequency or mfp.</p>
+</dd>
+<dt>dos</dt><dd><p>plot phonon DoS.</p>
+</dd>
+<dt>kappa</dt><dd><p>plot thermal conductivity against temperature.</p>
+</dd>
+<dt>kappa_target</dt><dd><p>plot target lattice thermal conductivity heatmap.</p>
+</dd>
+<dt>phonons</dt><dd><p>plot phonon dispersion(s) (and optional DoS).</p>
+</dd>
+<dt>transport</dt><dd><p>plot transport properties.</p>
+</dd>
+<dt>waterfall</dt><dd><p>plot scatter plots by band and q-point.</p>
+</dd>
+<dt>wideband</dt><dd><p>plot broadened phonon dispersion.</p>
+</dd>
+<dt>ztmap</dt><dd><p>plot zt or pf against temperature and doping.</p>
+</dd>
+<dt>ztdiff</dt><dd><p>plot zt or pf difference against temperature and doping.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd>
@@ -143,24 +189,24 @@ ztdiff</p>
 <div class="section" id="id1">
 <h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>direction_option
-directions_option
-doping_type_option
-doping_option
-dopings_option
-dos_function
-input_argument
-inputs_function
-interpolate_options
-kpoints_options
-legend_options
-line_options
-fill_options
-plot_io_function
-temperature_option
-verbose_option
-xy_limit_options
-c_limit_options</p>
+<div><p>direction_option</p>
+<p>directions_option</p>
+<p>doping_type_option</p>
+<p>doping_option</p>
+<p>dopings_option</p>
+<p>dos_function</p>
+<p>input_argument</p>
+<p>inputs_function</p>
+<p>interpolate_options</p>
+<p>kpoints_options</p>
+<p>legend_options</p>
+<p>line_options</p>
+<p>fill_options</p>
+<p>plot_io_function</p>
+<p>temperature_option</p>
+<p>verbose_option</p>
+<p>xy_limit_options</p>
+<p>c_limit_options</p>
 </div></blockquote>
 <dl class="py function">
 <dt id="tp.cli.options.c_limit_options">
@@ -260,21 +306,6 @@ c_limit_options</p>
 <dd><p>Options for x and y axes limits.</p>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="module-tp.cli">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.cli" title="Permalink to this headline">¶</a></h2>
-<p>Provides CLI.</p>
-<div class="section" id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>cli</dt><dd><p>Command line interface functions</p>
-</dd>
-<dt>options</dt><dd><p>Option groups for cli functions.</p>
-</dd>
-</dl>
-</div></blockquote>
 </div>
 </div>
 </div>
