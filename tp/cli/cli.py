@@ -12,6 +12,8 @@ Functions
         get
             amset
                 get specific data from amset transport json or mesh h5.
+            occupation
+                get charge carrier occupation
             boltztrap
                 get specific data from tp boltztrap hdf5.
             phono3py
@@ -267,7 +269,77 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
 
     return
 
-@get.command('boltztrap', no_args_is_help=True)
+@get.command('occupation')
+@inputs_function('amset_mesh_file', nargs=1)
+@doping_type_option
+@doping_option
+@temperature_option
+@click.option('--spin',
+              help='Spin direction.',
+              type=click.Choice(['up', 'down', 'avg'], case_sensitive=False),
+              default='avg',
+              show_default=True)
+@click.option('-p', '--poscar',
+              help='POSCAR path. Required for --qpoint.',
+              type=click.Path(file_okay=True, dir_okay=False),
+              default='POSCAR',
+              show_default=True)
+
+
+def get_occupation(amset_mesh_file, dtype, doping, temperature, spin, poscar):
+    """Prints AMSET occupation info at given conditions.
+
+    Requires an AMSET mesh file.
+    """
+
+    from pymatgen.io.vasp.inputs import Poscar
+    from scipy.constants import physical_constants
+    kb = physical_constants['Boltzmann constant in eV/K'][0]
+    if 'energy' in tp.settings.conversions():
+        kb *= tp.settings.conversions()['energy']
+    if 'temperature' in tp.settings.conversions():
+        kb /= tp.settings.conversions()['temperature']
+
+    data = tp.data.load.amset_mesh(amset_mesh_file, 'occupation energy vb_idx',
+                                   spin=spin, doping=dtype)
+
+    v = Poscar.from_file(poscar).structure.lattice.volume
+    data = tp.data.utilities.resolve(data, 'occupation energy',
+                                     temperature=temperature, dtype=dtype,
+                                     doping=doping)
+
+    avg_factor = 2 if spin in ['average', 'avg'] else 1
+    cb = data['vb_idx'] + 1
+    occ = np.average(data['occupation'], axis=1)
+    e = np.sum(occ[cb:])
+    h = avg_factor * cb - np.sum(occ[:cb])
+    e /= v * 1e-8 ** 3
+    h /= v * 1e-8 ** 3
+    c = tp.settings.conversions()
+    if 'doping' in c:
+        e *= c['doping']
+        h *= c['doping']
+    vbm = np.amax(data['energy'][cb-1])
+    cbm = np.amin(data['energy'][cb])
+    eg = cbm - vbm
+
+    print('The bandgap is {:.3f} {}, and at {:d} {} 10kbT = {:.3f} {}.'.format(
+          eg, data['meta']['units']['energy'],
+          int(np.ceil(data['meta']['temperature'])),
+          data['meta']['units']['temperature'],
+          10 * kb * int(np.ceil(data['meta']['temperature'])),
+          data['meta']['units']['energy']))
+    print('Your chosen carrier concentration is {} {}.'.format(
+          data['meta']['doping'], data['meta']['units']['doping']))
+    print('There are {:.3e} holes {} in the valence band and {:.3e} '
+          'electrons {} in the conduction band.'.format(
+          h, data['meta']['units']['doping'],
+          e, data['meta']['units']['doping']))
+
+    return
+
+
+@get.command('boltztrap')
 @inputs_function('boltztrap_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -734,8 +806,8 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
 
     Requires AMSET mesh files. Plots scattering rates averaged over
     kpoints and weighted by the derivative of the Fermi-Dirac
-    distribution against tempearture or carrier concentration or both.
-    If one file is given, it will be used for both plots, or if more are
+    distribution against temperature or carrier concentration or both.
+    If one file is given, it will be used for both plots, or if two are
     specified the one with the most temperatures will be used for the
     temperature plot and the one with the most carrier concentrations
     will be used for the doping plot. x-limits only work for individual

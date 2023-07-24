@@ -15,6 +15,8 @@ Functions
         particle lifetime.
     mfp:
         particle mean free path.
+    fd_occupation:
+        fermion occupation.
     be_occupation:
         boson occupation.
     dfdde:
@@ -189,6 +191,46 @@ def mfp(gamma, group_velocity, use_tprc=True):
         mfp = from_tp('mean_free_path', mfp)
 
     return mfp
+
+def fd_occupation(energy, temperature, fermi_level, use_tprc=True):
+    """Calculates Fermi-Dirac occupation.
+
+    Assumes singly-occupied bands: double as necessary.
+
+    Arguments
+    ---------
+
+        energy : array-like or float
+            energies (by default in eV).
+        temperature : array-like or float
+            temperature (by default in K).
+        fermi_level : array-like or float
+            fermi level (by default in eV).
+
+        use_tprc : bool, optional
+            use custom unit conversions. Default: True.
+
+    Returns
+    -------
+
+        array-like
+            occupations.
+    """
+
+    kb = physical_constants['Boltzmann constant in eV/K'][0]
+
+    if use_tprc:
+        energy = to_tp('energy', energy)
+        temperature = to_tp('temperature', temperature)
+        fermi_level = to_tp('fermi_level', fermi_level)
+
+    occupation = (np.exp(np.divide(np.add.outer(-fermi_level, energy),
+                                   kb * temperature[None, :, None, None])) + 1) ** -1
+
+    if use_tprc:
+        occupation = from_tp('occupation', occupation)
+
+    return occupation
 
 def be_occupation(frequency, temperature, use_tprc=True):
     """Calculates Bose-Einstein occupation.
