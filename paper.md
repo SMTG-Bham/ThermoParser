@@ -114,6 +114,6 @@ There are no conflicts to declare.
 
 KBS, DWD and DOS acknowledge support from the European Research Council (grant 758345).
 This work made use of the ARCHER2 UK National Supercomputing Service via the Materials Chemistry Consortium, which is funded by EPSRC (EP/L000202), and resources made available via the UK Materials and Molecular Modelling Hub, which is partially funded by EPSRC (EP/P020194/1).
-We would like to acknowledge contributions of ideas and time from Bonan Zhu, Seán R. Kavanagh, Warda Rahim, Katarina Brlec, Joe Willis, Luisa Herring--Rodriguez and Sabrine Hachmioune.
+We would like to acknowledge contributions of ideas and time from Katarina Brlec, Bonan Zhu, Seán R. Kavanagh, Warda Rahim, Joe Willis, Luisa Herring--Rodriguez and Sabrine Hachmioune.
 
 # References
