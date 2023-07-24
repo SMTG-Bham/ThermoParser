@@ -233,9 +233,9 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
 
     # list of abbriviations and dependent quantites
     subs = {'weights':        ['ibz_weights', 'fd_weights'],
-            'weighted_rates': ['scattering_rates', 'weighted_rates'],
+            'weighted_rates': ['scattering_rates', 'energies', 'fermi_levels', 'weighted_rates'],
             'mean_free_path': ['scattering_rates', 'velocities', 'mean_free_path'],
-            'weighted_mfp':   ['scattering_rates', 'velocities', 'mean_free_path', 'weighted_mfp'],
+            'weighted_mfp':   ['scattering_rates', 'velocities', 'mean_free_path', 'energies', 'fermi_levels', 'weighted_mfp'],
             'occupation':     ['energies', 'fermi_levels', 'occupation']}
     hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
 
@@ -329,7 +329,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
 
         data = {'meta': {'doping_type':       doping,
                          'electronic_source': 'amset',
-                         'spin':              spin,
+                         'spin':              spin2,
                          'units':             {},
                          'dimensions':        {}}}
         for q in quantities:
@@ -350,7 +350,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 _, data['ibz_weights'] = np.unique(f['ir_to_full_kpoint_mapping'],
                                                    return_counts=True)
             if q in ['fd_weights', 'weighted_rates', 'weighted_mfp']:
-                e = resolve_spin(f, 'energies', spin)
+                e = resolve_spin(f, 'energies', spin2)
                 data['fd_weights'] = -tp.calculate.dfdde(e, f['fermi_levels'],
                                                          f['temperatures'],
                                                          f['doping'],
