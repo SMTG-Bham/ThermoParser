@@ -307,7 +307,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         else:
             colours = colour
 
-    if label is None:
+    if label is None or label == [None]:
         label = np.full(len(data), None)
 
     if isinstance(linestyle, str) or len(linestyle) == 1:
