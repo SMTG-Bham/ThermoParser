@@ -15,7 +15,8 @@ character.
 While plots cannot be layered at the command line like this, the
 waterfall section can be plotted with:
 
-.. codeblock::
+.. code-block::
+   
    tp plot waterfall ../data/basno3/kappa-m363636.hdf5 -y mfp --projected kappa
 
 And in python:
@@ -44,7 +45,8 @@ adjusting the alpha parameter on the regular waterfall plot.
 
 It can be plotted at the command line with:
 
-.. codeblock::
+.. code-block::
+
    tp plot waterfall ../data/basno3/kappa-m363636.hdf5 -y mfp --projected density -c Blues
 
 Or in python with:

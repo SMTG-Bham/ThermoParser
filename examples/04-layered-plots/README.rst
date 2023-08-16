@@ -70,4 +70,4 @@ which removes the ticks and tick labels and the y axis label, while all
 the default labels can be accessed with ``settings.labels``. These will
 be covered more in `Tutorial-05`_.
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html
+.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html

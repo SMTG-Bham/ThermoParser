@@ -3,7 +3,7 @@
 ----------------
 
 This module contains functions for calculating some properties used in
-ThermoPlotter.
+ThermoParser.
 
 ---------------
 ``settings.py``

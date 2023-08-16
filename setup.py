@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-__name__ =       'ThermoPlotter'
+__name__ =       'ThermoParser'
 __author__ =     'Kieran B. Spooner'
-__copyright__ =  'Copyright Scanlon Materials Theory Group (2022)'
-__version__ =    '2.3.0'
+__copyright__ =  'Copyright Scanlon Materials Theory Group (2023)'
+__version__ =    '3.0.0'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'kieran.spooner.14@ucl.ac.uk'
-__date__ =       'October 12th 2022'
+__date__ =       'August 16th 2023'
 
 import os
 import setuptools
@@ -45,7 +45,7 @@ setuptools.setup(
     description='streamlined analysis of thermoelectric properties',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://smtg-ucl.github.io/ThermoPlotter/',
+    url='https://smtg-ucl.github.io/ThermoParser/',
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -58,7 +58,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Scientific/Engineering :: Visualization'],
     keywords='chemistry materials thermoelectric dft phonopy phono3py '
-             'amset boltztrap tp te matplotlib',
+             'amset boltztrap tp te matplotlib vasp transport',
     test_suite='setup.load_test_suite',
     install_requires=['click', 'h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy'],

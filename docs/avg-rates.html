@@ -49,8 +49,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -92,9 +92,12 @@ across k-points and weighted by the derivative of the Fermi-Dirac
 distribution, as they are when calculating the conductivity, thereby
 giving a representative image of the effect the scattering processes
 play in the material. This can be plotted at the command line with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">avg</span><span class="o">-</span><span class="n">rates</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">mesh_75x75x75</span><span class="o">.</span><span class="n">h5</span> <span class="o">-</span><span class="n">t</span> <span class="mi">1000</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="mf">1e19</span> <span class="o">--</span><span class="n">location</span> <span class="mi">2</span> <span class="o">--</span><span class="n">large</span> <span class="o">-</span><span class="n">c</span> <span class="n">red</span> <span class="o">-</span><span class="n">c</span> <span class="n">blue</span> <span class="o">-</span><span class="n">c</span> <span class="n">magenta</span>
+</pre></div>
+</div>
 <p>If rates are included in the file but are very low, you may want to
 <code class="docutils literal notranslate"><span class="pre">--exclude</span></code> them; <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">PIE</span></code> may be particularly popular.
-While ThermoPlotter does not currently have python functions to plot
+While ThermoParser does not currently have python functions to plot
 line graphs, it does calculate the weighted rates and the ancillary
 functions should make this relatively straightforward:</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -196,7 +199,7 @@ as the <code class="docutils literal notranslate"><span class="pre">quantity</sp
 as simple as using the resolve function (lines 26/27). To plot the
 graph matplotlib’s normal <code class="docutils literal notranslate"><span class="pre">plot</span></code> function is used, and the axes,
 labels, ticks and legend are all sorted out by tp functions (lines 21,
-34-38. 39/40 and 42 respectively, see also <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html">Tutorial-05</a>).</p>
+34-38. 39/40 and 42 respectively, see also <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorial-05.html">Tutorial-05</a>).</p>
 <p>This graph can instead show weighted mean free paths, by adding the
 <code class="docutils literal notranslate"><span class="pre">--mfp</span></code> tag at the command line or changing <code class="docutils literal notranslate"><span class="pre">q</span></code> to equal
 <code class="docutils literal notranslate"><span class="pre">weighted_mfp</span></code> in python.</p>

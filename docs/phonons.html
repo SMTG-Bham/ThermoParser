@@ -49,8 +49,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -89,6 +89,9 @@
 <img alt="Phonon dispersion and density of states." src="_images/phonons1.png" />
 <p>This shows a phonon dispersion and density of states (DoS). This is the
 only combined plot currenty possible at the command line, with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">phonons</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">band</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">dos</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">projected_dos</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">poscar</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">POSCAR</span> <span class="o">-</span><span class="n">doscolour</span> <span class="s1">&#39;#d46ef9&#39;</span> <span class="o">--</span><span class="n">doscolour</span> <span class="s1">&#39;#7b8eff&#39;</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;#f0901f&#39;</span>
+</pre></div>
+</div>
 <p>and in python:</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -157,6 +160,9 @@ this is simple (line 24).</p>
 <img alt="Phonon dispersions for different supercell sizes." src="_images/multiphon1.png" />
 <p>This shows phonons dispersions for various supercell sizes for
 convergence:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">phonons</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">band</span><span class="o">-*.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">legend_title</span> <span class="s2">&quot;Supercell Size&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;2 x 2 x 2&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;3 x 3 x 3&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;4 x 4 x 4&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;5 x 5 x 5&quot;</span>
+</pre></div>
+</div>
 <p>and in python:</p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2

@@ -8,7 +8,8 @@ Projected Phonons
 This shows a phonon dispersion with bands broadened to indicate
 scattering (the widest bands scatter the most). Via the command-line:
 
-.. codeblock::
+.. code-block::
+
    tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 -c black -c red -s dark_background -p POSCAR
 
 and in python:
