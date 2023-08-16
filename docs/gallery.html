@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gallery &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Gallery &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -16,8 +16,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorials" href="tutorials.html" />
-    <link rel="prev" title="ThermoPlotter" href="contents.html" /> 
+    <link rel="next" title="Heatmaps" href="heatmaps.html" />
+    <link rel="prev" title="ThermoParser" href="contents.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -37,13 +37,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Gallery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="heatmaps.html">Heatmaps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phonons.html">Phonons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dos.html">Density of States (DoS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cumkappa.html">Cumulative Kappa</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waterfalls.html">Waterfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prophon.html">Projected Phonons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="avg-rates.html">Average Scattering Rates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -58,7 +65,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -78,18 +85,20 @@
              
   <div class="section" id="gallery">
 <h1>Gallery<a class="headerlink" href="#gallery" title="Permalink to this headline">¶</a></h1>
-<p>This is a gallery of some things you can do in ThermoPlotter with brief
+<div class="toctree-wrapper compound">
+</div>
+<p>This is a gallery of some things you can do in ThermoParser with brief
 explanations. More details on each of the plots, including the scripts
-and specific commands used are available in the <a class="reference external" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/">examples</a>, and we
-also have <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorials.html">tutorials</a>!</p>
+and specific commands used are available by clicking on the figures, and we
+also have <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorials.html">tutorials</a>!</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Click on the images to see the script which generated them.</p>
 </div>
-<p>At its simplest, <code class="docutils literal notranslate"><span class="pre">ThermoPlotter</span></code> is a way to quickly plot useful data
+<p>At its simplest, <code class="docutils literal notranslate"><span class="pre">ThermoParser</span></code> is a way to quickly plot useful data
 from either a python script or the command line, such as the classic
 <code class="docutils literal notranslate"><span class="pre">ztmap</span></code> heatmap (the power factor <code class="docutils literal notranslate"><span class="pre">pfmap</span></code> is also available):</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-zt.py"><img alt="A heatmap of ZT against carrier concentration and temperature" src="_images/ztmap.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of ZT against carrier concentration and temperature" src="_images/ztmap.png" /></a>
 <p>Click on the plot to see the script, or one could use</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztmap boltztrap.hdf5 -k kappa-m&lt;xxx&gt;.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x
 </pre></div>
@@ -98,61 +107,71 @@ from either a python script or the command line, such as the classic
 run three+ phonon calculations on is the <code class="docutils literal notranslate"><span class="pre">kappa-target</span></code> plot, which
 calculates the lattice thermal conductivity required to reach a given
 ZT, in this case 2.</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-kappa-target.py"><img alt="A heatmap of target lattice thermal conductivity against carrier concentration and temperature" src="_images/kappa-target.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of target lattice thermal conductivity against carrier concentration and temperature" src="_images/kappa-target.png" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot kappa-target boltztrap.hdf5 -c <span class="s1">&#39;#008080&#39;</span> -d x
 </pre></div>
 </div>
 <p>Or on the analytical end of the process, <code class="docutils literal notranslate"><span class="pre">zdiff</span></code> and <code class="docutils literal notranslate"><span class="pre">pfdiff</span></code> allow
 comparison among different datasets.</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-ztdiff.py"><img alt="A heatmap of differentce in ZT against carrier concentration and temperature" src="_images/ztdiff.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of differentce in ZT against carrier concentration and temperature" src="_images/ztdiff.png" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff &lt;x&gt;/boltztrap.hdf5 &lt;y&gt;/boltztrap.hdf5 -k &lt;x&gt;/kappa-m&lt;xxx&gt;.hdf5 &lt;y&gt;/kappa-m&lt;yyy&gt;.hdf5 -l &lt;x&gt; &lt;y&gt;
 </pre></div>
 </div>
 <p>Slightly more complex plots also with command line scripts are the
 phonon dispersions, which can be overlayed and plotted with DoSs.</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-multiphon.py"><img alt="A plot converging phonon dispersions against supercell size" src="_images/multiphon.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/phonons.html"><img alt="A plot converging phonon dispersions against supercell size" src="_images/multiphon.png" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons &lt;list of band.yamls&gt; -l &lt;list of labels&gt; -t <span class="s1">&#39;Supercell\ Size&#39;</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-phonons.py"><img alt="A phonon dispersion and DoS" src="_images/phonons.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/phonons.html"><img alt="A phonon dispersion and DoS" src="_images/phonons.png" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons band.yaml -c <span class="s1">&#39;#ff8000&#39;</span> -d projected_dos.dat --doscolour <span class="s1">&#39;#ffff00&#39;</span> <span class="s1">&#39;#00ffff&#39;</span>
 </pre></div>
 </div>
-<p>This is where some of the more useful functions of <code class="docutils literal notranslate"><span class="pre">ThermoPlotter</span></code>
+<p>This is where some of the more useful functions of <code class="docutils literal notranslate"><span class="pre">ThermoParser</span></code>
 come in, e.g. the rescaling of the x axis in the former plot, and the
-simplicity of compound axes in the latter.</p>
-<p>There are  command-line script, but the main functionality is
+simplicity of compound axes in the latter. Another example is the ability to
+add gaussian smearing to a DoS plot during plotting, removing the need to rerun
+e.g. Phonopy or maintain multiple data files.</p>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/dos.html"><img alt="A DoS plot without and with gaussian smearing (sigma=0.2)" src="_images/dos.png" /></a>
+<p>The right-hand plot can be plotted with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot dos projected_dos.dat --atoms <span class="s2">&quot;Ba Sn O O_2 2&quot;</span> --sigma <span class="m">0</span>.2 --location <span class="m">1</span> -c magenta -c cyan -c red -c orange
+</pre></div>
+</div>
+<p>There are command-line scripts, but the main functionality is
 intended as a python package, which enables much more customisable
 plotting, to enable nicely formatted multi-axes plots…</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/cumkappa/plot-cumkappa.py"><img alt="Cumulative kappa against frequency and mean free path, broken down by direction" src="_images/cumkappa.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/cumkappa.html"><img alt="Cumulative kappa against frequency and mean free path, broken down by direction" src="_images/cumkappa.png" /></a>
 <p>...and multi-plot axes, to highlight particular interactions.</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/waterfall/plot-waterfall.py"><img alt="A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS" src="_images/waterfall.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/waterfall.html"><img alt="A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS" src="_images/waterfall.png" /></a>
 <p>As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
 projecting these properties onto phonon dispersions. The former is an
 oft plotted widening of the bands due to scattering,<sup>1</sup> and the
 latter shows the same data, but in a more quantitative way.</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-wideband.py"><img alt="A phonon dispersion where widened bands show phonon scattering" src="_images/wideband.png" /></a>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/prophon.html"><img alt="A phonon dispersion where widened bands show phonon scattering" src="_images/wideband.png" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband band.yaml kappa-m&lt;xxx&gt;.hdf5 -c <span class="s1">&#39;#000000&#39;</span> <span class="s1">&#39;#ff0000&#39;</span> -s dark_background
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-projected-phonons.py"><img alt="A phonon dispersion where dark colours show phonn scattering" src="_images/prophon.png" /></a>
-<p>Besides plotting, ThermoPlotter offers a number of ways to streamline
-trnasport property workflows, from generating more efficent input files
-(<code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">gen</span></code>) to data consolidation (<code class="docutils literal notranslate"><span class="pre">tp.utilities.merge</span></code>) and
-retrieval (<code class="docutils literal notranslate"><span class="pre">tp.utilities.resolve</span></code> and <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">get</span></code>), many of which are
-outlined in the <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorials.html">tutorials</a>. Most of these don’t lend themselves to a
-gallery, except the ability to add gaussian smearing to a DoS plot
-during plotting, removing the need to rerun e.g. Phonopy or maintain
-multiple data files.</p>
-<a class="reference external image-reference" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/plot-dos.py"><img alt="A DoS plot without and with gaussian smearing (sigma=0.2)" src="_images/dos.png" /></a>
-<p>The right-hand plot can be plotted with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot dos projected_dos.dat --atoms <span class="s2">&quot;Ba Sn O O_2 2&quot;</span> --sigma <span class="m">0</span>.2 --location <span class="m">1</span> -c magenta -c cyan -c red -c orange
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/prophon.html"><img alt="A phonon dispersion where dark colours show phonn scattering" src="_images/prophon.png" /></a>
+<p>Besides plotting, ThermoParser offers a number of ways to streamline
+transport property workflows, from generating more efficent input files
+(<code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">gen</span></code>), to data consolidation (<code class="docutils literal notranslate"><span class="pre">tp.utilities.merge</span></code>) and
+retrieval (<code class="docutils literal notranslate"><span class="pre">tp.utilities.resolve</span></code> and <code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">get</span></code>), to pre-typed axis labels,
+because thats long… many of these outlined in the <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorials.html">tutorials</a>, and some are
+demonstrated in this line plot, which is not available as a python command,
+but is easily scripted or plotted at the command line:</p>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/avg-rates.html"><img alt="A plot of weighted average scattering rates against temperature and carrier concnetration." src="_images/avg-rates.png" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">avg</span><span class="o">-</span><span class="n">rates</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">mesh_75x75x75</span><span class="o">.</span><span class="n">h5</span> <span class="o">-</span><span class="n">t</span> <span class="mi">1000</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="mf">1e19</span> <span class="o">--</span><span class="n">location</span> <span class="mi">2</span> <span class="o">--</span><span class="n">large</span> <span class="o">-</span><span class="n">c</span> <span class="n">red</span> <span class="o">-</span><span class="n">c</span> <span class="n">blue</span> <span class="o">-</span><span class="n">c</span> <span class="n">magenta</span>
 </pre></div>
 </div>
-<p>There are also a number of cosmetic options in the python interface,
-which may be of interest outside the main scope of ThermoPlotter, e.g.
-the custom colourmaps, legend formatting tools and axes labels.</p>
+<p>It shows the k-point and Fermi-Dirac weighted scattering rates against
+temperature and carrier concentration, to give an accurate picture of their
+effect on the electrical conductivity. This can also be done for the electron
+mean free paths.</p>
+<p>There are also a number of cosmetic options in
+the python interface, which may be of interest outside the main scope of
+ThermoParser, e.g. the custom colourmaps, legend formatting tools and axes
+labels.</p>
 <div class="section" id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">Maradudin1962</span><span class="p">,</span>
@@ -174,14 +193,14 @@ the custom colourmaps, legend formatting tools and axes labels.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="contents.html" class="btn btn-neutral float-left" title="ThermoPlotter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="contents.html" class="btn btn-neutral float-left" title="ThermoParser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="heatmaps.html" class="btn btn-neutral float-right" title="Heatmaps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

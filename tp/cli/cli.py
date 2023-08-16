@@ -6,30 +6,51 @@ Functions
     tp
         gen
             kpar
+                suggest kpar ignoring zero-weighted k-points.
             kpoints
+                generate zero-weighted KPOINTS file.
         get
             amset
+                get specific data from amset transport json or mesh h5.
             boltztrap
+                get specific data from tp boltztrap hdf5.
             phono3py
+                get specific data from phono3py kappa hdf5.
             zt
+                get zt from an electronic and a phononic file.
         run
             boltztrap
+                efficient boltztrap runner to hdf5.
         save
             cumkappa
+                save cumulative kappa data to dat.
             kappa
+                save lattice thermal conductivity to dat.
             zt
+                save zt to hdf5.
         plot
             avg_rates
+                plot scattering rates against temperature and doping.
             cumkappa
+                plot cumulative kappa against frequency or mfp.
             dos
+                plot phonon DoS.
             kappa
+                plot thermal conductivity against temperature.
             kappa_target
+                plot target lattice thermal conductivity heatmap.
             phonons
+                plot phonon dispersion(s) (and optional DoS).
             transport
+                plot transport properties.
             waterfall
+                plot scatter plots by band and q-point.
             wideband
+                plot broadened phonon dispersion.
             ztmap
+                plot zt or pf against temperature and doping.
             ztdiff
+                plot zt or pf difference against temperature and doping.
 """
 
 import click
@@ -52,7 +73,7 @@ def gen():
     return
 
 
-@gen.command()
+@gen.command(no_args_is_help=True)
 @kpoints_options
 def kpar(kpoints, mesh, poscar):
     """Suggests KPAR values for VASP.
@@ -75,7 +96,7 @@ def kpar(kpoints, mesh, poscar):
     return
 
 
-@gen.command()
+@gen.command(no_args_is_help=True)
 @kpoints_options
 @click.option('-z', '--zero-kpoints', '--zero-ibzkpt',
               help='IBZKPT file path. Overrides --zero-mesh.',
@@ -119,7 +140,7 @@ def get():
     return
 
 
-@get.command('amset')
+@get.command('amset', no_args_is_help=True)
 @inputs_function('amset_file', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -246,7 +267,7 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
 
     return
 
-@get.command('boltztrap')
+@get.command('boltztrap', no_args_is_help=True)
 @inputs_function('boltztrap_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -305,7 +326,7 @@ def get_boltztrap(boltztrap_hdf5, quantity, dtype, doping, direction, temperatur
     return
 
 
-@get.command('phono3py')
+@get.command('phono3py', no_args_is_help=True)
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -398,7 +419,7 @@ def get_phono3py(kappa_hdf5, quantity, direction, temperature, band, qpoint,
     return
 
 
-@get.command('zt')
+@get.command('zt', no_args_is_help=True)
 @inputs_function('transport_file', nargs=1)
 @click.option('-k', '--kappa',
               help='Phono3py kappa-mxxx.hdf5.',
@@ -471,7 +492,7 @@ def run():
     return
 
 
-@run.command()
+@run.command(no_args_is_help=True)
 
 @click.option('--tmin',
               help='Set minimum temperature in K. Does not speed up '
@@ -563,7 +584,7 @@ def save():
     return
 
 
-@save.command('cumkappa')
+@save.command('cumkappa', no_args_is_help=True)
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -596,7 +617,7 @@ def save_cumkappa(kappa_hdf5, mfp, direction, temperature, output, extension):
     return
 
 
-@save.command('kappa')
+@save.command('kappa', no_args_is_help=True)
 @inputs_function('kappa_hdf5', nargs=1)
 @direction_function(multiple=True)
 @click.option('-o', '--output',
@@ -626,7 +647,7 @@ def save_kappa(kappa_hdf5, direction, output):
     return
 
 
-@save.command('zt')
+@save.command('zt', no_args_is_help=True)
 @inputs_function('transport_file', nargs=1)
 @click.option('-k', '--kappa',
               help='Phono3py kappa-mxxx.hdf5.',
@@ -661,10 +682,14 @@ def plot():
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('mesh_h5')
+@click.option('--mfp/--rate',
+              help='Plot mfp instead of rate.  [default: rate]',
+              default=False,
+              show_default=False)
 @click.option('--total/--nototal',
-              help='Plot total scattering rate  [default: total]',
+              help='Plot total  [default: total]',
               default=True,
               show_default=False)
 @click.option('-x', '--x',
@@ -674,9 +699,15 @@ def plot():
               default='both',
               show_default=True)
 @click.option('--crt',
-        help='Constant relaxation time rate.  [default: off]',
+              help='Constant relaxation time rate.  [default: off]',
               type=float)
+
+@click.option('--exclude',
+              help='Rates to exclude. Excludes from the graph, *not* '
+                   'from the total calculation.',
+              multiple=True)
 @doping_function()
+@direction_function()
 @temperature_option
 
 @click.option('-c', '--colour',
@@ -688,24 +719,31 @@ def plot():
 @line_options
 
 @axes_limit_function()
+@legend_function(label=False)
+@click.option('--long/--short',
+              help='Legend label length.  [default: short]',
+              default=False,
+              show_default=False)
 @plot_io_function('tp-avg-rates')
 @verbose_option
 
-def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
-              marker, xmin, xmax, ymin, ymax, style, large, save, show,
+def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
+              temperature, colour, linestyle, marker, xmin, xmax, ymin, ymax,
+              legend_title, legend, location, long, style, large, save, show,
               extension, output, verbose):
-    """Plots averaged scattering rates.
+    """Plots averaged scattering rates or mfp.
 
     Requires AMSET mesh files. Plots scattering rates averaged over
     kpoints and weighted by the derivative of the Fermi-Dirac
     distribution against tempearture or carrier concentration or both.
-    If one file is given, it will be used for both plots, or if two are
+    If one file is given, it will be used for both plots, or if more are
     specified the one with the most temperatures will be used for the
     temperature plot and the one with the most carrier concentrations
     will be used for the doping plot. x-limits only work for individual
     plots.
     """
 
+    q = 'weighted_mfp' if mfp else 'weighted_rates'
     if x == 'both':
         axes = tp.axes.large if large else tp.axes.small
         fig, ax, add_legend = axes.two_h(style)
@@ -716,18 +754,31 @@ def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
     dax = ax[1] if x == 'both' else ax
 
     if len(mesh_h5) == 1:
-        data = [tp.data.load.amset_mesh(mesh_h5[0], 'weighted_rates')]
+        data = [tp.data.load.amset_mesh(mesh_h5[0], q)]
         tindex = 0
         dindex = 0
-    elif len(mesh_h5) == 2:
-        data = [tp.data.load.amset_mesh(f, 'weighted_rates') for f in mesh_h5]
-        tindex = 0 if len(data[0]['temperature']) > len(data[1]['temperature']) else 1
-        dindex = 0 if len(data[0]['doping']) > len(data[1]['doping']) else 1
+    elif len(mesh_h5) > 1:
+        data = [tp.data.load.amset_mesh(f, q) for f in mesh_h5]
+        tlen = [len(d['temperature']) for d in data]
+        dlen = [len(d['doping']) for d in data]
+        tindex = np.where(tlen = np.amax(tlen))[0][0]
+        dindex = np.where(dlen = np.amax(dlen))[0][0]
         if verbose:
             print('Using {} for the temperature data.'.format(mesh_h5[tindex]))
             print('Using {} for the doping data.'.format(mesh_h5[dindex]))
-    else:
-        raise Exception('Please specify at most two filenames')
+    
+    if exclude != ():
+        for i, d in enumerate(data):
+            delarray = []
+            for j, r in enumerate(d['stype']):
+                if r in exclude:
+                    delarray.append(j)
+            delarray.sort()
+            delarray.reverse()
+            for k in delarray:
+                del d['stype'][k]
+                data[i]['stype'] = d['stype']
+                data[i][q] = np.delete(d[q], k, 0)
 
     nlines = np.amax([len(d['stype']) for d in data])
 
@@ -754,48 +805,67 @@ def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
     while len(marker) < nlines:
         marker.append(None)
 
+    if long:
+        expanded = {'ADP':   'Acoustic Deformation Potential',
+                    'CRT':   'Constant Relaxation Time',
+                    'IMP':   'Ionised Impurity',
+                    'MFP':   'Mean Free Path',
+                    'PIE':   'Piezoelectric',
+                    'POP':   'Polar Optical Phonon',
+                    'Total': 'Total'}
+        for i in range(len(data)):
+            for r in range(len(data[i]['stype'])):
+                data[i]['stype'][r] = expanded[data[i]['stype'][r]]
+                crtname = expanded['CRT']
+    else:
+        crtname = 'CRT'
+
     labels = tp.settings.large_labels() if large else tp.settings.labels()
     if x == 'temperature' or x == 'both':
-        tdata = tp.data.utilities.resolve(data[tindex], 'weighted_rates',
-                                          doping=doping)
+        tdata = tp.data.utilities.resolve(data[tindex], q, doping=doping, direction=direction)
         if verbose:
             print('Using {} {}.'.format(tdata['meta']['doping'],
                                         tdata['meta']['units']['doping']))
         for i, rate in enumerate(data[tindex]['stype']):
             if total or rate != 'Total':
-                tax.plot(tdata['temperature'], tdata['weighted_rates'][i],
-                         color=colours[i], linestyle=linestyle[i],
-                         marker=marker[i], label=rate)
+                tax.plot(tdata['temperature'], tdata[q][i], color=colours[i],
+                         linestyle=linestyle[i], marker=marker[i], label=rate)
         if crt is not None:
             i += 1
             crtrate = np.full(len(tdata['temperature']), crt)
             tax.plot(tdata['temperature'], crtrate, color=colours[i],
-                     linestyle=linestyle[i], marker=marker[i], label='CRT')
+                     linestyle=linestyle[i], marker=marker[i], label=crtname)
         tax.set_xlabel(labels['temperature'])
-        tax.set_ylabel(labels['scattering_rates'])
+        tax.set_ylabel(labels[q])
         tp.plot.utilities.set_locators(tax, x='linear', y='log')
 
     if x == 'doping' or x == 'both':
-        ddata = tp.data.utilities.resolve(data[dindex], 'weighted_rates',
+        ddata = tp.data.utilities.resolve(data[dindex], q, direction=direction,
                                           temperature=temperature)
         if verbose:
             print('Using {} {}.'.format(ddata['meta']['temperature'],
                                         ddata['meta']['units']['temperature']))
         for i, rate in enumerate(data[dindex]['stype']):
             if total or rate != 'Total':
-                dax.plot(np.abs(ddata['doping']), ddata['weighted_rates'][i],
-                         color=colours[i], linestyle=linestyle[i],
-                         marker=marker[i], label=rate)
+                dax.plot(np.abs(ddata['doping']), ddata[q][i], color=colours[i],
+                                linestyle=linestyle[i], marker=marker[i],
+                                label=rate)
         if crt is not None:
             i += 1
             crtrate = np.full(len(ddata['doping']), crt)
             dax.plot(np.abs(ddata['doping']), crtrate, color=colours[i],
-                     linestyle=linestyle[i], marker=marker[i], label='CRT')
+                     linestyle=linestyle[i], marker=marker[i], label=crtname)
         dax.set_xlabel(labels['doping'])
-        dax.set_ylabel(labels['scattering_rates'])
+        dax.set_ylabel(labels[q])
         tp.plot.utilities.set_locators(dax, x='log', y='log')
 
-    add_legend(title='Rate')
+    if legend:
+        if legend_title is None:
+            legend_title = 'Mean Free Path' if mfp else 'Rate'
+        if location is None:
+            add_legend(title=legend_title)
+        else:
+            add_legend(title=legend_title, location=location)
 
     if x != 'both':
         if xmin is not None:
@@ -834,7 +904,7 @@ def avg_rates(mesh_h5, total, x, crt, doping, temperature, colour, linestyle,
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('kappa_hdf5')
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -954,7 +1024,7 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('dos_dat', nargs=1)
 @dos_function()
 @fill_options
@@ -1016,7 +1086,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a '
                    '--component of lattice or total.',
@@ -1269,7 +1339,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('transport_file', nargs=1)
 @click.option('-z', '--zt',
               help='Target ZT.',
@@ -1340,7 +1410,7 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
     return
 
 
-@plot.command('phonons')
+@plot.command('phonons', no_args_is_help=True)
 @inputs_function('band_yaml')
 @click.option('--bandmin',
               help='Minimum band index.',
@@ -1451,7 +1521,7 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('transport_file')
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a --quantity '
@@ -1603,7 +1673,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     data[i].append({'temperature': kdata3['temperature'],
                                     q:             kdata3[ltc] + edata2[etc]})
                 defleg['labels'] = dopelist
-            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+            elif q in edata[0] and \
+                 'temperature' in edata[0]['meta']['dimensions'][q]:
                 dopelist = []
                 for d in doping:
                     edata2 = deepcopy(edata[0])
@@ -1614,7 +1685,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
                 defleg['labels'] = dopelist
-            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+            elif kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 kdata2 = deepcopy(kdata[0])
                 kdata2 = tp.data.utilities.resolve(kdata2, q,
                                                    direction=direction[0])
@@ -1639,7 +1711,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                               kind='cubic')
                     data[i].append({'temperature': kdata2['temperature'],
                                     q:             kdata2[ltc] + edata2[etc]})
-            elif q in edata[0] and 'temperature' in edata[0]['meta']['dimensions'][q]:
+            elif q in edata[0] and \
+                 'temperature' in edata[0]['meta']['dimensions'][q]:
                 for d in direction:
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.utilities.resolve(edata2, q,
@@ -1648,7 +1721,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                        stype=stype[0])
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
-            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+            elif kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
                     kdata2 = tp.data.utilities.resolve(kdata2, q,
@@ -1739,7 +1813,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                            stype=stype[j])
                         data[i].append({'temperature': edata2['temperature'],
                                         q:             edata2[q]})
-            elif q in kdata[0] and 'temperature' in kdata[0]['meta']['dimensions'][q]:
+            elif kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
                 if len(kdata) > 1:
                     lendata = len(kdata)
                     defleg['title'] = 'Phononic Data'
@@ -1839,7 +1914,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('-y',
               help='y-axis quantity. Options include frequency, kappa, '
@@ -1994,7 +2069,7 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('band_yaml', nargs=1)
 @inputs_function('kappa_hdf5', nargs=1)
 
@@ -2049,7 +2124,7 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('transport_file', nargs=1)
 @click.option('--pf/--zt',
               help='Power factor instead of ZT.  [default: zt]',
@@ -2065,9 +2140,10 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
 @interpolate_options
 
 @click.option('-c', '--colour',
-              help='Colourmap name or #rrggbb highlight colour or min '
-                   'and max and highlight #rrggbb colours to generate '
-                   'a colourmap from.',
+              help='Colourmap name or highlight colour or min and max '
+                   'and highlight colours to generate a colourmap '
+                   'from. Colour may be #rrggbb or a named colour in '
+                   'matplotlib.',
               multiple=True,
               default=['viridis'],
               show_default=True)
@@ -2118,16 +2194,15 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour
     return
 
 
-@plot.command()
+@plot.command(no_args_is_help=True)
 @inputs_function('transport_files', nargs=2)
 @click.option('--pf/--zt',
               help='Power factor instead of ZT.  [default: zt]',
               default=False,
               show_default=False)
 @click.option('-k', '--kappa',
-              help='Phono3py kappa hdf5s. Ignored if ZT is in file. If '
-                   'otherwise unspecified, set to 1 (W m-1 K-1).',
-              type=click.Path(file_okay=True, dir_okay=False),
+              help='Phono3py kappa hdf5s or constant lattice thermal '
+                   'conductivity.  [default: 1]',
               nargs=2)
 
 @direction_function()
@@ -2185,11 +2260,17 @@ def ztdiff(transport_files, pf, kappa, direction, dtype, interpolate, kind,
                    ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
     else:
         kdata = []
+        if kappa == ():
+            kappa = [1., 1.]
         for k in kappa:
-            if k is not None:
-                kdata.append(tp.data.load.phono3py(k))
-            else:
-                kdata.append(None)
+            try:
+                kdata.append(float(k))
+            except ValueError:
+                try:
+                    kdata.append(tp.data.load.phono3py(k))
+                except OSError:
+                    raise Exception(
+                                    "--kappa must be valid filepaths or floats.")
         _, h, l = tp.plot.heatmap.add_ztdiff(ax, edata[0], edata[1], kdata1=kdata[0],
                    kdata2=kdata[1], direction=direction, xinterp=interpolate,
                    yinterp=interpolate, kind=kind, colour1=colour[0],

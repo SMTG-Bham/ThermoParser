@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial-02: Individual Customisation &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Tutorial-02: Individual Customisation &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,6 +45,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#axes-line-20">Axes (line 20)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load-lines-23-24">Load (lines 23-24)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plot-lines-27-28">Plot (lines 27-28)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colourmaps">Colourmaps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial-03.html"> Tutorial-03: Compound Axes</a></li>
@@ -55,8 +56,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -71,7 +72,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -93,7 +94,7 @@
   <div class="section" id="tutorial-02-individual-customisation">
 <h1>Tutorial-02: Individual Customisation<a class="headerlink" href="#tutorial-02-individual-customisation" title="Permalink to this headline">¶</a></h1>
 <img alt="Finite bandwidth phonon dispersion of ZnO." src="_images/tutorial-02.png" />
-<p>In most cases, plotting scripts will be more complex than <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-01.html">Tutorial-01</a>.
+<p>In most cases, plotting scripts will be more complex than <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorial-01.html">Tutorial-01</a>.
 Many functions require more inputs, and most users will want to
 customise plots with colours and stuff.</p>
 <p>The CLI version of this code is:</p>
@@ -191,10 +192,26 @@ space-delimited string. In this case, there is a shorthand,
 <h2>Plot (lines 27-28)<a class="headerlink" href="#plot-lines-27-28" title="Permalink to this headline">¶</a></h2>
 <p>Plot commands take a wide range of arguments, from the standard
 matplotlib kwargs such as <code class="docutils literal notranslate"><span class="pre">alpha</span></code> (transparency) and calculation
-conditions, such as <code class="docutils literal notranslate"><span class="pre">temperature</span></code>, to custom ThermoPlotter inputs,
+conditions, such as <code class="docutils literal notranslate"><span class="pre">temperature</span></code>, to custom ThermoParser inputs,
 like here where we’ve provided two colours (black and red respectively)
-which ThermoPlotter can use to generate a custom colourmap. DoS plots
+which ThermoParser can use to generate a custom colourmap. DoS plots
 and all projected phonon plots also require a POSCAR file.</p>
+</div>
+<div class="section" id="colourmaps">
+<h2>Colourmaps<a class="headerlink" href="#colourmaps" title="Permalink to this headline">¶</a></h2>
+<p>Some functions, including heatmaps and projected dispersions such as
+the wideband plot above, accept single colours which are passed to
+ThermoParser’s <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour">colourmap generators</a>. These can also be accessed
+directly, allowing greater control of the output or use on non-tp
+applications. The colourmap used here could be generated with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">cmin</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">linear</span></code> interpolates linearly between the colours, and is used for
+projected dispersions. <code class="docutils literal notranslate"><span class="pre">elbow</span></code> provides two linear sections with a
+midpoint you specify, and <code class="docutils literal notranslate"><span class="pre">uniform</span></code> calculates the midpoint position
+based on the relative compositions of the colours, which is used for
+heatmaps.</p>
 </div>
 </div>
 
@@ -209,7 +226,7 @@ and all projected phonon plots also require a POSCAR file.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

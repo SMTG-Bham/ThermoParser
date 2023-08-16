@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial-05: Helper Functions &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Tutorial-05: Helper Functions &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -55,8 +55,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -71,7 +71,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -93,34 +93,143 @@
   <div class="section" id="tutorial-05-helper-functions">
 <h1>Tutorial-05: Helper Functions<a class="headerlink" href="#tutorial-05-helper-functions" title="Permalink to this headline">¶</a></h1>
 <img alt="Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`" src="_images/tutorial-05.png" />
-<p>ThermoPlotter contains a number of helper functions that may be useful
+<p>ThermoParser contains a number of helper functions that may be useful
 even when not using the core functionality. We will cover several of
 these here, however this particular example is also plottable via the
 CLI:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">transport</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">transport_75x75x75</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">q</span> <span class="n">conductivity</span> <span class="o">-</span><span class="n">q</span> <span class="n">seebeck</span> <span class="o">-</span><span class="n">q</span> <span class="n">lattice_thermal_conductivity</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e18</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e19</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e20</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e21</span> <span class="o">--</span><span class="n">tmin</span> <span class="mi">0</span> <span class="o">--</span><span class="n">location</span> <span class="mi">3</span>
 </pre></div>
 </div>
-<p>The full script is long and mostly irrelevant, but can be found <a class="reference external" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/05-helper-functions/tutorial-05.py">here</a>.</p>
+<p>In Python, it is:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">tp</span>
+<span class="kn">from</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">import</span> <span class="n">GridSpec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">afile</span> <span class="o">=</span> <span class="s1">&#39;../data/basno3/transport_75x75x75.json&#39;</span>
+<span class="n">kfile</span> <span class="o">=</span> <span class="s1">&#39;../data/basno3/kappa-m363636.hdf5&#39;</span>
+
+<span class="n">doping</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">1e18</span><span class="p">,</span> <span class="o">-</span><span class="mf">1e19</span><span class="p">,</span> <span class="o">-</span><span class="mf">1e20</span><span class="p">,</span> <span class="o">-</span><span class="mf">1e21</span><span class="p">]</span>
+<span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;avg&#39;</span>
+<span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;conductivity&#39;</span><span class="p">,</span> <span class="s1">&#39;seebeck&#39;</span><span class="p">]</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+
+<span class="c1"># Axes</span>
+<span class="hll"><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tp&#39;</span><span class="p">)</span>
+</span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">27</span><span class="o">/</span><span class="mf">2.54</span><span class="p">,</span> <span class="mf">8.3</span><span class="o">/</span><span class="mf">2.54</span><span class="p">))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">4</span><span class="p">]),</span>
+      <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="mi">9</span><span class="p">]),</span>
+      <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">:])]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span>
+                    <span class="n">bottom</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+
+<span class="c1"># Load</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">amset</span><span class="p">(</span><span class="n">afile</span><span class="p">)</span>
+<span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">quantities</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">doping</span><span class="p">:</span>
+<span class="hll">        <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+</span>        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">],</span>
+<span class="hll">                   <span class="n">label</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;doping&#39;</span><span class="p">]))</span>
+</span>
+<span class="n">q</span> <span class="o">=</span> <span class="s1">&#39;lattice_thermal_conductivity&#39;</span>
+<span class="hll"><span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">kdata</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">)</span>
+</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
+
+<span class="c1"># Formatting</span>
+<span class="hll"><span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
+</span><span class="hll"><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="o">*</span><span class="n">quantities</span><span class="p">,</span> <span class="n">q</span><span class="p">]):</span>
+</span><span class="hll">    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span>
+</span><span class="hll">    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
+</span><span class="hll">    <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">scale</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span>
+<span class="hll"><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">consolidate</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+</span><span class="hll"><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span> <span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span>
+</span><span class="hll">             <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+</span><span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">alphabetise</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">&#39;roman&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=-</span><span class="mf">0.12</span><span class="p">)</span>
+</span>
+<span class="c1"># Save</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tutorial-05.png&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 <div class="section" id="axes-line-20">
 <h2>Axes (line 20)<a class="headerlink" href="#axes-line-20" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tp&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>ThermoPlotter comes with two <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styles, <code class="docutils literal notranslate"><span class="pre">tp</span></code> and
+<p>ThermoParser comes with two <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styles, <code class="docutils literal notranslate"><span class="pre">tp</span></code> and
 <code class="docutils literal notranslate"><span class="pre">tp-large</span></code>, for small and large axes respectively, which are
 accessible any time using <code class="docutils literal notranslate"><span class="pre">plt.style.use</span></code>.</p>
 </div>
 <div class="section" id="resolve-lines-36-and-41">
 <h2>Resolve (lines 36 and 41)<a class="headerlink" href="#resolve-lines-36-and-41" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
-</pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">tp.data.utilities.resolve</span></code> resolves a data array by dependent
 properties. As arguments, it takes a data dictionary, an array of the
 names of the quantities to be resolved, and the dependent variable
-values. This can be used easily with data loaded through ThermoPlotter,
+values. This can be used easily with data loaded through ThermoParser,
 but with some minor alterations, almost any data can be resolved.</p>
-<p>Most ThermoPlotter data dictionaries come with a <code class="docutils literal notranslate"><span class="pre">meta</span></code>
+<p>Most ThermoParser data dictionaries come with a <code class="docutils literal notranslate"><span class="pre">meta</span></code>
 subdictionary, which contains metadata including units, array shapes
 and data source. For <code class="docutils literal notranslate"><span class="pre">resolve</span></code> to work, it needs a <code class="docutils literal notranslate"><span class="pre">dimensions</span></code>
 subdictionary in <code class="docutils literal notranslate"><span class="pre">meta</span></code>, which should contain an array with the same
@@ -130,7 +239,7 @@ directions, which can be either 3 or 6. For example,
 <code class="docutils literal notranslate"><span class="pre">adata['meta']['dimensions']['seebeck']</span> <span class="pre">==</span> <span class="pre">['temperature',</span> <span class="pre">'doping',</span> <span class="pre">3,</span> <span class="pre">3]</span></code>.
 The direction is represented by a 3x3 array. The other thing that is
 needed is for the dependent variables to also be in the dictionary.
-ThermoPlotter automatically loads dependent variables.</p>
+ThermoParser automatically loads dependent variables.</p>
 <p><code class="docutils literal notranslate"><span class="pre">resolve</span></code> does not interpolate, but rather rounds to the nearest data
 point, which it saves to <code class="docutils literal notranslate"><span class="pre">['meta']['variable_name']</span></code>, so you can be
 sure what the data is. This is also useful in setting legend labels, as
@@ -138,13 +247,6 @@ on line 38.</p>
 </div>
 <div class="section" id="locators-ticks-and-labels-lines-45-49">
 <h2>Locators, Ticks and Labels (lines 45-49)<a class="headerlink" href="#locators-ticks-and-labels-lines-45-49" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">axlabels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">labels</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="o">*</span><span class="n">quantities</span><span class="p">,</span> <span class="n">q</span><span class="p">]):</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">])</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
-    <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">scale</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-</pre></div>
-</div>
 <p>There are several functions to aid in formatting axes.
 <code class="docutils literal notranslate"><span class="pre">tp.settings.labels</span></code>, and its variations <code class="docutils literal notranslate"><span class="pre">large_</span></code>, <code class="docutils literal notranslate"><span class="pre">long_</span></code>,
 <code class="docutils literal notranslate"><span class="pre">medium_</span></code> and <code class="docutils literal notranslate"><span class="pre">short_labels</span></code> return a dictionary of axes labels
@@ -155,12 +257,6 @@ as appropriate.</p>
 </div>
 <div class="section" id="legends-lines-51-54">
 <h2>Legends (lines 51-54)<a class="headerlink" href="#legends-lines-51-54" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">consolidate</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">axlabels</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span> <span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span>
-             <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
-<span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">alphabetise</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">&#39;roman&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=-</span><span class="mf">0.12</span><span class="p">)</span>
-</pre></div>
-</div>
 <p><code class="docutils literal notranslate"><span class="pre">tp.axes.legend.consolidate</span></code> consolidates the legends of a list of
 axes into one, ensuring no duplicates, and returns the handles and
 labels, which can then be passed to <code class="docutils literal notranslate"><span class="pre">ax.legend</span></code>.</p>
@@ -185,7 +281,7 @@ using the <code class="docutils literal notranslate"><span class="pre">labels</s
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

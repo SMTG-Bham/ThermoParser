@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.data package &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>tp.data package &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,8 +39,8 @@
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -48,6 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">tp.data package</a></li>
@@ -59,7 +60,6 @@
 <li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -72,7 +72,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -94,6 +94,25 @@
              
   <div class="section" id="tp-data-package">
 <h1>tp.data package<a class="headerlink" href="#tp-data-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-tp.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.data" title="Permalink to this headline">¶</a></h2>
+<p>Data handling.</p>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>utilities</dt><dd><p>combining and resolving data by dependent variables.</p>
+</dd>
+<dt>load</dt><dd><p>loads data from specific codes.</p>
+</dd>
+<dt>run</dt><dd><p>runs specific codes (currently BoltzTraP).</p>
+</dd>
+<dt>save</dt><dd><p>saves data (currently hdf5).</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -106,13 +125,19 @@ array dimensions and the data source.</p>
 <div class="section" id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>amset
-amset_mesh
-boltztrap
-phono3py
-phonopy_dispersion
-phonopy_dos</p>
-<dl class="simple">
+<div><dl class="simple">
+<dt>amset:</dt><dd><p>from the amset transport json.</p>
+</dd>
+<dt>amset_mesh:</dt><dd><p>from the amset mesh h5.</p>
+</dd>
+<dt>boltztrap:</dt><dd><p>from the tp boltztrap hdf5.</p>
+</dd>
+<dt>phono3py:</dt><dd><p>from the phono3py kappa hdf5.</p>
+</dd>
+<dt>phonopy_dispersion:</dt><dd><p>from the phonopy or sumo band.yaml.</p>
+</dd>
+<dt>phonopy_dos:</dt><dd><p>from the phonopy projected_dos.dat.</p>
+</dd>
 <dt>get_path:</dt><dd><p>gets high path from phonopy dispersion data.</p>
 </dd>
 </dl>
@@ -120,7 +145,7 @@ phonopy_dos</p>
 <dl class="py function">
 <dt id="tp.data.load.amset">
 <code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#amset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.amset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads AMSET transport data.</p>
+<dd><p>Loads AMSET transport data from json.</p>
 <p>Includes unit conversion and outputs units (see tp.settings).
 Swaps temperature and doping indices so temperature is first, for
 consistency with other codes, and mobility is formatted as an array,
@@ -129,7 +154,7 @@ compatibility with amset 0.1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – amset transport json filepath.</p></li>
 <li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts AMSET keys and power_factor.
 All loads the whole file, power factor can be added if it
 is not in the file. Loads dependent properties.
@@ -150,14 +175,14 @@ n, else this is ignored.</p></li>
 <dl class="py function">
 <dt id="tp.data.load.amset_mesh">
 <code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">amset_mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">'n'</span></em>, <em class="sig-param"><span class="n">spin</span><span class="o">=</span><span class="default_value">'avg'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#amset_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.amset_mesh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads AMSET mesh data.</p>
+<dd><p>Loads AMSET mesh data from h5.</p>
 <p>Can also weight rates. Includes unit conversion and outputs units
 (see tp.settings). Swaps temperature and doping indices so
 temperature is first, for consistency with other codes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – amset mesh h5 filepath.</p></li>
 <li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts AMSET keys, without spin
 channels, which are dealt with in the spin variable.
 Also accepts ibz_weights, the weights of the irreducible
@@ -190,7 +215,7 @@ spin channel, selects that, else averages both. Default: avg.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – boltztrap.hdf5 filepath.</p></li>
 <li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts boltztrap.hdf5 keys or all.
 Default: all.</p></li>
 <li><p><strong>doping</strong> (<em>str</em><em>, </em><em>optional</em>) – doping.  Default: n.</p></li>
@@ -227,7 +252,7 @@ Default: all.</p></li>
 <dl class="py function">
 <dt id="tp.data.load.phono3py">
 <code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phono3py</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#phono3py"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.phono3py" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads Phono3py data.</p>
+<dd><p>Loads Phono3py data from kappa hdf5.</p>
 <p>Can also calculate lifetimes, mean free paths and occupations.
 Includes unit conversions and outputs units and index order for all
 the data (see tp.settings). Also corrects mode_kappa for different
@@ -236,7 +261,7 @@ into 3x3 ones for compatability with other codes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – phono3py kappa hdf5 filepath.</p></li>
 <li><p><strong>quantities</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts Phono3py keys, lifetime,
 mean_free_path and occupation. ‘all’ loads all Phono3py
 keys, but lifetime etc. must be loaded separately.
@@ -261,7 +286,7 @@ the same axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – filepath.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – phonopy or sumo band.yaml filepath.</p></li>
 <li><p><strong>xdata</strong> (<em>dict</em><em>, </em><em>optional</em>) – data for the dispersion to scale this to. Should have the
 same path, must have the same number of labels. Not
 necessary if using tp.plot.phonons.add_multi. Default: None.</p></li>
@@ -301,6 +326,49 @@ Default: read from POSCAR.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.phonopy_gruneisen">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">phonopy_gruneisen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#phonopy_gruneisen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.phonopy_gruneisen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads phonopy gruneisen data.</p>
+<p>Does not load path data, but can load from files with a q-point
+path, which will often be preferable if projecting onto a phonon
+dispersion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – phonopy gruneisen.yaml filepath.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>gruneisen data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.load.scale_to_path">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">scale_to_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">tickpos</span></em>, <em class="sig-param"><span class="n">scalepos</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#scale_to_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.scale_to_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales data to a path.</p>
+<p>Useful to make different phonopy runs fit together or to map
+gruneisen data on a phonon dispersion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em>) – wavevector ordinates.</p></li>
+<li><p><strong>tickpos</strong> (<em>list</em>) – tick wavevectors for scaling.</p></li>
+<li><p><strong>scalepos</strong> (<em>list</em>) – scale tick wavevectors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>wavevector ordinates.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -659,7 +727,7 @@ lifetime, mean_free_path and/ or occupation are recommended.</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>efile</strong> (<em>str</em>) – electronic data filepath.</p></li>
-<li><p><strong>kfile</strong> (<em>str</em>) – phononic data filepath.</p></li>
+<li><p><strong>kfile</strong> (<em>str</em><em> or </em><em>float</em><em> or </em><em>int</em>) – phononic data filepath or lattice thermal conductivity value.</p></li>
 <li><p><strong>direction</strong> (<em>str</em><em>, </em><em>optional</em>) – crystal direction, accepts x-z/ a-c or average/ avg.
 Default: average.</p></li>
 <li><p><strong>doping</strong> (<em>str</em><em>, </em><em>optional</em>) – doping type for BoltzTraP. Must be n or p. Default: n.</p></li>
@@ -683,25 +751,6 @@ Default: 200.</p></li>
 
 </div>
 </div>
-<div class="section" id="module-tp.data">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.data" title="Permalink to this headline">¶</a></h2>
-<p>Data handling.</p>
-<div class="section" id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>resolve</dt><dd><p>resolves named data by direction and/or temperature.</p>
-</dd>
-<dt>load</dt><dd><p>loads data from specific codes.</p>
-</dd>
-<dt>run</dt><dd><p>runs specific codes (currently BoltzTraP).</p>
-</dd>
-<dt>save</dt><dd><p>saves data (currently hdf5).</p>
-</dd>
-</dl>
-</div></blockquote>
-</div>
-</div>
 </div>
 
 
@@ -715,7 +764,7 @@ Default: 200.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

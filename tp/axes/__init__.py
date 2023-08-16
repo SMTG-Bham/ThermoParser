@@ -19,7 +19,9 @@ Modules
 -------
 
     small
+
     large
+    
     legend
 """
 

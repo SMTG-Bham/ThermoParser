@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; ThermoPlotter 2.0.0 documentation</title>
+  <title>Installation &mdash; ThermoParser 2.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <a href="contents.html" class="icon icon-home"> ThermoParser
             <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -60,7 +60,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -78,7 +78,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoPlotter/"><img alt="The ThermoPlotter logo, which looks like &quot;TP&quot;" class="align-center" src="_images/tp-logo-header.png" /></a>
+  <a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/"><img alt="The ThermoParser logo, which looks like &quot;TP&quot;" class="align-center" src="_images/tp-logo-header.png" /></a>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">________</span>
 <span class="o">/////</span> \\\\
 \<span class="n">________</span><span class="o">/</span><span class="n">_______________________________________________________________</span>
@@ -91,27 +91,27 @@
 <span class="o">|</span><span class="n">_________________________________</span><span class="p">:</span><span class="n">______________________________________</span><span class="p">:</span><span class="n">_____</span><span class="o">/</span>
 </pre></div>
 </div>
-<a class="reference external image-reference" href="https://travis-ci.com/SMTG-UCL/ThermoPlotter"><img alt="The travis-ci badge" src="https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master" /></a>
-<p>ThermoPlotter is a toolkit used to simplify the analysis of data
+<a class="reference external image-reference" href="https://travis-ci.com/SMTG-UCL/ThermoParser"><img alt="The travis-ci badge" src="https://travis-ci.com/SMTG-UCL/ThermoParser.svg?branch=master" /></a>
+<p>ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
 thermoelectrics, but also useful for anything pertaining to electronic
-and/ or phononic transport. ThermoPlotter is a Python library which
+and/ or phononic transport. ThermoParser is a Python library which
 contains functions for data retrieval, manipulation and plotting, which
 can be easily used with a little Python knowlege to generate a wide
-array of high-quality plots in only a few lines of code. ThermoPlotter
+array of high-quality plots in only a few lines of code. ThermoParser
 also contains a suite of command-line tools which can retrieve specific
 data, save derived properties and plot graphs in a single command.</p>
-<p>Click on the image to go to the <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/gallery.html">gallery</a>!</p>
-<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoPlotter/gallery.html"><img alt="A phonon dispersion where widened bands show phonon scattering" src="_images/wideband.png" /></a>
+<p>Click on the image to go to the <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/gallery.html">gallery</a>!</p>
+<a class="reference external image-reference" href="https://smtg-ucl.github.io/ThermoParser/gallery.html"><img alt="A phonon dispersion where widened bands show phonon scattering" src="_images/wideband.png" /></a>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<p>ThermoPlotter can easily be installed with git and pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/SMTG-UCL/ThermoPlotter.git
-<span class="nb">cd</span> ThermoPlotter
+<p>ThermoParser can easily be installed with git and pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/SMTG-UCL/ThermoParser.git
+<span class="nb">cd</span> ThermoParser
 pip install .
 </pre></div>
 </div>
-<p>After installing, you may want to copy <code class="docutils literal notranslate"><span class="pre">ThermoPlotter/tprc.yaml</span></code> to
+<p>After installing, you may want to copy <code class="docutils literal notranslate"><span class="pre">ThermoParser/tprc.yaml</span></code> to
 <code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>, if you want to set your own default axis
 labels, unit conversions, default style sheets (two are provided),
 other aesthetic alterations and more!</p>
@@ -125,8 +125,8 @@ longer process is required:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cython</span> <span class="pre">numpy</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">info</span> <span class="pre">hdf5</span></code> to retrieve the path to your hdf5 install</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">HDF5_DIR=YOUR_HDF5_PATH</span> <span class="pre">--no-build-isolation</span> <span class="pre">h5py</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/SMTG-UCL/ThermoPlotter.git</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">ThermoPlotter</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/SMTG-UCL/ThermoParser.git</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">ThermoParser</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
 </ol>
 <p>Using conda may circumvent this process.</p>
@@ -134,12 +134,12 @@ longer process is required:</p>
 </div>
 <div class="section" id="command-line-usage">
 <h1>Command Line Usage<a class="headerlink" href="#command-line-usage" title="Permalink to this headline"></a></h1>
-<p>ThermoPlotter uses <a class="reference external" href="https://click.palletsprojects.com/en/8.0.x/">click</a>, which has an easily navigable structure
-from the command-line, detailed in the <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorials.html">tutorials</a>.</p>
+<p>ThermoParser uses <a class="reference external" href="https://click.palletsprojects.com/en/8.0.x/">click</a>, which has an easily navigable structure
+from the command-line, detailed in the <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorials.html">tutorials</a>.</p>
 </div>
 <div class="section" id="python-usage">
 <h1>Python Usage<a class="headerlink" href="#python-usage" title="Permalink to this headline"></a></h1>
-<p>ThermoPlotter is designed to have four main stages:</p>
+<p>ThermoParser is designed to have four main stages:</p>
 <ol class="arabic simple">
 <li><dl class="simple">
 <dt><em>Axes</em>:</dt><dd><p>Pick an axis layout from <code class="docutils literal notranslate"><span class="pre">tp.axes</span></code>.</p>
@@ -162,14 +162,14 @@ from the command-line, detailed in the <a class="reference external" href="https
 </dl>
 </li>
 </ol>
-<p>As ThermoPlotter is dependent on matplotlib, each stage can be
+<p>As ThermoParser is dependent on matplotlib, each stage can be
 substituted with bespoke code, e.g. using <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.subplots</span></code>
 or <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.scatter</span></code>. These can still be supplemented
-with ThermoPlotter helper functions, such as default labels which the
+with ThermoParser helper functions, such as default labels which the
 user can set in <code class="docutils literal notranslate"><span class="pre">tp.settings</span></code>, colourmap generators in
 <code class="docutils literal notranslate"><span class="pre">tp.plot.colour</span></code> or legend helpers such as <code class="docutils literal notranslate"><span class="pre">tp.axes.legend.alphabetise</span></code>.</p>
-<p>The best way to get a feel for ThermoPlotter is to see it in action:
-Take a look at our  <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples">examples</a> and <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorials.html">tutorials</a>. Currently supported
+<p>The best way to get a feel for ThermoParser is to see it in action:
+Take a look at our  <a class="reference external" href="https://github.com/smtg-ucl/ThermoParser/tree/master/examples">examples</a> and <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorials.html">tutorials</a>. Currently supported
 codes are:</p>
 <ul class="simple">
 <li><p>Phononic properties:</p>
@@ -204,7 +204,7 @@ concentration; and one which plots the lattice thermal conductivity
 required to reach a target ZT, again against temperature and doping.</p></li>
 </ul>
 <p>A set of example scripts is provided in the <code class="docutils literal notranslate"><span class="pre">tp/examples</span></code> folder and
-in our online <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples">examples</a>, and there is <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">documentation</a>.</p>
+in our online <a class="reference external" href="https://github.com/smtg-ucl/ThermoParser/tree/master/examples">examples</a>, and there is <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/">documentation</a>.</p>
 </div>
 <div class="section" id="contributing">
 <h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h1>
@@ -212,10 +212,10 @@ in our online <a class="reference external" href="https://github.com/smtg-ucl/Th
 piece of code (or anything else). Adding options is inteded to be
 straightforward; the modularity of the code means that each step is mostly
 independent of the others.</p>
-<p>Bugs and feature requests can be submitted to the <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/issues">issue tracker</a>,
+<p>Bugs and feature requests can be submitted to the <a class="reference external" href="https://github.com/smtg-ucl/ThermoParser/issues">issue tracker</a>,
 while contributions can be made using the <a class="reference external" href="https://guides.github.com/activities/forking">fork and pull</a> approach.
 Contributions should include comprehensive docstrings, and where
-appropriate <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples">examples</a>, further <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">documentation</a> and <a class="reference external" href="https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests">tests</a> are greatly
+appropriate <a class="reference external" href="https://github.com/smtg-ucl/ThermoParser/tree/master/examples">examples</a>, further <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/">documentation</a> and <a class="reference external" href="https://github.com/smtg-ucl/ThermoParser/tree/master/tests">tests</a> are greatly
 appreciated. Documentation uses the <a class="reference external" href="https://www.sphinx-doc.org">sphinx</a> package, and can be built from
 the <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory with <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">src/</span> <span class="pre">.</span></code>.</p>
 </div>
@@ -226,7 +226,7 @@ with <code class="docutils literal notranslate"><span class="pre">python3</span>
 </div>
 <div class="section" id="contributors">
 <h1>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline"></a></h1>
-<p>Many thanks to all those who contributed code or ideas to ThermoPlotter!
+<p>Many thanks to all those who contributed code or ideas to ThermoParser!
 Roughly chronologically, they are so far:</p>
 <ul class="simple">
 <li><p>Kieran B. Spooner</p></li>
@@ -242,12 +242,12 @@ Roughly chronologically, they are so far:</p>
 </div>
 <div class="section" id="license">
 <h1>License<a class="headerlink" href="#license" title="Permalink to this headline"></a></h1>
-<p>ThermoPlotter is licensed under the GNU Affero General Public License v3
+<p>ThermoParser is licensed under the GNU Affero General Public License v3
 (AGPLv3).</p>
 </div>
 <div class="section" id="requirements">
 <h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h1>
-<p>ThermoPlotter uses the following open-source packages:</p>
+<p>ThermoParser uses the following open-source packages:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://click.palletsprojects.com/en/8.0.x/">click</a></p></li>
 <li><p><a class="reference external" href="http://docs.h5py.org/">h5py</a></p></li>

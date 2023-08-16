@@ -90,16 +90,19 @@ def add_add_legend(ax, locations, names, defloc):
 
             if isinstance(location, (int, float)):
                 location = str(location)
+            incol = 1
             if 'ncol' in kwargs:
                 for l in locations:
                     l['ncol'] = kwargs['ncol']
+                incol = kwargs['ncol']
                 del kwargs['ncol']
 
             fin = False
             if custom:
                 for i, a in enumerate(ax):
                     if a is not None and location in names[i]:
-                        legend = a.legend(loc='best', *args, **kwargs)
+                        legend = a.legend(loc='best', ncol=incol,
+                                          *args, **kwargs)
                         fin = True
                         break
                 if not fin:
@@ -117,8 +120,7 @@ def add_add_legend(ax, locations, names, defloc):
                 for i, a in enumerate(ax):
                     if a is not None and location in names[i]:
                         legend = a.legend(loc='best', handles=handles,
-                                          labels=labels,
-                                          ncol=locations[i]['ncol'],
+                                          labels=labels, ncol=incol,
                                           *args, **kwargs)
                         fin = True
                         break
@@ -148,16 +150,17 @@ def add_add_legend(ax, locations, names, defloc):
 
             if isinstance(location, (int, float)):
                 location = str(location)
+            incol = 1
             if 'ncol' in kwargs:
                 for l in locations:
                     l['ncol'] = kwargs['ncol']
+                incol = kwargs['ncol']
                 del kwargs['ncol']
 
             fin = False
             for i, a in enumerate(ax):
                 if location in names[i]:
-                    legend = a.legend(loc='best', ncol=locations[i]['ncol'],
-                                      *args, **kwargs)
+                    legend = a.legend(loc='best', ncol=incol, *args, **kwargs)
                     fin = True
                     break
             if not fin:

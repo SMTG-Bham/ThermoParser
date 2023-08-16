@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.setup package &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>tp.setup package &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -24,7 +24,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -38,8 +38,8 @@
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -47,6 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="tp.axes.html">tp.axes package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tp.data.html">tp.data package</a></li>
@@ -58,7 +59,6 @@
 <li class="toctree-l3"><a class="reference internal" href="tp.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.calculate">tp.calculate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp.settings">tp.settings module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -71,7 +71,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -93,6 +93,19 @@
              
   <div class="section" id="tp-setup-package">
 <h1>tp.setup package<a class="headerlink" href="#tp-setup-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-tp.setup">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.setup" title="Permalink to this headline">¶</a></h2>
+<p>Tools for setting up calculations and inputs</p>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>vasp</dt><dd><p>currently contains KPOINTS generators</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -194,19 +207,6 @@ Default: no zero-weighted kpoints.</p></li>
 
 </div>
 </div>
-<div class="section" id="module-tp.setup">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.setup" title="Permalink to this headline">¶</a></h2>
-<p>Tools for setting up calculations and inputs</p>
-<div class="section" id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>vasp</dt><dd><p>currently contains KPOINTS generators</p>
-</dd>
-</dl>
-</div></blockquote>
-</div>
-</div>
 </div>
 
 
@@ -219,7 +219,7 @@ Default: no zero-weighted kpoints.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

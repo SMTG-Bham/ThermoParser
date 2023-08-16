@@ -8,7 +8,8 @@ Projected Phonons
 This shows a phonon dispersion with bands broadened to indicate
 scattering (the widest bands scatter the most). Via the command-line:
 
-.. codeblock::
+.. code-block::
+
    tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 -c black -c red -s dark_background -p POSCAR
 
 and in python:
@@ -39,3 +40,14 @@ plot. It can be plotted in python with:
    :language: python
    :linenos:
    :emphasize-lines: 25-27
+
+Another similar function is ``tp.plot.phonons.add_alt_dispersion``,
+which plots other phonon properties onto the y-axis along the high-
+symmetry path provided by Phonopy. This will work with Phono3py
+data, but also Gruneisen data from Phonopy
+(``tp.data.load.phonopy_gruneisen``). Some useful tags for making the
+Gruneisen data clearer include ``scatter=True`` (to clean up the bits
+around &Gamma;), ``bandmax=3`` (only acoustic phonons) and manually
+setting the y-limit (some outliers are automatically hidden, but
+especially if only the acoustic modes are shown, it can be useful to
+cut some of the data off the top).

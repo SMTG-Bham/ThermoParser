@@ -1,7 +1,7 @@
-# This is a counterpart to the ThermoPlotter/tp/settings.py module for
-# saving cutom values. If you want to edit ThermoPlotter, save a copy of
+# This is a counterpart to the ThermoParser/tp/settings.py module for
+# saving cutom values. If you want to edit ThermoParser, save a copy of
 # this file as ``~/.config/tprc.yaml``, and edit it there. Only that
-# file will be checked and any changes made in the ThermoPlotter
+# file will be checked and any changes made in the ThermoParser
 # directory will be overwritten on upgrading.
 
 # style sheet names or lists of names
@@ -70,3 +70,6 @@ projected_dispersion_kwargs:     null
 alt_projected_dispersion_kwargs: null
 wideband_kwargs:                 null
 xmarkkwargs:                     null
+
+# Override default workers (= number of cores) for parallelisation
+workers: null

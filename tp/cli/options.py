@@ -4,19 +4,33 @@ Functions
 ---------
 
     direction_function
+    
     doping_type_option
+    
     doping_function
+    
     dos_function
+    
     input_argument
+    
     inputs_function
+    
     interpolate_options
+    
     kpoints_options
+    
     legend_options
+    
     line_options
+    
     fill_options
+    
     plot_io_function
+    
     temperature_option
+    
     verbose_option
+
     axes_limit_function
 """
 
@@ -78,7 +92,7 @@ def dos_function(dosargs=['-c', '--colour']):
                          type=click.Path(file_okay=True, dir_okay=False),
                          default='POSCAR',
                          show_default=True)(f)
-        f = click.option('-a', '--atoms',
+        f = click.option('--atoms',
                          help='Atoms in POSCAR order. Repeated names have '
                               'their contributions summed, or different names '
                               'can be used to separate environments. E.g. '
@@ -314,4 +328,3 @@ def axes_limit_function(multiple=False, c=False):
                              type=float)(f)
         return f
     return axes_limit_options
-    

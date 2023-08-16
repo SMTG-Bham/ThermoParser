@@ -7,7 +7,7 @@ Tutorial-03: Compound Axes
 
 Often, a good way to draw links between data is to position them
 together. Here, the DoS shows which atoms affect which parts of the
-phonon dispersion. ThermoPlotter offers a number of ways to streamline
+phonon dispersion. ThermoParser offers a number of ways to streamline
 comparing graphs, including compound axes and enhanced legend handling.
 
 The CLI version of this code is:
@@ -62,7 +62,7 @@ For figures with more than one set of axes, the labels are consolidated
 into one legend, with duplicates removed, which uses up the ``handles``
 and ``labels`` arguments, so in order to specify your own, you must set
 ``custom=True`` (not necessary for single-axes figures).
-``tp.axes.legend.consolidate`` may also be useful for non-ThermoPlotter
+``tp.axes.legend.consolidate`` may also be useful for non-ThermoParser
 endaevors, as will be discussed in `Tutorial-05`_.
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html
+.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html

@@ -3,8 +3,8 @@
 Modules
 -------
 
-    resolve
-        resolves named data by direction and/or temperature.
+    utilities
+        combining and resolving data by dependent variables.
     load
         loads data from specific codes.
     run

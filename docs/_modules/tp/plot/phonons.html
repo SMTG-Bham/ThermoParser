@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tp.plot.phonons &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>tp.plot.phonons &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -23,7 +23,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../contents.html" class="icon icon-home"> ThermoPlotter<img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="../../../contents.html" class="icon icon-home"> ThermoParser<img src="../../../_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -37,8 +37,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
@@ -53,7 +53,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../contents.html">ThermoPlotter</a>
+          <a href="../../../contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -62,6 +62,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../contents.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../tp.html">tp</a> &raquo;</li>
       <li>tp.plot.phonons</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -122,6 +123,8 @@
     <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
     <span class="n">conf</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">workers</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get_workers</span><span class="p">()</span>
 
 <div class="viewcode-block" id="add_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span>
@@ -426,13 +429,14 @@
 
     <span class="k">return</span></div>
 
-<div class="viewcode-block" id="add_alt_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_alt_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_alt_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="add_alt_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_alt_dispersion">[docs]</a><span class="nd">@tp</span><span class="o">.</span><span class="n">docstring_replace</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">add_alt_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Longitudinal&#39;</span><span class="p">,</span>
-                       <span class="s1">&#39;Transverse_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Transverse_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Optic&#39;</span><span class="p">],</span>
-                       <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="s1">&#39;Transverse$_1$&#39;</span><span class="p">,</span> <span class="s1">&#39;Transverse$_2$&#39;</span><span class="p">,</span> <span class="s1">&#39;Optic&#39;</span><span class="p">],</span>
+                       <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">scatter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="n">interpolate</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;#44ffff&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;#ff8044&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff4444&#39;</span><span class="p">,</span> <span class="s1">&#39;#00000010&#39;</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-                       <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phono3py quantity on a high-symmetry path.</span>
 
@@ -483,8 +487,10 @@
 <span class="sd">            labels per line. A single dataset could have a single label,</span>
 <span class="sd">            or the default labels the lines by type. You&#39;ll want to</span>
 <span class="sd">            change this if a minimum band index is set.</span>
-<span class="sd">            Default: [&#39;Longitudinal&#39;, &#39;Transverse_1&#39;, &#39;Transverse_2&#39;,</span>
+<span class="sd">            Default: [&#39;Longitudinal&#39;, &#39;Transverse$_1$&#39;, &#39;Transverse$_2$&#39;,</span>
 <span class="sd">            &#39;Optic&#39;].</span>
+<span class="sd">        scatter : bool, optional</span>
+<span class="sd">            plot scatter rather than line graph. Default: False.</span>
 
 <span class="sd">        poscar : str, optional</span>
 <span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
@@ -510,7 +516,7 @@
 <span class="sd">            marker(s). Default: None.</span>
 
 <span class="sd">        workers : int, optional</span>
-<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">            number of workers for paralellised section. Default: {workers}.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Write actual temperature used if applicable.</span>
 <span class="sd">            Default: False.</span>
@@ -621,8 +627,8 @@
     <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="n">ysort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
 
     <span class="c1"># line appearance</span>
 
@@ -637,8 +643,12 @@
     <span class="c1"># plotting</span>
 
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
-                <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scatter</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                       <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -648,11 +658,12 @@
 
     <span class="k">return</span></div>
 
-<div class="viewcode-block" id="add_projected_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_projected_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="add_projected_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_projected_dispersion">[docs]</a><span class="nd">@tp</span><span class="o">.</span><span class="n">docstring_replace</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">add_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
                              <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
                              <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                             <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                             <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
                              <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with projected colour.</span>
 
@@ -728,7 +739,7 @@
 <span class="sd">            this feature is turned off. Default: grey.</span>
 
 <span class="sd">        workers : int, optional</span>
-<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">            number of workers for paralellised section. Default: {workers}.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Write actual temperature used if applicable.</span>
 <span class="sd">            Default: False.</span>
@@ -875,13 +886,15 @@
 
     <span class="k">return</span> <span class="n">cbar</span></div>
 
-<div class="viewcode-block" id="add_alt_projected_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_alt_projected_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_alt_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span>
+<div class="viewcode-block" id="add_alt_projected_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_alt_projected_dispersion">[docs]</a><span class="nd">@tp</span><span class="o">.</span><span class="n">docstring_replace</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">add_alt_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span>
                                  <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                                  <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                  <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                                  <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-                                 <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                                 <span class="n">cscale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unoccupied</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span>
+                                 <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span>
+                                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phono3py quantity on a high-symmetry path and projection.</span>
 
 <span class="sd">    Just because you can, doesn&#39;t mean you should. A maxim I may fail to</span>
@@ -960,7 +973,7 @@
 <span class="sd">            this feature is turned off. Default: grey.</span>
 
 <span class="sd">        workers : int, optional</span>
-<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">            number of workers for paralellised section. Default: {workers}.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Write actual temperature used if applicable.</span>
 <span class="sd">            Default: False.</span>
@@ -1114,9 +1127,10 @@
 
     <span class="k">return</span> <span class="n">cbar</span></div>
 
-<div class="viewcode-block" id="add_wideband"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_wideband">[docs]</a><span class="k">def</span> <span class="nf">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="add_wideband"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_wideband">[docs]</a><span class="nd">@tp</span><span class="o">.</span><span class="n">docstring_replace</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+                 <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with broadened bands.</span>
 
 <span class="sd">    Requires a POSCAR.</span>
@@ -1168,7 +1182,7 @@
 <span class="sd">            colour recognised by matplotlib. Default: viridis.</span>
 
 <span class="sd">        workers : int, optional</span>
-<span class="sd">            number of workers for paralellised section. Default: 32.</span>
+<span class="sd">            number of workers for paralellised section. Default: {workers}.</span>
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            Write actual temperature used if applicable.</span>
 <span class="sd">            Default: False.</span>
@@ -1269,6 +1283,7 @@
     <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="n">fmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
     <span class="n">fmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">c2</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">c2</span><span class="p">)]),</span> <span class="n">c2</span><span class="p">)</span>
     <span class="n">f2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span>
 
     <span class="c1"># broadening</span>
@@ -1486,7 +1501,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
