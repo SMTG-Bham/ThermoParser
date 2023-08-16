@@ -28,7 +28,7 @@ types in the `gallery`_.
  * A brief tutorial on the command-line interface (CLI).
   
 `Tutorial-01`_: Python Foundations
- * An introduction to the structure of ThermoPlotter when used as a
+ * An introduction to the structure of ThermoParser when used as a
    Python package.
 
 `Tutorial-02`_: Individual Customaisation
@@ -48,18 +48,18 @@ types in the `gallery`_.
 
 `Tutorial-06`_: Package Customisation
  * Information on the ``tprc.yaml``, which lets you customise default
-   units, labels and styles; and a note on expanding ThermoPlotter.
+   units, labels and styles; and a note on expanding ThermoParser.
 
 `Tutorial-0X`_: VASP Assists
  * A selection of scripts to help get the most out of VASP calculations,
    and some extras.
 
-.. _gallery: https://smtg-ucl.github.io/ThermoPlotter/gallery.html
-.. _Tutorial-00: https://smtg-ucl.github.io/ThermoPlotter/tutorial-00.html
-.. _Tutorial-01: https://smtg-ucl.github.io/ThermoPlotter/tutorial-01.html
-.. _Tutorial-02: https://smtg-ucl.github.io/ThermoPlotter/tutorial-02.html
-.. _Tutorial-03: https://smtg-ucl.github.io/ThermoPlotter/tutorial-03.html
-.. _Tutorial-04: https://smtg-ucl.github.io/ThermoPlotter/tutorial-04.html
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html
-.. _Tutorial-06: https://smtg-ucl.github.io/ThermoPlotter/tutorial-06.html
-.. _Tutorial-0X: https://smtg-ucl.github.io/ThermoPlotter/tutorial-0X.html
+.. _gallery: https://smtg-ucl.github.io/ThermoParser/gallery.html
+.. _Tutorial-00: https://smtg-ucl.github.io/ThermoParser/tutorial-00.html
+.. _Tutorial-01: https://smtg-ucl.github.io/ThermoParser/tutorial-01.html
+.. _Tutorial-02: https://smtg-ucl.github.io/ThermoParser/tutorial-02.html
+.. _Tutorial-03: https://smtg-ucl.github.io/ThermoParser/tutorial-03.html
+.. _Tutorial-04: https://smtg-ucl.github.io/ThermoParser/tutorial-04.html
+.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
+.. _Tutorial-06: https://smtg-ucl.github.io/ThermoParser/tutorial-06.html
+.. _Tutorial-0X: https://smtg-ucl.github.io/ThermoParser/tutorial-0X.html

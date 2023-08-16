@@ -2,24 +2,24 @@
 Gallery
 -------
 
-This is a gallery of some things you can do in ThermoPlotter with brief
+This is a gallery of some things you can do in ThermoParser with brief
 explanations. More details on each of the plots, including the scripts
 and specific commands used are available in the `examples`_, and we
 also have `tutorials`_!
 
-.. _examples: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/
-.. _tutorials: https://smtg-ucl.github.io/ThermoPlotter/tutorials.html
+.. _examples: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/
+.. _tutorials: https://smtg-ucl.github.io/ThermoParser/tutorials.html
 
 .. hint::
     Click on the images to see the script which generated them.
 
-At its simplest, ``ThermoPlotter`` is a way to quickly plot useful data
+At its simplest, ``ThermoParser`` is a way to quickly plot useful data
 from either a python script or the command line, such as the classic
 ``ztmap`` heatmap (the power factor ``pfmap`` is also available):
 
 .. image:: figures/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-zt.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/heatmaps/plot-zt.py
 
 Click on the plot to see the script, or one could use
 
@@ -34,7 +34,7 @@ ZT, in this case 2.
 
 .. image:: figures/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-kappa-target.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/heatmaps/plot-kappa-target.py
 
 .. code-block:: bash
 
@@ -45,7 +45,7 @@ comparison among different datasets.
 
 .. image:: figures/ztdiff.png
    :alt: A heatmap of differentce in ZT against carrier concentration and temperature
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/heatmaps/plot-ztdiff.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/heatmaps/plot-ztdiff.py
 
 .. code-block:: bash
 
@@ -56,7 +56,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-multiphon.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/phonons/plot-multiphon.py
 
 .. code-block:: bash
 
@@ -64,13 +64,13 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/phonons/plot-phonons.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/phonons/plot-phonons.py
 
 .. code-block:: bash
 
    tp plot phonons band.yaml -c '#ff8000' -d projected_dos.dat --doscolour '#ffff00' '#00ffff'
 
-This is where some of the more useful functions of ``ThermoPlotter``
+This is where some of the more useful functions of ``ThermoParser``
 come in, e.g. the rescaling of the x axis in the former plot, and the
 simplicity of compound axes in the latter.
 
@@ -80,13 +80,13 @@ plotting, to enable nicely formatted multi-axes plots...
 
 .. image:: figures/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/cumkappa/plot-cumkappa.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/cumkappa/plot-cumkappa.py
 
 \...and multi-plot axes, to highlight particular interactions.
 
 .. image:: figures/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/waterfall/plot-waterfall.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/waterfall/plot-waterfall.py
 
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
@@ -96,7 +96,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-wideband.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/projected-phonons/plot-wideband.py
 
 .. code-block:: bash
 
@@ -104,9 +104,9 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/projected-phonons/plot-projected-phonons.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/projected-phonons/plot-projected-phonons.py
 
-Besides plotting, ThermoPlotter offers a number of ways to streamline
+Besides plotting, ThermoParser offers a number of ways to streamline
 trnasport property workflows, from generating more efficent input files
 (``tp gen``) to data consolidation (``tp.utilities.merge``) and
 retrieval (``tp.utilities.resolve`` and ``tp get``), many of which are
@@ -117,7 +117,7 @@ multiple data files.
 
 .. image:: figures/dos.png
    :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
-   :target: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/plot-dos.py
+   :target: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/dos/plot-dos.py
 
 The right-hand plot can be plotted with:
 
@@ -126,7 +126,7 @@ The right-hand plot can be plotted with:
    tp plot dos projected_dos.dat --atoms "Ba Sn O O_2 2" --sigma 0.2 --location 1 -c magenta -c cyan -c red -c orange
 
 There are also a number of cosmetic options in the python interface,
-which may be of interest outside the main scope of ThermoPlotter, e.g.
+which may be of interest outside the main scope of ThermoParser, e.g.
 the custom colourmaps, legend formatting tools and axes labels.
 
 Reference

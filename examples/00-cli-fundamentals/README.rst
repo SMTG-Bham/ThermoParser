@@ -2,13 +2,13 @@
 Tutorial-00: CLI Fundamentals
 -----------------------------
 
-The simplest way to use ThermoPlotter is via the command-line interface
+The simplest way to use ThermoParser is via the command-line interface
 (CLI). This is easily navigable due to its modular structure. To get
 started, simply type ``tp`` into the command line, and a list of
 modules will be returned along with short descriptions. Pick one and
-type the full thing in, e.g. ``tp plot``, to get a similar list of the
+type the full thing in, e.g. ``tp get``, to get a similar list of the
 available functions. Then type in all three parts to get a detailed
-description of how to use the function, e.g. ``tp plot avg-rates``.
+description of how to use the function, e.g. ``tp get zt``.
 If further arguments have been given, this can be accessed with
 ``--help``, but note ``-h`` is *not* a substitute for ``--help``.
 

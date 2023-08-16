@@ -5,7 +5,7 @@ Tutorial-05: Helper Functions
 .. image:: tutorial-05.png
    :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`
 
-ThermoPlotter contains a number of helper functions that may be useful
+ThermoParser contains a number of helper functions that may be useful
 even when not using the core functionality. We will cover several of
 these here, however this particular example is also plottable via the
 CLI:
@@ -24,7 +24,7 @@ In Python, it is:
 Axes (line 20)
 --------------
 
-ThermoPlotter comes with two ``matplotlib`` styles, ``tp`` and
+ThermoParser comes with two ``matplotlib`` styles, ``tp`` and
 ``tp-large``, for small and large axes respectively, which are
 accessible any time using ``plt.style.use``.
 
@@ -34,10 +34,10 @@ Resolve (lines 36 and 41)
 ``tp.data.utilities.resolve`` resolves a data array by dependent
 properties. As arguments, it takes a data dictionary, an array of the
 names of the quantities to be resolved, and the dependent variable
-values. This can be used easily with data loaded through ThermoPlotter,
+values. This can be used easily with data loaded through ThermoParser,
 but with some minor alterations, almost any data can be resolved.
 
-Most ThermoPlotter data dictionaries come with a ``meta``
+Most ThermoParser data dictionaries come with a ``meta``
 subdictionary, which contains metadata including units, array shapes
 and data source. For ``resolve`` to work, it needs a ``dimensions``
 subdictionary in ``meta``, which should contain an array with the same
@@ -47,7 +47,7 @@ directions, which can be either 3 or 6. For example,
 ``adata['meta']['dimensions']['seebeck'] == ['temperature', 'doping', 3, 3]``.
 The direction is represented by a 3x3 array. The other thing that is
 needed is for the dependent variables to also be in the dictionary.
-ThermoPlotter automatically loads dependent variables.
+ThermoParser automatically loads dependent variables.
 
 ``resolve`` does not interpolate, but rather rounds to the nearest data
 point, which it saves to ``['meta']['variable_name']``, so you can be

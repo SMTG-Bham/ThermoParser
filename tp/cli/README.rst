@@ -1,6 +1,6 @@
 Command-line scripts for rapid analysis.
 
-ThermoPlotter uses `click`_ to organise the command line interface (cli).
+ThermoParser uses `click`_ to organise the command line interface (cli).
 This allows a more navigable, flexible and maintainable cli, but is slightly
 different to the commonly-used ``argparse``. There are two main
 practical differences for the user:

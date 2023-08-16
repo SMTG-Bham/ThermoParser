@@ -4,7 +4,7 @@ This module sets the default style sheet, tick locators and axis labels;
 as well as providing a means to automatically convert the units
 presented and add abbreviations that can be used when loading data.
 Custom defaults can be set by saving a copy of tprc.yaml (found in the
-main ThermoPlotter directory) to ``~/.config/tprc.yaml`` and editing
+main ThermoParser directory) to ``~/.config/tprc.yaml`` and editing
 that.
 
 Functions

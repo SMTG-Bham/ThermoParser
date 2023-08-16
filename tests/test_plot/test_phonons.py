@@ -161,7 +161,7 @@ class AltDispersionTest(unittest.TestCase):
 
         import os, re
         cwd = os.getcwd()
-        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
+        self.poscar = re.match('^.*ThermoParser', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
@@ -255,7 +255,7 @@ class ProjectedDispersionTest(unittest.TestCase):
         warnings.simplefilter('ignore')
         import os, re
         cwd = os.getcwd()
-        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
+        self.poscar = re.match('^.*ThermoParser', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
@@ -368,7 +368,7 @@ class AltProjectedDispersionTest(unittest.TestCase):
         warnings.simplefilter('ignore')
         import os, re
         cwd = os.getcwd()
-        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
+        self.poscar = re.match('^.*ThermoParser', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
@@ -485,7 +485,7 @@ class WidebandTest(unittest.TestCase):
         warnings.simplefilter('ignore')
         import os, re
         cwd = os.getcwd()
-        self.poscar = re.match('^.*ThermoPlotter', cwd).group() + '/tests/data/POSCAR'
+        self.poscar = re.match('^.*ThermoParser', cwd).group() + '/tests/data/POSCAR'
         self.data =  {'qpoint':        [[0, 1, 2.1],
                                         [3.2, 0.9, 2],
                                         [0.1, 0, 0.1],
