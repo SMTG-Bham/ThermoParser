@@ -8,7 +8,8 @@ Phonons
 This shows a phonon dispersion and density of states (DoS). This is the
 only combined plot currenty possible at the command line, with:
 
-.. codeblock::
+.. code-block::
+
    tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR -doscolour '#d46ef9' --doscolour '#7b8eff' -c '#f0901f'
 
 and in python:
@@ -30,7 +31,8 @@ this is simple (line 24).
 This shows phonons dispersions for various supercell sizes for
 convergence:
 
-.. codeblock::
+.. code-block::
+
    tp plot phonons ../data/basno3/band-*.yaml --legend_title "Supercell Size" -l "2 x 2 x 2" -l "3 x 3 x 3" -l "4 x 4 x 4" -l "5 x 5 x 5"
 
 and in python:

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial-01: Python Foundations &mdash; ThermoPlotter 2.0.0 documentation</title>
+  <title>Tutorial-01: Python Foundations &mdash; ThermoParser 2.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <a href="contents.html" class="icon icon-home"> ThermoParser
             <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -74,7 +74,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -96,7 +96,7 @@
   <div class="section" id="tutorial-01-python-foundations">
 <h1>Tutorial-01: Python Foundations<a class="headerlink" href="#tutorial-01-python-foundations" title="Permalink to this headline"></a></h1>
 <img alt="Phonon dispersion of ZnO." src="_images/tutorial-01.png" />
-<p>The most basic plots in ThermoPlotter consist of four commands:</p>
+<p>The most basic plots in ThermoParser consist of four commands:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>axes</p></li>
@@ -105,7 +105,7 @@
 <li><p>save</p></li>
 </ol>
 </div></blockquote>
-<p>ThermoPlotter offers ways to do the first three (the last is trivial),
+<p>ThermoParser offers ways to do the first three (the last is trivial),
 but each part can be replaced by your own code if you prefer.</p>
 <p>The CLI version of this code is:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml
@@ -131,7 +131,7 @@ but each part can be replaced by your own code if you prefer.</p>
 </div>
 <div class="section" id="axes-line-6">
 <h2>Axes (line 6)<a class="headerlink" href="#axes-line-6" title="Permalink to this headline"></a></h2>
-<p>ThermoPlotter offers a number of pre-sized axes in the <code class="docutils literal notranslate"><span class="pre">axes</span></code> module.
+<p>ThermoParser offers a number of pre-sized axes in the <code class="docutils literal notranslate"><span class="pre">axes</span></code> module.
 Within, there is a <code class="docutils literal notranslate"><span class="pre">large</span></code> module, which provides presentation-
 oriented figures, but these take relatively long to load so here we use
 <code class="docutils literal notranslate"><span class="pre">small</span></code>, which is better for papers. The functions consist of the
@@ -144,7 +144,7 @@ case, we use the most basic <code class="docutils literal notranslate"><span cla
 <li><p>axes: Where the data goes, used in step 3.</p></li>
 <li><p>add_legend: Adds a legend. We don’t use it here, so we’ve thrown it
 away by assigning it to <code class="docutils literal notranslate"><span class="pre">_</span></code>. Giving it any name and not using it
-has the same effect. Legends will be discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-03.html">Tutorial-03</a>.</p></li>
+has the same effect. Legends will be discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorial-03.html">Tutorial-03</a>.</p></li>
 </ol>
 </div></blockquote>
 <p>This command can easily be replaced with <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> commands
@@ -152,10 +152,10 @@ such as <code class="docutils literal notranslate"><span class="pre">figure</spa
 </div>
 <div class="section" id="load-line-9">
 <h2>Load (line 9)<a class="headerlink" href="#load-line-9" title="Permalink to this headline"></a></h2>
-<p>ThermoPlotter contains several data loading functions for different
+<p>ThermoParser contains several data loading functions for different
 inputs in the <code class="docutils literal notranslate"><span class="pre">data.load</span></code> module. At their most basic, these take a
 file to read from, and return a dictionary of the data.</p>
-<p>While you can load your own data, ThermoPlotter takes several steps to
+<p>While you can load your own data, ThermoParser takes several steps to
 ensure consistent format and units between codes and also with some
 old versions of these codes; and with the plotting functions. It also
 consistently applies custom unit conversions and provides metadata
@@ -164,14 +164,14 @@ taken if this step is done manually.</p>
 </div>
 <div class="section" id="plot-line-12">
 <h2>Plot (line 12)<a class="headerlink" href="#plot-line-12" title="Permalink to this headline"></a></h2>
-<p>ThermoPlotter contains a number of plotting functions in the <code class="docutils literal notranslate"><span class="pre">plot</span></code>
+<p>ThermoParser contains a number of plotting functions in the <code class="docutils literal notranslate"><span class="pre">plot</span></code>
 module. At their most basic, they take a set of axes to plot on, and a
 data dictionary to read from. All plot functions also take a number of
 customisation option, including all the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the underlying
 <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> function.</p>
 <p>This stage can be replaced with ordinary <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> functions such
 as <code class="docutils literal notranslate"><span class="pre">ax.plot</span></code>, which can be assisted by a number of ancillary
-ThermoPlotter functions discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html">Tutorial-05</a>.</p>
+ThermoParser functions discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorial-05.html">Tutorial-05</a>.</p>
 </div>
 <div class="section" id="save-line-15">
 <h2>Save (line 15)<a class="headerlink" href="#save-line-15" title="Permalink to this headline"></a></h2>
@@ -179,11 +179,11 @@ ThermoPlotter functions discussed in <a class="reference external" href="https:/
 </div>
 <div class="section" id="more-help">
 <h2>More Help<a class="headerlink" href="#more-help" title="Permalink to this headline"></a></h2>
-<p>ThermoPlotter has extensive docs. Docstrings are available throughout
+<p>ThermoParser has extensive docs. Docstrings are available throughout
 the code itself, if you are using IPython or Jupyter and you can access
 them by typing the command name followed by two question marks, and
 IDEs normally have options too. If you are on the master branch,
-they can also be found <a class="reference external" href="https://smtg-ucl.github.io/ThermoPlotter/">here</a>.</p>
+they can also be found <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/">here</a>.</p>
 </div>
 </div>
 

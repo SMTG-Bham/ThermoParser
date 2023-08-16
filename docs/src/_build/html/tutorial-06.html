@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial-06: Package Customisation &mdash; ThermoPlotter 2.0.0 documentation</title>
+  <title>Tutorial-06: Package Customisation &mdash; ThermoParser 2.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter
+            <a href="contents.html" class="icon icon-home"> ThermoParser
             <img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -48,7 +48,7 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial-05.html"> Tutorial-05: Helper Functions</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> Tutorial-06: Package Customaisation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tprc-yaml">tprc.yaml</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extending-thermoplotter">Extending ThermoPlotter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-ThermoParser">Extending ThermoParser</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
@@ -71,7 +71,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -93,11 +93,11 @@
   <div class="section" id="tutorial-06-package-customisation">
 <h1>Tutorial-06: Package Customisation<a class="headerlink" href="#tutorial-06-package-customisation" title="Permalink to this headline"></a></h1>
 <p>First we’ll look at the <code class="docutils literal notranslate"><span class="pre">tprc.yaml</span></code>, which can customise how
-ThermoPlotter behaves, and then how you might expand it.</p>
+ThermoParser behaves, and then how you might expand it.</p>
 <div class="section" id="tprc-yaml">
 <h2>tprc.yaml<a class="headerlink" href="#tprc-yaml" title="Permalink to this headline"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">tprc.yaml</span></code> is a configuration file which allows you to customise
-many aspects of ThermoPlotter. A template is provided in the top
+many aspects of ThermoParser. A template is provided in the top
 directory, but to use it it must be saved as <code class="docutils literal notranslate"><span class="pre">~/.config/tprc.yaml</span></code>.
 The file is basically a dictionary. If you prefer your own style sheet,
 you can set it as default by setting <code class="docutils literal notranslate"><span class="pre">style:</span> <span class="pre">yourstyle</span></code>, and the same
@@ -117,7 +117,7 @@ dictionaries like the locators. The aliases are listed as:</p>
 </div>
 <p>If you add unit conversions, remember to update the units and labels
 too! An example has been provided for converting from
-S m<sup>-1</sup> to S cm<sup>-1</sup> <a class="reference external" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/06-package-customisation/tprc.yaml">here</a>.
+S m<sup>-1</sup> to S cm<sup>-1</sup> <a class="reference external" href="https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/06-package-customisation/tprc.yaml">here</a>.
 There are six labels dictionaries. <code class="docutils literal notranslate"><span class="pre">long_</span></code>, <code class="docutils literal notranslate"><span class="pre">medium_</span></code> and
 <code class="docutils literal notranslate"><span class="pre">short_labels</span></code> contain the actual labels of those lengths, while
 <code class="docutils literal notranslate"><span class="pre">labels</span></code>, <code class="docutils literal notranslate"><span class="pre">inverted_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">large_labels</span></code> point to which of
@@ -127,14 +127,14 @@ separate axes rather than a DoS axes, you may want to set
 <code class="docutils literal notranslate"><span class="pre">inverted_labels:</span> <span class="pre">long</span></code>. Finally, there are the default <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>
 for each function, which are passed to the matplotlib plotting
 function, such as <code class="docutils literal notranslate"><span class="pre">plt.plot</span></code>. These override defaults set in the
-ThermoPlotter plotting function, but are overridden by arguments
+ThermoParser plotting function, but are overridden by arguments
 specified by the user (in the Python inteface, extra arguments will be
 passed on to the underlying matplotlib plotting function).</p>
 </div>
-<div class="section" id="extending-thermoplotter">
-<h2>Extending ThermoPlotter<a class="headerlink" href="#extending-thermoplotter" title="Permalink to this headline"></a></h2>
-<p>Due to its modular nature, extending ThermoPlotter should be relatively
-easy. So long as it reads or writes data in the standard ThermoPlotter
+<div class="section" id="extending-ThermoParser">
+<h2>Extending ThermoParser<a class="headerlink" href="#extending-ThermoParser" title="Permalink to this headline"></a></h2>
+<p>Due to its modular nature, extending ThermoParser should be relatively
+easy. So long as it reads or writes data in the standard ThermoParser
 format, a function can be added to a module without having to worry
 about conflicts with the rest of the code. The exception are the
 <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> and <code class="docutils literal notranslate"><span class="pre">tprc.yaml</span></code>, which may need extra labels, kwargs,

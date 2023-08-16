@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cumulative Lattice Thermal Conductivity &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Cumulative Lattice Thermal Conductivity &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,8 +49,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -65,7 +65,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -89,7 +89,7 @@
 <img alt="Cumulative lattice thermal conductivity against frequency and mean free path." src="_images/cumkappa1.png" />
 <p>This shows two plots of cumulative lattice thermal conductivity. The
 first one is against frequency, and particularly in conjunction with a
-<a class="reference external" href="https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/">density of states</a> (DoS) or a phonon band structure, this can show the
+<a class="reference external" href="https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/dos/">density of states</a> (DoS) or a phonon band structure, this can show the
 relative contributions of the constituent atoms to the lattice thermal
 conductivity. The second is against mean free path, and can be used to
 approximate the effect of nanostructuring, for which reason the ability
@@ -97,6 +97,9 @@ to add markers has been included, e.g. here you can see nanostructuring
 to 100 nanometers may reduce the lattice thermal conductivity by around
 40 %.</p>
 <p>The right plot can be plotted at the command line with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">cumkappa</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">--</span><span class="n">mfp</span> <span class="o">--</span><span class="n">percent</span> <span class="o">-</span><span class="n">d</span> <span class="n">x</span> <span class="o">-</span><span class="n">d</span> <span class="n">y</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;#59c605&#39;</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;#ffcf06&#39;</span> <span class="o">--</span><span class="n">nofill</span> <span class="o">--</span><span class="n">xmarkers</span> <span class="mf">1e-7</span> <span class="o">-</span><span class="n">l</span> <span class="n">x</span> <span class="o">-</span><span class="n">l</span> <span class="n">y</span> <span class="o">--</span><span class="n">location</span> <span class="ow">in</span>
+</pre></div>
+</div>
 <p>And while the layering of the DoS plot is not yet supported at the
 command line, the cumkappa part of the left graph can be plotted by
 removing <code class="docutils literal notranslate"><span class="pre">--mfp</span> <span class="pre">--percent</span> <span class="pre">--xmarkers</span> <span class="pre">1e-7</span></code> from the above.</p>
@@ -214,7 +217,7 @@ DoS axes), you must specify <code class="docutils literal notranslate"><span cla
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -29,7 +29,7 @@ single colour, in hex, rgb (array) or named colour format. In this
 case, the ``tp.plot.colour.uniform`` colourmap generator has been used,
 which calculates a uniform colourmap between white, a supplied
 highlight colour and black, or three colours of your choosing. There
-are several other heatmap functions in Thermoplotter, including the
+are several other heatmap functions in ThermoParser, including the
 equivalent for power factor, ``add_pfmap``, and those below...
 
 .. image:: kappa-target.png

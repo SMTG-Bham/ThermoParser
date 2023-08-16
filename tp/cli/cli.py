@@ -147,8 +147,8 @@ def get():
               default='conductivity',
               show_default=True)
 @doping_type_option
-@doping_option
-@direction_option
+@doping_function()
+@direction_function()
 @temperature_option
 @click.option('--spin',
               help='Spin direction.',
@@ -274,8 +274,8 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
               default='conductivity',
               show_default=True)
 @doping_type_option
-@doping_option
-@direction_option
+@doping_function()
+@direction_function()
 @temperature_option
 
 def get_boltztrap(boltztrap_hdf5, quantity, dtype, doping, direction, temperature):
@@ -332,7 +332,7 @@ def get_boltztrap(boltztrap_hdf5, quantity, dtype, doping, direction, temperatur
               help='Quantity to read.',
               default='lattice_thermal_conductivity',
               show_default=True)
-@direction_option
+@direction_function()
 @temperature_option
 @click.option('-b', '--band',
               help='Phonon band index (1-indexed).',
@@ -425,8 +425,8 @@ def get_phono3py(kappa_hdf5, quantity, direction, temperature, band, qpoint,
               help='Phono3py kappa-mxxx.hdf5.',
               type=click.Path(exists=True, file_okay=True, dir_okay=False))
 @doping_type_option
-@doping_option
-@direction_option
+@doping_function()
+@direction_function()
 @temperature_option
 @click.option('--max',
               is_flag=True,
@@ -590,7 +590,7 @@ def save():
               help='x-axis quantity.  [default: frequency]',
               default=False,
               show_default=False)
-@direction_option
+@direction_function()
 @temperature_option
 @click.option('-o', '--output',
               help='Output filename, sans extension.',
@@ -619,7 +619,7 @@ def save_cumkappa(kappa_hdf5, mfp, direction, temperature, output, extension):
 
 @save.command('kappa', no_args_is_help=True)
 @inputs_function('kappa_hdf5', nargs=1)
-@directions_option
+@direction_function(multiple=True)
 @click.option('-o', '--output',
               help='Output filenames, sans extension.',
               default='tp-kappa',
@@ -653,7 +653,7 @@ def save_kappa(kappa_hdf5, direction, output):
               help='Phono3py kappa-mxxx.hdf5.',
               type=click.Path(exists=True, file_okay=True, dir_okay=False))
 @doping_type_option
-@direction_option
+@direction_function()
 @interpolate_options
 @click.option('-o', '--output',
               help='Output filename, sans extension.',
@@ -701,12 +701,13 @@ def plot():
 @click.option('--crt',
               help='Constant relaxation time rate.  [default: off]',
               type=float)
+
 @click.option('--exclude',
               help='Rates to exclude. Excludes from the graph, *not* '
                    'from the total calculation.',
               multiple=True)
-@doping_option
-@direction_option
+@doping_function()
+@direction_function()
 @temperature_option
 
 @click.option('-c', '--colour',
@@ -717,7 +718,7 @@ def plot():
               show_default=True)
 @line_options
 
-@xy_limit_options
+@axes_limit_function()
 @legend_function(label=False)
 @click.option('--long/--short',
               help='Legend label length.  [default: short]',
@@ -922,7 +923,7 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
               multiple=True,
               type=float)
 
-@directions_option
+@direction_function(multiple=True)
 @temperature_option
 @click.option('--xmin',
               help='Override minimum x.',
@@ -940,7 +941,7 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
 @fill_options
 @line_options
 
-@xy_limit_options
+@axes_limit_function()
 @legend_function(toggle=False)
 @plot_io_function('tp-cumkappa')
 @verbose_option
@@ -1029,7 +1030,7 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 @fill_options
 @line_options
 
-@xy_limit_options
+@axes_limit_function()
 @legend_function(label=False)
 @plot_io_function('tp-dos')
 
@@ -1100,7 +1101,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
               type=click.Choice(['lattice', 'electronic', 'total'],
                                 case_sensitive=False),
               show_default=True)
-@directions_option
+@direction_function(multiple=True)
 @click.option('--tmin',
               help='Minimum temperature to plot, by default in K.',
               default=300.,
@@ -1110,7 +1111,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
               default=np.inf,
               show_default=False)
 @doping_type_option
-@doping_option
+@doping_function()
 
 @click.option('-c', '--colour',
               help='Colourmap name or min and max colours or list of '
@@ -1120,7 +1121,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
               show_default=True)
 @line_options
 
-@xy_limit_options
+@axes_limit_function()
 @legend_function()
 @plot_io_function('tp-kappa')
 
@@ -1346,7 +1347,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
               default=2.,
               show_default=True)
 
-@direction_option
+@direction_function()
 @interpolate_options
 
 @click.option('-c', '--colour',
@@ -1362,8 +1363,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
               default='grey',
               show_default=True)
 
-@xy_limit_options
-@c_limit_options
+@axes_limit_function(c=True)
 @plot_io_function('tp-kappa-target')
 
 def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
@@ -1533,7 +1533,7 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
               default=['conductivity', 'seebeck',
                        'electronic_thermal_conductivity'],
               show_default=True)
-@directions_option
+@direction_function(multiple=True)
 @click.option('--tmin',
               help='Minimum temperature to plot, by default in K.',
               default=300.,
@@ -1543,7 +1543,16 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
               default=np.inf,
               show_default=False)
 @doping_type_option
-@dopings_option
+@doping_function(multiple=True)
+@click.option('--stype',
+              help='Scattering type(s) for mobility. Cedes precedence '
+                   'other options (e.g. doping). If other options are '
+                   'specified, only shows the first stype supplied, '
+                   'Total by default. Otherwise defaults to show all '
+                   'scattering types including Total.',
+              multiple=True,
+              default=[None],
+              show_default=False)
 
 @click.option('-c', '--colour',
               help='Colourmap name or min and max colours or list of '
@@ -1553,24 +1562,34 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
               show_default=True)
 @line_options
 
-@xy_limit_options
+@axes_limit_function(multiple=True)
+@click.option('--xscale',
+              help='x-scale.',
+              type=click.Choice(['linear', 'log'], case_sensitive=False),
+              multiple=True,
+              default=['linear'],
+              show_default=True)
+@click.option('--yscale',
+              help='y-scale.',
+              type=click.Choice(['linear', 'log'], case_sensitive=False),
+              multiple=True,
+              default=['linear'],
+              show_default=True)
 @legend_function()
 @plot_io_function('tp-transport')
 
 def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
-              doping, colour, linestyle, marker, xmin, xmax, ymin, ymax,
-              label, legend_title, legend, location, style, large, save, show,
-              extension, output):
+              doping, stype, colour, linestyle, marker, xmin, xmax, ymin,
+              ymax, xscale, yscale, label, legend_title, legend, location, style, large, save,
+              show, extension, output):
     """Plots line graphs of transport properties against temperature.
 
     Currently not all combinations of inputs work. The order of
-    precedence is lines represent doping > direction > files.
-    If using multiple sets of files (so only one doping and direction),
-    either there must be the same number of each, or only one file of
-    one type, in which case it is used for all instances of the other.
-
-    Changing the y-axis limits is also not currently supported (we
-    recommend changing the temperatures plotted instead).
+    precedence is lines represent doping > direction > files >
+    scattering type. If using multiple sets of files (so only one
+    doping and direction), either there must be the same number of
+    each, or only one file of one type, in which case it is used for
+    all instances of the other.
     """
 
     if len(quantity) < 1 or len(quantity) > 4:
@@ -1618,6 +1637,12 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
     else:
         kdata = None
 
+    if stype in [None, [None], (None,)]:
+        if len(doping) > 1 or len(direction) > 1 or len(edata) > 1:
+            stype = ['Total']
+        elif 'stype' in edata[0]:
+            stype = edata[0]['stype']
+
     for e in edata:
         e['doping'] = np.abs(e['doping'])
 
@@ -1654,7 +1679,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                 for d in doping:
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.utilities.resolve(edata2, q, doping=d,
-                                                       direction=direction[0])
+                                                       direction=direction[0],
+                                                       stype=stype[0])
                     dopelist.append('{:.2e}'.format(edata2['meta']['doping']))
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
@@ -1691,7 +1717,8 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     edata2 = deepcopy(edata[0])
                     edata2 = tp.data.utilities.resolve(edata2, q,
                                                        doping=doping[0],
-                                                       direction=d)
+                                                       direction=d,
+                                                       stype=stype[0])
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
             elif kdata is not None and q in kdata[0] and \
@@ -1765,13 +1792,27 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                 elif defleg['title'] is None:
                     defleg['title'] = 'Electronic Data'
                     defleg['labels'] = transport_file
-                for j in range(len(edata)):
-                    edata2 = deepcopy(edata[j])
-                    edata2 = tp.data.utilities.resolve(edata2, q,
-                                                       doping=doping[0],
-                                                       direction=direction[0])
-                    data[i].append({'temperature': edata2['temperature'],
-                                    q:             edata2[q]})
+                if len(edata) > 1 or len(stype) == 1:
+                    for j in range(len(edata)):
+                        edata2 = deepcopy(edata[j])
+                        edata2 = tp.data.utilities.resolve(edata2, q,
+                                                           doping=doping[0],
+                                                           direction=direction[0],
+                                                           stype=stype[0])
+                        data[i].append({'temperature': edata2['temperature'],
+                                        q:             edata2[q]})
+                else:
+                    lendata = len(stype)
+                    defleg['title'] = 'Scattering Type'
+                    defleg['labels'] = stype
+                    for j in range(len(stype)):
+                        edata2 = deepcopy(edata[0])
+                        edata2 = tp.data.utilities.resolve(edata2, q,
+                                                           doping=doping[0],
+                                                           direction=direction[0],
+                                                           stype=stype[j])
+                        data[i].append({'temperature': edata2['temperature'],
+                                        q:             edata2[q]})
             elif kdata is not None and q in kdata[0] and \
                  'temperature' in kdata[0]['meta']['dimensions'][q]:
                 if len(kdata) > 1:
@@ -1820,7 +1861,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
             d2['temperature'] = np.array(d2['temperature'])
             k = np.where((d2['temperature'] <= tmax)
                        & (d2['temperature'] >= tmin))[0]
-
             ax[i].plot(d2['temperature'][k], d2[quantity[i]][k],
                        linestyle=linestyle[j], marker=marker[j], c=colours[j],
                        label=label[j])
@@ -1838,22 +1878,32 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
         else:
             add_legend(title=legend_title, location=location)
 
-    for a in ax:
-        if xmin is not None:
-            if xmax is not None:
-                a.set_xlim(xmin, xmax)
-            else:
-                a.set_xlim(left=xmin)
-        elif xmax is not None:
-            a.set_xlim(right=xmax)
+    lims = {'xmin':   list(xmin),
+            'xmax':   list(xmax),
+            'ymin':   list(ymin),
+            'ymax':   list(ymax),
+            'xscale': list(xscale),
+            'yscale': list(yscale)}
+    for l in lims:
+        if lims[l] not in [None, [None], (None,), (), []]:
+            if len(lims[l]) > len(ax):
+                lims[l] = lims[l][:len(ax)]
+            while len(lims[l]) < len(ax):
+                lims[l].append(lims[l][-1])
+        else:
+            lims[l] = None
 
-    #if ymin is not None:
-    #    if ymax is not None:
-    #        ax.set_ylim(ymin, ymax)
-    #    else:
-    #        ax.set_ylim(bottom=ymin)
-    #elif ymax is not None:
-    #    ax.set_ylim(top=ymax)
+    for i, a in enumerate(ax):
+        if lims['xmin'] is not None:
+            a.set_xlim(left=lims['xmin'][i])
+        if lims['xmax'] is not None:
+            a.set_xlim(right=lims['xmax'][i])
+        if lims['ymin'] is not None:
+            a.set_ylim(bottom=lims['ymin'][i])
+        if lims['ymax'] is not None:
+            a.set_ylim(top=lims['ymax'][i])
+        tp.plot.utilities.set_locators(a, x=lims['xscale'][i],
+                                          y=lims['yscale'][i])
 
     if save:
         for ext in extension:
@@ -1884,7 +1934,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                    'frequency, kappa, group_velocity, lifetime, '
                    'mean_free_path, occupation and ph_ph_strength.')
 
-@direction_option
+@direction_function()
 @temperature_option
 
 @click.option('-c', '--colour',
@@ -1926,8 +1976,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
 @click.option('--cscale',
               help='Override colour-scale if projected.',
               type=click.Choice(['linear', 'log'], case_sensitive=False))
-@xy_limit_options
-@c_limit_options
+@axes_limit_function(c=True)
 
 @plot_io_function('tp-waterfall')
 @verbose_option
@@ -2086,7 +2135,7 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
                    'otherwise unspecified, set to 1 (W m-1 K-1).',
               type=click.Path(file_okay=True, dir_okay=False))
 
-@direction_option
+@direction_function()
 @doping_type_option
 @interpolate_options
 
@@ -2099,8 +2148,7 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
               default=['viridis'],
               show_default=True)
 
-@xy_limit_options
-@c_limit_options
+@axes_limit_function(c=True)
 @plot_io_function('tp-ztmap')
 
 def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour,
@@ -2157,7 +2205,7 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour
                    'conductivity.  [default: 1]',
               nargs=2)
 
-@direction_option
+@direction_function()
 @doping_type_option
 @interpolate_options
 
@@ -2173,8 +2221,7 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour
               default='white',
               show_default=True)
 
-@xy_limit_options
-@c_limit_options
+@axes_limit_function(c=True)
 @legend_function()
 @plot_io_function('tp-ztdiff')
 

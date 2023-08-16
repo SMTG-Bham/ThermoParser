@@ -17,12 +17,12 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'ThermoPlotter'
-copyright = '2021, Scanlon Materials Theory Group'
+project = 'ThermoParser'
+copyright = '2023, Scanlon Materials Theory Group'
 author = 'Kieran B. Spooner'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '3.0.0'
 
 
 # -- General configuration ---------------------------------------------------

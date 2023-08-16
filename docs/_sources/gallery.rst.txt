@@ -13,23 +13,23 @@ Gallery
    Projected Phonons <prophon>
    Average Scattering Rates <avg-rates>
 
-This is a gallery of some things you can do in ThermoPlotter with brief
+This is a gallery of some things you can do in ThermoParser with brief
 explanations. More details on each of the plots, including the scripts
 and specific commands used are available by clicking on the figures, and we
 also have `tutorials`_!
 
-.. _tutorials: https://smtg-ucl.github.io/ThermoPlotter/tutorials.html
+.. _tutorials: https://smtg-ucl.github.io/ThermoParser/tutorials.html
 
 .. hint::
     Click on the images to see the script which generated them.
 
-At its simplest, ``ThermoPlotter`` is a way to quickly plot useful data
+At its simplest, ``ThermoParser`` is a way to quickly plot useful data
 from either a python script or the command line, such as the classic
 ``ztmap`` heatmap (the power factor ``pfmap`` is also available):
 
 .. image:: figures/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
-   :target: https://smtg-ucl.github.io/ThermoPlotter/heatmaps.html
+   :target: https://smtg-ucl.github.io/ThermoParser/heatmaps.html
 
 Click on the plot to see the script, or one could use
 
@@ -44,7 +44,7 @@ ZT, in this case 2.
 
 .. image:: figures/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
-   :target: https://smtg-ucl.github.io/ThermoPlotter/heatmaps.html
+   :target: https://smtg-ucl.github.io/ThermoParser/heatmaps.html
 
 .. code-block:: bash
 
@@ -55,7 +55,7 @@ comparison among different datasets.
 
 .. image:: figures/ztdiff.png
    :alt: A heatmap of differentce in ZT against carrier concentration and temperature
-   :target: https://smtg-ucl.github.io/ThermoPlotter/heatmaps.html
+   :target: https://smtg-ucl.github.io/ThermoParser/heatmaps.html
 
 .. code-block:: bash
 
@@ -66,7 +66,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
-   :target: https://smtg-ucl.github.io/ThermoPlotter/phonons.html
+   :target: https://smtg-ucl.github.io/ThermoParser/phonons.html
 
 .. code-block:: bash
 
@@ -74,13 +74,13 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
-   :target: https://smtg-ucl.github.io/ThermoPlotter/phonons.html
+   :target: https://smtg-ucl.github.io/ThermoParser/phonons.html
 
 .. code-block:: bash
 
    tp plot phonons band.yaml -c '#ff8000' -d projected_dos.dat --doscolour '#ffff00' '#00ffff'
 
-This is where some of the more useful functions of ``ThermoPlotter``
+This is where some of the more useful functions of ``ThermoParser``
 come in, e.g. the rescaling of the x axis in the former plot, and the
 simplicity of compound axes in the latter. Another example is the ability to
 add gaussian smearing to a DoS plot during plotting, removing the need to rerun
@@ -88,7 +88,7 @@ e.g. Phonopy or maintain multiple data files.
 
 .. image:: figures/dos.png
    :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
-   :target: https://smtg-ucl.github.io/ThermoPlotter/dos.html
+   :target: https://smtg-ucl.github.io/ThermoParser/dos.html
 
 The right-hand plot can be plotted with:
 
@@ -102,13 +102,13 @@ plotting, to enable nicely formatted multi-axes plots...
 
 .. image:: figures/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
-   :target: https://smtg-ucl.github.io/ThermoPlotter/cumkappa.html
+   :target: https://smtg-ucl.github.io/ThermoParser/cumkappa.html
 
 \...and multi-plot axes, to highlight particular interactions.
 
 .. image:: figures/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
-   :target: https://smtg-ucl.github.io/ThermoPlotter/waterfall.html
+   :target: https://smtg-ucl.github.io/ThermoParser/waterfall.html
 
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
@@ -118,7 +118,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://smtg-ucl.github.io/ThermoPlotter/prophon.html
+   :target: https://smtg-ucl.github.io/ThermoParser/prophon.html
 
 .. code-block:: bash
 
@@ -126,9 +126,9 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
-   :target: https://smtg-ucl.github.io/ThermoPlotter/prophon.html
+   :target: https://smtg-ucl.github.io/ThermoParser/prophon.html
 
-Besides plotting, ThermoPlotter offers a number of ways to streamline
+Besides plotting, ThermoParser offers a number of ways to streamline
 transport property workflows, from generating more efficent input files
 (``tp gen``), to data consolidation (``tp.utilities.merge``) and
 retrieval (``tp.utilities.resolve`` and ``tp get``), to pre-typed axis labels,
@@ -138,9 +138,10 @@ but is easily scripted or plotted at the command line:
 
 .. image:: avg-rates.png
    :alt: A plot of weighted average scattering rates against temperature and carrier concnetration.
-   :target: https://smtg-ucl.github.io/ThermoPlotter/avg-rates.html
+   :target: https://smtg-ucl.github.io/ThermoParser/avg-rates.html
 
-.. codeblock::
+.. code-block::
+
    tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t 1000 -n -1e19 --location 2 --large -c red -c blue -c magenta
 
 It shows the k-point and Fermi-Dirac weighted scattering rates against
@@ -150,7 +151,7 @@ mean free paths.
 
 There are also a number of cosmetic options in
 the python interface, which may be of interest outside the main scope of
-ThermoPlotter, e.g. the custom colourmaps, legend formatting tools and axes
+ThermoParser, e.g. the custom colourmaps, legend formatting tools and axes
 labels.
 
 Reference

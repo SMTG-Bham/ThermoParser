@@ -3,13 +3,13 @@ Tutorial-06: Package Customisation
 ----------------------------------
 
 First we'll look at the ``tprc.yaml``, which can customise how
-ThermoPlotter behaves, and then how you might expand it.
+ThermoParser behaves, and then how you might expand it.
 
 tprc.yaml
 ---------
 
 ``tprc.yaml`` is a configuration file which allows you to customise
-many aspects of ThermoPlotter. A template is provided in the top
+many aspects of ThermoParser. A template is provided in the top
 directory, but to use it it must be saved as ``~/.config/tprc.yaml``.
 The file is basically a dictionary. If you prefer your own style sheet,
 you can set it as default by setting ``style: yourstyle``, and the same
@@ -33,7 +33,7 @@ dictionaries like the locators. The aliases are listed as:
 
 If you add unit conversions, remember to update the units and labels
 too! An example has been provided for converting from
-S m\ :sup:`-1` to S cm\ :sup:`-1` `here <https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/06-package-customisation/tprc.yaml>`_.
+S m\ :sup:`-1` to S cm\ :sup:`-1` `here <https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/06-package-customisation/tprc.yaml>`_.
 There are six labels dictionaries. ``long_``, ``medium_`` and
 ``short_labels`` contain the actual labels of those lengths, while
 ``labels``, ``inverted_labels`` and ``large_labels`` point to which of
@@ -43,15 +43,15 @@ separate axes rather than a DoS axes, you may want to set
 ``inverted_labels: long``. Finally, there are the default ``kwargs``
 for each function, which are passed to the matplotlib plotting
 function, such as ``plt.plot``. These override defaults set in the
-ThermoPlotter plotting function, but are overridden by arguments
+ThermoParser plotting function, but are overridden by arguments
 specified by the user (in the Python inteface, extra arguments will be
 passed on to the underlying matplotlib plotting function).
 
-Extending ThermoPlotter
+Extending ThermoParser
 -----------------------
 
-Due to its modular nature, extending ThermoPlotter should be relatively
-easy. So long as it reads or writes data in the standard ThermoPlotter
+Due to its modular nature, extending ThermoParser should be relatively
+easy. So long as it reads or writes data in the standard ThermoParser
 format, a function can be added to a module without having to worry
 about conflicts with the rest of the code. The exception are the
 ``settings.py`` and ``tprc.yaml``, which may need extra labels, kwargs,

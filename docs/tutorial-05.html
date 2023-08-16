@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tutorial-05: Helper Functions &mdash; ThermoPlotter 2.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Tutorial-05: Helper Functions &mdash; ThermoParser 3.0.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="contents.html" class="icon icon-home"> ThermoPlotter<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
+            <a href="contents.html" class="icon icon-home"> ThermoParser<img src="_static/tp-logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -55,8 +55,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-usage">Command Line Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#python-usage">Python Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#command-line-interface-cli">Command Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#python-interface">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#testing">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
@@ -71,7 +71,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">ThermoPlotter</a>
+          <a href="contents.html">ThermoParser</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -93,7 +93,7 @@
   <div class="section" id="tutorial-05-helper-functions">
 <h1>Tutorial-05: Helper Functions<a class="headerlink" href="#tutorial-05-helper-functions" title="Permalink to this headline">¶</a></h1>
 <img alt="Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`" src="_images/tutorial-05.png" />
-<p>ThermoPlotter contains a number of helper functions that may be useful
+<p>ThermoParser contains a number of helper functions that may be useful
 even when not using the core functionality. We will cover several of
 these here, however this particular example is also plottable via the
 CLI:</p>
@@ -218,7 +218,7 @@ CLI:</p>
 </td></tr></table></div>
 <div class="section" id="axes-line-20">
 <h2>Axes (line 20)<a class="headerlink" href="#axes-line-20" title="Permalink to this headline">¶</a></h2>
-<p>ThermoPlotter comes with two <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styles, <code class="docutils literal notranslate"><span class="pre">tp</span></code> and
+<p>ThermoParser comes with two <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styles, <code class="docutils literal notranslate"><span class="pre">tp</span></code> and
 <code class="docutils literal notranslate"><span class="pre">tp-large</span></code>, for small and large axes respectively, which are
 accessible any time using <code class="docutils literal notranslate"><span class="pre">plt.style.use</span></code>.</p>
 </div>
@@ -227,9 +227,9 @@ accessible any time using <code class="docutils literal notranslate"><span class
 <p><code class="docutils literal notranslate"><span class="pre">tp.data.utilities.resolve</span></code> resolves a data array by dependent
 properties. As arguments, it takes a data dictionary, an array of the
 names of the quantities to be resolved, and the dependent variable
-values. This can be used easily with data loaded through ThermoPlotter,
+values. This can be used easily with data loaded through ThermoParser,
 but with some minor alterations, almost any data can be resolved.</p>
-<p>Most ThermoPlotter data dictionaries come with a <code class="docutils literal notranslate"><span class="pre">meta</span></code>
+<p>Most ThermoParser data dictionaries come with a <code class="docutils literal notranslate"><span class="pre">meta</span></code>
 subdictionary, which contains metadata including units, array shapes
 and data source. For <code class="docutils literal notranslate"><span class="pre">resolve</span></code> to work, it needs a <code class="docutils literal notranslate"><span class="pre">dimensions</span></code>
 subdictionary in <code class="docutils literal notranslate"><span class="pre">meta</span></code>, which should contain an array with the same
@@ -239,7 +239,7 @@ directions, which can be either 3 or 6. For example,
 <code class="docutils literal notranslate"><span class="pre">adata['meta']['dimensions']['seebeck']</span> <span class="pre">==</span> <span class="pre">['temperature',</span> <span class="pre">'doping',</span> <span class="pre">3,</span> <span class="pre">3]</span></code>.
 The direction is represented by a 3x3 array. The other thing that is
 needed is for the dependent variables to also be in the dictionary.
-ThermoPlotter automatically loads dependent variables.</p>
+ThermoParser automatically loads dependent variables.</p>
 <p><code class="docutils literal notranslate"><span class="pre">resolve</span></code> does not interpolate, but rather rounds to the nearest data
 point, which it saves to <code class="docutils literal notranslate"><span class="pre">['meta']['variable_name']</span></code>, so you can be
 sure what the data is. This is also useful in setting legend labels, as
@@ -281,7 +281,7 @@ using the <code class="docutils literal notranslate"><span class="pre">labels</s
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Scanlon Materials Theory Group.</p>
+    <p>&#169; Copyright 2023, Scanlon Materials Theory Group.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
