@@ -19,7 +19,7 @@
 
 .. image:: https://travis-ci.com/SMTG-UCL/ThermoParser.svg?branch=master
     :alt: The travis-ci badge
-    :target: https://travis-ci.com/SMTG-UCL/ThermoParser
+    :target: https://app.travis-ci.com/SMTG-UCL/ThermoParser.svg?branch=master
 
 ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
