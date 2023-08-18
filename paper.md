@@ -105,6 +105,7 @@ The primary code base was largely written by KBS based on standalone scripts wri
 ME implemented functions to plot the density of phonon modes.
 DWD provided day-to-day supervision and guidance and DOS provided the initial idea and motivation for the code.
 The first draft of the manuscript was written by KBS and DWD with input from all co-authors.
+The code is currently maintained by KBS.
 
 # Conflicts of Interest
 
