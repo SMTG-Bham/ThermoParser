@@ -1,33 +1,33 @@
 .. image:: figures/tp-logo-header.png
-    :alt: The ThermoPlotter logo, which looks like "TP"
-    :target: https://smtg-ucl.github.io/ThermoPlotter/
+    :alt: The ThermoParser logo, which looks like "TP"
+    :target: https://smtg-ucl.github.io/ThermoParser/
     :align: center
 
 .. code-block::
 
      ________
     ///// \\\\
-    \________/_______________________________________________________________
-    |_____                            : ___                                  \
-    | |   |                           :|   \ |           |     |             /
-    | |   |__   __  |___  |_____   __ :|___/ |    ___  __|__ __|__  __  |__  \
-    | |   |  | /  \ |   \ |  |  | /  \:|     |   /   \   |     |   /  \ |  \ /
-    | |   |  | |__/ |     |  |  | |  |:|     |   |   |   |     |   |__/ |    \_____
-    | |   |  | \__  |     |  |  | \__/:|     \__ \___/   \__   \__ \__  |    :2.3.0\
-    |_________________________________:______________________________________:_____/
+    \________/________________________________________________________________
+    |_____                               : ___                                \
+    | |   |                              :|   \                               /
+    | |   |___   ___  |___  |_____   ___ :|___/  ___   |___   ___   ___  |___ \
+    | |   |   | /   \ |   \ |  |  | /   \:|     /   |  |   \ /     /   \ |   \/
+    | |   |   | |___/ |     |  |  | |   |:|     |   |  |     \___  |___/ |    \_____
+    | |   |   | \___  |     |  |  | \___/:|     \___|_ |         \ \___  |    :3.0.0\
+    |____________________________________:_______________________/____________:_____/
 
 
-.. image:: https://travis-ci.com/SMTG-UCL/ThermoPlotter.svg?branch=master
+.. image:: https://app.travis-ci.com/SMTG-UCL/ThermoParser.svg?branch=master
     :alt: The travis-ci badge
-    :target: https://travis-ci.com/SMTG-UCL/ThermoPlotter
+    :target: https://app.travis-ci.com/SMTG-UCL/ThermoParser
 
-ThermoPlotter is a toolkit used to simplify the analysis of data
+ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
 thermoelectrics, but also useful for anything pertaining to electronic
-and/ or phononic transport. ThermoPlotter is a Python library which
+and/ or phononic transport. ThermoParser is a Python library which
 contains functions for data retrieval, manipulation and plotting, which
 can be easily used with a little Python knowlege to generate a wide
-array of high-quality plots in only a few lines of code. ThermoPlotter
+array of high-quality plots in only a few lines of code. ThermoParser
 also contains a suite of command-line tools which can retrieve specific
 data, save derived properties and plot graphs in a single command.
 
@@ -35,22 +35,22 @@ Click on the image to go to the `gallery`_!
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://smtg-ucl.github.io/ThermoPlotter/gallery.html
+   :target: https://smtg-ucl.github.io/ThermoParser/gallery.html
 
-.. _gallery: https://smtg-ucl.github.io/ThermoPlotter/gallery.html
+.. _gallery: https://smtg-ucl.github.io/ThermoParser/gallery.html
 
 Installation
 ------------
 
-ThermoPlotter can easily be installed with git and pip:
+ThermoParser can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone https://github.com/SMTG-UCL/ThermoPlotter.git
-    cd ThermoPlotter
+    git clone https://github.com/SMTG-UCL/ThermoParser.git
+    cd ThermoParser
     pip install .
 
-After installing, you may want to copy ``ThermoPlotter/tprc.yaml`` to
+After installing, you may want to copy ``ThermoParser/tprc.yaml`` to
 ``~/.config/tprc.yaml``, if you want to set your own default axis
 labels, unit conversions, default style sheets (two are provided),
 other aesthetic alterations and more!
@@ -66,22 +66,26 @@ longer process is required:
 2. ``python3 -m pip install cython numpy``
 3. ``brew info hdf5`` to retrieve the path to your hdf5 install
 4. ``HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py``
-5. ``git clone https://github.com/SMTG-UCL/ThermoPlotter.git``
-6. ``cd ThermoPlotter``
+5. ``git clone https://github.com/SMTG-UCL/ThermoParser.git``
+6. ``cd ThermoParser``
 7. ``pip install --user -e .``
 
 Using conda may circumvent this process.
 
-Command Line Usage
-------------------
+Command Line Interface (CLI)
+----------------------------
 
-ThermoPlotter uses `click`_, which has an easily navigable structure
+ThermoParser uses `click`_, which has an easily navigable structure
 from the command-line, detailed in the `tutorials`_.
+The most frequently useful commands are included in the CLI for maximum
+ease, including the ``tp get`` functions, which verbosely retrieve data
+from files which are normally tiresome and error-prone to navigate; and
+most of the simplest plot-types available through the Python interface.
 
-Python Usage
-------------
+Python Interface
+----------------
 
-ThermoPlotter is designed to have four main stages:
+ThermoParser is designed to have four main stages:
 
 #. *Axes*:
      Pick an axis layout from ``tp.axes``.
@@ -92,19 +96,19 @@ ThermoPlotter is designed to have four main stages:
 #. *Save*:
      Use ``plt.savefig`` or equivalent to produce the figure.
 
-As ThermoPlotter is dependent on matplotlib, each stage can be
+As ThermoParser is dependent on matplotlib, each stage can be
 substituted with bespoke code, e.g. using ``matplotlib.pyplot.subplots``
 or ``matplotlib.axes.Axes.scatter``. These can still be supplemented
-with ThermoPlotter helper functions, such as default labels which the
+with ThermoParser helper functions, such as default labels which the
 user can set in ``tp.settings``, colourmap generators in
 ``tp.plot.colour`` or legend helpers such as ``tp.axes.legend.alphabetise``.
 
-The best way to get a feel for ThermoPlotter is to see it in action:
+The best way to get a feel for ThermoParser is to see it in action:
 Take a look at our  `examples`_ and `tutorials`_. Currently supported
 codes are:
 
-.. _examples: https://github.com/smtg-ucl/ThermoPlotter/tree/master/examples
-.. _tutorials: https://smtg-ucl.github.io/ThermoPlotter/tutorials.html
+.. _examples: https://github.com/smtg-ucl/ThermoParser/tree/master/examples
+.. _tutorials: https://smtg-ucl.github.io/ThermoParser/tutorials.html
 
 * Phononic properties:
 
@@ -152,10 +156,10 @@ appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
 appreciated. Documentation uses the `sphinx`_ package, and can be built from
 the ``docs`` directory with ``sphinx-build -b html src/ .``.
 
-.. _issue tracker: https://github.com/smtg-ucl/ThermoPlotter/issues
+.. _issue tracker: https://github.com/smtg-ucl/ThermoParser/issues
 .. _fork and pull: https://guides.github.com/activities/forking
-.. _documentation: https://smtg-ucl.github.io/ThermoPlotter/
-.. _tests: https://github.com/smtg-ucl/ThermoPlotter/tree/master/tests
+.. _documentation: https://smtg-ucl.github.io/ThermoParser/
+.. _tests: https://github.com/smtg-ucl/ThermoParser/tree/master/tests
 
 Testing
 -------
@@ -168,7 +172,7 @@ with ``python3 -m unittest``.
 Contributors
 ------------
 
-Many thanks to all those who contributed code or ideas to ThermoPlotter!
+Many thanks to all those who contributed code or ideas to ThermoParser!
 Roughly chronologically, they are so far:
 
 * Kieran B. Spooner
@@ -184,13 +188,13 @@ Roughly chronologically, they are so far:
 License
 -------
 
-ThermoPlotter is licensed under the GNU Affero General Public License v3
+ThermoParser is licensed under the GNU Affero General Public License v3
 (AGPLv3).
 
 Requirements
 ------------
 
-ThermoPlotter uses the following open-source packages:
+ThermoParser uses the following open-source packages:
 
 * `click <https://click.palletsprojects.com/en/8.0.x/>`_
 * `h5py <http://docs.h5py.org/>`_

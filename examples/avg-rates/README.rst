@@ -11,12 +11,13 @@ distribution, as they are when calculating the conductivity, thereby
 giving a representative image of the effect the scattering processes
 play in the material. This can be plotted at the command line with:
 
-.. codeblock::
+.. code-block::
+
    tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t 1000 -n -1e19 --location 2 --large -c red -c blue -c magenta
 
 If rates are included in the file but are very low, you may want to
 ``--exclude`` them; ``--exclude PIE`` may be particularly popular.
-While ThermoPlotter does not currently have python functions to plot
+While ThermoParser does not currently have python functions to plot
 line graphs, it does calculate the weighted rates and the ancillary
 functions should make this relatively straightforward:
 
@@ -33,7 +34,7 @@ graph matplotlib's normal ``plot`` function is used, and the axes,
 labels, ticks and legend are all sorted out by tp functions (lines 21,
 34-38. 39/40 and 42 respectively, see also `Tutorial-05`_).
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoPlotter/tutorial-05.html
+.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
 
 This graph can instead show weighted mean free paths, by adding the
 ``--mfp`` tag at the command line or changing ``q`` to equal

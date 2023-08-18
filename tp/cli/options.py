@@ -3,15 +3,11 @@
 Functions
 ---------
 
-    direction_option
-    
-    directions_option
+    direction_function
     
     doping_type_option
     
-    doping_option
-    
-    dopings_option
+    doping_function
     
     dos_function
     
@@ -34,44 +30,30 @@ Functions
     temperature_option
     
     verbose_option
-    
-    xy_limit_options
-    
-    c_limit_options
+
+    axes_limit_function
 """
 
 import click
 
-def direction_option(f):
-    """Option for singular option for anisotropic data."""
-
-    f = click.option('-d', '--direction',
-                     help='Direction for anisotropic data.',
-                     type=click.Choice(['a', 'b', 'c',
-                                        'x', 'y', 'z',
-                                        'average', 'avg',
-                                        'normal', 'norm'],
-                                       case_sensitive=False),
-                     default='avg',
-                     show_default=True)(f)
-
-    return f
-
-def directions_option(f):
-    """Option for multiple directions for anisotropic data."""
-
-    f = click.option('-d', '--direction',
-                     help='Direction(s) for anisotropic data.',
-                     multiple=True,
-                     type=click.Choice(['a', 'b', 'c',
-                                        'x', 'y', 'z',
-                                        'average', 'avg',
-                                        'normal', 'norm'],
-                                       case_sensitive=False),
-                     default=['avg'],
-                     show_default=True)(f)
-
-    return f
+def direction_function(multiple=False):
+    default = ['avg'] if multiple else 'avg'
+    def direction_option(f):
+        """Option for anisotropic data."""
+    
+        f = click.option('-d', '--direction',
+                         help='Direction(s) for anisotropic data.',
+                         type=click.Choice(['a', 'b', 'c',
+                                            'x', 'y', 'z',
+                                            'average', 'avg',
+                                            'normal', 'norm'],
+                                           case_sensitive=False),
+                         multiple=multiple,
+                         default=default,
+                         show_default=True)(f)
+    
+        return f
+    return direction_option
 
 def doping_type_option(f):
     """Option for doping type."""
@@ -84,28 +66,20 @@ def doping_type_option(f):
 
     return f
 
-def doping_option(f):
-    """Option for a doping concentration."""
-
-    f = click.option('-n', '--concentration', 'doping',
-                     help='Doping concentration (will be rounded).',
-                     default=1.e19,
-                     type=float,
-                     show_default=True)(f)
-
-    return f
-
-def dopings_option(f):
-    """Option for doping concentrations."""
-
-    f = click.option('-n', '--concentration', 'doping',
-                     help='Doping concentration(s) (will be rounded).',
-                     multiple=True,
-                     default=[1.e19],
-                     type=float,
-                     show_default=True)(f)
-
-    return f
+def doping_function(multiple=False):
+    default = [1e19] if multiple else 1e19
+    def doping_option(f):
+        """Option for doping concentration."""
+    
+        f = click.option('-n', '--concentration', 'doping',
+                         help='Doping concentration(s) (will be rounded).',
+                         multiple=multiple,
+                         default=default,
+                         type=float,
+                         show_default=True)(f)
+    
+        return f
+    return doping_option
 
 def dos_function(dosargs=['-c', '--colour']):
     if isinstance(dosargs, str):
@@ -323,32 +297,34 @@ def verbose_option(f):
 
     return f
 
-def xy_limit_options(f):
-    """Options for x and y axes limits."""
-
-    f = click.option('--xmin',
-                     help='Override minimum x-axis value.',
-                     type=float)(f)
-    f = click.option('--xmax',
-                     help='Override maximum x-axis value.',
-                     type=float)(f)
-    f = click.option('--ymin',
-                     help='Override minimum y-axis value.',
-                     type=float)(f)
-    f = click.option('--ymax',
-                     help='Override maximum y-axis value.',
-                     type=float)(f)
-
-    return f
-
-def c_limit_options(f):
-    """Options for colour axes limits."""
-
-    f = click.option('--cmin',
-                     help='Override minimum colour-axis value.',
-                     type=float)(f)
-    f = click.option('--cmax',
-                     help='Override maximum colour-axis value.',
-                     type=float)(f)
-
-    return f
+def axes_limit_function(multiple=False, c=False):
+    def axes_limit_options(f):
+        """Options for axes limits."""
+    
+        f = click.option('--xmin',
+                         help='Override minimum x.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--xmax',
+                         help='Override maximum x.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--ymin',
+                         help='Override minimum y.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--ymax',
+                         help='Override maximum y.',
+                         multiple=multiple,
+                         type=float)(f)
+        if c:
+            f = click.option('--cmin',
+                             help='Override minimum colour value.',
+                             multiple=multiple,
+                             type=float)(f)
+            f = click.option('--cmax',
+                             help='Override maximum colour value.',
+                             multiple=multiple,
+                             type=float)(f)
+        return f
+    return axes_limit_options

@@ -15,11 +15,12 @@ to add markers has been included, e.g. here you can see nanostructuring
 to 100 nanometers may reduce the lattice thermal conductivity by around
 40 %.
 
-.. _density of states: https://github.com/SMTG-UCL/ThermoPlotter/blob/master/examples/dos/
+.. _density of states: https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/dos/
 
 The right plot can be plotted at the command line with:
 
-.. codeblock::
+.. code-block::
+
    tp plot cumkappa ../data/zno/kappa-m404021.hdf5 --mfp --percent -d x -d y -c '#59c605' -c '#ffcf06' --nofill --xmarkers 1e-7 -l x -l y --location in
 
 And while the layering of the DoS plot is not yet supported at the

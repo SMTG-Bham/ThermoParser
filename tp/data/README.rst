@@ -4,7 +4,7 @@ Data handling modules.
 ``utilities.py``
 ----------------
 
-``utilities.py`` uses the metadata stored by ThermoPlotter to
+``utilities.py`` uses the metadata stored by ThermoParser to
 manipulate data.
 
 * ``tp.data.utilities.resolve`` breaks down data by dependent variable,
