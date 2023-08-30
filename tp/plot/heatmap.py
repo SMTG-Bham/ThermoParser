@@ -46,7 +46,9 @@ except FileNotFoundError:
 def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
                 xscale='linear', yscale='linear', cscale='linear', xmin=None,
                 xmax=None, ymin=None, ymax=None, cmin=None, cmax=None,
-                colour='viridis', undercolour=None, overcolour=None, **kwargs):
+                colour='viridis', undercolour=None, overcolour=None,
+                contours=None, contourcolours='black', contourkwargs=None,
+                **kwargs):
     """Adds a heatmap to a set of axes.
 
     Formats limits, parses extra colourmap options, makes sure data
@@ -101,6 +103,15 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         overcolour : str or array-like, optional
             colour for values over cmax. Default: None.
 
+        contours : int or float or array-like, optional
+            contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
@@ -233,6 +244,21 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     else:
         cbar = plt.colorbar(heat, ax=ax, extend=extend)
 
+    # contours
+    if contours is not None:
+        if contourkwargs == None:
+            contourkwargs = {}
+        if not isinstance(contours, (list, np.ndarray)):
+            contours = list(contours)
+        if not isinstance(contourcolours, (list, np.ndarray)):
+            contourcolours = list(contourcolours)
+        while len(contourcolours) < len(contours):
+            contourcolours += contourcolours
+        plt.contour(x[:-1], y[:-1], c, contours, colors=contourcolours,
+                    **contourkwargs)
+        for i, c in enumerate(contours):
+            cbar.ax.axhline(c, color=contourcolours[i], **contourkwargs)
+
     # axes formatting
     tp.plot.utilities.set_locators(ax, x=xscale, y=yscale)
     tp.plot.utilities.set_locators(cbar.ax, y=cscale)
@@ -244,7 +270,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
 def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
               kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
-              cmin=None, cmax=None, colour='viridis', **kwargs):
+              cmin=None, cmax=None, colour='viridis', contours=None,
+              contourcolours='black', contourkwargs=None, **kwargs):
     """Convenience wrapper for plotting power factor heatmaps.
 
     Calculates power factor, plots and formats labels etc.
@@ -287,6 +314,15 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
             hex or rgb (array) or a named colour recognised by
             matplotlib. Default: viridis.
 
+        contours : int or float or array-like, optional
+            PF contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the PF contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
@@ -329,7 +365,9 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
                        data['power_factor'], xinterp=xinterp, yinterp=yinterp,
                        kind=kind, yscale='log', xmin=xmin, xmax=xmax,
                        ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax,
-                       colour=colour, **kwargs)
+                       colour=colour, contours=contours,
+                       countourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -343,7 +381,9 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
 def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
                kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
                cmin=None, cmax=None, colour1='#800080', colour2='#FF8000',
-               midcolour='#FFFFFF', label1=None, label2=None, **kwargs):
+               midcolour='#FFFFFF', label1=None, label2=None,
+               contours=None, contourcolours='black', contourkwargs=None,
+               **kwargs):
     """Plots a difference of two power factors heatmap.
 
     Calculates power factor, plots and formats labels etc.
@@ -390,6 +430,15 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
         label(1,2) : str, optional
             labels for data(1,2) to go in a legend. Default: None.
 
+        contours : int or float or array-like, optional
+            PF contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the PF contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
@@ -467,7 +516,8 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
                        diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       **kwargs)
+                       contours=contours, contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -480,7 +530,8 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
 
 def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
               yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
-              ymax=None, cmin=None, cmax=None, colour='viridis', **kwargs):
+              ymax=None, cmin=None, cmax=None, colour='viridis', contours=None,
+              contourcolours='black', contourkwargs=None, **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
 
     Calculates ZT, plots and formats labels etc.
@@ -527,6 +578,15 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
             or rgb (array) or a named colour recognised by matplotlib.
             Default: viridis.
 
+        contours : int or float or array-like, optional
+            ZT contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the ZT contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
@@ -588,7 +648,8 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
                        data['zt'], xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       **kwargs)
+                       contours=contours, contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -603,7 +664,8 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
                xinterp=200, yinterp=200, kind='linear', xmin=None, xmax=None,
                ymin=None, ymax=None, cmin=None, cmax=None, colour1='#800080',
                colour2='#FF8000', midcolour='#FFFFFF', label1=None,
-               label2=None, **kwargs):
+               label2=None, contours=None, contourcolours='black',
+               contourkwargs=None, **kwargs):
     """Plots a difference of two ZTs heatmap.
 
     Calculates ZT, plots and formats labels etc.
@@ -654,6 +716,15 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
         label(1,2) : str, optional
             labels for data(1,2) to go in a legend. Default: None.
 
+        contours : int or float or array-like, optional
+            ZT contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the ZT contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
@@ -751,7 +822,8 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
                        diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       **kwargs)
+                       contours=contours, contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -765,7 +837,8 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                      yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
-                     negativecolour='grey', **kwargs):
+                     negativecolour='grey', contours=None,
+                     contourcolours='black', contourkwargs=None, **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels
@@ -813,6 +886,15 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
         negativecolour : str or array-like, optional
             colour for values under cmin. Default: grey.
 
+        contours : int or float or array-like, optional
+            kappa contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the kappa contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
             keyword arguments passed to matplotlib.pyplot.pcolormesh.
             Defaults are defined below, which are overridden by those in
@@ -854,7 +936,9 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                        data[ltc], xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       undercolour=negativecolour, **kwargs)
+                       undercolour=negativecolour, contours=contours,
+                       contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
