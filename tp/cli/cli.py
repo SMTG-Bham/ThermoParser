@@ -159,7 +159,7 @@ def get():
               show_default=True)
 @click.option('-s', '--scattering',
               help='Scattering mechanism.',
-              type=click.Choice(['ADP', 'IMP', 'PIE', 'POP', 'total'],
+              type=click.Choice(['ADP', 'IMP', 'PIE', 'POP', 'Total'],
                                 case_sensitive=False),
               default='total',
               show_default=True)
@@ -272,7 +272,7 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
 @get.command('occupation')
 @inputs_function('amset_mesh_file', nargs=1)
 @doping_type_option
-@doping_option
+@doping_function()
 @temperature_option
 @click.option('--spin',
               help='Spin direction.',
