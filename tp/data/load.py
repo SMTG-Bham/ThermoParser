@@ -326,6 +326,8 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 spin2 = 'up'
             elif 'energies_down' in f:
                 spin2 = 'down'
+        else:
+            spin2 = spin
 
         data = {'meta': {'doping_type':       doping,
                          'electronic_source': 'amset',
