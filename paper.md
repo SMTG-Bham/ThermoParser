@@ -26,7 +26,7 @@ authors:
     orchid: 0000-0001-9174-8601
     affiliation: "1, 2, 3"
 affiliations:
-- name: School of Chemistry, University of Birmingham, Birmingham B15 2TT, United Kingdom
+ - name: School of Chemistry, University of Birmingham, Birmingham B15 2TT, United Kingdom
    index: 1
  - name: Department of Chemistry, University College London, 20 Gordon Street, London WC1H 0AJ, United Kingdom
    index: 2
