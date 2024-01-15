@@ -15,21 +15,23 @@ tags:
 authors:
   - name: Kieran B. Spooner
     orchid: 0000-0002-4078-3148
-    affiliation: "1, 2"
+    affiliation: "1, 2, 3"
   - name: Maud Einhorn
     orchid: 0000-0003-0371-0262
-    affiliation: "1, 2"
+    affiliation: "2, 3"
   - name: Daniel W. Davies
     orchid: 0000-0003-4094-5992
-    affiliation: "1, 2"
+    affiliation: "2, 3"
   - name: David O. Scanlon
     orchid: 0000-0001-9174-8601
-    affiliation: "1, 2"
+    affiliation: "1, 2, 3"
 affiliations:
- - name: Department of Chemistry, University College London, 20 Gordon Street, London WC1H 0AJ, United Kingdom
+- name: School of Chemistry, University of Birmingham, Birmingham B15 2TT, United Kingdom
    index: 1
- - name: Thomas Young Centre, University College London, Gower Street, London WC1E 6BT, United Kingdom
+ - name: Department of Chemistry, University College London, 20 Gordon Street, London WC1H 0AJ, United Kingdom
    index: 2
+ - name: Thomas Young Centre, University College London, Gower Street, London WC1E 6BT, United Kingdom
+   index: 3
 date: 13 July 2023
 bibliography: ref.bib
 ---
@@ -115,6 +117,7 @@ There are no conflicts to declare.
 
 KBS, DWD and DOS acknowledge support from the European Research Council (grant 758345).
 This work made use of the ARCHER2 UK National Supercomputing Service via the Materials Chemistry Consortium, which is funded by EPSRC (EP/L000202), and resources made available via the UK Materials and Molecular Modelling Hub, which is partially funded by EPSRC (EP/P020194/1).
+K.B.S and D.O.S acknowledge the University of Birmingham’s BlueBEAR HPC service (http://www.birmingham.ac.uk/bear); the Baskerville Tier 2 HPC service (https://www.baskerville.ac.uk/), which was funded by the EPSRC and UKRI through the World Class Labs scheme (EP/T022221/1) and the Digital Research Infrastructure programme (EP/W032244/1) and is operated by Advanced Research Computing at the University of Birmingham; and the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick, which is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
 We would like to acknowledge contributions of ideas and time from Katarina Brlec, Bonan Zhu, Seán R. Kavanagh, Warda Rahim, Joe Willis, Luisa Herring--Rodriguez and Sabrine Hachmioune.
 
 # References
