@@ -32,7 +32,7 @@ affiliations:
    index: 2
  - name: Thomas Young Centre, University College London, Gower Street, London WC1E 6BT, United Kingdom
    index: 3
-date: 13 July 2023
+date: 12 February 2024
 bibliography: ref.bib
 ---
 
@@ -43,7 +43,7 @@ With the growing computational capacity and development of several codes to calc
 Thermal transport packages include Phonopy [@Togo2015a], Phono3py [@Togo2015], ShengBTE/ almaBTE [@Li2014], ALAMODE [@Tadano2014], TDEP [@Hellman2011] and HiPhive [@Eriksson2019]; and electronic transport packages include BoltzTraP(2) [@Madsen2006;@Madsen2018], EPW [@Noffsinger2010], EPA [@Samsonidze2018], EPIC STAR [@Deng2020], AMSET [@Ganose2021], Perturbo [@Zhou2021], TOSSPB [@Poehls2022] and ElecTra [@Graziosi2023].
 While separate packages are required for such different calculations, this makes data analysis complex, needing to load in different file formats, account for different data arrangements (e.g. array shapes), and convert to consistent units, even before one begins analysing anything.
 ThermoParser deals with these time-consuming and error-prone problems by loading data from multiple codes into a consistent data format with informative metadata, and facilitates the post-processing of thermoelectric properties by using this to accurately calculate and visualise them through an easy-to-use command-line interface (CLI) and a fully customisable Python package.
-Some of its utility can be seen by its use in the literature [@Spooner2020;@Einhorn2020;@Kavanagh2021;@Spooner2021;@Brlec2022;@HerringRodriguez2023].
+Some of its utility can be seen by its use in the literature [@Spooner2020;@Einhorn2020;@Kavanagh2021;@Spooner2021;@Brlec2022;@HerringRodriguez2023;@Willis2023;@Han2024].
 
 # Statement of Need
 
