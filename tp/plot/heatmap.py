@@ -46,7 +46,9 @@ except FileNotFoundError:
 def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
                 xscale='linear', yscale='linear', cscale='linear', xmin=None,
                 xmax=None, ymin=None, ymax=None, cmin=None, cmax=None,
-                colour='viridis', undercolour=None, overcolour=None, **kwargs):
+                colour='viridis', undercolour=None, overcolour=None,
+                discrete=False, levels=None, contours=None,
+                contourcolours='black', contourkwargs=None, **kwargs):
     """Adds a heatmap to a set of axes.
 
     Formats limits, parses extra colourmap options, makes sure data
@@ -96,17 +98,33 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             with mid and min and/or max keys. Colour format must be
             hex or rgb (array) or a named colour recognised by
             matplotlib. Default: Blues.
+        discrete : bool, optional
+            use colour bands rather than a continuously shifting colour
+            sequence. Default: False.
+        levels : int or array-like, optional
+            sets levels for discrete plots. Lists directly specify the
+            contour levels while integers specify the maximum-1 number
+            of "nice" levels to plot. Default: None.
         undercolour : str or array-like, optional
             colour for values under cmin. Default: None.
         overcolour : str or array-like, optional
             colour for values over cmax. Default: None.
 
+        contours : int or float or array-like, optional
+            contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
-            keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
+            keyword arguments passed to matplotlib.pyplot.pcolormesh or
+            matplotlib.pyplot.contourf. Defaults are defined below,
+            which are overridden by those in ``~/.config/tprc.yaml``,
+            both of which are overridden by arguments passed to this
+            function. Defaults:
 
                 rasterized: True
 
@@ -225,13 +243,64 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             y.append(y[-1] ** 2 / y[-2])
 
     # plotting
-    heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
+    if discrete:
+        kwargs.pop('rasterized')
+        if levels is None or levels == ():
+            heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
+                               **kwargs)
+        else:
+            if isinstance(levels, (list, np.ndarray, tuple)) and len(levels) == 1:
+                levels = int(levels[0])
+            elif isinstance(levels, float):
+                raise TypeError('levels must be an int or array-like, not float')
+            if levels is not None and levels != ():
+                heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
+                                   levels=levels, **kwargs)
+    else:
+        heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
     fig = ax.get_figure()
     if 'dos' in fig.__dict__ and fig.__dict__['dos']:
         # place colourbar outside dos
         cbar = plt.colorbar(heat, extend=extend)
     else:
         cbar = plt.colorbar(heat, ax=ax, extend=extend)
+
+    # contours
+    if contours is not None and contours != ():
+        if contourkwargs == None:
+            contourkwargs = {}
+        if not isinstance(contours, (list, np.ndarray)):
+            contours = list(contours)
+        if not isinstance(contourcolours, (list, np.ndarray)):
+            contourcolours = list(contourcolours)
+        if len(contours) > 1:
+            ctnorm = [(ct-np.amin(contours))/
+                      (np.amax(contours)-np.amin(contours))
+                       for ct in contours]
+        else:
+            ctnorm = 0
+        cmap = None
+        try:
+            cmap = contourcolours
+            contourcolours = mpl.cm.get_cmap(contourcolours)(ctnorm)
+            plt.contour(x[:-1], y[:-1], c, contours, cmap=cmap,
+                        **contourkwargs)
+        except ValueError:
+            cmap = None
+            if  isinstance(contourcolours, mpl.colors.ListedColormap):
+                cmap = contourcolours
+                contourcolours = contourcolours(ctnorm)
+                plt.contour(x[:-1], y[:-1], c, contours, cmap=cmap,
+                            **contourkwargs)
+            elif not isinstance(contourcolours, (list, np.ndarray)):
+                contourcolours = [contourcolours]
+            while len(contourcolours) < len(contours):
+                contourcolours += contourcolours
+        if cmap is None:
+            plt.contour(x[:-1], y[:-1], c, contours, colors=contourcolours,
+                        **contourkwargs)
+        for i, c in enumerate(contours):
+            cbar.ax.axhline(c, color=contourcolours[i], **contourkwargs)
 
     # axes formatting
     tp.plot.utilities.set_locators(ax, x=xscale, y=yscale)
@@ -244,7 +313,9 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
 
 def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
               kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
-              cmin=None, cmax=None, colour='viridis', **kwargs):
+              cmin=None, cmax=None, colour='viridis', discrete=False,
+              levels=None, contours=None, contourcolours='black',
+              contourkwargs=None, **kwargs):
     """Convenience wrapper for plotting power factor heatmaps.
 
     Calculates power factor, plots and formats labels etc.
@@ -286,13 +357,29 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
             RGB colours to generate a colour map. Colour format must be
             hex or rgb (array) or a named colour recognised by
             matplotlib. Default: viridis.
+        discrete : bool, optional
+            use colour bands rather than a continuously shifting colour
+            sequence. Default: False.
+        levels : int or array-like, optional
+            sets levels for discrete plots. Lists directly specify the
+            contour levels while integers specify the maximum-1 number
+            of "nice" levels to plot. Default: None.
 
+        contours : int or float or array-like, optional
+            PF contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the PF contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
-            keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
+            keyword arguments passed to matplotlib.pyplot.pcolormesh or
+            matplotlib.pyplot.contourf. Defaults are defined below,
+            which are overridden by those in ``~/.config/tprc.yaml``,
+            both of which are overridden by arguments passed to this
+            function. Defaults:
 
                 rasterized: True
 
@@ -329,7 +416,9 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
                        data['power_factor'], xinterp=xinterp, yinterp=yinterp,
                        kind=kind, yscale='log', xmin=xmin, xmax=xmax,
                        ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax,
-                       colour=colour, **kwargs)
+                       colour=colour, discrete=discrete, levels=levels,
+                       contours=contours, countourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -343,7 +432,9 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
 def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
                kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
                cmin=None, cmax=None, colour1='#800080', colour2='#FF8000',
-               midcolour='#FFFFFF', label1=None, label2=None, **kwargs):
+               midcolour='#FFFFFF', label1=None, label2=None, discrete=False,
+               levels=None, contours=None, contourcolours='black',
+               contourkwargs=None, **kwargs):
     """Plots a difference of two power factors heatmap.
 
     Calculates power factor, plots and formats labels etc.
@@ -389,13 +480,29 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
             colour at 0 difference. Default: #FFFFFF.
         label(1,2) : str, optional
             labels for data(1,2) to go in a legend. Default: None.
+        discrete : bool, optional
+            use colour bands rather than a continuously shifting colour
+            sequence. Default: False.
+        levels : int or array-like, optional
+            sets levels for discrete plots. Lists directly specify the
+            contour levels while integers specify the maximum-1 number
+            of "nice" levels to plot. Default: None.
 
+        contours : int or float or array-like, optional
+            PF contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the PF contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
-            keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
+            keyword arguments passed to matplotlib.pyplot.pcolormesh or
+            matplotlib.pyplot.contourf. Defaults are defined below,
+            which are overridden by those in ``~/.config/tprc.yaml``,
+            both of which are overridden by arguments passed to this
+            function. Defaults:
 
                 rasterized: True
 
@@ -467,7 +574,9 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
                        diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       **kwargs)
+                       discrete=discrete, levels=levels, contours=contours,
+                       contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -480,7 +589,9 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
 
 def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
               yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
-              ymax=None, cmin=None, cmax=None, colour='viridis', **kwargs):
+              ymax=None, cmin=None, cmax=None, colour='viridis',
+              discrete=False, levels=None, contours=None,
+              contourcolours='black', contourkwargs=None, **kwargs):
     """Convenience wrapper for plotting ZT heatmaps.
 
     Calculates ZT, plots and formats labels etc.
@@ -526,13 +637,29 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
             colours to generate a colour map. Colour format must be hex
             or rgb (array) or a named colour recognised by matplotlib.
             Default: viridis.
+        discrete : bool, optional
+            use colour bands rather than a continuously shifting colour
+            sequence. Default: False.
+        levels : int or array-like, optional
+            sets levels for discrete plots. Lists directly specify the
+            contour levels while integers specify the maximum-1 number
+            of "nice" levels to plot. Default: None.
 
+        contours : int or float or array-like, optional
+            ZT contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the ZT contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
-            keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
+            keyword arguments passed to matplotlib.pyplot.pcolormesh or
+            matplotlib.pyplot.contourf. Defaults are defined below,
+            which are overridden by those in ``~/.config/tprc.yaml``,
+            both of which are overridden by arguments passed to this
+            function. Defaults:
 
                 rasterized: True
 
@@ -588,7 +715,9 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
                        data['zt'], xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       **kwargs)
+                       discrete=discrete, levels=levels, contours=contours,
+                       contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -603,7 +732,8 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
                xinterp=200, yinterp=200, kind='linear', xmin=None, xmax=None,
                ymin=None, ymax=None, cmin=None, cmax=None, colour1='#800080',
                colour2='#FF8000', midcolour='#FFFFFF', label1=None,
-               label2=None, **kwargs):
+               label2=None, discrete=False, levels=None, contours=None,
+               contourcolours='black', contourkwargs=None, **kwargs):
     """Plots a difference of two ZTs heatmap.
 
     Calculates ZT, plots and formats labels etc.
@@ -653,13 +783,29 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
             colour at 0 difference. Default: #FFFFFF.
         label(1,2) : str, optional
             labels for data(1,2) to go in a legend. Default: None.
+        discrete : bool, optional
+            use colour bands rather than a continuously shifting colour
+            sequence. Default: False.
+        levels : int or array-like, optional
+            sets levels for discrete plots. Lists directly specify the
+            contour levels while integers specify the maximum-1 number
+            of "nice" levels to plot. Default: None.
 
+        contours : int or float or array-like, optional
+            ZT contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the ZT contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
-            keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
+            keyword arguments passed to matplotlib.pyplot.pcolormesh or
+            matplotlib.pyplot.contourf. Defaults are defined below,
+            which are overridden by those in ``~/.config/tprc.yaml``,
+            both of which are overridden by arguments passed to this
+            function. Defaults:
 
                 rasterized: True
 
@@ -751,7 +897,9 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
                        diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       **kwargs)
+                       discrete=discrete, levels=levels, contours=contours,
+                       contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 
@@ -765,7 +913,9 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                      yinterp=200, kind='linear', xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
-                     negativecolour='grey', **kwargs):
+                     negativecolour='grey', discrete=False, levels=None,
+                     contours=None, contourcolours='black', contourkwargs=None,
+                     **kwargs):
     """Plots a heatmap of k_latt required for a target ZT
 
     Calculates lattice thermal conductivity, plots and formats labels
@@ -812,13 +962,29 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
             matplotlib. Default: viridis.
         negativecolour : str or array-like, optional
             colour for values under cmin. Default: grey.
+        discrete : bool, optional
+            use colour bands rather than a continuously shifting colour
+            sequence. Default: False.
+        levels : int or array-like, optional
+            sets levels for discrete plots. Lists directly specify the
+            contour levels while integers specify the maximum-1 number
+            of "nice" levels to plot. Default: None.
 
+        contours : int or float or array-like, optional
+            kappa contours to plot. Default: None.
+        contourcolours : string or array-like, optional
+            colours of the kappa contours. If fewer are supplied, they
+            repeat. Default: black.
+
+        contourkwargs : dict, optional
+            keyword arguments passed to matplotlib.pyplot.contour.
+            Default: None
         kwargs
-            keyword arguments passed to matplotlib.pyplot.pcolormesh.
-            Defaults are defined below, which are overridden by those in
-            ``~/.config/tprc.yaml``, both of which are overridden by
-            arguments passed to this function.
-            Defaults:
+            keyword arguments passed to matplotlib.pyplot.pcolormesh or
+            matplotlib.pyplot.contourf. Defaults are defined below,
+            which are overridden by those in ``~/.config/tprc.yaml``,
+            both of which are overridden by arguments passed to this
+            function. Defaults:
 
                 rasterized: True
 
@@ -854,7 +1020,10 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
                        data[ltc], xinterp=xinterp, yinterp=yinterp, kind=kind,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
-                       undercolour=negativecolour, **kwargs)
+                       undercolour=negativecolour, discrete=discrete,
+                       levels=levels, contours=contours,
+                       contourcolours=contourcolours,
+                       contourkwargs=contourkwargs, **kwargs)
 
     # axes formatting
 

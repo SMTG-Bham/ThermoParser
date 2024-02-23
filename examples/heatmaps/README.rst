@@ -85,3 +85,7 @@ argument must be used in ``add_legend`` to enable manual manipulation
 of the handles and labels. ``add_ztdiff`` and its power factor
 equivalent, ``add_pfdiff``, also make sure the colour scale is centred
 on zero (i.e. where both are equal).
+
+Some users may find adding contours with the ``contours`` argument or making
+the colour scale discrete with the ``discrete`` argument more legible or
+informative.

@@ -956,16 +956,17 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
         elif ymax is not None:
             ax.set_ylim(top=ymax)
 
-    if ymin is not None:
-        if ymax is not None:
+    else:
+        if ymin is not None:
+            if ymax is not None:
+                for a in ax:
+                    a.set_ylim(ymin, ymax)
+            else:
+                for a in ax:
+                    a.set_ylim(bottom=ymin)
+        elif ymax is not None:
             for a in ax:
-                a.set_ylim(ymin, ymax)
-        else:
-            for a in ax:
-                a.set_ylim(bottom=ymin)
-    elif ymax is not None:
-        for a in ax:
-            a.set_ylim(top=ymax)
+                a.set_ylim(top=ymax)
 
     if save:
         for ext in extension:
@@ -1434,12 +1435,14 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
               help='Colour for values below --cmin.',
               default='grey',
               show_default=True)
+@heatmap_options
 
 @axes_limit_function(c=True)
 @plot_io_function('tp-kappa-target')
 
 def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
-                 negativecolour, xmin, xmax, ymin, ymax, cmin, cmax, style,
+                 negativecolour, discrete, levels, contours, contourcolours,
+                 xmin, xmax, ymin, ymax, cmin, cmax, style,
                  large, save, show, extension, output):
     """Plots lattice thermal conductivity to reach a target ZT.
 
@@ -1466,6 +1469,9 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
                                             xinterp=interpolate,
                                             yinterp=interpolate,
                                             kind=kind, colour=colour,
+                                            discrete=discrete, levels=levels,
+                                            contours=contours,
+                                            contourcolours=contourcolours,
                                             negativecolour=negativecolour,
                                             xmin=xmin, xmax=xmax, ymin=ymin,
                                             ymax=ymax, cmin=cmin, cmax=cmax)
@@ -2219,11 +2225,13 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
               multiple=True,
               default=['viridis'],
               show_default=True)
+@heatmap_options
 
 @axes_limit_function(c=True)
 @plot_io_function('tp-ztmap')
 
-def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour,
+def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind,
+          colour, discrete, levels, contours, contourcolours,
           xmin, xmax, ymin, ymax, cmin, cmax, style, large, save, show,
           extension, output):
     """Plots ZT or PF against temperature and carrier concentration."""
@@ -2242,7 +2250,9 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour
     if pf:
         tp.plot.heatmap.add_pfmap(ax, edata, direction=direction,
                                   xinterp=interpolate, yinterp=interpolate,
-                                  kind=kind, colour=colour, xmin=xmin,
+                                  kind=kind, colour=colour, discrete=discrete,
+                                  levels=levels, contours=contours,
+                                  contourcolours=contourcolours, xmin=xmin,
                                   xmax=xmax, ymin=ymin, ymax=ymax, cmin=cmin,
                                   cmax=cmax)
     else:
@@ -2253,7 +2263,9 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour
 
         tp.plot.heatmap.add_ztmap(ax, edata, kdata=kdata, direction=direction,
                                   xinterp=interpolate, yinterp=interpolate,
-                                  kind=kind, colour=colour, xmin=xmin,
+                                  kind=kind, colour=colour, discrete=discrete,
+                                  levels=levels, contours=contours,
+                                  contourcolours=contourcolours, xmin=xmin,
                                   xmax=xmax, ymin=ymin, ymax=ymax, cmin=cmin,
                                   cmax=cmax)
 
@@ -2292,15 +2304,16 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind, colour
                    'colour recognised by matplotlib.',
               default='white',
               show_default=True)
+@heatmap_options
 
 @axes_limit_function(c=True)
 @legend_function()
 @plot_io_function('tp-ztdiff')
 
 def ztdiff(transport_files, pf, kappa, direction, dtype, interpolate, kind,
-           colour, midcolour, xmin, xmax, ymin, ymax, cmin, cmax, legend,
-           label, legend_title, location, style, large, save, show, extension,
-           output):
+           colour, midcolour, discrete, levels, contours, contourcolours,
+           xmin, xmax, ymin, ymax, cmin, cmax, legend, label, legend_title,
+           location, style, large, save, show, extension, output):
     """Plots ZT or PF difference against temperature and carrier concentration.
     
     Requires two input datasets. --kappa and --colour take exactly two values
@@ -2328,7 +2341,9 @@ def ztdiff(transport_files, pf, kappa, direction, dtype, interpolate, kind,
         _, h, l = tp.plot.heatmap.add_pfdiff(ax, *edata, direction=direction,
                    xinterp=interpolate, yinterp=interpolate, kind=kind,
                    colour1=colour[0], colour2=colour[1], midcolour=midcolour,
-                   label1=label[0], label2=label[1], xmin=xmin, xmax=xmax,
+                   label1=label[0], label2=label[1], discrete=discrete,
+                   levels=levels, contours=contours,
+                   contourcolours=contourcolours, xmin=xmin, xmax=xmax,
                    ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
     else:
         kdata = []
@@ -2343,12 +2358,14 @@ def ztdiff(transport_files, pf, kappa, direction, dtype, interpolate, kind,
                 except OSError:
                     raise Exception(
                                     "--kappa must be valid filepaths or floats.")
-        _, h, l = tp.plot.heatmap.add_ztdiff(ax, edata[0], edata[1], kdata1=kdata[0],
-                   kdata2=kdata[1], direction=direction, xinterp=interpolate,
-                   yinterp=interpolate, kind=kind, colour1=colour[0],
-                   colour2=colour[1], midcolour=midcolour, label1=label[0],
-                   label2=label[1], xmin=xmin, xmax=xmax, ymin=ymin,
-                   ymax=ymax, cmin=cmin, cmax=cmax)
+        _, h, l = tp.plot.heatmap.add_ztdiff(ax, edata[0], edata[1],
+                   kdata1=kdata[0], kdata2=kdata[1], direction=direction,
+                   xinterp=interpolate, yinterp=interpolate, kind=kind,
+                   colour1=colour[0], colour2=colour[1], midcolour=midcolour,
+                   label1=label[0], label2=label[1], discrete=discrete,
+                   levels=levels, contours=contours,
+                   contourcolours=contourcolours, xmin=xmin, xmax=xmax,
+                   ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax)
 
     if legend and label != [None, None]:
         if location is None:
