@@ -33,7 +33,7 @@ dictionaries like the locators. The aliases are listed as:
 
 If you add unit conversions, remember to update the units and labels
 too! An example has been provided for converting from
-S m\ :sup:`-1` to S cm\ :sup:`-1` `here <https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/06-package-customisation/tprc.yaml>`_.
+S m\ :sup:`-1` to S cm\ :sup:`-1` `here <https://github.com/smtg-bham/ThermoParser/blob/master/examples/06-package-customisation/tprc.yaml>`_.
 There are six labels dictionaries. ``long_``, ``medium_`` and
 ``short_labels`` contain the actual labels of those lengths, while
 ``labels``, ``inverted_labels`` and ``large_labels`` point to which of

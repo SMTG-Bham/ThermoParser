@@ -54,7 +54,7 @@ units.
 .. _AMSET: <https://hackingmaterials.lbl.gov/amset/>
 .. _Phono3py: <https://phonopy.github.io/phono3py/hdf5_howto.html#kappa-hdf5-file>
 .. _Phonopy: <https://phonopy.github.io/phonopy/>
-.. _sumo: <https://github.com/SMTG-UCL/sumo>
+.. _sumo: <https://github.com/smtg-bham/sumo>
 
 ----------
 ``run.py``

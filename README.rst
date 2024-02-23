@@ -1,6 +1,6 @@
 .. image:: figures/tp-logo-header.png
     :alt: The ThermoParser logo, which looks like "TP"
-    :target: https://smtg-ucl.github.io/ThermoParser/
+    :target: https://smtg-bham.github.io/ThermoParser/
     :align: center
 
 .. code-block::
@@ -17,9 +17,9 @@
     |____________________________________:_______________________/____________:_____/
 
 
-.. image:: https://app.travis-ci.com/SMTG-UCL/ThermoParser.svg?branch=master
+.. image:: https://travis-ci.com/smtg-bham/ThermoParser.svg?branch=master
     :alt: The travis-ci badge
-    :target: https://app.travis-ci.com/SMTG-UCL/ThermoParser
+    :target: https://travis-ci.com/smtg-bham/ThermoParser
 
 ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
@@ -35,9 +35,9 @@ Click on the image to go to the `gallery`_!
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://smtg-ucl.github.io/ThermoParser/gallery.html
+   :target: https://smtg-bham.github.io/ThermoParser/gallery.html
 
-.. _gallery: https://smtg-ucl.github.io/ThermoParser/gallery.html
+.. _gallery: https://smtg-bham.github.io/ThermoParser/gallery.html
 
 Installation
 ------------
@@ -46,7 +46,7 @@ ThermoParser can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone https://github.com/SMTG-UCL/ThermoParser.git
+    git clone https://github.com/smtg-bham/ThermoParser.git
     cd ThermoParser
     pip install .
 
@@ -66,7 +66,7 @@ longer process is required:
 2. ``python3 -m pip install cython numpy``
 3. ``brew info hdf5`` to retrieve the path to your hdf5 install
 4. ``HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py``
-5. ``git clone https://github.com/SMTG-UCL/ThermoParser.git``
+5. ``git clone https://github.com/smtg-bham/ThermoParser.git``
 6. ``cd ThermoParser``
 7. ``pip install --user -e .``
 
@@ -107,8 +107,8 @@ The best way to get a feel for ThermoParser is to see it in action:
 Take a look at our  `examples`_ and `tutorials`_. Currently supported
 codes are:
 
-.. _examples: https://github.com/smtg-ucl/ThermoParser/tree/master/examples
-.. _tutorials: https://smtg-ucl.github.io/ThermoParser/tutorials.html
+.. _examples: https://github.com/smtg-bham/ThermoParser/tree/master/examples
+.. _tutorials: https://smtg-bham.github.io/ThermoParser/tutorials.html
 
 * Phononic properties:
 
@@ -156,10 +156,10 @@ appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
 appreciated. Documentation uses the `sphinx`_ package, and can be built from
 the ``docs`` directory with ``sphinx-build -b html src/ .``.
 
-.. _issue tracker: https://github.com/smtg-ucl/ThermoParser/issues
+.. _issue tracker: https://github.com/smtg-bham/ThermoParser/issues
 .. _fork and pull: https://guides.github.com/activities/forking
-.. _documentation: https://smtg-ucl.github.io/ThermoParser/
-.. _tests: https://github.com/smtg-ucl/ThermoParser/tree/master/tests
+.. _documentation: https://smtg-bham.github.io/ThermoParser/
+.. _tests: https://github.com/smtg-bham/ThermoParser/tree/master/tests
 
 Testing
 -------

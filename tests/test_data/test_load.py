@@ -132,6 +132,8 @@ class AmsetMeshTest(unittest.TestCase):
             f['ir_kpoints']                       = [[1, 2, 3]]
             f['scattering_rates_up'][0,0,1,0,0]   = 1
             f['scattering_rates_down'][0,0,1,0,0] = 3
+            f['energies_up']                      = np.zeros((1, 2, 2, 3, 1))
+            f['energies_down']                    = np.zeros((1, 2, 2, 3, 1))
 
         data = load.amset_mesh('test.hdf5', 'scattering_rates', spin='avg')
         for q2 in ['scattering_rates', 'temperature', 'doping', 'meta']:

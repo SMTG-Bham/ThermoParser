@@ -2,11 +2,11 @@
 
 __name__ =       'ThermoParser'
 __author__ =     'Kieran B. Spooner'
-__copyright__ =  'Copyright Scanlon Materials Theory Group (2023)'
+__copyright__ =  'Copyright Scanlon Materials Theory Group (2024)'
 __version__ =    '3.0.0'
 __maintainer__ = 'Kieran B. Spooner'
-__email__ =      'kieran.spooner.14@ucl.ac.uk'
-__date__ =       'August 16th 2023'
+__email__ =      'k.b.spooner@bham.ac.uk'
+__date__ =       'February 23rd 2024'
 
 import os
 import setuptools
@@ -45,7 +45,7 @@ setuptools.setup(
     description='streamlined analysis of thermoelectric properties',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://smtg-ucl.github.io/ThermoParser/',
+    url='https://smtg-bham.github.io/ThermoParser/',
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
