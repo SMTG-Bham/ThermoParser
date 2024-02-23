@@ -34,7 +34,7 @@ graph matplotlib's normal ``plot`` function is used, and the axes,
 labels, ticks and legend are all sorted out by tp functions (lines 21,
 34-38. 39/40 and 42 respectively, see also `Tutorial-05`_).
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
+.. _Tutorial-05: https://smtg-bham.github.io/ThermoParser/tutorial-05.html
 
 This graph can instead show weighted mean free paths, by adding the
 ``--mfp`` tag at the command line or changing ``q`` to equal
