@@ -77,5 +77,5 @@ midpoint you specify, and ``uniform`` calculates the midpoint position
 based on the relative compositions of the colours, which is used for
 heatmaps.
 
-.. _Tutorial-01: https://smtg-ucl.github.io/ThermoParser/tutorial-01.html
-.. _colourmap generators: https://smtg-ucl.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour
+.. _Tutorial-01: https://smtg-bham.github.io/ThermoParser/tutorial-01.html
+.. _colourmap generators: https://smtg-bham.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour

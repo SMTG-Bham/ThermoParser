@@ -6,7 +6,7 @@ kfile = '../data/basno3/kappa-m363636.hdf5'
 # <ignore>
 from os import path
 if not path.isfile(kfile) or (path.getsize(kfile) < 1024*1024*100):
-    raise Exception('File not found, please use get-data.sh')
+    raise Exception('File not found, please use get-data.sh in the folder above.')
 # </ignore>
 
 direction = 'avg'

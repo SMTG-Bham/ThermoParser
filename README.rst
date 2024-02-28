@@ -1,6 +1,6 @@
 .. image:: figures/tp-logo-header.png
     :alt: The ThermoParser logo, which looks like "TP"
-    :target: https://smtg-ucl.github.io/ThermoParser/
+    :target: https://smtg-bham.github.io/ThermoParser/
     :align: center
 
 .. code-block::
@@ -35,7 +35,7 @@ Click on the image to go to the `gallery`_!
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://smtg-ucl.github.io/ThermoParser/gallery.html
+   :target: https://smtg-bham.github.io/ThermoParser/gallery.html
 
 .. _gallery: https://smtg-bham.github.io/ThermoParser/gallery.html
 

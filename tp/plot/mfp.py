@@ -183,7 +183,7 @@ def add_cum_kappa(ax, data, kmin=1, temperature=300, direction='avg',
     
     if label is None:
         if len(data) == 1 and len(direction) == 1:
-            label = ['$\mathregular{\kappa_l}$']
+            label = [r'$\mathregular{\kappa_l}$']
         else:
             label = direction
     elif isinstance(label, str):

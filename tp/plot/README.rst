@@ -1,6 +1,6 @@
 Please see the `examples`_.
 
-.. _examples: https://github.com/smtg-ucl/ThermoParser/tree/master/examples
+.. _examples: https://github.com/smtg-bham/ThermoParser/tree/master/examples
 
 All plotting functions can read in defaults from ``~/.config/tprc.yaml``
 to enable consistent customisation. A template ``tprc.yaml`` is

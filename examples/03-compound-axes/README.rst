@@ -65,4 +65,4 @@ and ``labels`` arguments, so in order to specify your own, you must set
 ``tp.axes.legend.consolidate`` may also be useful for non-ThermoParser
 endaevors, as will be discussed in `Tutorial-05`_.
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
+.. _Tutorial-05: https://smtg-bham.github.io/ThermoParser/tutorial-05.html
