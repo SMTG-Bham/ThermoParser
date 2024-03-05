@@ -162,14 +162,18 @@
             <span class="s1">&#39;to_boltztrap&#39;</span><span class="p">,</span>
             <span class="s1">&#39;to_phono3py&#39;</span><span class="p">,</span>
 
+            <span class="s1">&#39;conversions&#39;</span><span class="p">,</span>
             <span class="s1">&#39;amset_conversions&#39;</span><span class="p">,</span>
             <span class="s1">&#39;boltztrap_conversions&#39;</span><span class="p">,</span>
             <span class="s1">&#39;phonopy_conversions&#39;</span><span class="p">,</span>
             <span class="s1">&#39;phono3py_conversions&#39;</span><span class="p">,</span>
             <span class="s1">&#39;units&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dimensions&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;boltztrap_dimensions&#39;</span><span class="p">,</span>
             <span class="s1">&#39;labels&#39;</span><span class="p">,</span>
             <span class="s1">&#39;inverted_labels&#39;</span><span class="p">,</span>
             <span class="s1">&#39;long_labels&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;medium_labels&#39;</span><span class="p">,</span>
             <span class="s1">&#39;short_labels&#39;</span><span class="p">]</span>
 
    <span class="k">return</span> <span class="n">names</span>
@@ -308,7 +312,7 @@
 
     <span class="k">return</span> <span class="n">names</span></div>
 
-<span class="k">def</span> <span class="nf">conversions</span><span class="p">():</span>
+<div class="viewcode-block" id="conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.conversions">[docs]</a><span class="k">def</span> <span class="nf">conversions</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of custom unit conversions from tprc.yaml.&quot;&quot;&quot;</span>
 
     <span class="n">conversions</span> <span class="o">=</span> <span class="p">{}</span>
@@ -317,7 +321,7 @@
        <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;conversions&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">conversions</span> <span class="o">=</span> <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;conversions&#39;</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">conversions</span>
+    <span class="k">return</span> <span class="n">conversions</span></div>
 
 <div class="viewcode-block" id="amset_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.amset_conversions">[docs]</a><span class="k">def</span> <span class="nf">amset_conversions</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for amset to tp.&quot;&quot;&quot;</span>
@@ -408,7 +412,7 @@
 
     <span class="k">return</span> <span class="n">units</span></div>
 
-<span class="k">def</span> <span class="nf">dimensions</span><span class="p">():</span>
+<div class="viewcode-block" id="dimensions"><a class="viewcode-back" href="../../tp.html#tp.settings.dimensions">[docs]</a><span class="k">def</span> <span class="nf">dimensions</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of dimensions of quantities used in tp.&quot;&quot;&quot;</span>
 
     <span class="n">dims</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;average_eff_mass&#39;</span><span class="p">:</span>                <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
@@ -448,15 +452,15 @@
             <span class="s1">&#39;seebeck_effective_mass&#39;</span><span class="p">:</span>          <span class="p">[],</span>
             <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
             <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>            <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-            <span class="s1">&#39;total_weights&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;total_weights&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
             <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
             <span class="s1">&#39;zt&#39;</span><span class="p">:</span>                              <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
 
-    <span class="k">return</span> <span class="n">dims</span>
+    <span class="k">return</span> <span class="n">dims</span></div>
 
-<span class="k">def</span> <span class="nf">boltztrap_dimensions</span><span class="p">():</span>
+<div class="viewcode-block" id="boltztrap_dimensions"><a class="viewcode-back" href="../../tp.html#tp.settings.boltztrap_dimensions">[docs]</a><span class="k">def</span> <span class="nf">boltztrap_dimensions</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of dimensions of quantities updated for BoltzTraP.&quot;&quot;&quot;</span>
 
     <span class="n">dims</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">()</span>
@@ -468,7 +472,7 @@
     <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">]</span> <span class="o">=</span>                    <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
     <span class="n">dims</span><span class="p">[</span><span class="s1">&#39;seebeck&#39;</span><span class="p">]</span> <span class="o">=</span>                         <span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">dims</span>
+    <span class="k">return</span> <span class="n">dims</span></div>
 
 <div class="viewcode-block" id="labels"><a class="viewcode-back" href="../../tp.html#tp.settings.labels">[docs]</a><span class="k">def</span> <span class="nf">labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get the default labels for small axes in tp.&quot;&quot;&quot;</span>
@@ -522,23 +526,23 @@
               <span class="s1">&#39;complexity_factor&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Complexity Factor&#39;</span><span class="p">,</span>
               <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Conductivity (S m$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Conductivity (S m$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_percent&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Cumulative Lattice Thermal Conductivity (%)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Carrier Concentration (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Carrier Concentration (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Density of States&#39;</span><span class="p">,</span>
               <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Fermi Energy (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Effective Mass (m$\mathregular</span><span class="si">{_e}</span><span class="s1">$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Effective Mass (m$\mathregular</span><span class="si">{_e}</span><span class="s1">$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Energy (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Fermi Level (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>
@@ -546,45 +550,45 @@
               <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Imaginary Self Energy (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Group Velocity (m s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Group Velocity (m s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Gruneisen Parameter&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Heat Capacity (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Heat Capacity (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Lifetime (s)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Mean Free Path (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Average Phonon-Phonon Interaction Strengths (eV$\mathregular{^2}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Average Phonon-Phonon Interaction Strengths (eV$\mathregular{^2}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Occupation&#39;</span><span class="p">,</span>
               <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Temperature (K)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Velocity (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Velocity (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Wavevector&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Mean Free Path (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;ZT&#39;</span><span class="p">}</span>
 
@@ -594,7 +598,7 @@
 
     <span class="k">return</span> <span class="n">labels</span></div>
 
-<span class="k">def</span> <span class="nf">medium_labels</span><span class="p">():</span>
+<div class="viewcode-block" id="medium_labels"><a class="viewcode-back" href="../../tp.html#tp.settings.medium_labels">[docs]</a><span class="k">def</span> <span class="nf">medium_labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get a dictionary of medium-length axis labels.&quot;&quot;&quot;</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chemical_potential&#39;</span><span class="p">:</span>
@@ -602,23 +606,23 @@
               <span class="s1">&#39;complexity_factor&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Complexity Factor&#39;</span><span class="p">,</span>
               <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Conductivity (S m$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Conductivity (S m$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_percent&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Cum. LTC (%)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Carrier Concentration (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Carrier Concentration (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Density of States&#39;</span><span class="p">,</span>
               <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Fermi Energy (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Effective Mass (m$\mathregular</span><span class="si">{_e}</span><span class="s1">$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Effective Mass (m$\mathregular</span><span class="si">{_e}</span><span class="s1">$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Energy (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Fermi Level (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>
@@ -626,45 +630,45 @@
               <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Imaginary Self Energy (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Group Velocity (m s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Group Velocity (m s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Gruneisen Parameter&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Heat Capacity (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Heat Capacity (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Lifetime (s)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Mean Free Path (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Avg. Ph-Ph Strengths (eV$\mathregular{^2}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Avg. Ph-Ph Strengths (eV$\mathregular{^2}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Occupation&#39;</span><span class="p">,</span>
               <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Temperature (K)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Velocity (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Velocity (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Wavevector&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Mean Free Path (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;Scattering Rates (s$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;ZT&#39;</span><span class="p">}</span>
 
@@ -672,79 +676,79 @@
        <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;medium_labels&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">labels</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;medium_labels&#39;</span><span class="p">]}</span>
 
-    <span class="k">return</span> <span class="n">labels</span>
+    <span class="k">return</span> <span class="n">labels</span></div>
 
 <div class="viewcode-block" id="short_labels"><a class="viewcode-back" href="../../tp.html#tp.settings.short_labels">[docs]</a><span class="k">def</span> <span class="nf">short_labels</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of short-form axis labels.&quot;&quot;&quot;</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chemical_potential&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\mu}$ (eV)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\mu}$ (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;complexity_factor&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{N_v*K*}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{N_v*K*}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\sigma\ (S\ m^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\sigma\ (S\ m^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_kappa&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;cumulative_percent&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\kappa_l}$ (%)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_l}$ (%)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;doping&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;n (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;n (cm$\mathregular{^{-3}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;dos&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;DoS&#39;</span><span class="p">,</span>
               <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;E$\mathregular{_</span><span class="si">{F}</span><span class="s1">}$ (eV)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;E$\mathregular{_</span><span class="si">{F}</span><span class="s1">}$ (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{m*\ (m_e})$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{m*\ (m_e})$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;E (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;E$\mathregular{_</span><span class="si">{F}</span><span class="s1">}$ (eV)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;E$\mathregular{_</span><span class="si">{F}</span><span class="s1">}$ (eV)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">nu}$ (THz)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">nu}$ (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\Gamma}$ (THz)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\Gamma}$ (THz)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{g_v\ (m\ s^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{g_v\ (m\ s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\gamma$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;C (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;C (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau}$ (s)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau}$ (s)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\Lambda}$ (m)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\Lambda}$ (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mobility&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;mode_kappa&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;ph_ph_strength&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{P_\lambda\ (eV^2)}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{P_\lambda\ (eV^2)}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;PF (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;PF (W m$\mathregular{^{-1}\ K^{-2}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Occupation&#39;</span><span class="p">,</span>
               <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau^{-1}\ (s^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau^{-1}\ (s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">alpha\ (\mu V\ K^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">alpha\ (\mu V\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;T (K)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;thermal_conductivity&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;velocities&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;v (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;v (m s$\mathregular{^{-1}})&#39;</span><span class="p">,</span>
               <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;q&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{\Lambda}$ (m)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{\Lambda}$ (m)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span>
-                  <span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau^{-1}\ (s^{-1})}$&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{</span><span class="se">\\</span><span class="s1">tau^{-1}\ (s^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;zt&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;ZT&#39;</span><span class="p">}</span>
 

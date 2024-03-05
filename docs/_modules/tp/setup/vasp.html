@@ -92,8 +92,7 @@
 <span class="kn">from</span> <span class="nn">pymatgen.io.vasp.inputs</span> <span class="kn">import</span> <span class="n">Kpoints</span><span class="p">,</span> <span class="n">Poscar</span>
 
 <div class="viewcode-block" id="gen_ibz"><a class="viewcode-back" href="../../../tp.setup.html#tp.setup.vasp.gen_ibz">[docs]</a><span class="k">def</span> <span class="nf">gen_ibz</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">symprec</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates the irreducible kpoints and weights for a mesh and</span>
-<span class="sd">       material.</span>
+    <span class="sd">&quot;&quot;&quot;Generates the irreducible kpoints and weights for a mesh and material.</span>
 
 <span class="sd">    Arguments</span>
 <span class="sd">    ---------</span>
@@ -193,13 +192,13 @@
     <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">kpar</span><span class="p">))]</span></div>
 
 <div class="viewcode-block" id="get_kpoints"><a class="viewcode-back" href="../../../tp.setup.html#tp.setup.vasp.get_kpoints">[docs]</a><span class="k">def</span> <span class="nf">get_kpoints</span><span class="p">(</span><span class="n">kpoints</span><span class="p">,</span> <span class="n">zero_weighted</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;KPOINTS&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates a KPOINTS file, including optional zero-weighted</span>
-<span class="sd">       kpoints, for kpoint mesh(es) or IBZKPT files and a material.</span>
-
-<span class="sd">       This will create a file if you supply it with KPOINTS meshes,</span>
-<span class="sd">       however this is purportedly not necessarily the same as what vasp</span>
-<span class="sd">       would do. To avoid this possibility, we recommend supplying two</span>
-<span class="sd">       IBZKPT files, which this will stitch together.</span>
+    <span class="sd">&quot;&quot;&quot;Generates a KPOINTS file.</span>
+<span class="sd">    </span>
+<span class="sd">       Includes optional zero-weighted kpoints. This will create a file</span>
+<span class="sd">       if you supply it with KPOINTS meshes, however this is</span>
+<span class="sd">       purportedly not necessarily the same as what vasp would do. To</span>
+<span class="sd">       avoid this possibility, we recommend supplying two IBZKPT files,</span>
+<span class="sd">       which this will stitch together.</span>
 
 <span class="sd">    Arguments</span>
 <span class="sd">    ---------</span>
