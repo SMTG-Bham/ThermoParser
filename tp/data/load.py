@@ -159,9 +159,6 @@ def amset(filename, quantities='all', doping='n'):
         if q2 in dimensions:
             data2['meta']['dimensions'][q2] = dimensions[q2]
 
-    if 'doping' in data2:
-        data2['doping'] = np.array(data2['doping'])[di]
-
     for c in aconversions:
         if c in data2:
             data2[c] = np.multiply(data2[c], float(aconversions[c]))
@@ -403,9 +400,6 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 data['meta']['units'][q2] = units[q2]
             if q2 in dimensions:
                 data['meta']['dimensions'][q2] = dimensions[q2]
-
-    if 'doping' in data:
-        data['doping'] = np.array(data['doping'])[di]
 
     if 'stype' in data:
         data['stype'] = [l.decode('UTF-8') for l in data['stype']]
@@ -896,8 +890,8 @@ def get_path(yamldata):
         ticks.append(yamldata['labels'][-1][1])
     except: # new phonopy/ sumo
         ticks = [yamldata['phonon'][i - 1]['label'] for i in tickindex]
-    ticks = ['$\mathregular{\Gamma}$' if i == 'G' or 'gamma' in i.lower() else
-             '$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
+    ticks = [r'$\mathregular{\Gamma}$' if i == 'G' or 'gamma' in i.lower() else
+             r'$\mathregular{{{}}}$'.format(i.strip('$')) for i in ticks]
 
     return tickpos, ticks
 

@@ -254,6 +254,8 @@
 </dd>
 <dt>mfp:</dt><dd><p>particle mean free path.</p>
 </dd>
+<dt>fd_occupation:</dt><dd><p>fermion occupation.</p>
+</dd>
 <dt>be_occupation:</dt><dd><p>boson occupation.</p>
 </dd>
 <dt>dfdde:</dt><dd><p>derivative of the Fermi-Dirac distribution.</p>
@@ -324,7 +326,7 @@
 
 <dl class="py function">
 <dt id="tp.calculate.dfdde">
-<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">dfdde</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">fermi_level</span></em>, <em class="sig-param"><span class="n">temperature</span></em>, <em class="sig-param"><span class="n">doping</span></em>, <em class="sig-param"><span class="n">amset_order</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_tprc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#dfdde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.dfdde" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">dfdde</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">fermi_level</span></em>, <em class="sig-param"><span class="n">temperature</span></em>, <em class="sig-param"><span class="n">amset_order</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_tprc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#dfdde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.dfdde" title="Permalink to this definition">¶</a></dt>
 <dd><p>Derivative of the Fermi-Dirac distribution wrt energy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -332,7 +334,6 @@
 <li><p><strong>energy</strong> (<em>array-like</em>) – energies per band and k-point (by default in eV).</p></li>
 <li><p><strong>fermi_level</strong> (<em>array-like</em>) – fermi level per temperature and dopant (by default in eV).</p></li>
 <li><p><strong>temperature</strong> (<em>array-like</em>) – temperatures (by default in K).</p></li>
-<li><p><strong>doping</strong> (<em>array-like</em>) – doping concentrations (by default in cm-3).</p></li>
 <li><p><strong>amset_order</strong> (<em>bool</em><em>, </em><em>optional</em>) – doping index before temperature index. Default: False.</p></li>
 <li><p><strong>use_tprc</strong> (<em>bool</em><em>, </em><em>optional</em>) – use custom unit conversions. Default: True.</p></li>
 </ul>
@@ -342,6 +343,29 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.calculate.fd_occupation">
+<code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">fd_occupation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">temperature</span></em>, <em class="sig-param"><span class="n">fermi_level</span></em>, <em class="sig-param"><span class="n">use_tprc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#fd_occupation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.fd_occupation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates Fermi-Dirac occupation.</p>
+<p>Assumes singly-occupied bands: double as necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energy</strong> (<em>array-like</em><em> or </em><em>float</em>) – energies (by default in eV).</p></li>
+<li><p><strong>temperature</strong> (<em>array-like</em><em> or </em><em>float</em>) – temperature (by default in K).</p></li>
+<li><p><strong>fermi_level</strong> (<em>array-like</em><em> or </em><em>float</em>) – fermi level (by default in eV).</p></li>
+<li><p><strong>use_tprc</strong> (<em>bool</em><em>, </em><em>optional</em>) – use custom unit conversions. Default: True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>occupations.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like</p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,8 +540,7 @@ in W m-1 K-1).</p>
 <dl class="py function">
 <dt id="tp.calculate.mfp">
 <code class="sig-prename descclassname">tp.calculate.</code><code class="sig-name descname">mfp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">group_velocity</span></em>, <em class="sig-param"><span class="n">use_tprc</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/calculate.html#mfp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.calculate.mfp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates mean free path from imaginary self-energy (Gamma) and
-group velocity.</p>
+<dd><p>Calculates mean free path from imaginary self-energy (Gamma) and group velocity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -761,6 +784,24 @@ that.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="tp.settings.boltztrap_dimensions">
+<code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">boltztrap_dimensions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#boltztrap_dimensions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.boltztrap_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dictionary of dimensions of quantities updated for BoltzTraP.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.settings.conversions">
+<code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">conversions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#conversions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.conversions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dictionary of custom unit conversions from tprc.yaml.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.settings.dimensions">
+<code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">dimensions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#dimensions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get dictionary of dimensions of quantities used in tp.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="tp.settings.inverted_labels">
 <code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">inverted_labels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#inverted_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.inverted_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the default labels for inverted axes in tp.</p>
@@ -782,6 +823,12 @@ that.</p>
 <dt id="tp.settings.long_labels">
 <code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">long_labels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#long_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.long_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a dictionary of long-form axis labels.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.settings.medium_labels">
+<code class="sig-prename descclassname">tp.settings.</code><code class="sig-name descname">medium_labels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/settings.html#medium_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.settings.medium_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dictionary of medium-length axis labels.</p>
 </dd></dl>
 
 <dl class="py function">

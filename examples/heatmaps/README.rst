@@ -59,15 +59,16 @@ and python:
 
 The final heatmap is the ztdiff, which compares the ZTs of two
 materials at a range of carrier concentrations and temperatures. This
-can be done with any two materials, from completely different (e.g.
-BaSnO<sub>3</sub> and ZnO here) to the same material under different
-conditions (e.g. different degrees of nanostructuring), although this
-method is most appropriate for closely related materials with similar
-dopabilities. At the command line:
+can be done with any two materials, from completely different to the
+same material under different conditions (e.g. different degrees of
+nanostructuring), although this method is most appropriate for closely
+related materials with similar dopabilities. Here we compare the
+momentum relaxation time approximation via AMSET with the constant
+relaxation approximation via BoltzTraP. At the command line:
 
 .. code-block::
    
-   tp plot ztdiff ../data/zno/boltztrap.hdf5  ../data/basno3/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/basno3/kappa-m363636.hdf5 -l ZnO -l 'BaSnO$_3$'
+   tp plot ztdiff ../data/zno/transport_75x75x75.json  ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/zno/kappa-m404021.hdf5 -l MRTA -l CRTA
 
 and in python:
 
@@ -85,3 +86,7 @@ argument must be used in ``add_legend`` to enable manual manipulation
 of the handles and labels. ``add_ztdiff`` and its power factor
 equivalent, ``add_pfdiff``, also make sure the colour scale is centred
 on zero (i.e. where both are equal).
+
+Some users may find adding contours with the ``contours`` argument or making
+the colour scale discrete with the ``discrete`` argument more legible or
+informative.

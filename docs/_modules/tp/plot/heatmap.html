@@ -121,7 +121,9 @@
 <div class="viewcode-block" id="add_heatmap"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_heatmap">[docs]</a><span class="k">def</span> <span class="nf">add_heatmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
                 <span class="n">xscale</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">cscale</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">undercolour</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overcolour</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">undercolour</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overcolour</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">contourcolours</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">contourkwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a heatmap to a set of axes.</span>
 
 <span class="sd">    Formats limits, parses extra colourmap options, makes sure data</span>
@@ -171,17 +173,33 @@
 <span class="sd">            with mid and min and/or max keys. Colour format must be</span>
 <span class="sd">            hex or rgb (array) or a named colour recognised by</span>
 <span class="sd">            matplotlib. Default: Blues.</span>
+<span class="sd">        discrete : bool, optional</span>
+<span class="sd">            use colour bands rather than a continuously shifting colour</span>
+<span class="sd">            sequence. Default: False.</span>
+<span class="sd">        levels : int or array-like, optional</span>
+<span class="sd">            sets levels for discrete plots. Lists directly specify the</span>
+<span class="sd">            contour levels while integers specify the maximum-1 number</span>
+<span class="sd">            of &quot;nice&quot; levels to plot. Default: None.</span>
 <span class="sd">        undercolour : str or array-like, optional</span>
 <span class="sd">            colour for values under cmin. Default: None.</span>
 <span class="sd">        overcolour : str or array-like, optional</span>
 <span class="sd">            colour for values over cmax. Default: None.</span>
 
+<span class="sd">        contours : int or float or array-like, optional</span>
+<span class="sd">            contours to plot. Default: None.</span>
+<span class="sd">        contourcolours : string or array-like, optional</span>
+<span class="sd">            colours of the contours. If fewer are supplied, they</span>
+<span class="sd">            repeat. Default: black.</span>
+
+<span class="sd">        contourkwargs : dict, optional</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.contour.</span>
+<span class="sd">            Default: None</span>
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh or</span>
+<span class="sd">            matplotlib.pyplot.contourf. Defaults are defined below,</span>
+<span class="sd">            which are overridden by those in ``~/.config/tprc.yaml``,</span>
+<span class="sd">            both of which are overridden by arguments passed to this</span>
+<span class="sd">            function. Defaults:</span>
 
 <span class="sd">                rasterized: True</span>
 
@@ -300,13 +318,64 @@
             <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
 
     <span class="c1"># plotting</span>
-    <span class="n">heat</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">discrete</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;rasterized&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">levels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">levels</span> <span class="o">==</span> <span class="p">():</span>
+            <span class="n">heat</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span>
+                               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">levels</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;levels must be an int or array-like, not float&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">levels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">levels</span> <span class="o">!=</span> <span class="p">():</span>
+                <span class="n">heat</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span>
+                                   <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">heat</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colours</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">cnorm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
     <span class="k">if</span> <span class="s1">&#39;dos&#39;</span> <span class="ow">in</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">and</span> <span class="n">fig</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;dos&#39;</span><span class="p">]:</span>
         <span class="c1"># place colourbar outside dos</span>
         <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">extend</span><span class="p">)</span>
+
+    <span class="c1"># contours</span>
+    <span class="k">if</span> <span class="n">contours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">contours</span> <span class="o">!=</span> <span class="p">():</span>
+        <span class="k">if</span> <span class="n">contourkwargs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">contourkwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">contours</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">contours</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">contourcolours</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contours</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ctnorm</span> <span class="o">=</span> <span class="p">[(</span><span class="n">ct</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">contours</span><span class="p">))</span><span class="o">/</span>
+                      <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">contours</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">contours</span><span class="p">))</span>
+                       <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ctnorm</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">contourcolours</span>
+            <span class="n">contourcolours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">)(</span><span class="n">ctnorm</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">contourkwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
+                <span class="n">cmap</span> <span class="o">=</span> <span class="n">contourcolours</span>
+                <span class="n">contourcolours</span> <span class="o">=</span> <span class="n">contourcolours</span><span class="p">(</span><span class="n">ctnorm</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">contourkwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+                <span class="n">contourcolours</span> <span class="o">=</span> <span class="p">[</span><span class="n">contourcolours</span><span class="p">]</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">contours</span><span class="p">):</span>
+                <span class="n">contourcolours</span> <span class="o">+=</span> <span class="n">contourcolours</span>
+        <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">contourkwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">contours</span><span class="p">):</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">**</span><span class="n">contourkwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">xscale</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yscale</span><span class="p">)</span>
@@ -319,7 +388,9 @@
 
 <div class="viewcode-block" id="add_pfmap"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_pfmap">[docs]</a><span class="k">def</span> <span class="nf">add_pfmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
               <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+              <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contourcolours</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+              <span class="n">contourkwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convenience wrapper for plotting power factor heatmaps.</span>
 
 <span class="sd">    Calculates power factor, plots and formats labels etc.</span>
@@ -361,13 +432,29 @@
 <span class="sd">            RGB colours to generate a colour map. Colour format must be</span>
 <span class="sd">            hex or rgb (array) or a named colour recognised by</span>
 <span class="sd">            matplotlib. Default: viridis.</span>
+<span class="sd">        discrete : bool, optional</span>
+<span class="sd">            use colour bands rather than a continuously shifting colour</span>
+<span class="sd">            sequence. Default: False.</span>
+<span class="sd">        levels : int or array-like, optional</span>
+<span class="sd">            sets levels for discrete plots. Lists directly specify the</span>
+<span class="sd">            contour levels while integers specify the maximum-1 number</span>
+<span class="sd">            of &quot;nice&quot; levels to plot. Default: None.</span>
 
+<span class="sd">        contours : int or float or array-like, optional</span>
+<span class="sd">            PF contours to plot. Default: None.</span>
+<span class="sd">        contourcolours : string or array-like, optional</span>
+<span class="sd">            colours of the PF contours. If fewer are supplied, they</span>
+<span class="sd">            repeat. Default: black.</span>
+
+<span class="sd">        contourkwargs : dict, optional</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.contour.</span>
+<span class="sd">            Default: None</span>
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh or</span>
+<span class="sd">            matplotlib.pyplot.contourf. Defaults are defined below,</span>
+<span class="sd">            which are overridden by those in ``~/.config/tprc.yaml``,</span>
+<span class="sd">            both of which are overridden by arguments passed to this</span>
+<span class="sd">            function. Defaults:</span>
 
 <span class="sd">                rasterized: True</span>
 
@@ -404,7 +491,9 @@
                        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;power_factor&#39;</span><span class="p">],</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span>
                        <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span>
                        <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span>
-                       <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                       <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
+                       <span class="n">contours</span><span class="o">=</span><span class="n">contours</span><span class="p">,</span> <span class="n">countourcolours</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">,</span>
+                       <span class="n">contourkwargs</span><span class="o">=</span><span class="n">contourkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -418,7 +507,9 @@
 <div class="viewcode-block" id="add_pfdiff"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_pfdiff">[docs]</a><span class="k">def</span> <span class="nf">add_pfdiff</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour1</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span> <span class="n">colour2</span><span class="o">=</span><span class="s1">&#39;#FF8000&#39;</span><span class="p">,</span>
-               <span class="n">midcolour</span><span class="o">=</span><span class="s1">&#39;#FFFFFF&#39;</span><span class="p">,</span> <span class="n">label1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+               <span class="n">midcolour</span><span class="o">=</span><span class="s1">&#39;#FFFFFF&#39;</span><span class="p">,</span> <span class="n">label1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contourcolours</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+               <span class="n">contourkwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a difference of two power factors heatmap.</span>
 
 <span class="sd">    Calculates power factor, plots and formats labels etc.</span>
@@ -464,13 +555,29 @@
 <span class="sd">            colour at 0 difference. Default: #FFFFFF.</span>
 <span class="sd">        label(1,2) : str, optional</span>
 <span class="sd">            labels for data(1,2) to go in a legend. Default: None.</span>
+<span class="sd">        discrete : bool, optional</span>
+<span class="sd">            use colour bands rather than a continuously shifting colour</span>
+<span class="sd">            sequence. Default: False.</span>
+<span class="sd">        levels : int or array-like, optional</span>
+<span class="sd">            sets levels for discrete plots. Lists directly specify the</span>
+<span class="sd">            contour levels while integers specify the maximum-1 number</span>
+<span class="sd">            of &quot;nice&quot; levels to plot. Default: None.</span>
 
+<span class="sd">        contours : int or float or array-like, optional</span>
+<span class="sd">            PF contours to plot. Default: None.</span>
+<span class="sd">        contourcolours : string or array-like, optional</span>
+<span class="sd">            colours of the PF contours. If fewer are supplied, they</span>
+<span class="sd">            repeat. Default: black.</span>
+
+<span class="sd">        contourkwargs : dict, optional</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.contour.</span>
+<span class="sd">            Default: None</span>
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh or</span>
+<span class="sd">            matplotlib.pyplot.contourf. Defaults are defined below,</span>
+<span class="sd">            which are overridden by those in ``~/.config/tprc.yaml``,</span>
+<span class="sd">            both of which are overridden by arguments passed to this</span>
+<span class="sd">            function. Defaults:</span>
 
 <span class="sd">                rasterized: True</span>
 
@@ -542,7 +649,9 @@
                        <span class="n">diff</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
                        <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
                        <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                       <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="n">contours</span><span class="p">,</span>
+                       <span class="n">contourcolours</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">,</span>
+                       <span class="n">contourkwargs</span><span class="o">=</span><span class="n">contourkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -555,7 +664,9 @@
 
 <div class="viewcode-block" id="add_ztmap"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_ztmap">[docs]</a><span class="k">def</span> <span class="nf">add_ztmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">kdata</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
               <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+              <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+              <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">contourcolours</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">contourkwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convenience wrapper for plotting ZT heatmaps.</span>
 
 <span class="sd">    Calculates ZT, plots and formats labels etc.</span>
@@ -601,13 +712,29 @@
 <span class="sd">            colours to generate a colour map. Colour format must be hex</span>
 <span class="sd">            or rgb (array) or a named colour recognised by matplotlib.</span>
 <span class="sd">            Default: viridis.</span>
+<span class="sd">        discrete : bool, optional</span>
+<span class="sd">            use colour bands rather than a continuously shifting colour</span>
+<span class="sd">            sequence. Default: False.</span>
+<span class="sd">        levels : int or array-like, optional</span>
+<span class="sd">            sets levels for discrete plots. Lists directly specify the</span>
+<span class="sd">            contour levels while integers specify the maximum-1 number</span>
+<span class="sd">            of &quot;nice&quot; levels to plot. Default: None.</span>
 
+<span class="sd">        contours : int or float or array-like, optional</span>
+<span class="sd">            ZT contours to plot. Default: None.</span>
+<span class="sd">        contourcolours : string or array-like, optional</span>
+<span class="sd">            colours of the ZT contours. If fewer are supplied, they</span>
+<span class="sd">            repeat. Default: black.</span>
+
+<span class="sd">        contourkwargs : dict, optional</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.contour.</span>
+<span class="sd">            Default: None</span>
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh or</span>
+<span class="sd">            matplotlib.pyplot.contourf. Defaults are defined below,</span>
+<span class="sd">            which are overridden by those in ``~/.config/tprc.yaml``,</span>
+<span class="sd">            both of which are overridden by arguments passed to this</span>
+<span class="sd">            function. Defaults:</span>
 
 <span class="sd">                rasterized: True</span>
 
@@ -663,7 +790,9 @@
                        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;zt&#39;</span><span class="p">],</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
                        <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
                        <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                       <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="n">contours</span><span class="p">,</span>
+                       <span class="n">contourcolours</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">,</span>
+                       <span class="n">contourkwargs</span><span class="o">=</span><span class="n">contourkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -678,7 +807,8 @@
                <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour1</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span>
                <span class="n">colour2</span><span class="o">=</span><span class="s1">&#39;#FF8000&#39;</span><span class="p">,</span> <span class="n">midcolour</span><span class="o">=</span><span class="s1">&#39;#FFFFFF&#39;</span><span class="p">,</span> <span class="n">label1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">label2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+               <span class="n">label2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">contourcolours</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">contourkwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a difference of two ZTs heatmap.</span>
 
 <span class="sd">    Calculates ZT, plots and formats labels etc.</span>
@@ -728,13 +858,29 @@
 <span class="sd">            colour at 0 difference. Default: #FFFFFF.</span>
 <span class="sd">        label(1,2) : str, optional</span>
 <span class="sd">            labels for data(1,2) to go in a legend. Default: None.</span>
+<span class="sd">        discrete : bool, optional</span>
+<span class="sd">            use colour bands rather than a continuously shifting colour</span>
+<span class="sd">            sequence. Default: False.</span>
+<span class="sd">        levels : int or array-like, optional</span>
+<span class="sd">            sets levels for discrete plots. Lists directly specify the</span>
+<span class="sd">            contour levels while integers specify the maximum-1 number</span>
+<span class="sd">            of &quot;nice&quot; levels to plot. Default: None.</span>
 
+<span class="sd">        contours : int or float or array-like, optional</span>
+<span class="sd">            ZT contours to plot. Default: None.</span>
+<span class="sd">        contourcolours : string or array-like, optional</span>
+<span class="sd">            colours of the ZT contours. If fewer are supplied, they</span>
+<span class="sd">            repeat. Default: black.</span>
+
+<span class="sd">        contourkwargs : dict, optional</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.contour.</span>
+<span class="sd">            Default: None</span>
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh or</span>
+<span class="sd">            matplotlib.pyplot.contourf. Defaults are defined below,</span>
+<span class="sd">            which are overridden by those in ``~/.config/tprc.yaml``,</span>
+<span class="sd">            both of which are overridden by arguments passed to this</span>
+<span class="sd">            function. Defaults:</span>
 
 <span class="sd">                rasterized: True</span>
 
@@ -826,7 +972,9 @@
                        <span class="n">diff</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
                        <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
                        <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                       <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="n">contours</span><span class="p">,</span>
+                       <span class="n">contourcolours</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">,</span>
+                       <span class="n">contourkwargs</span><span class="o">=</span><span class="n">contourkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -840,7 +988,9 @@
 <div class="viewcode-block" id="add_kappa_target"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.heatmap.add_kappa_target">[docs]</a><span class="k">def</span> <span class="nf">add_kappa_target</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">zt</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">xinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                      <span class="n">yinterp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
-                     <span class="n">negativecolour</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                     <span class="n">negativecolour</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contourcolours</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">contourkwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a heatmap of k_latt required for a target ZT</span>
 
 <span class="sd">    Calculates lattice thermal conductivity, plots and formats labels</span>
@@ -887,13 +1037,29 @@
 <span class="sd">            matplotlib. Default: viridis.</span>
 <span class="sd">        negativecolour : str or array-like, optional</span>
 <span class="sd">            colour for values under cmin. Default: grey.</span>
+<span class="sd">        discrete : bool, optional</span>
+<span class="sd">            use colour bands rather than a continuously shifting colour</span>
+<span class="sd">            sequence. Default: False.</span>
+<span class="sd">        levels : int or array-like, optional</span>
+<span class="sd">            sets levels for discrete plots. Lists directly specify the</span>
+<span class="sd">            contour levels while integers specify the maximum-1 number</span>
+<span class="sd">            of &quot;nice&quot; levels to plot. Default: None.</span>
 
+<span class="sd">        contours : int or float or array-like, optional</span>
+<span class="sd">            kappa contours to plot. Default: None.</span>
+<span class="sd">        contourcolours : string or array-like, optional</span>
+<span class="sd">            colours of the kappa contours. If fewer are supplied, they</span>
+<span class="sd">            repeat. Default: black.</span>
+
+<span class="sd">        contourkwargs : dict, optional</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.contour.</span>
+<span class="sd">            Default: None</span>
 <span class="sd">        kwargs</span>
-<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh.</span>
-<span class="sd">            Defaults are defined below, which are overridden by those in</span>
-<span class="sd">            ``~/.config/tprc.yaml``, both of which are overridden by</span>
-<span class="sd">            arguments passed to this function.</span>
-<span class="sd">            Defaults:</span>
+<span class="sd">            keyword arguments passed to matplotlib.pyplot.pcolormesh or</span>
+<span class="sd">            matplotlib.pyplot.contourf. Defaults are defined below,</span>
+<span class="sd">            which are overridden by those in ``~/.config/tprc.yaml``,</span>
+<span class="sd">            both of which are overridden by arguments passed to this</span>
+<span class="sd">            function. Defaults:</span>
 
 <span class="sd">                rasterized: True</span>
 
@@ -929,7 +1095,10 @@
                        <span class="n">data</span><span class="p">[</span><span class="n">ltc</span><span class="p">],</span> <span class="n">xinterp</span><span class="o">=</span><span class="n">xinterp</span><span class="p">,</span> <span class="n">yinterp</span><span class="o">=</span><span class="n">yinterp</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
                        <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span>
                        <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">cmin</span><span class="o">=</span><span class="n">cmin</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">cmax</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
-                       <span class="n">undercolour</span><span class="o">=</span><span class="n">negativecolour</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                       <span class="n">undercolour</span><span class="o">=</span><span class="n">negativecolour</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
+                       <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span> <span class="n">contours</span><span class="o">=</span><span class="n">contours</span><span class="p">,</span>
+                       <span class="n">contourcolours</span><span class="o">=</span><span class="n">contourcolours</span><span class="p">,</span>
+                       <span class="n">contourkwargs</span><span class="o">=</span><span class="n">contourkwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 

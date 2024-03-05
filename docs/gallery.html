@@ -91,6 +91,24 @@
 explanations. More details on each of the plots, including the scripts
 and specific commands used are available by clicking on the figures, and we
 also have <a class="reference external" href="https://smtg-bham.github.io/ThermoParser/tutorials.html">tutorials</a>!</p>
+<p>The data files provided are mostly from published work<sup>1</sup>, which
+looks at the effectiveness of four transparent conducting oxides (TCOs)
+as thermoelectrics. Using a pre-release version of this code, the main
+problem was found to be their large lattice thermal conductivities,
+contributed to most by their low-frequency modes which have large
+mean free paths and group velocities. This is old work, and at the time
+the constant relaxation time approximation (CRTA) via BoltzTraP was
+used to calculate the electronic transport properties. Since then, we
+have recalculated the properties with the momentum relaxation time
+approximation (MRTA) via AMSET, and found using explicit electronic
+relaxation times via MRTA significantly alters the results. This is both
+due to the inclusion of more realistic scattering trends with
+temperature and carrier concentration (<a class="reference external" href="https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates">average-rates</a>), and the ability
+to alter the electronic scattering rates rather than just the phononic
+ones when simulating nanostructuring. This leads to a much reduced
+electrical conductivity in BaSnO<sub>3</sub>, and therefore a much lower
+ZT (<a class="reference external" href="https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps">ztdiff</a>), although these trends will vary significantly by
+material.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Click on the images to see the script which generated them.</p>
@@ -132,7 +150,7 @@ come in, e.g. the rescaling of the x axis in the former plot, and the
 simplicity of compound axes in the latter. Another example is the ability to
 add gaussian smearing to a DoS plot during plotting, removing the need to rerun
 e.g. Phonopy or maintain multiple data files.</p>
-<a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/dos.html"><img alt="A DoS plot without and with gaussian smearing (sigma=0.2)" src="_images/dos.png" /></a>
+<a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/dos.html"><img alt="A DoS plot without and with gaussian smearing (sigma=0.2)" src="_images/dos1.png" /></a>
 <p>The right-hand plot can be plotted with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot dos projected_dos.dat --atoms <span class="s2">&quot;Ba Sn O O_2 2&quot;</span> --sigma <span class="m">0</span>.2 --location <span class="m">1</span> -c magenta -c cyan -c red -c orange
 </pre></div>
@@ -140,13 +158,13 @@ e.g. Phonopy or maintain multiple data files.</p>
 <p>There are command-line scripts, but the main functionality is
 intended as a python package, which enables much more customisable
 plotting, to enable nicely formatted multi-axes plots…</p>
-<a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/cumkappa.html"><img alt="Cumulative kappa against frequency and mean free path, broken down by direction" src="_images/cumkappa.png" /></a>
+<a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/cumkappa.html"><img alt="Cumulative kappa against frequency and mean free path, broken down by direction" src="_images/cumkappa1.png" /></a>
 <p>...and multi-plot axes, to highlight particular interactions.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/waterfall.html"><img alt="A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS" src="_images/waterfall.png" /></a>
 <p>As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
 projecting these properties onto phonon dispersions. The former is an
-oft plotted widening of the bands due to scattering,<sup>1</sup> and the
+oft plotted widening of the bands due to scattering,<sup>2</sup> and the
 latter shows the same data, but in a more quantitative way.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/prophon.html"><img alt="A phonon dispersion where widened bands show phonon scattering" src="_images/wideband.png" /></a>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband band.yaml kappa-m&lt;xxx&gt;.hdf5 -c <span class="s1">&#39;#000000&#39;</span> <span class="s1">&#39;#ff0000&#39;</span> -s dark_background
@@ -174,18 +192,8 @@ ThermoParser, e.g. the custom colourmaps, legend formatting tools and axes
 labels.</p>
 <div class="section" id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">Maradudin1962</span><span class="p">,</span>
-  <span class="na">title</span><span class="p">=</span><span class="s">{Scattering of neutrons by an anharmonic crystal}</span><span class="p">,</span>
-  <span class="na">author</span><span class="p">=</span><span class="s">{Maradudin, AA and Fein, AE}</span><span class="p">,</span>
-  <span class="na">journal</span><span class="p">=</span><span class="s">{Physical Review}</span><span class="p">,</span>
-  <span class="na">volume</span><span class="p">=</span><span class="s">{128}</span><span class="p">,</span>
-  <span class="na">number</span><span class="p">=</span><span class="s">{6}</span><span class="p">,</span>
-  <span class="na">pages</span><span class="p">=</span><span class="s">{2589}</span><span class="p">,</span>
-  <span class="na">year</span><span class="p">=</span><span class="s">{1962}</span><span class="p">,</span>
-  <span class="na">publisher</span><span class="p">=</span><span class="s">{APS}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<p>[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, <em>J. Mater. Chem. A</em>, <strong>2020</strong>, 8, 11948.
+[2] A. A. Maradudin and A. E. Fein, <em>Phys. Rev.</em>, <strong>1962</strong>, 128, 2589.</p>
 </div>
 </div>
 
