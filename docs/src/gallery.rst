@@ -18,7 +18,7 @@ explanations. More details on each of the plots, including the scripts
 and specific commands used are available by clicking on the figures, and we
 also have `tutorials`_!
 
-.. _tutorials: https://smtg-ucl.github.io/ThermoParser/tutorials.html
+.. _tutorials: https://smtg-bham.github.io/ThermoParser/tutorials.html
 
 .. hint::
     Click on the images to see the script which generated them.
@@ -29,7 +29,7 @@ from either a python script or the command line, such as the classic
 
 .. image:: figures/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
-   :target: https://smtg-ucl.github.io/ThermoParser/heatmaps.html
+   :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
 Click on the plot to see the script, or one could use
 
@@ -44,7 +44,7 @@ ZT, in this case 2.
 
 .. image:: figures/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
-   :target: https://smtg-ucl.github.io/ThermoParser/heatmaps.html
+   :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
 .. code-block:: bash
 
@@ -55,7 +55,7 @@ comparison among different datasets.
 
 .. image:: figures/ztdiff.png
    :alt: A heatmap of differentce in ZT against carrier concentration and temperature
-   :target: https://smtg-ucl.github.io/ThermoParser/heatmaps.html
+   :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
 .. code-block:: bash
 
@@ -66,7 +66,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
-   :target: https://smtg-ucl.github.io/ThermoParser/phonons.html
+   :target: https://smtg-bham.github.io/ThermoParser/phonons.html
 
 .. code-block:: bash
 
@@ -74,7 +74,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
-   :target: https://smtg-ucl.github.io/ThermoParser/phonons.html
+   :target: https://smtg-bham.github.io/ThermoParser/phonons.html
 
 .. code-block:: bash
 
@@ -88,7 +88,7 @@ e.g. Phonopy or maintain multiple data files.
 
 .. image:: figures/dos.png
    :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
-   :target: https://smtg-ucl.github.io/ThermoParser/dos.html
+   :target: https://smtg-bham.github.io/ThermoParser/dos.html
 
 The right-hand plot can be plotted with:
 
@@ -102,13 +102,13 @@ plotting, to enable nicely formatted multi-axes plots...
 
 .. image:: figures/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
-   :target: https://smtg-ucl.github.io/ThermoParser/cumkappa.html
+   :target: https://smtg-bham.github.io/ThermoParser/cumkappa.html
 
 \...and multi-plot axes, to highlight particular interactions.
 
 .. image:: figures/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
-   :target: https://smtg-ucl.github.io/ThermoParser/waterfall.html
+   :target: https://smtg-bham.github.io/ThermoParser/waterfall.html
 
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
@@ -118,7 +118,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
-   :target: https://smtg-ucl.github.io/ThermoParser/prophon.html
+   :target: https://smtg-bham.github.io/ThermoParser/prophon.html
 
 .. code-block:: bash
 
@@ -126,7 +126,7 @@ latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
-   :target: https://smtg-ucl.github.io/ThermoParser/prophon.html
+   :target: https://smtg-bham.github.io/ThermoParser/prophon.html
 
 Besides plotting, ThermoParser offers a number of ways to streamline
 transport property workflows, from generating more efficent input files
@@ -138,7 +138,7 @@ but is easily scripted or plotted at the command line:
 
 .. image:: avg-rates.png
    :alt: A plot of weighted average scattering rates against temperature and carrier concnetration.
-   :target: https://smtg-ucl.github.io/ThermoParser/avg-rates.html
+   :target: https://smtg-bham.github.io/ThermoParser/avg-rates.html
 
 .. code-block::
 

@@ -14,6 +14,11 @@ class LinearTest(unittest.TestCase):
         cround = [round(c[0], 2), round(c[1], 2), round(c[2], 2)]
         self.assertEqual(cround, [0.5, 0.5, 0.5])
 
+class UniformTest(unittest.TestCase):
+    def test_is_colourmap(self):
+        cmap = colour.uniform('#ff0000')
+        self.assertIsInstance(cmap, matplotlib.colors.ListedColormap)
+
 class ElbowTest(unittest.TestCase):
     def test_is_colourmap(self):
         cmap = colour.elbow('#ff0000')

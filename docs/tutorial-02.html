@@ -94,7 +94,7 @@
   <div class="section" id="tutorial-02-individual-customisation">
 <h1>Tutorial-02: Individual Customisation<a class="headerlink" href="#tutorial-02-individual-customisation" title="Permalink to this headline">¶</a></h1>
 <img alt="Finite bandwidth phonon dispersion of ZnO." src="_images/tutorial-02.png" />
-<p>In most cases, plotting scripts will be more complex than <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorial-01.html">Tutorial-01</a>.
+<p>In most cases, plotting scripts will be more complex than <a class="reference external" href="https://smtg-bham.github.io/ThermoParser/tutorial-01.html">Tutorial-01</a>.
 Many functions require more inputs, and most users will want to
 customise plots with colours and stuff.</p>
 <p>The CLI version of this code is:</p>
@@ -147,7 +147,7 @@ customise plots with colours and stuff.</p>
 <span class="c1"># You can ignore down to line 20!</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 <span class="c1"># Stop ignoring!</span>
 
 <span class="c1"># Axes</span>
@@ -201,7 +201,7 @@ and all projected phonon plots also require a POSCAR file.</p>
 <h2>Colourmaps<a class="headerlink" href="#colourmaps" title="Permalink to this headline">¶</a></h2>
 <p>Some functions, including heatmaps and projected dispersions such as
 the wideband plot above, accept single colours which are passed to
-ThermoParser’s <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour">colourmap generators</a>. These can also be accessed
+ThermoParser’s <a class="reference external" href="https://smtg-bham.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour">colourmap generators</a>. These can also be accessed
 directly, allowing greater control of the output or use on non-tp
 applications. The colourmap used here could be generated with:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">colour</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">cmin</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>

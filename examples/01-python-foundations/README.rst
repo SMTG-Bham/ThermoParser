@@ -2,6 +2,14 @@
 Tutorial-01: Python Foundations
 -------------------------------
 
+Here we show a phonon dispersion, calculated via the supercell method
+in Phonopy, which shows the vibrational frequencies of ZnO along a
+high symmetry path in reciprocal space. The gradient of the bands is
+the group velocity of the phonons, an important factor in the lattice
+thermal conductivity; and if there are negative-frequency (imaginary)
+modes, it indicates kinetic instability. More information can also be
+gleaned, which is covered in later tutorials.
+
 .. image:: tutorial-01.png
    :alt: Phonon dispersion of ZnO.
 
@@ -88,10 +96,10 @@ ThermoParser has extensive docs. Docstrings are available throughout
 the code itself, if you are using IPython or Jupyter and you can access
 them by typing the command name followed by two question marks, and
 IDEs normally have options too. If you are on the master branch,
-they can also be found `here <https://smtg-ucl.github.io/ThermoParser/>`_.
+they can also be found `here <https://smtg-bham.github.io/ThermoParser/>`_.
 
-.. _Tutorial-03: https://smtg-ucl.github.io/ThermoParser/tutorial-03.html
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
-.. _Axes: https://smtg-ucl.github.io/ThermoParser/tp.axes.html
-.. _Load: https://smtg-ucl.github.io/ThermoParser/tp.data.html#module-tp.data.load
-.. _Plot: https://smtg-ucl.github.io/ThermoParser/tp.plot.html
+.. _Tutorial-03: https://smtg-bham.github.io/ThermoParser/tutorial-03.html
+.. _Tutorial-05: https://smtg-bham.github.io/ThermoParser/tutorial-05.html
+.. _Axes: https://smtg-bham.github.io/ThermoParser/tp.axes.html
+.. _Load: https://smtg-bham.github.io/ThermoParser/tp.data.html#module-tp.data.load
+.. _Plot: https://smtg-bham.github.io/ThermoParser/tp.plot.html

@@ -2,6 +2,14 @@
 Tutorial-03: Compound Axes
 --------------------------
 
+This dispersion includes a phonon density of state (DoS) alongside,
+showing which atoms contribute to each mode. This can help determine
+the way in which heat is transported through the lattice, for example
+the lowest three (acoustic) modes, which often transport the majority
+of the heat, are dominated by Zn. Frequency-localised DoSs of a
+particular atom can indicate spacially localised, poorly-conductive
+phonons. The DoS is also calculated via Phonopy.
+
 .. image:: tutorial-03.png
    :alt: Phonon dispersion and density of states of ZnO.
 
@@ -14,7 +22,7 @@ The CLI version of this code is:
 
 .. code-block:: bash
    
-   tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --doscolour '#d46ef9' --doscolour '#7b8eff' --legend_title ZnO --location 2
+   tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour '#d46ef9' --doscolour '#7b8eff' --legend_title ZnO --location 2
 
 And the python version is:
 
@@ -65,4 +73,4 @@ and ``labels`` arguments, so in order to specify your own, you must set
 ``tp.axes.legend.consolidate`` may also be useful for non-ThermoParser
 endaevors, as will be discussed in `Tutorial-05`_.
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
+.. _Tutorial-05: https://smtg-bham.github.io/ThermoParser/tutorial-05.html

@@ -3,43 +3,69 @@
 Functions
 ---------
 
-    direction_function
-    
-    doping_type_option
-    
-    doping_function
-    
-    dos_function
-    
-    input_argument
-    
-    inputs_function
-    
-    interpolate_options
-    
-    kpoints_options
-    
-    legend_options
-    
-    line_options
-    
-    fill_options
-    
-    plot_io_function
-    
-    temperature_option
-    
-    verbose_option
-
+    direction_function:
+        function for picking the --direction (-d).
+    doping_type_option:
+        function for picking the doping --type (-t).
+    doping_function:
+        function for picking the doping --concentration (-n).
+    dos_function:
+        function for setting DoS formatting.
+    inputs_function:
+        function for picking the input file(s) argument.
+    interpolate_options:
+        function for setting interpolation options.
+    kpoints_options:
+        function for handling KPOINTS files.
+    legend_options:
+        function for formatting legends.
+    line_options:
+        function for formatting line plots.
+    fill_options:
+        function for formatting fillable line plots.
+    plot_io_function:
+        function for formatting plot outputs.
+    temperature_option:
+        function for picking the --temperature (-t).
+    verbose_option:
+        function for increasing the verbosity.
     axes_limit_function
+        function for setting the axis limits.
 """
 
 import click
 
 def direction_function(multiple=False):
+    """Function to create direction options.
+        
+    Arguments
+    ---------
+
+        multiple : bool, optional
+            whether to allow multiple directions. Default: False.
+
+    Returns
+    -------
+        decorator
+            direction option decorator.
+    """
+
     default = ['avg'] if multiple else 'avg'
     def direction_option(f):
-        """Option for anisotropic data."""
+        """Option for anisotropic data.
+        
+        Options
+        -------
+
+            --direction, -d : str or array-like, optional
+                direction. Default: avg.
+
+        Returns
+        -------
+
+            decorator
+                direction option decorator.
+        """
     
         f = click.option('-d', '--direction',
                          help='Direction(s) for anisotropic data.',
@@ -56,9 +82,22 @@ def direction_function(multiple=False):
     return direction_option
 
 def doping_type_option(f):
-    """Option for doping type."""
+    """Option for doping type.
+        
+        Options
+        -------
 
-    f = click.option('-t', '--type', 'dtype',
+            --type : str, optional
+                doping type. Default: n.
+
+        Returns
+        -------
+
+            decorator
+                doping type option decorator.
+        """
+
+    f = click.option('--type', 'dtype',
                      help='Type of doping.',
                      type=click.Choice(['n', 'p']),
                      default='n',
@@ -67,9 +106,36 @@ def doping_type_option(f):
     return f
 
 def doping_function(multiple=False):
+    """Function to create doping options.
+        
+    Arguments
+    ---------
+
+        multiple : bool, optional
+            whether to allow multiple concentrations. Default: False.
+
+    Returns
+    -------
+        decorator
+            carrier concentration option decorator.
+    """
+
     default = [1e19] if multiple else 1e19
     def doping_option(f):
-        """Option for doping concentration."""
+        """Option for doping concentration.
+        
+        Options
+        -------
+
+            --concentration, -n : int or float or array-like, optional
+                carrier concentration. Default: 1e19.
+
+        Returns
+        -------
+
+            decorator
+                carrier concentration option decorator.
+        """
     
         f = click.option('-n', '--concentration', 'doping',
                          help='Doping concentration(s) (will be rounded).',
@@ -82,14 +148,58 @@ def doping_function(multiple=False):
     return doping_option
 
 def dos_function(dosargs=['-c', '--colour']):
+    """Function for creating DoS options.
+
+    Arguments
+    ---------
+
+        dosargs : array-like, optional
+            names for the colour argument. Default: ['-c', '--colour'].
+
+    Returns
+    -------
+        decorator
+            DoS options decorator.
+    """
+
     if isinstance(dosargs, str):
         dosargs = [dosargs]
     def dos_options(f):
-        """Options for DoS plots."""
+        """Options for DoS plots.
+        
+        Options
+        -------
+
+            --poscar, -p : str, optional
+                POSCAR path. Ignored if atoms specified. Default: POSCAR.
+            --atoms : str, optional
+                atoms in POSCAR order. Overrides poscar. Default: None.
+            --sigma : float, optional
+                standard deviation for gaussian broadening.
+                Recommended: 0.2. Default: None.
+            --projected/--notprojected : bool, optional
+                plot atom-projected DoS. Default: --projected.
+            --colour : str or array-like, optional
+                colours in atom order followed by total or colourmap.
+                Default: tab10.
+            --total, -t/--nototal : bool, optional
+                plot the total DoS. Default: --nototal.
+            --total_label : str, optional
+                total label for the legend. Default: total.
+            --total_colour : str, optional
+                total line colour. Overrides --colour.
+
+        Returns
+        -------
+
+            decorator
+                DoS options decorator.
+        """
     
         f = click.option('-p', '--poscar',
                          help='POSCAR path. Ignored if --atoms specified.',
-                         type=click.Path(file_okay=True, dir_okay=False),
+                         type=click.Path(file_okay=True, dir_okay=False,
+                                         exists=False),
                          default='POSCAR',
                          show_default=True)(f)
         f = click.option('--atoms',
@@ -132,8 +242,38 @@ def dos_function(dosargs=['-c', '--colour']):
     return dos_options
 
 def inputs_function(name='filenames', nargs=-1):
+    """Function for creating input arguments.
+
+    Arguments
+    ---------
+
+        name : str, optional
+            filename argument. Default: 'filenames'.
+        nargs : int, optional
+            number of input files allowed. Default: -1.
+
+    Returns
+    -------
+        decorator
+            input argument decorator.
+    """
+
     def inputs_argument(f):
-        """Option for input files."""
+        """Option for input files.
+        
+        Options
+        -------
+
+            name : str or array-like
+                input files.
+
+        Returns
+        -------
+
+            decorator
+                input argument decorator.
+        """
+
         f = click.argument(name,
                            type=click.Path(exists=True, file_okay=True,
                                            dir_okay=False),
@@ -143,7 +283,22 @@ def inputs_function(name='filenames', nargs=-1):
     return inputs_argument
 
 def interpolate_options(f):
-    """Options for interpolation."""
+    """Options for interpolation.
+        
+        Options
+        -------
+
+            --interpolate, -i : int, optional
+                number of points to interpolate. Default: 200.
+            --kind : str, optional
+                interpolation kind. Default: linear.
+
+        Returns
+        -------
+
+            decorator
+                interpolation options decorator.
+        """
 
     f = click.option('-i', '--interpolate',
                      help='Number of points to interpolate to on each axis.',
@@ -158,7 +313,24 @@ def interpolate_options(f):
     return f
 
 def kpoints_options(f):
-    """Group of options for handling KPOINTS files."""
+    """Group of options for handling KPOINTS files.
+    
+        Options
+        -------
+
+            --kpoints, -k, --ibzkbt, -i : str, optional
+                KPOINTS/IBZKPT file. Overrides --mesh.
+            --mesh, -m : 3x int, optional
+                k-point mesh. Overridden by --kpoints.
+            --poscar, -p : str, optional
+                POSCAR. Required for --mesh.
+
+        Returns
+        -------
+
+            decorator
+                kpoints options decorator.
+        """
 
     f = click.option('-k', '--kpoints', '-i', '--ibzkpt',
                      help='KPOINTS/IBZKPT file. Overrides --mesh.',
@@ -169,7 +341,7 @@ def kpoints_options(f):
                      nargs=3,
                      type=int)(f)
     f = click.option('-p', '--poscar',
-                     help='POSCAR path.',
+                     help='POSCAR path. Required for --mesh.',
                      type=click.Path(file_okay=True, dir_okay=False),
                      default='POSCAR',
                      show_default=True)(f)
@@ -177,8 +349,43 @@ def kpoints_options(f):
     return f
 
 def legend_function(toggle=True, label=True):
+    """Function for creating legend options.
+
+    Arguments
+    ---------
+
+        toggle : bool, optional
+            include option to remove legend. Default: True.
+        label : bool, optional
+            include option to set labels manually. Default: True.
+
+    Returns
+    -------
+        decorator
+            legend options decorator.
+    """
+
     def legend_options(f):
-        """Group of options for plot legends."""
+        """Group of options for plot legends.
+    
+        Options
+        -------
+
+            --label, -l : str, optional
+                legend label(s).
+            --legend_title : str, optional
+                legend title.
+            --legend/--nolegend : bool, optional
+                show legend. Default: --legend.
+            --location : str or int, optional
+                legend location.
+
+        Returns
+        -------
+
+            decorator
+                legend options decorator.
+        """
     
         if label:
             f = click.option('-l', '--label',
@@ -203,7 +410,22 @@ def legend_function(toggle=True, label=True):
     return legend_options
 
 def line_options(f):
-    """Group of options for line plots"""
+    """Group of options for line plots
+    
+        Options
+        -------
+
+            --linestyle : str, optional
+                linestyle(s). Default: solid.
+            --marker : str, optional
+                marker(s). Default: None.
+
+        Returns
+        -------
+
+            decorator
+                line options decorator.
+        """
 
     f = click.option('--linestyle',
                      help='linestyle(s).',
@@ -220,7 +442,25 @@ def line_options(f):
     return f
 
 def fill_options(f):
-    """Group of options for fillable line plots"""
+    """Group of options for fillable line plots
+    
+        Options
+        -------
+
+            --fill, -f/--nofill : bool, optional
+                fill under line. Default: --fill.
+            --fillalpha : str, optional
+                fill opacity (0-1). Only works for #RRGGBB colours.
+                Default: 0.2.
+            --line/--noline : bool, optional
+                show line. Default: --line.
+
+        Returns
+        -------
+
+            decorator
+                fill options decorator.
+        """
 
     f = click.option('-f', '--fill/--nofill',
                      help='Fill under line.  [default: fill]',
@@ -240,8 +480,46 @@ def fill_options(f):
     return f
 
 def plot_io_function(name):
+    """Function for creating plot I/O options.
+
+    Arguments
+    ---------
+
+        name : str
+            output filename.
+
+    Returns
+    -------
+        decorator
+            plot I/O options decorator.
+    """
+
     def plot_io_options(f):
-        """Group of options for plot file I/O."""
+        """Group of options for plot file I/O.
+    
+        Options
+        -------
+
+            --style, -s : str, optional
+                style sheet to overlay. Later ones override earlier
+                ones.
+            --large/--small : str, optional
+                axes size. Default: small.
+            --save/--nosave : bool, optional
+                write to file. Default: --save.
+            --show/--noshow : bool, optional
+                show plot. Default: --noshow.
+            --extension : str, optional
+                output extensions(s). Default: pdf.
+            --output : str, optional.
+                output filenames, sans extension.
+
+        Returns
+        -------
+
+            decorator
+                plot I/O options decorator.
+        """
     
         f = click.option('-s', '--style',
                          help='Style sheet to overlay. Later ones override '
@@ -277,7 +555,20 @@ def plot_io_function(name):
     return plot_io_options
 
 def temperature_option(f):
-    """Option for temperature selection."""
+    """Option for temperature selection.
+        
+        Options
+        -------
+
+            --temperature, -t : str, optional
+                temperature. Default: 300.
+
+        Returns
+        -------
+
+            decorator
+                temperature option decorator.
+        """
 
     f = click.option('-t', '--temperature',
                      help='Temperature (by default in K).',
@@ -288,7 +579,20 @@ def temperature_option(f):
     return f
 
 def verbose_option(f):
-    """Option for verbose output."""
+    """Option for output verbosity.
+        
+        Options
+        -------
+
+            --verbose/--notverbose : bool, optional
+                output plot conditions. Default: --verbose.
+
+        Returns
+        -------
+
+            decorator
+                verbosity option decorator.
+        """
 
     f = click.option('--verbose/--notverbose',
                      help='Output plot conditions.  [default: verbose]',
@@ -298,8 +602,47 @@ def verbose_option(f):
     return f
 
 def axes_limit_function(multiple=False, c=False):
+    """Function for creating axes limit options.
+
+    Arguments
+    ---------
+
+        multiple : bool, optional
+            allow multiple limits. Default: False.
+        c : bool, optional
+            include colour limits. Default: False.
+
+    Returns
+    -------
+        decorator
+            axes limit options decorator.
+    """
+
     def axes_limit_options(f):
-        """Options for axes limits."""
+        """Options for axes limits.
+        
+        Options
+        -------
+
+            --xmin : float, optional
+                override minimum x.
+            --xmax : float, optional
+                override maximum x.
+            --ymin : float, optional
+                override minimum y.
+            --ymax : float, optional
+                override maximum y.
+            --cmin : float, optional
+                override minimum colour.
+            --cmax : float, optional
+                override maximum colour.
+
+        Returns
+        -------
+
+            decorator
+                axes limits options decorator.
+        """
     
         f = click.option('--xmin',
                          help='Override minimum x.',

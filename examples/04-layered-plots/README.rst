@@ -2,12 +2,18 @@
 Tutorial-04: Layered Plots
 --------------------------
 
+On top of the information in tutorial-03, this adds a plot of the
+phonon mean free path at each band and q-point in the simulation.
+This contains much the same information as the broadening in
+tutorial-02, with smaller values showing more scattering and lower
+lattice thermal conductivity.
+
 .. image:: tutorial-04.png
    :alt: Phonon dispersion convergence, density of states  and mean free path of BaSnO<sub>3</sub>.
 
 As well as plotting graphs on neighbouring axes, it can be informative
 to plot them on the same axes to highlight links, for example how the
-mean free paths of phonons in BaSnO<sub>3</sub> dip where Ba has a
+mean free paths of phonons in BaSnO\ :sub:`3` dip where Ba has a
 strong contribution to the DoS, or how a phonon dispersion converges
 with supercell size. Although this can start to make scripts more
 complicated, and is not yet supported by the CLI, it is often worth the
@@ -70,4 +76,4 @@ which removes the ticks and tick labels and the y axis label, while all
 the default labels can be accessed with ``settings.labels``. These will
 be covered more in `Tutorial-05`_.
 
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
+.. _Tutorial-05: https://smtg-bham.github.io/ThermoParser/tutorial-05.html

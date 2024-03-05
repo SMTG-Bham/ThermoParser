@@ -2,6 +2,13 @@
 Tutorial-02: Individual Customisation
 -------------------------------------
 
+Like tutorial-01, this is a phonon dispersion, but this time the modes
+have been broadened in relation to the imaginary component of their
+self-energy. This represents the degree to which they scatter (broader
+modes indicates more scattering). More scattering causes a decrease in
+lattice thermal conductivity. The data for the scattering comes from
+Phono3py, which also uses the supercell approach.
+
 .. image:: tutorial-02.png
    :alt: Finite bandwidth phonon dispersion of ZnO.
 
@@ -77,5 +84,5 @@ midpoint you specify, and ``uniform`` calculates the midpoint position
 based on the relative compositions of the colours, which is used for
 heatmaps.
 
-.. _Tutorial-01: https://smtg-ucl.github.io/ThermoParser/tutorial-01.html
-.. _colourmap generators: https://smtg-ucl.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour
+.. _Tutorial-01: https://smtg-bham.github.io/ThermoParser/tutorial-01.html
+.. _colourmap generators: https://smtg-bham.github.io/ThermoParser/tp.plot.html#module-tp.plot.colour
