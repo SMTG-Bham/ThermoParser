@@ -147,6 +147,31 @@ def doping_function(multiple=False):
         return f
     return doping_option
 
+def heatmap_options(f):
+    """Options for heatmaps."""
+
+    f = click.option('--discrete/--continuous',
+                     help='Discretise colourmap.  [default: continuous]',
+                     default=False,
+                     show_default=False)(f)
+    f = click.option('-l', '--levels',
+                     help='Levels for discrete plots. Lists directly '
+                          'specify the contour levels, while integers '
+                          'specify the maximum-1 number of "nice" '
+                          'levels to plot.',
+                     multiple=True,
+                     default=None)(f)
+    f = click.option('--contours',
+                     help='Contours to plot.',
+                     multiple=True,
+                     type=float,
+                     default=None)(f)
+    f = click.option('--contourcolours',
+                     help='contour colours',
+                     multiple=True,
+                     default='black')(f)
+    return f
+
 def dos_function(dosargs=['-c', '--colour']):
     """Function for creating DoS options.
 

@@ -377,7 +377,7 @@ def dimensions():
             'seebeck_effective_mass':          [],
             'temperature':                     ['temperature'],
             'thermal_conductivity':            ['temperature', 'doping', 3, 3],
-            'total_weights':                   ['stype', 'temperature', 'doping'],
+            'total_weights':                   ['temperature', 'doping'],
             'velocities':                      ['band', 'kpoint', 3],
             'weighted_mfp':                    ['stype', 'temperature', 'doping', 3],
             'weighted_rates':                  ['stype', 'temperature', 'doping'],
@@ -451,23 +451,23 @@ def long_labels():
               'complexity_factor':
                   'Complexity Factor',
               'conductivity':
-                  'Conductivity (S m$\mathregular{^{-1}}$)',
+                  r'Conductivity (S m$\mathregular{^{-1}}$)',
               'cumulative_kappa':
-                  'Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Cumulative Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'cumulative_percent':
                   'Cumulative Lattice Thermal Conductivity (%)',
               'doping':
-                  'Carrier Concentration (cm$\mathregular{^{-3}}$)',
+                  r'Carrier Concentration (cm$\mathregular{^{-3}}$)',
               'dos':
                   'Density of States',
               'efermi':
                   'Fermi Energy (eV)',
               'effective_mass':
-                  'Effective Mass (m$\mathregular{_e}$)',
+                  r'Effective Mass (m$\mathregular{_e}$)',
               'energy':
                   'Energy (eV)',
               'electronic_thermal_conductivity':
-                  'Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'fermi_level':
                   'Fermi Level (eV)',
               'frequency':
@@ -475,45 +475,45 @@ def long_labels():
               'gamma':
                   'Imaginary Self Energy (THz)',
               'group_velocity':
-                  'Group Velocity (m s$\mathregular{^{-1}}$)',
+                  r'Group Velocity (m s$\mathregular{^{-1}}$)',
               'gruneisen':
                   'Gruneisen Parameter',
               'gv_by_gv':
-                  'Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)',
+                  r'Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)',
               'heat_capacity':
-                  'Heat Capacity (J K$\mathregular{^{-1}}$)',
+                  r'Heat Capacity (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
-                  'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'lifetime':
                   'Lifetime (s)',
               'mean_free_path':
                   'Mean Free Path (m)',
               'mobility':
-                  'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
+                  r'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
               'mode_kappa':
-                  'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Lattice Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'ph_ph_strength':
-                  'Average Phonon-Phonon Interaction Strengths (eV$\mathregular{^2}$)',
+                  r'Average Phonon-Phonon Interaction Strengths (eV$\mathregular{^2}$)',
               'power_factor':
-                  'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
+                  r'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':
                   'Occupation',
               'scattering_rates':
-                  'Scattering Rates (s$\mathregular{^{-1}}$)',
+                  r'Scattering Rates (s$\mathregular{^{-1}}$)',
               'seebeck':
-                  'Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)',
+                  r'Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)',
               'temperature':
                   'Temperature (K)',
               'thermal_conductivity':
-                  'Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'velocities':
-                  'Velocity (m s$\mathregular{^{-1}})',
+                  r'Velocity (m s$\mathregular{^{-1}})',
               'wavevector':
                   'Wavevector',
               'weighted_mfp':
                   'Mean Free Path (m)',
               'weighted_rates':
-                  'Scattering Rates (s$\mathregular{^{-1}}$)',
+                  r'Scattering Rates (s$\mathregular{^{-1}}$)',
               'zt':
                   'ZT'}
 
@@ -531,23 +531,23 @@ def medium_labels():
               'complexity_factor':
                   'Complexity Factor',
               'conductivity':
-                  'Conductivity (S m$\mathregular{^{-1}}$)',
+                  r'Conductivity (S m$\mathregular{^{-1}}$)',
               'cumulative_kappa':
-                  'Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Cum. LTC (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'cumulative_percent':
                   'Cum. LTC (%)',
               'doping':
-                  'Carrier Concentration (cm$\mathregular{^{-3}}$)',
+                  r'Carrier Concentration (cm$\mathregular{^{-3}}$)',
               'dos':
                   'Density of States',
               'efermi':
                   'Fermi Energy (eV)',
               'effective_mass':
-                  'Effective Mass (m$\mathregular{_e}$)',
+                  r'Effective Mass (m$\mathregular{_e}$)',
               'energy':
                   'Energy (eV)',
               'electronic_thermal_conductivity':
-                  'Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'fermi_level':
                   'Fermi Level (eV)',
               'frequency':
@@ -555,45 +555,45 @@ def medium_labels():
               'gamma':
                   'Imaginary Self Energy (THz)',
               'group_velocity':
-                  'Group Velocity (m s$\mathregular{^{-1}}$)',
+                  r'Group Velocity (m s$\mathregular{^{-1}}$)',
               'gruneisen':
                   'Gruneisen Parameter',
               'gv_by_gv':
-                  'Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)',
+                  r'Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)',
               'heat_capacity':
-                  'Heat Capacity (J K$\mathregular{^{-1}}$)',
+                  r'Heat Capacity (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
-                  'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'lifetime':
                   'Lifetime (s)',
               'mean_free_path':
                   'Mean Free Path (m)',
               'mobility':
-                  'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
+                  r'Mobility (cm$\mathregular{^2\ V^{-1}\ s^{-1}}$)',
               'mode_kappa':
-                  'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'ph_ph_strength':
-                  'Avg. Ph-Ph Strengths (eV$\mathregular{^2}$)',
+                  r'Avg. Ph-Ph Strengths (eV$\mathregular{^2}$)',
               'power_factor':
-                  'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
+                  r'Power Factor (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':
                   'Occupation',
               'scattering_rates':
-                  'Scattering Rates (s$\mathregular{^{-1}}$)',
+                  r'Scattering Rates (s$\mathregular{^{-1}}$)',
               'seebeck':
-                  'Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)',
+                  r'Seebeck Coefficient ($\mathregular{\mu V\ K^{-1}}$)',
               'temperature':
                   'Temperature (K)',
               'thermal_conductivity':
-                  'Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
+                  r'Thermal Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'velocities':
-                  'Velocity (m s$\mathregular{^{-1}})',
+                  r'Velocity (m s$\mathregular{^{-1}})',
               'wavevector':
                   'Wavevector',
               'weighted_mfp':
                   'Mean Free Path (m)',
               'weighted_rates':
-                  'Scattering Rates (s$\mathregular{^{-1}}$)',
+                  r'Scattering Rates (s$\mathregular{^{-1}}$)',
               'zt':
                   'ZT'}
 
@@ -607,73 +607,73 @@ def short_labels():
     """Get dictionary of short-form axis labels."""
 
     labels = {'chemical_potential':
-                  '$\mathregular{\mu}$ (eV)',
+                  r'$\mathregular{\mu}$ (eV)',
               'complexity_factor':
-                  '$\mathregular{N_v*K*}$',
+                  r'$\mathregular{N_v*K*}$',
               'conductivity':
-                  '$\mathregular{\sigma\ (S\ m^{-1})}$',
+                  r'$\mathregular{\sigma\ (S\ m^{-1})}$',
               'cumulative_kappa':
-                  '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+                  r'$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
               'cumulative_percent':
-                  '$\mathregular{\kappa_l}$ (%)',
+                  r'$\mathregular{\kappa_l}$ (%)',
               'doping':
-                  'n (cm$\mathregular{^{-3}}$)',
+                  r'n (cm$\mathregular{^{-3}}$)',
               'dos':
                   'DoS',
               'efermi':
-                  'E$\mathregular{_{F}}$ (eV)',
+                  r'E$\mathregular{_{F}}$ (eV)',
               'effective_mass':
-                  '$\mathregular{m*\ (m_e})$',
+                  r'$\mathregular{m*\ (m_e})$',
               'energy':
                   'E (eV)',
               'electronic_thermal_conductivity':
-                  '$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$',
+                  r'$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$',
               'fermi_level':
-                  'E$\mathregular{_{F}}$ (eV)',
+                  r'E$\mathregular{_{F}}$ (eV)',
               'frequency':
-                  '$\mathregular{\\nu}$ (THz)',
+                  r'$\mathregular{\\nu}$ (THz)',
               'gamma':
-                  '$\mathregular{\Gamma}$ (THz)',
+                  r'$\mathregular{\Gamma}$ (THz)',
               'group_velocity':
-                  '$\mathregular{g_v\ (m\ s^{-1})}$',
+                  r'$\mathregular{g_v\ (m\ s^{-1})}$',
               'gruneisen':
-                  '$\gamma$',
+                  r'$\gamma$',
               'gv_by_gv':
-                  '$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$',
+                  r'$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$',
               'heat_capacity':
-                  'C (J K$\mathregular{^{-1}}$)',
+                  r'C (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
-                  '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+                  r'$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
               'lifetime':
-                  '$\mathregular{\\tau}$ (s)',
+                  r'$\mathregular{\\tau}$ (s)',
               'mean_free_path':
-                  '$\mathregular{\Lambda}$ (m)',
+                  r'$\mathregular{\Lambda}$ (m)',
               'mobility':
-                  '$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$',
+                  r'$\mathregular{\mu\ (cm^2\ V^{-1}\ s^{-1})}$',
               'mode_kappa':
-                  '$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
+                  r'$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
               'ph_ph_strength':
-                  '$\mathregular{P_\lambda\ (eV^2)}$',
+                  r'$\mathregular{P_\lambda\ (eV^2)}$',
               'power_factor':
-                  'PF (W m$\mathregular{^{-1}\ K^{-2}}$)',
+                  r'PF (W m$\mathregular{^{-1}\ K^{-2}}$)',
               'occupation':
                   'Occupation',
               'scattering_rates':
-                  '$\mathregular{\\tau^{-1}\ (s^{-1})}$',
+                  r'$\mathregular{\\tau^{-1}\ (s^{-1})}$',
               'seebeck':
-                  '$\mathregular{\\alpha\ (\mu V\ K^{-1})}$',
+                  r'$\mathregular{\\alpha\ (\mu V\ K^{-1})}$',
               'temperature':
                   'T (K)',
               'thermal_conductivity':
-                  '$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)',
+                  r'$\mathregular{\kappa\ (W\ m^{-1}\ K^{-1}}$)',
               'velocities':
-                  'v (m s$\mathregular{^{-1}})',
+                  r'v (m s$\mathregular{^{-1}})',
               'wavevector':
                   'q',
               'weighted_mfp':
-                  '$\mathregular{\Lambda}$ (m)',
+                  r'$\mathregular{\Lambda}$ (m)',
               'weighted_rates':
-                  '$\mathregular{\\tau^{-1}\ (s^{-1})}$',
+                  r'$\mathregular{\\tau^{-1}\ (s^{-1})}$',
               'zt':
                   'ZT'}
 

@@ -3,7 +3,7 @@ numbered examples aim to provide a tutorial of how the package in
 general works, while the rest show some more concrete examples you
 might find in published work.
 
-The data files provided are mostly from published work\ :sup`1`, which
+The data files provided are mostly from published work\ :sup:`1`, which
 looks at the effectiveness of four transparent conducting oxides (TCOs)
 as thermoelectrics. Using a pre-release version of this code, the main
 problem was found to be their large lattice thermal conductivities,
