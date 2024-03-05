@@ -78,80 +78,101 @@
 <span class="sd">Functions</span>
 <span class="sd">---------</span>
 
-<span class="sd">    direction_option</span>
-<span class="sd">    </span>
-<span class="sd">    directions_option</span>
-<span class="sd">    </span>
-<span class="sd">    doping_type_option</span>
-<span class="sd">    </span>
-<span class="sd">    doping_option</span>
-<span class="sd">    </span>
-<span class="sd">    dopings_option</span>
-<span class="sd">    </span>
-<span class="sd">    dos_function</span>
-<span class="sd">    </span>
-<span class="sd">    input_argument</span>
-<span class="sd">    </span>
-<span class="sd">    inputs_function</span>
-<span class="sd">    </span>
-<span class="sd">    interpolate_options</span>
-<span class="sd">    </span>
-<span class="sd">    kpoints_options</span>
-<span class="sd">    </span>
-<span class="sd">    legend_options</span>
-<span class="sd">    </span>
-<span class="sd">    line_options</span>
-<span class="sd">    </span>
-<span class="sd">    fill_options</span>
-<span class="sd">    </span>
-<span class="sd">    plot_io_function</span>
-<span class="sd">    </span>
-<span class="sd">    temperature_option</span>
-<span class="sd">    </span>
-<span class="sd">    verbose_option</span>
-<span class="sd">    </span>
-<span class="sd">    xy_limit_options</span>
-<span class="sd">    </span>
-<span class="sd">    c_limit_options</span>
+<span class="sd">    direction_function:</span>
+<span class="sd">        function for picking the --direction (-d).</span>
+<span class="sd">    doping_type_option:</span>
+<span class="sd">        function for picking the doping --type (-t).</span>
+<span class="sd">    doping_function:</span>
+<span class="sd">        function for picking the doping --concentration (-n).</span>
+<span class="sd">    dos_function:</span>
+<span class="sd">        function for setting DoS formatting.</span>
+<span class="sd">    inputs_function:</span>
+<span class="sd">        function for picking the input file(s) argument.</span>
+<span class="sd">    interpolate_options:</span>
+<span class="sd">        function for setting interpolation options.</span>
+<span class="sd">    kpoints_options:</span>
+<span class="sd">        function for handling KPOINTS files.</span>
+<span class="sd">    legend_options:</span>
+<span class="sd">        function for formatting legends.</span>
+<span class="sd">    line_options:</span>
+<span class="sd">        function for formatting line plots.</span>
+<span class="sd">    fill_options:</span>
+<span class="sd">        function for formatting fillable line plots.</span>
+<span class="sd">    plot_io_function:</span>
+<span class="sd">        function for formatting plot outputs.</span>
+<span class="sd">    temperature_option:</span>
+<span class="sd">        function for picking the --temperature (-t).</span>
+<span class="sd">    verbose_option:</span>
+<span class="sd">        function for increasing the verbosity.</span>
+<span class="sd">    axes_limit_function</span>
+<span class="sd">        function for setting the axis limits.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">click</span>
 
-<div class="viewcode-block" id="direction_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.direction_option">[docs]</a><span class="k">def</span> <span class="nf">direction_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for singular option for anisotropic data.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="direction_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.direction_function">[docs]</a><span class="k">def</span> <span class="nf">direction_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to create direction options.</span>
+<span class="sd">        </span>
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--direction&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction for anisotropic data.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">],</span>
-                                       <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-                     <span class="n">default</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span>
-                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd">        multiple : bool, optional</span>
+<span class="sd">            whether to allow multiple directions. Default: False.</span>
 
-    <span class="k">return</span> <span class="n">f</span></div>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            direction option decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="directions_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.directions_option">[docs]</a><span class="k">def</span> <span class="nf">directions_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for multiple directions for anisotropic data.&quot;&quot;&quot;</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">multiple</span> <span class="k">else</span> <span class="s1">&#39;avg&#39;</span>
+    <span class="k">def</span> <span class="nf">direction_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Option for anisotropic data.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--direction&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction(s) for anisotropic data.&#39;</span><span class="p">,</span>
-                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">],</span>
-                                       <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">],</span>
-                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd">            --direction, -d : str or array-like, optional</span>
+<span class="sd">                direction. Default: avg.</span>
 
-    <span class="k">return</span> <span class="n">f</span></div>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                direction option decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--direction&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Direction(s) for anisotropic data.&#39;</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;norm&#39;</span><span class="p">],</span>
+                                           <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">direction_option</span></div>
 
 <div class="viewcode-block" id="doping_type_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.doping_type_option">[docs]</a><span class="k">def</span> <span class="nf">doping_type_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for doping type.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Option for doping type.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--type&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
+<span class="sd">            --type : str, optional</span>
+<span class="sd">                doping type. Default: n.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                doping type option decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--type&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Type of doping.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">]),</span>
                      <span class="n">default</span><span class="o">=</span><span class="s1">&#39;n&#39;</span><span class="p">,</span>
@@ -159,38 +180,126 @@
 
     <span class="k">return</span> <span class="n">f</span></div>
 
-<div class="viewcode-block" id="doping_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.doping_option">[docs]</a><span class="k">def</span> <span class="nf">doping_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for a doping concentration.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="doping_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.doping_function">[docs]</a><span class="k">def</span> <span class="nf">doping_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to create doping options.</span>
+<span class="sd">        </span>
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--concentration&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Doping concentration (will be rounded).&#39;</span><span class="p">,</span>
-                     <span class="n">default</span><span class="o">=</span><span class="mf">1.e19</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
-                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd">        multiple : bool, optional</span>
+<span class="sd">            whether to allow multiple concentrations. Default: False.</span>
 
-    <span class="k">return</span> <span class="n">f</span></div>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            carrier concentration option decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="dopings_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.dopings_option">[docs]</a><span class="k">def</span> <span class="nf">dopings_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for doping concentrations.&quot;&quot;&quot;</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e19</span><span class="p">]</span> <span class="k">if</span> <span class="n">multiple</span> <span class="k">else</span> <span class="mf">1e19</span>
+    <span class="k">def</span> <span class="nf">doping_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Option for doping concentration.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--concentration&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Doping concentration(s) (will be rounded).&#39;</span><span class="p">,</span>
+<span class="sd">            --concentration, -n : int or float or array-like, optional</span>
+<span class="sd">                carrier concentration. Default: 1e19.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                carrier concentration option decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--concentration&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Doping concentration(s) (will be rounded).&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                         <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">doping_option</span></div>
+
+<div class="viewcode-block" id="heatmap_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.heatmap_options">[docs]</a><span class="k">def</span> <span class="nf">heatmap_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Options for heatmaps.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--discrete/--continuous&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Discretise colourmap.  [default: continuous]&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--levels&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Levels for discrete plots. Lists directly &#39;</span>
+                          <span class="s1">&#39;specify the contour levels, while integers &#39;</span>
+                          <span class="s1">&#39;specify the maximum-1 number of &quot;nice&quot; &#39;</span>
+                          <span class="s1">&#39;levels to plot.&#39;</span><span class="p">,</span>
                      <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mf">1.e19</span><span class="p">],</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--contours&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Contours to plot.&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
-                     <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--contourcolours&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;contour colours&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="dos_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.dos_function">[docs]</a><span class="k">def</span> <span class="nf">dos_function</span><span class="p">(</span><span class="n">dosargs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--colour&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Function for creating DoS options.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        dosargs : array-like, optional</span>
+<span class="sd">            names for the colour argument. Default: [&#39;-c&#39;, &#39;--colour&#39;].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            DoS options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dosargs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">dosargs</span> <span class="o">=</span> <span class="p">[</span><span class="n">dosargs</span><span class="p">]</span>
     <span class="k">def</span> <span class="nf">dos_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Options for DoS plots.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Options for DoS plots.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --poscar, -p : str, optional</span>
+<span class="sd">                POSCAR path. Ignored if atoms specified. Default: POSCAR.</span>
+<span class="sd">            --atoms : str, optional</span>
+<span class="sd">                atoms in POSCAR order. Overrides poscar. Default: None.</span>
+<span class="sd">            --sigma : float, optional</span>
+<span class="sd">                standard deviation for gaussian broadening.</span>
+<span class="sd">                Recommended: 0.2. Default: None.</span>
+<span class="sd">            --projected/--notprojected : bool, optional</span>
+<span class="sd">                plot atom-projected DoS. Default: --projected.</span>
+<span class="sd">            --colour : str or array-like, optional</span>
+<span class="sd">                colours in atom order followed by total or colourmap.</span>
+<span class="sd">                Default: tab10.</span>
+<span class="sd">            --total, -t/--nototal : bool, optional</span>
+<span class="sd">                plot the total DoS. Default: --nototal.</span>
+<span class="sd">            --total_label : str, optional</span>
+<span class="sd">                total label for the legend. Default: total.</span>
+<span class="sd">            --total_colour : str, optional</span>
+<span class="sd">                total line colour. Overrides --colour.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                DoS options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--poscar&#39;</span><span class="p">,</span>
                          <span class="n">help</span><span class="o">=</span><span class="s1">&#39;POSCAR path. Ignored if --atoms specified.&#39;</span><span class="p">,</span>
-                         <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                         <span class="n">exists</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
                          <span class="n">default</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span>
                          <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--atoms&#39;</span><span class="p">,</span>
@@ -233,8 +342,38 @@
     <span class="k">return</span> <span class="n">dos_options</span></div>
 
 <div class="viewcode-block" id="inputs_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.inputs_function">[docs]</a><span class="k">def</span> <span class="nf">inputs_function</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;filenames&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function for creating input arguments.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        name : str, optional</span>
+<span class="sd">            filename argument. Default: &#39;filenames&#39;.</span>
+<span class="sd">        nargs : int, optional</span>
+<span class="sd">            number of input files allowed. Default: -1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            input argument decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">inputs_argument</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Option for input files.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Option for input files.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            name : str or array-like</span>
+<span class="sd">                input files.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                input argument decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
                            <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                            <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -244,7 +383,22 @@
     <span class="k">return</span> <span class="n">inputs_argument</span></div>
 
 <div class="viewcode-block" id="interpolate_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.interpolate_options">[docs]</a><span class="k">def</span> <span class="nf">interpolate_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Options for interpolation.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Options for interpolation.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --interpolate, -i : int, optional</span>
+<span class="sd">                number of points to interpolate. Default: 200.</span>
+<span class="sd">            --kind : str, optional</span>
+<span class="sd">                interpolation kind. Default: linear.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                interpolation options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--interpolate&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of points to interpolate to on each axis.&#39;</span><span class="p">,</span>
@@ -259,7 +413,24 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="kpoints_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.kpoints_options">[docs]</a><span class="k">def</span> <span class="nf">kpoints_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Group of options for handling KPOINTS files.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Group of options for handling KPOINTS files.</span>
+<span class="sd">    </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --kpoints, -k, --ibzkbt, -i : str, optional</span>
+<span class="sd">                KPOINTS/IBZKPT file. Overrides --mesh.</span>
+<span class="sd">            --mesh, -m : 3x int, optional</span>
+<span class="sd">                k-point mesh. Overridden by --kpoints.</span>
+<span class="sd">            --poscar, -p : str, optional</span>
+<span class="sd">                POSCAR. Required for --mesh.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                kpoints options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="s1">&#39;--kpoints&#39;</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--ibzkpt&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;KPOINTS/IBZKPT file. Overrides --mesh.&#39;</span><span class="p">,</span>
@@ -270,7 +441,7 @@
                      <span class="n">nargs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--poscar&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;POSCAR path.&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;POSCAR path. Required for --mesh.&#39;</span><span class="p">,</span>
                      <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_okay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dir_okay</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
                      <span class="n">default</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span>
                      <span class="n">show_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
@@ -278,8 +449,43 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="legend_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.legend_function">[docs]</a><span class="k">def</span> <span class="nf">legend_function</span><span class="p">(</span><span class="n">toggle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function for creating legend options.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        toggle : bool, optional</span>
+<span class="sd">            include option to remove legend. Default: True.</span>
+<span class="sd">        label : bool, optional</span>
+<span class="sd">            include option to set labels manually. Default: True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            legend options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">legend_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Group of options for plot legends.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Group of options for plot legends.</span>
+<span class="sd">    </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --label, -l : str, optional</span>
+<span class="sd">                legend label(s).</span>
+<span class="sd">            --legend_title : str, optional</span>
+<span class="sd">                legend title.</span>
+<span class="sd">            --legend/--nolegend : bool, optional</span>
+<span class="sd">                show legend. Default: --legend.</span>
+<span class="sd">            --location : str or int, optional</span>
+<span class="sd">                legend location.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                legend options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--label&#39;</span><span class="p">,</span>
@@ -304,7 +510,22 @@
     <span class="k">return</span> <span class="n">legend_options</span></div>
 
 <div class="viewcode-block" id="line_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.line_options">[docs]</a><span class="k">def</span> <span class="nf">line_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Group of options for line plots&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Group of options for line plots</span>
+<span class="sd">    </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --linestyle : str, optional</span>
+<span class="sd">                linestyle(s). Default: solid.</span>
+<span class="sd">            --marker : str, optional</span>
+<span class="sd">                marker(s). Default: None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                line options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--linestyle&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;linestyle(s).&#39;</span><span class="p">,</span>
@@ -321,7 +542,25 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="fill_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.fill_options">[docs]</a><span class="k">def</span> <span class="nf">fill_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Group of options for fillable line plots&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Group of options for fillable line plots</span>
+<span class="sd">    </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --fill, -f/--nofill : bool, optional</span>
+<span class="sd">                fill under line. Default: --fill.</span>
+<span class="sd">            --fillalpha : str, optional</span>
+<span class="sd">                fill opacity (0-1). Only works for #RRGGBB colours.</span>
+<span class="sd">                Default: 0.2.</span>
+<span class="sd">            --line/--noline : bool, optional</span>
+<span class="sd">                show line. Default: --line.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                fill options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="s1">&#39;--fill/--nofill&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Fill under line.  [default: fill]&#39;</span><span class="p">,</span>
@@ -341,8 +580,46 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="plot_io_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.plot_io_function">[docs]</a><span class="k">def</span> <span class="nf">plot_io_function</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function for creating plot I/O options.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        name : str</span>
+<span class="sd">            output filename.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            plot I/O options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">plot_io_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Group of options for plot file I/O.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Group of options for plot file I/O.</span>
+<span class="sd">    </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --style, -s : str, optional</span>
+<span class="sd">                style sheet to overlay. Later ones override earlier</span>
+<span class="sd">                ones.</span>
+<span class="sd">            --large/--small : str, optional</span>
+<span class="sd">                axes size. Default: small.</span>
+<span class="sd">            --save/--nosave : bool, optional</span>
+<span class="sd">                write to file. Default: --save.</span>
+<span class="sd">            --show/--noshow : bool, optional</span>
+<span class="sd">                show plot. Default: --noshow.</span>
+<span class="sd">            --extension : str, optional</span>
+<span class="sd">                output extensions(s). Default: pdf.</span>
+<span class="sd">            --output : str, optional.</span>
+<span class="sd">                output filenames, sans extension.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                plot I/O options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="s1">&#39;--style&#39;</span><span class="p">,</span>
                          <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Style sheet to overlay. Later ones override &#39;</span>
@@ -378,7 +655,20 @@
     <span class="k">return</span> <span class="n">plot_io_options</span></div>
 
 <div class="viewcode-block" id="temperature_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.temperature_option">[docs]</a><span class="k">def</span> <span class="nf">temperature_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for temperature selection.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Option for temperature selection.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --temperature, -t : str, optional</span>
+<span class="sd">                temperature. Default: 300.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                temperature option decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--temperature&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Temperature (by default in K).&#39;</span><span class="p">,</span>
@@ -389,7 +679,20 @@
     <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="verbose_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.verbose_option">[docs]</a><span class="k">def</span> <span class="nf">verbose_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Option for verbose output.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Option for output verbosity.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --verbose/--notverbose : bool, optional</span>
+<span class="sd">                output plot conditions. Default: --verbose.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                verbosity option decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--verbose/--notverbose&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output plot conditions.  [default: verbose]&#39;</span><span class="p">,</span>
@@ -398,35 +701,76 @@
 
     <span class="k">return</span> <span class="n">f</span></div>
 
-<div class="viewcode-block" id="xy_limit_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.xy_limit_options">[docs]</a><span class="k">def</span> <span class="nf">xy_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Options for x and y axes limits.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="axes_limit_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.axes_limit_function">[docs]</a><span class="k">def</span> <span class="nf">axes_limit_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function for creating axes limit options.</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmin&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x-axis value.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmax&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x-axis value.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymin&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y-axis value.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymax&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y-axis value.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
 
-    <span class="k">return</span> <span class="n">f</span></div>
+<span class="sd">        multiple : bool, optional</span>
+<span class="sd">            allow multiple limits. Default: False.</span>
+<span class="sd">        c : bool, optional</span>
+<span class="sd">            include colour limits. Default: False.</span>
 
-<div class="viewcode-block" id="c_limit_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.c_limit_options">[docs]</a><span class="k">def</span> <span class="nf">c_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Options for colour axes limits.&quot;&quot;&quot;</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            axes limit options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmin&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour-axis value.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmax&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour-axis value.&#39;</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">axes_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Options for axes limits.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
 
-    <span class="k">return</span> <span class="n">f</span></div>
+<span class="sd">            --xmin : float, optional</span>
+<span class="sd">                override minimum x.</span>
+<span class="sd">            --xmax : float, optional</span>
+<span class="sd">                override maximum x.</span>
+<span class="sd">            --ymin : float, optional</span>
+<span class="sd">                override minimum y.</span>
+<span class="sd">            --ymax : float, optional</span>
+<span class="sd">                override maximum y.</span>
+<span class="sd">            --cmin : float, optional</span>
+<span class="sd">                override minimum colour.</span>
+<span class="sd">            --cmax : float, optional</span>
+<span class="sd">                override maximum colour.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                axes limits options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmin&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmax&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymin&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymax&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmin&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour value.&#39;</span><span class="p">,</span>
+                             <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                             <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmax&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour value.&#39;</span><span class="p">,</span>
+                             <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                             <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">axes_limit_options</span></div>
 </pre></div>
 
            </div>

@@ -92,6 +92,10 @@
              
   <div class="section" id="tutorial-05-helper-functions">
 <h1>Tutorial-05: Helper Functions<a class="headerlink" href="#tutorial-05-helper-functions" title="Permalink to this headline">¶</a></h1>
+<p>This shows simple line plots of electrical conductivity, Seebeck
+coefficient and lattice thermal conductivity. Thermoelectrics require a
+balance of high electrical conductivity and Seebeck coefficient, but
+low thermal conductivity to be efficient.</p>
 <img alt="Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`" src="_images/tutorial-05.png" />
 <p>ThermoParser contains a number of helper functions that may be useful
 even when not using the core functionality. We will cover several of
@@ -173,7 +177,7 @@ CLI:</p>
 
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="c1"># Axes</span>
 <span class="hll"><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tp&#39;</span><span class="p">)</span>

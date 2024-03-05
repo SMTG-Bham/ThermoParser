@@ -130,6 +130,8 @@
 <dt>get</dt><dd><dl class="simple">
 <dt>amset</dt><dd><p>get specific data from amset transport json or mesh h5.</p>
 </dd>
+<dt>occupation</dt><dd><p>get charge carrier occupation</p>
+</dd>
 <dt>boltztrap</dt><dd><p>get specific data from tp boltztrap hdf5.</p>
 </dd>
 <dt>phono3py</dt><dd><p>get specific data from phono3py kappa hdf5.</p>
@@ -189,121 +191,322 @@
 <div class="section" id="id1">
 <h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>direction_option</p>
-<p>directions_option</p>
-<p>doping_type_option</p>
-<p>doping_option</p>
-<p>dopings_option</p>
-<p>dos_function</p>
-<p>input_argument</p>
-<p>inputs_function</p>
-<p>interpolate_options</p>
-<p>kpoints_options</p>
-<p>legend_options</p>
-<p>line_options</p>
-<p>fill_options</p>
-<p>plot_io_function</p>
-<p>temperature_option</p>
-<p>verbose_option</p>
-<p>xy_limit_options</p>
-<p>c_limit_options</p>
+<div><dl class="simple">
+<dt>direction_function:</dt><dd><p>function for picking the –direction (-d).</p>
+</dd>
+<dt>doping_type_option:</dt><dd><p>function for picking the doping –type (-t).</p>
+</dd>
+<dt>doping_function:</dt><dd><p>function for picking the doping –concentration (-n).</p>
+</dd>
+<dt>dos_function:</dt><dd><p>function for setting DoS formatting.</p>
+</dd>
+<dt>inputs_function:</dt><dd><p>function for picking the input file(s) argument.</p>
+</dd>
+<dt>interpolate_options:</dt><dd><p>function for setting interpolation options.</p>
+</dd>
+<dt>kpoints_options:</dt><dd><p>function for handling KPOINTS files.</p>
+</dd>
+<dt>legend_options:</dt><dd><p>function for formatting legends.</p>
+</dd>
+<dt>line_options:</dt><dd><p>function for formatting line plots.</p>
+</dd>
+<dt>fill_options:</dt><dd><p>function for formatting fillable line plots.</p>
+</dd>
+<dt>plot_io_function:</dt><dd><p>function for formatting plot outputs.</p>
+</dd>
+<dt>temperature_option:</dt><dd><p>function for picking the –temperature (-t).</p>
+</dd>
+<dt>verbose_option:</dt><dd><p>function for increasing the verbosity.</p>
+</dd>
+<dt>axes_limit_function</dt><dd><p>function for setting the axis limits.</p>
+</dd>
+</dl>
 </div></blockquote>
 <dl class="py function">
-<dt id="tp.cli.options.c_limit_options">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">c_limit_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#c_limit_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.c_limit_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Options for colour axes limits.</p>
+<dt id="tp.cli.options.axes_limit_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">axes_limit_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiple</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">c</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#axes_limit_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.axes_limit_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for creating axes limit options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>multiple</strong> (<em>bool</em><em>, </em><em>optional</em>) – allow multiple limits. Default: False.</p></li>
+<li><p><strong>c</strong> (<em>bool</em><em>, </em><em>optional</em>) – include colour limits. Default: False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>axes limit options decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.cli.options.direction_option">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">direction_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#direction_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.direction_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for singular option for anisotropic data.</p>
+<dt id="tp.cli.options.direction_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">direction_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiple</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#direction_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.direction_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create direction options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>multiple</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to allow multiple directions. Default: False.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>direction option decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="tp.cli.options.directions_option">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">directions_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#directions_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.directions_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for multiple directions for anisotropic data.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.cli.options.doping_option">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">doping_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#doping_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.doping_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for a doping concentration.</p>
+<dt id="tp.cli.options.doping_function">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">doping_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiple</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#doping_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.doping_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create doping options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>multiple</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to allow multiple concentrations. Default: False.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>carrier concentration option decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.doping_type_option">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">doping_type_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#doping_type_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.doping_type_option" title="Permalink to this definition">¶</a></dt>
 <dd><p>Option for doping type.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.cli.options.dopings_option">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">dopings_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#dopings_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.dopings_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for doping concentrations.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–type<span class="classifier">str, optional</span></dt><dd><p>doping type. Default: n.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>doping type option decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.dos_function">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">dos_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dosargs</span><span class="o">=</span><span class="default_value">['-c', '--colour']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#dos_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.dos_function" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function for creating DoS options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dosargs</strong> (<em>array-like</em><em>, </em><em>optional</em>) – names for the colour argument. Default: [‘-c’, ‘–colour’].</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DoS options decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.fill_options">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">fill_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#fill_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.fill_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Group of options for fillable line plots</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–fill, -f/–nofill<span class="classifier">bool, optional</span></dt><dd><p>fill under line. Default: –fill.</p>
+</dd>
+<dt>–fillalpha<span class="classifier">str, optional</span></dt><dd><p>fill opacity (0-1). Only works for #RRGGBB colours.
+Default: 0.2.</p>
+</dd>
+<dt>–line/–noline<span class="classifier">bool, optional</span></dt><dd><p>show line. Default: –line.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>fill options decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.cli.options.heatmap_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">heatmap_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#heatmap_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.heatmap_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for heatmaps.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.inputs_function">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">inputs_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'filenames'</span></em>, <em class="sig-param"><span class="n">nargs</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#inputs_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.inputs_function" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function for creating input arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – filename argument. Default: ‘filenames’.</p></li>
+<li><p><strong>nargs</strong> (<em>int</em><em>, </em><em>optional</em>) – number of input files allowed. Default: -1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>input argument decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.interpolate_options">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">interpolate_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#interpolate_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.interpolate_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options for interpolation.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–interpolate, -i<span class="classifier">int, optional</span></dt><dd><p>number of points to interpolate. Default: 200.</p>
+</dd>
+<dt>–kind<span class="classifier">str, optional</span></dt><dd><p>interpolation kind. Default: linear.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>interpolation options decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.kpoints_options">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">kpoints_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#kpoints_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.kpoints_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Group of options for handling KPOINTS files.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–kpoints, -k, –ibzkbt, -i<span class="classifier">str, optional</span></dt><dd><p>KPOINTS/IBZKPT file. Overrides –mesh.</p>
+</dd>
+<dt>–mesh, -m<span class="classifier">3x int, optional</span></dt><dd><p>k-point mesh. Overridden by –kpoints.</p>
+</dd>
+<dt>–poscar, -p<span class="classifier">str, optional</span></dt><dd><p>POSCAR. Required for –mesh.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>kpoints options decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.legend_function">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">legend_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">toggle</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#legend_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.legend_function" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function for creating legend options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>toggle</strong> (<em>bool</em><em>, </em><em>optional</em>) – include option to remove legend. Default: True.</p></li>
+<li><p><strong>label</strong> (<em>bool</em><em>, </em><em>optional</em>) – include option to set labels manually. Default: True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>legend options decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.line_options">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">line_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#line_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.line_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Group of options for line plots</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–linestyle<span class="classifier">str, optional</span></dt><dd><p>linestyle(s). Default: solid.</p>
+</dd>
+<dt>–marker<span class="classifier">str, optional</span></dt><dd><p>marker(s). Default: None.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>line options decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.plot_io_function">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">plot_io_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#plot_io_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.plot_io_function" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function for creating plot I/O options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – output filename.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>plot I/O options decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>decorator</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.temperature_option">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">temperature_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#temperature_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.temperature_option" title="Permalink to this definition">¶</a></dt>
 <dd><p>Option for temperature selection.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–temperature, -t<span class="classifier">str, optional</span></dt><dd><p>temperature. Default: 300.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>temperature option decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="tp.cli.options.verbose_option">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">verbose_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#verbose_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.verbose_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option for verbose output.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="tp.cli.options.xy_limit_options">
-<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">xy_limit_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#xy_limit_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.xy_limit_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Options for x and y axes limits.</p>
+<dd><p>Option for output verbosity.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–verbose/–notverbose<span class="classifier">bool, optional</span></dt><dd><p>output plot conditions. Default: –verbose.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>verbosity option decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

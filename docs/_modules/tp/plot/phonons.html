@@ -384,7 +384,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
 
-    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">label</span> <span class="o">==</span> <span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">linestyle</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">linestyle</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>

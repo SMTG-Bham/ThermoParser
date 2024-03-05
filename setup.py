@@ -3,10 +3,10 @@
 __name__ =       'ThermoParser'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Scanlon Materials Theory Group (2024)'
-__version__ =    '3.0.0'
+__version__ =    '3.1.2'
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'k.b.spooner@bham.ac.uk'
-__date__ =       'February 23rd 2024'
+__date__ =       'March 5th 2024'
 
 import os
 import setuptools

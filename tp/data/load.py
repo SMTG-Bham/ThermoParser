@@ -352,7 +352,6 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
                 e = resolve_spin(f, 'energies', spin2)
                 data['fd_weights'] = -tp.calculate.dfdde(e, f['fermi_levels'],
                                                          f['temperatures'],
-                                                         f['doping'],
                                                          amset_order=True)
             if q in ['mean_free_path', 'weighted_mfp']:
                 data['velocities'] = np.array(data['velocities'])

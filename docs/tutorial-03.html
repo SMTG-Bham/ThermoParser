@@ -91,13 +91,20 @@
              
   <div class="section" id="tutorial-03-compound-axes">
 <h1>Tutorial-03: Compound Axes<a class="headerlink" href="#tutorial-03-compound-axes" title="Permalink to this headline">¶</a></h1>
+<p>This dispersion includes a phonon density of state (DoS) alongside,
+showing which atoms contribute to each mode. This can help determine
+the way in which heat is transported through the lattice, for example
+the lowest three (acoustic) modes, which often transport the majority
+of the heat, are dominated by Zn. Frequency-localised DoSs of a
+particular atom can indicate spacially localised, poorly-conductive
+phonons. The DoS is also calculated via Phonopy.</p>
 <img alt="Phonon dispersion and density of states of ZnO." src="_images/tutorial-03.png" />
 <p>Often, a good way to draw links between data is to position them
 together. Here, the DoS shows which atoms affect which parts of the
 phonon dispersion. ThermoParser offers a number of ways to streamline
 comparing graphs, including compound axes and enhanced legend handling.</p>
 <p>The CLI version of this code is:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml -c <span class="s1">&#39;#f0901f&#39;</span> --dos ../data/zno/projected_dos.dat --doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> --legend_title ZnO --location <span class="m">2</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml -c <span class="s1">&#39;#f0901f&#39;</span> --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> --legend_title ZnO --location <span class="m">2</span>
 </pre></div>
 </div>
 <p>And the python version is:</p>
@@ -198,7 +205,7 @@ into one legend, with duplicates removed, which uses up the <code class="docutil
 and <code class="docutils literal notranslate"><span class="pre">labels</span></code> arguments, so in order to specify your own, you must set
 <code class="docutils literal notranslate"><span class="pre">custom=True</span></code> (not necessary for single-axes figures).
 <code class="docutils literal notranslate"><span class="pre">tp.axes.legend.consolidate</span></code> may also be useful for non-ThermoParser
-endaevors, as will be discussed in <a class="reference external" href="https://smtg-ucl.github.io/ThermoParser/tutorial-05.html">Tutorial-05</a>.</p>
+endaevors, as will be discussed in <a class="reference external" href="https://smtg-bham.github.io/ThermoParser/tutorial-05.html">Tutorial-05</a>.</p>
 </div>
 </div>
 

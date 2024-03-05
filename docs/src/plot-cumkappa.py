@@ -11,7 +11,7 @@ quantities = 'frequency mode_kappa mfp'
 # You can ignore this section
 from os import path
 if not path.isfile(kappafile) or (path.getsize(kappafile) < 1024*1024*100):
-    raise Exception('File not found, please use get-data.sh')
+    raise Exception('File not found, please use get-data.sh in the folder above.')
 # End ignore
 
 dosfile = '../data/zno/projected_dos.dat'

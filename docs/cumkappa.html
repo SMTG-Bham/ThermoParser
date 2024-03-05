@@ -86,10 +86,10 @@
              
   <div class="section" id="cumulative-lattice-thermal-conductivity">
 <h1>Cumulative Lattice Thermal Conductivity<a class="headerlink" href="#cumulative-lattice-thermal-conductivity" title="Permalink to this headline">¶</a></h1>
-<img alt="Cumulative lattice thermal conductivity against frequency and mean free path." src="_images/cumkappa1.png" />
+<img alt="Cumulative lattice thermal conductivity against frequency and mean free path." src="_images/cumkappa.png" />
 <p>This shows two plots of cumulative lattice thermal conductivity. The
 first one is against frequency, and particularly in conjunction with a
-<a class="reference external" href="https://github.com/SMTG-UCL/ThermoParser/blob/master/examples/dos/">density of states</a> (DoS) or a phonon band structure, this can show the
+<a class="reference external" href="https://github.com/smtg-bham/ThermoParser/blob/master/examples/dos/">density of states</a> (DoS) or a phonon band structure, this can show the
 relative contributions of the constituent atoms to the lattice thermal
 conductivity. The second is against mean free path, and can be used to
 approximate the effect of nanostructuring, for which reason the ability
@@ -157,7 +157,7 @@ removing <code class="docutils literal notranslate"><span class="pre">--mfp</spa
 <span class="c1"># You can ignore this section</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kappafile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kappafile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 <span class="c1"># End ignore</span>
 
 <span class="n">dosfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/projected_dos.dat&#39;</span>

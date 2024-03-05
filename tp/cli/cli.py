@@ -1581,7 +1581,7 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
                                   totallabel=total_label, colour=doscolour,
                                   totalcolour=total_colour, fill=fill,
                                   fillalpha=fillalpha, line=line, invert=True)
-        ax.set_ylim(dosax.get_ylim())
+        dosax.set_ylim(ax.get_ylim())
         tp.plot.utilities.set_locators(dosax, dos=True)
 
     if label != [None] or dos is not None:
@@ -1693,12 +1693,13 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
     elif len(quantity) == 1:
         ax = [ax]
 
+    eqs = [q for q in quantity if q != ltc]
     edata = []
     for f in transport_file:
         try:
-            edata.append(tp.data.load.amset(f, quantity))
+            edata.append(tp.data.load.amset(f, eqs))
         except UnicodeDecodeError:
-            edata.append(tp.data.load.boltztrap(f, quantity, doping=dtype))
+            edata.append(tp.data.load.boltztrap(f, eqs, doping=dtype))
     if ltc in quantity or tc in quantity:
         if len(kfile) != 0:
             kdata = []
@@ -1734,7 +1735,14 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
         if len(doping) > 1: # one line per doping
             lendata = len(doping)
             defleg['title'] = axlabels['doping']
-            if q == tc:
+            if kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
+                kdata2 = deepcopy(kdata[0])
+                kdata2 = tp.data.utilities.resolve(kdata2, q,
+                                                   direction=direction[0])
+                data[i].append({'temperature': kdata2['temperature'],
+                                q:             kdata2[q]})
+            elif q == tc:
                 kdata2 = deepcopy(kdata[0])
                 kdata2 = tp.data.utilities.resolve(kdata2, ltc,
                                                    direction=direction[0])
@@ -1763,18 +1771,16 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
                 defleg['labels'] = dopelist
-            elif kdata is not None and q in kdata[0] and \
-                 'temperature' in kdata[0]['meta']['dimensions'][q]:
-                kdata2 = deepcopy(kdata[0])
-                kdata2 = tp.data.utilities.resolve(kdata2, q,
-                                                   direction=direction[0])
-                data[i].append({'temperature': kdata2['temperature'],
-                                q:             kdata2[q]})
         elif len(direction) > 1: # one line per direction
-            lendata = len(direction)
-            defleg['title'] = 'Direction'
-            defleg['labels'] = direction
-            if q == tc:
+            if kdata is not None and q in kdata[0] and \
+                 'temperature' in kdata[0]['meta']['dimensions'][q]:
+                for d in direction:
+                    kdata2 = deepcopy(kdata[0])
+                    kdata2 = tp.data.utilities.resolve(kdata2, q,
+                                                       direction=d)
+                    data[i].append({'temperature': kdata2['temperature'],
+                                    q:             kdata2[q]})
+            elif q == tc:
                 for d in direction:
                     kdata2 = deepcopy(kdata[0])
                     kdata2 = tp.data.utilities.resolve(kdata2, ltc,
@@ -1799,16 +1805,26 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                        stype=stype[0])
                     data[i].append({'temperature': edata2['temperature'],
                                     q:             edata2[q]})
-            elif kdata is not None and q in kdata[0] and \
+            lendata = len(direction)
+            defleg['title'] = 'Direction'
+            defleg['labels'] = direction
+        else: # one line per file/ one line
+            if kdata is not None and q in kdata[0] and \
                  'temperature' in kdata[0]['meta']['dimensions'][q]:
-                for d in direction:
-                    kdata2 = deepcopy(kdata[0])
+                if len(kdata) > 1:
+                    lendata = len(kdata)
+                    defleg['title'] = 'Phononic Data'
+                    defleg['labels'] = kfile
+                elif defleg['title'] is None:
+                    defleg['title'] = 'Phononic Data'
+                    defleg['labels'] = kfile
+                for j in range(len(kdata)):
+                    kdata2 = deepcopy(kdata[j])
                     kdata2 = tp.data.utilities.resolve(kdata2, q,
-                                                       direction=d)
+                                                       direction=direction[0])
                     data[i].append({'temperature': kdata2['temperature'],
                                     q:             kdata2[q]})
-        else: # one line per file/ one line
-            if q == tc:
+            elif q == tc:
                 lendata = len(kdata)
                 if len(kdata) == len(edata):
                     defleg['title'] = 'Electronic Data'
@@ -1891,21 +1907,6 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                                            stype=stype[j])
                         data[i].append({'temperature': edata2['temperature'],
                                         q:             edata2[q]})
-            elif kdata is not None and q in kdata[0] and \
-                 'temperature' in kdata[0]['meta']['dimensions'][q]:
-                if len(kdata) > 1:
-                    lendata = len(kdata)
-                    defleg['title'] = 'Phononic Data'
-                    defleg['labels'] = kfile
-                elif defleg['title'] is None:
-                    defleg['title'] = 'Phononic Data'
-                    defleg['labels'] = kfile
-                for j in range(len(kdata)):
-                    kdata2 = deepcopy(kdata[j])
-                    kdata2 = tp.data.utilities.resolve(kdata2, q,
-                                                       direction=direction[0])
-                    data[i].append({'temperature': kdata2['temperature'],
-                                    q:             kdata2[q]})
 
     try:
         colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))

@@ -126,7 +126,7 @@ heatmap. This can be plotted at the command line with:</p>
 <span class="n">bfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/boltztrap.hdf5&#39;</span>
 <span class="n">kfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/kappa-m404021.hdf5&#39;</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
 <span class="n">colour</span> <span class="o">=</span> <span class="s1">&#39;#800080&#39;</span>
@@ -220,12 +220,13 @@ thermal conductivity calculations on a material. The CLI is:</p>
 <img alt="Difference between two ZTs against carrier concentration and temperature." src="_images/ztdiff1.png" />
 <p>The final heatmap is the ztdiff, which compares the ZTs of two
 materials at a range of carrier concentrations and temperatures. This
-can be done with any two materials, from completely different (e.g.
-BaSnO&lt;sub&gt;3&lt;/sub&gt; and ZnO here) to the same material under different
-conditions (e.g. different degrees of nanostructuring), although this
-method is most appropriate for closely related materials with similar
-dopabilities. At the command line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">ztdiff</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span>  <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="n">ZnO</span> <span class="o">-</span><span class="n">l</span> <span class="s1">&#39;BaSnO$_3$&#39;</span>
+can be done with any two materials, from completely different to the
+same material under different conditions (e.g. different degrees of
+nanostructuring), although this method is most appropriate for closely
+related materials with similar dopabilities. Here we compare the
+momentum relaxation time approximation via AMSET with the constant
+relaxation approximation via BoltzTraP. At the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">ztdiff</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">transport_75x75x75</span><span class="o">.</span><span class="n">json</span>  <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="n">MRTA</span> <span class="o">-</span><span class="n">l</span> <span class="n">CRTA</span>
 </pre></div>
 </div>
 <p>and in python:</p>
@@ -270,7 +271,7 @@ dopabilities. At the command line:</p>
 <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ZnO&#39;</span><span class="p">,</span> <span class="s1">&#39;BaSnO$_3$&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">kfiles</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="c1"># Axes</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">add_legend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">one_colourbar</span><span class="p">()</span>
@@ -299,6 +300,9 @@ argument must be used in <code class="docutils literal notranslate"><span class=
 of the handles and labels. <code class="docutils literal notranslate"><span class="pre">add_ztdiff</span></code> and its power factor
 equivalent, <code class="docutils literal notranslate"><span class="pre">add_pfdiff</span></code>, also make sure the colour scale is centred
 on zero (i.e. where both are equal).</p>
+<p>Some users may find adding contours with the <code class="docutils literal notranslate"><span class="pre">contours</span></code> argument or making
+the colour scale discrete with the <code class="docutils literal notranslate"><span class="pre">discrete</span></code> argument more legible or
+informative.</p>
 </div>
 
 
