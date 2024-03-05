@@ -234,9 +234,6 @@
         <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">:</span>
             <span class="n">data2</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="s1">&#39;doping&#39;</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
-        <span class="n">data2</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])[</span><span class="n">di</span><span class="p">]</span>
-
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">aconversions</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
             <span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">aconversions</span><span class="p">[</span><span class="n">c</span><span class="p">]))</span>
@@ -268,11 +265,12 @@
 <span class="sd">            channels, which are dealt with in the spin variable.</span>
 <span class="sd">            Also accepts ibz_weights, the weights of the irreducible</span>
 <span class="sd">            k-points, fd_weights, the weights of the energies wrt the</span>
-<span class="sd">            derivative of the Fermi-Dirac distribution, and</span>
-<span class="sd">            weighted_rates, scattering_rates weighted by fd_weights</span>
-<span class="sd">            and averaged over kpoints. &quot;all&quot; loads all quantities in</span>
-<span class="sd">            the file, which does not include ibz_weights, fd_weights or</span>
-<span class="sd">            weighted_rates. Loads dependent properties. Default: all.</span>
+<span class="sd">            derivative of the Fermi-Dirac distribution, weighted_rates,</span>
+<span class="sd">            scattering_rates weighted by fd_weights and averaged over</span>
+<span class="sd">            kpoints and occupation, the Fermi-Dirac occupation.</span>
+<span class="sd">            &quot;all&quot; loads all quantities in the file, which does not</span>
+<span class="sd">            include ibz_weights, fd_weights, weighted_rates or</span>
+<span class="sd">            occupation. Loads dependent properties. Default: all.</span>
 
 <span class="sd">        doping : str, optional</span>
 <span class="sd">            doing type (n or p). If there is more than one, defaults to</span>
@@ -280,7 +278,9 @@
 
 <span class="sd">        spin : str, optional</span>
 <span class="sd">            spin. Accepts up, down or avg. If avg and there is only one</span>
-<span class="sd">            spin channel, selects that, else averages both. Default: avg.</span>
+<span class="sd">            spin channel, selects that, else averages both. If avg,</span>
+<span class="sd">            assumes non-spin separated bands and so multiplies occupation</span>
+<span class="sd">            by 2. Default: avg.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -299,14 +299,16 @@
     <span class="n">tnames</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">to_tp</span><span class="p">()</span>
     <span class="n">units</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
+    <span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;occupation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">quantities</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="n">quantities</span> <span class="o">=</span> <span class="n">quantities</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="n">anames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">]</span>
 
     <span class="c1"># list of abbriviations and dependent quantites</span>
     <span class="n">subs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;weights&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;weighted_rates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;fermi_levels&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">],</span>
             <span class="s1">&#39;mean_free_path&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>   <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]}</span>
+            <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">:</span>   <span class="p">[</span><span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;fermi_levels&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>     <span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;fermi_levels&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">]}</span>
     <span class="n">hasspin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="s1">&#39;vb_index&#39;</span><span class="p">,</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;velocities&#39;</span><span class="p">]</span>
 
     <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantities</span><span class="p">)</span>
@@ -330,6 +332,9 @@
                    <span class="p">(</span><span class="n">d</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="ow">or</span> <span class="p">(</span><span class="n">d</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="ow">and</span> <span class="n">tnames</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q</span><span class="p">])):</span>
                     <span class="n">quantities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
                     <span class="k">break</span>
+
+    <span class="k">if</span> <span class="s1">&#39;temperatures&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+        <span class="n">quantities</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">quantities</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">quantities</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;temperatures&#39;</span><span class="p">)))</span>
 
     <span class="c1"># load data</span>
 
@@ -369,7 +374,7 @@
         <span class="k">if</span> <span class="s1">&#39;all&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
             <span class="n">q2</span> <span class="o">=</span> <span class="n">quantities</span>
             <span class="n">quantities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">q2</span><span class="p">:</span>
                     <span class="n">quantities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;doping&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
@@ -385,30 +390,33 @@
             <span class="k">elif</span> <span class="n">doping</span> <span class="o">==</span> <span class="s1">&#39;p&#39;</span><span class="p">:</span>
                 <span class="n">di</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="c1"># spin2 so if avg selected doubles occupation</span>
         <span class="k">if</span> <span class="n">spin</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="s1">&#39;energies_up&#39;</span> <span class="ow">in</span> <span class="n">f</span> <span class="ow">and</span> <span class="s1">&#39;energies_down&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">spin</span> <span class="o">=</span> <span class="s1">&#39;avg&#39;</span>
+                <span class="n">spin2</span> <span class="o">=</span> <span class="s1">&#39;avg&#39;</span>
             <span class="k">elif</span> <span class="s1">&#39;energies_up&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">spin</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+                <span class="n">spin2</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
             <span class="k">elif</span> <span class="s1">&#39;energies_down&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">spin</span> <span class="o">=</span> <span class="s1">&#39;down&#39;</span>
+                <span class="n">spin2</span> <span class="o">=</span> <span class="s1">&#39;down&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spin2</span> <span class="o">=</span> <span class="n">spin</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;doping_type&#39;</span><span class="p">:</span>       <span class="n">doping</span><span class="p">,</span>
                          <span class="s1">&#39;electronic_source&#39;</span><span class="p">:</span> <span class="s1">&#39;amset&#39;</span><span class="p">,</span>
-                         <span class="s1">&#39;spin&#39;</span><span class="p">:</span>              <span class="n">spin</span><span class="p">,</span>
+                         <span class="s1">&#39;spin&#39;</span><span class="p">:</span>              <span class="n">spin2</span><span class="p">,</span>
                          <span class="s1">&#39;units&#39;</span><span class="p">:</span>             <span class="p">{},</span>
                          <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span>        <span class="p">{}}}</span>
         <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
             <span class="n">q2</span> <span class="o">=</span> <span class="n">tnames</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tnames</span> <span class="k">else</span> <span class="n">q</span>
             <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">hasspin</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">spin2</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">q</span><span class="p">][()]</span>
             <span class="k">elif</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span>
-                           <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
+                           <span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> unrecognised. Quantity must be </span><span class="si">{}</span><span class="s1">, &#39;</span>
                                 <span class="s1">&#39;ibz_weights, fd_weights, weighted_rates, &#39;</span>
-                                <span class="s1">&#39;mean_free_path or weighted_mfp.&#39;</span>
+                                <span class="s1">&#39;mean_free_path or weighted_mfp or occupation.&#39;</span>
                                 <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;scattering_rates&#39;</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))]</span>
@@ -416,10 +424,9 @@
                 <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ibz_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ir_to_full_kpoint_mapping&#39;</span><span class="p">],</span>
                                                    <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
-                <span class="n">e</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="n">spin</span><span class="p">)</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="n">resolve_spin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span> <span class="n">spin2</span><span class="p">)</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fd_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">dfdde</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;fermi_levels&#39;</span><span class="p">],</span>
                                                          <span class="n">f</span><span class="p">[</span><span class="s1">&#39;temperatures&#39;</span><span class="p">],</span>
-                                                         <span class="n">f</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
                                                          <span class="n">amset_order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">,</span> <span class="s1">&#39;weighted_mfp&#39;</span><span class="p">]:</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;velocities&#39;</span><span class="p">])</span>
@@ -441,6 +448,12 @@
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_free_path&#39;</span><span class="p">]</span> <span class="o">*</span> \
                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;normalised_weights&#39;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">q</span> <span class="o">==</span> <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;occupation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">calculate</span><span class="o">.</span><span class="n">fd_occupation</span><span class="p">(</span>
+                                     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;energy&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">],</span>
+                                     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fermi_level&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">spin</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">]:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;occupation&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span>
 
         <span class="k">for</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">q</span> <span class="o">=</span> <span class="n">anames</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span> <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">anames</span> <span class="k">else</span> <span class="n">q2</span>
@@ -462,9 +475,6 @@
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">q2</span><span class="p">]</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">[</span><span class="n">q2</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="s1">&#39;doping&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">])[</span><span class="n">di</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="s1">&#39;stype&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;stype&#39;</span><span class="p">]]</span>
@@ -955,8 +965,8 @@
         <span class="n">ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">yamldata</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">except</span><span class="p">:</span> <span class="c1"># new phonopy/ sumo</span>
         <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">yamldata</span><span class="p">[</span><span class="s1">&#39;phonon&#39;</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tickindex</span><span class="p">]</span>
-    <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;$\mathregular{\Gamma}$&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s1">&#39;G&#39;</span> <span class="ow">or</span> <span class="s1">&#39;gamma&#39;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">else</span>
-             <span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">]</span>
+    <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;$\mathregular{\Gamma}$&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s1">&#39;G&#39;</span> <span class="ow">or</span> <span class="s1">&#39;gamma&#39;</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">else</span>
+             <span class="sa">r</span><span class="s1">&#39;$\mathregular{{</span><span class="si">{}</span><span class="s1">}}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ticks</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">tickpos</span><span class="p">,</span> <span class="n">ticks</span></div>
 

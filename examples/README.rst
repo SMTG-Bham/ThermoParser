@@ -15,14 +15,14 @@ have recalculated the properties with the momentum relaxation time
 approximation (MRTA) via AMSET, and found using explicit electronic
 relaxation times via MRTA significantly alters the results. This is both
 due to the inclusion of more realistic scattering trends with
-temperature and carrier concentration (`avg-rates`_), and the ability
+temperature and carrier concentration (`average-rates`_), and the ability
 to alter the electronic scattering rates rather than just the phononic
 ones when simulating nanostructuring. This leads to a much reduced
 electrical conductivity in BaSnO\ :sub:`3`, and therefore a much lower
 ZT (`ztdiff`_), although these trends will vary significantly by
 material.
 
-.. _avg_rates: https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates
+.. _average-rates: https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates
 .. _ztdiff: https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps
 
 
@@ -103,4 +103,4 @@ ztmap
    :alt: ZT against carrier concentration and temperature.
    :target: https://github.com/smtg-bham/ThermoParser/tree/master/examples/ztmap
 
-[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, _J. Mater. Chem. A _, **2020**, 8, 11948.
+[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, *J. Mater. Chem. A*, **2020**, 8, 11948.

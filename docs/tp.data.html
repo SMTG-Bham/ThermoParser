@@ -187,15 +187,18 @@ temperature is first, for consistency with other codes.</p>
 channels, which are dealt with in the spin variable.
 Also accepts ibz_weights, the weights of the irreducible
 k-points, fd_weights, the weights of the energies wrt the
-derivative of the Fermi-Dirac distribution, and
-weighted_rates, scattering_rates weighted by fd_weights
-and averaged over kpoints. “all” loads all quantities in
-the file, which does not include ibz_weights, fd_weights or
-weighted_rates. Loads dependent properties. Default: all.</p></li>
+derivative of the Fermi-Dirac distribution, weighted_rates,
+scattering_rates weighted by fd_weights and averaged over
+kpoints and occupation, the Fermi-Dirac occupation.
+“all” loads all quantities in the file, which does not
+include ibz_weights, fd_weights, weighted_rates or
+occupation. Loads dependent properties. Default: all.</p></li>
 <li><p><strong>doping</strong> (<em>str</em><em>, </em><em>optional</em>) – doing type (n or p). If there is more than one, defaults to
 n, else this is ignored.</p></li>
 <li><p><strong>spin</strong> (<em>str</em><em>, </em><em>optional</em>) – spin. Accepts up, down or avg. If avg and there is only one
-spin channel, selects that, else averages both. Default: avg.</p></li>
+spin channel, selects that, else averages both. If avg,
+assumes non-spin separated bands and so multiplies occupation
+by 2. Default: avg.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

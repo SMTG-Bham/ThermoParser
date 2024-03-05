@@ -220,12 +220,13 @@ thermal conductivity calculations on a material. The CLI is:</p>
 <img alt="Difference between two ZTs against carrier concentration and temperature." src="_images/ztdiff1.png" />
 <p>The final heatmap is the ztdiff, which compares the ZTs of two
 materials at a range of carrier concentrations and temperatures. This
-can be done with any two materials, from completely different (e.g.
-BaSnO&lt;sub&gt;3&lt;/sub&gt; and ZnO here) to the same material under different
-conditions (e.g. different degrees of nanostructuring), although this
-method is most appropriate for closely related materials with similar
-dopabilities. At the command line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">ztdiff</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span>  <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="n">ZnO</span> <span class="o">-</span><span class="n">l</span> <span class="s1">&#39;BaSnO$_3$&#39;</span>
+can be done with any two materials, from completely different to the
+same material under different conditions (e.g. different degrees of
+nanostructuring), although this method is most appropriate for closely
+related materials with similar dopabilities. Here we compare the
+momentum relaxation time approximation via AMSET with the constant
+relaxation approximation via BoltzTraP. At the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">ztdiff</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">transport_75x75x75</span><span class="o">.</span><span class="n">json</span>  <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">boltztrap</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m404021</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">l</span> <span class="n">MRTA</span> <span class="o">-</span><span class="n">l</span> <span class="n">CRTA</span>
 </pre></div>
 </div>
 <p>and in python:</p>
@@ -299,6 +300,9 @@ argument must be used in <code class="docutils literal notranslate"><span class=
 of the handles and labels. <code class="docutils literal notranslate"><span class="pre">add_ztdiff</span></code> and its power factor
 equivalent, <code class="docutils literal notranslate"><span class="pre">add_pfdiff</span></code>, also make sure the colour scale is centred
 on zero (i.e. where both are equal).</p>
+<p>Some users may find adding contours with the <code class="docutils literal notranslate"><span class="pre">contours</span></code> argument or making
+the colour scale discrete with the <code class="docutils literal notranslate"><span class="pre">discrete</span></code> argument more legible or
+informative.</p>
 </div>
 
 

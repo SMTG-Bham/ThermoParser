@@ -160,16 +160,16 @@ def heatmap_options(f):
                           'specify the maximum-1 number of "nice" '
                           'levels to plot.',
                      multiple=True,
-                     default=None)(f)
+                     default=[None])(f)
     f = click.option('--contours',
                      help='Contours to plot.',
                      multiple=True,
                      type=float,
-                     default=None)(f)
+                     default=[None])(f)
     f = click.option('--contourcolours',
                      help='contour colours',
                      multiple=True,
-                     default='black')(f)
+                     default=['black'])(f)
     return f
 
 def dos_function(dosargs=['-c', '--colour']):
