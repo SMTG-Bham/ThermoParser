@@ -10,7 +10,7 @@ kfiles = ['../data/zno/kappa-m404021.hdf5',
 label = ['ZnO', 'BaSnO$_3$']
 for f in kfiles:
     if not path.isfile(f) or (path.getsize(f) < 1024*1024*100):
-        raise Exception('File not found, please use get-data.sh')
+        raise Exception('File not found, please use get-data.sh in the folder above.')
 
 # Axes
 fig, ax, add_legend = tp.axes.small.one_colourbar()

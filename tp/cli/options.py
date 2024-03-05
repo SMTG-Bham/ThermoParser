@@ -223,7 +223,8 @@ def dos_function(dosargs=['-c', '--colour']):
     
         f = click.option('-p', '--poscar',
                          help='POSCAR path. Ignored if --atoms specified.',
-                         type=click.Path(file_okay=True, dir_okay=False),
+                         type=click.Path(file_okay=True, dir_okay=False,
+                                         exists=False),
                          default='POSCAR',
                          show_default=True)(f)
         f = click.option('--atoms',

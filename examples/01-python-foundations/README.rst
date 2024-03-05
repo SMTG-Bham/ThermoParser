@@ -2,6 +2,14 @@
 Tutorial-01: Python Foundations
 -------------------------------
 
+Here we show a phonon dispersion, calculated via the supercell method
+in Phonopy, which shows the vibrational frequencies of ZnO along a
+high symmetry path in reciprocal space. The gradient of the bands is
+the group velocity of the phonons, an important factor in the lattice
+thermal conductivity; and if there are negative-frequency (imaginary)
+modes, it indicates kinetic instability. More information can also be
+gleaned, which is covered in later tutorials.
+
 .. image:: tutorial-01.png
    :alt: Phonon dispersion of ZnO.
 

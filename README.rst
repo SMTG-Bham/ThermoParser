@@ -17,9 +17,9 @@
     |____________________________________:_______________________/____________:_____/
 
 
-.. image:: https://app.travis-ci.com/SMTG-bham/ThermoParser.svg?branch=master
+.. image:: https://travis-ci.com/smtg-bham/ThermoParser.svg?branch=master
     :alt: The travis-ci badge
-    :target: https://app.travis-ci.com/SMTG-bham/ThermoParser
+    :target: https://travis-ci.com/smtg-bham/ThermoParser
 
 ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
@@ -46,7 +46,7 @@ ThermoParser can easily be installed with git and pip:
 
 .. code-block:: bash
 
-    git clone https://github.com/SMTG-bham/ThermoParser.git
+    git clone https://github.com/smtg-bham/ThermoParser.git
     cd ThermoParser
     pip install .
 
@@ -66,7 +66,7 @@ longer process is required:
 2. ``python3 -m pip install cython numpy``
 3. ``brew info hdf5`` to retrieve the path to your hdf5 install
 4. ``HDF5_DIR=YOUR_HDF5_PATH --no-build-isolation h5py``
-5. ``git clone https://github.com/SMTG-bham/ThermoParser.git``
+5. ``git clone https://github.com/smtg-bham/ThermoParser.git``
 6. ``cd ThermoParser``
 7. ``pip install --user -e .``
 

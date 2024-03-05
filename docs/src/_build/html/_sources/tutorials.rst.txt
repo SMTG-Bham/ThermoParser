@@ -54,12 +54,12 @@ types in the `gallery`_.
  * A selection of scripts to help get the most out of VASP calculations,
    and some extras.
 
-.. _gallery: https://smtg-ucl.github.io/ThermoParser/gallery.html
-.. _Tutorial-00: https://smtg-ucl.github.io/ThermoParser/tutorial-00.html
-.. _Tutorial-01: https://smtg-ucl.github.io/ThermoParser/tutorial-01.html
-.. _Tutorial-02: https://smtg-ucl.github.io/ThermoParser/tutorial-02.html
-.. _Tutorial-03: https://smtg-ucl.github.io/ThermoParser/tutorial-03.html
-.. _Tutorial-04: https://smtg-ucl.github.io/ThermoParser/tutorial-04.html
-.. _Tutorial-05: https://smtg-ucl.github.io/ThermoParser/tutorial-05.html
-.. _Tutorial-06: https://smtg-ucl.github.io/ThermoParser/tutorial-06.html
-.. _Tutorial-0X: https://smtg-ucl.github.io/ThermoParser/tutorial-0X.html
+.. _gallery: https://smtg-bham.github.io/ThermoParser/gallery.html
+.. _Tutorial-00: https://smtg-bham.github.io/ThermoParser/tutorial-00.html
+.. _Tutorial-01: https://smtg-bham.github.io/ThermoParser/tutorial-01.html
+.. _Tutorial-02: https://smtg-bham.github.io/ThermoParser/tutorial-02.html
+.. _Tutorial-03: https://smtg-bham.github.io/ThermoParser/tutorial-03.html
+.. _Tutorial-04: https://smtg-bham.github.io/ThermoParser/tutorial-04.html
+.. _Tutorial-05: https://smtg-bham.github.io/ThermoParser/tutorial-05.html
+.. _Tutorial-06: https://smtg-bham.github.io/ThermoParser/tutorial-06.html
+.. _Tutorial-0X: https://smtg-bham.github.io/ThermoParser/tutorial-0X.html

@@ -17,8 +17,7 @@ from pymatgen.analysis.structure_analyzer import SpacegroupAnalyzer
 from pymatgen.io.vasp.inputs import Kpoints, Poscar
 
 def gen_ibz(mesh, poscar='POSCAR', symprec=1e-5):
-    """Generates the irreducible kpoints and weights for a mesh and
-       material.
+    """Generates the irreducible kpoints and weights for a mesh and material.
 
     Arguments
     ---------
@@ -118,13 +117,13 @@ def get_kpar(kpoints, poscar='POSCAR', symprec=1e-5):
     return [int(k) for k in np.sort(np.unique(kpar))]
 
 def get_kpoints(kpoints, zero_weighted=None, poscar='POSCAR', output='KPOINTS'):
-    """Generates a KPOINTS file, including optional zero-weighted
-       kpoints, for kpoint mesh(es) or IBZKPT files and a material.
-
-       This will create a file if you supply it with KPOINTS meshes,
-       however this is purportedly not necessarily the same as what vasp
-       would do. To avoid this possibility, we recommend supplying two
-       IBZKPT files, which this will stitch together.
+    """Generates a KPOINTS file.
+    
+       Includes optional zero-weighted kpoints. This will create a file
+       if you supply it with KPOINTS meshes, however this is
+       purportedly not necessarily the same as what vasp would do. To
+       avoid this possibility, we recommend supplying two IBZKPT files,
+       which this will stitch together.
 
     Arguments
     ---------

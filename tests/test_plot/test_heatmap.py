@@ -206,6 +206,61 @@ class ZTMapTest(unittest.TestCase):
         mock_resolve.assert_called_once()
         mock_zt.assert_not_called()
 
+class PFMapTest(unittest.TestCase):
+    def setUp(self):
+        c =   [[1, 1],
+               [1, 2]]
+        s =   [[1, 1],
+               [1, 1]]
+        t = [1, 2]
+        d = [10, 100]
+        self.data = {'conductivity':                    c,
+                     'seebeck':                         s,
+                     'temperature':                     t,
+                     'doping':                          d,
+                     'meta':                            {'units':      {},
+                                                         'dimensions': {}}}
+        self.data2 = dict(self.data)
+        self.data2['power_factor'] = [[1, 1],
+                                      [1, 2]]
+        self.ax = Mock()
+
+    @patch.object(tp.calculate, 'power_factor_fromdict')
+    @patch.object(tp.data.utilities, 'resolve')
+    @patch.object(plt, 'colorbar')
+    def test_default(self, mock_colourbar, mock_resolve, mock_pf):
+        mock_pf.return_value = self.data2
+        mock_resolve.return_value = self.data
+        cbar = heatmap.add_pfmap(self.ax, self.data, xinterp=None, yinterp=None)
+
+        self.ax.pcolormesh.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
+        self.ax.set_xlim.assert_called_once_with(1, 3)
+        self.ax.set_ylim.assert_called_once_with(10, 1000)
+        mock_colourbar.assert_called_once()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
+        mock_resolve.assert_called_once()
+        mock_pf.assert_called_once()
+
+    @patch.object(tp.calculate, 'power_factor_fromdict')
+    @patch.object(tp.data.utilities, 'resolve')
+    @patch.object(plt, 'colorbar')
+    def test_precalculated(self, mock_colourbar, mock_resolve, mock_pf):
+        mock_resolve.return_value = self.data2
+        cbar = heatmap.add_pfmap(self.ax, self.data2, xinterp=None,
+                                 yinterp=None)
+
+        self.ax.pcolormesh.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
+        self.ax.set_xlim.assert_called_once_with(1, 3)
+        self.ax.set_ylim.assert_called_once_with(10, 1000)
+        mock_colourbar.assert_called_once()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
+        mock_resolve.assert_called_once()
+        mock_pf.assert_not_called()
+
 class TargetKLTest(unittest.TestCase):
     def setUp(self):
         c =   [[1, 1],
@@ -245,6 +300,151 @@ class TargetKLTest(unittest.TestCase):
         cbar.ax.set_yscale.assert_called_once_with('linear')
         mock_resolve.assert_called_once()
         mock_kl.assert_called_once()
+
+class ZTDiffTest(unittest.TestCase):
+    def setUp(self):
+        c =   [[1, 1],
+               [1, 2]]
+        s =   [[1, 1],
+               [1, 1]]
+        etc = [[1, 1],
+               [1, 1]]
+        ltc =  [1, 1]
+        t = [1, 2]
+        d = [10, 100]
+        self.data = {'conductivity':                    c,
+                     'seebeck':                         s,
+                     'electronic_thermal_conductivity': etc,
+                     'lattice_thermal_conductivity':    ltc,
+                     'temperature':                     t,
+                     'doping':                          d,
+                     'meta':                            {'units':        {'lattice_thermal_conductivity': ['']},
+                                                         'dimensions':   {'lattice_thermal_conductivity': ['']},
+                                                         'kappa_source': ''}}
+        self.data2 = dict(self.data)
+        self.data2['zt'] = [[1, 2],
+                            [4, 8]]
+        self.ax = Mock()
+
+    @patch.object(tp.calculate, 'zt_fromdict')
+    @patch.object(tp.calculate, 'interpolate')
+    @patch.object(tp.data.utilities, 'resolve')
+    @patch.object(plt, 'colorbar')
+    def test_default(self, mock_colourbar, mock_resolve, mock_interpolate,
+                     mock_zt):
+        mock_zt.return_value = self.data2
+        mock_interpolate.return_value = (self.data2, self.data2)
+        mock_resolve.return_value = self.data
+        cbar, _, l = heatmap.add_ztdiff(self.ax, self.data, self.data,
+                                        kdata1=self.data, kdata2=self.data,
+                                        xinterp=None, yinterp=None,
+                                        label1='1', label2='2')
+
+        self.ax.pcolormesh.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
+        self.ax.set_xlim.assert_called_once_with(1, 3)
+        self.ax.set_ylim.assert_called_once_with(10, 1000)
+        mock_colourbar.assert_called_once()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
+        self.assertEqual(mock_resolve.call_count, 2)
+        self.assertEqual(mock_interpolate.call_count, 4)
+        self.assertEqual(mock_zt.call_count, 2)
+        self.assertEqual(l, ['1', '2'])
+
+    @patch.object(tp.calculate, 'zt_fromdict')
+    @patch.object(tp.calculate, 'interpolate')
+    @patch.object(tp.data.utilities, 'resolve')
+    @patch.object(plt, 'colorbar')
+    def test_precalculated(self, mock_colourbar, mock_resolve,
+                           mock_interpolate, mock_zt):
+        mock_interpolate.return_value = (self.data2, self.data2)
+        mock_resolve.return_value = self.data2
+        cbar, _, l = heatmap.add_ztdiff(self.ax, self.data2, self.data2,
+                                        kdata1=self.data, kdata2=self.data,
+                                        xinterp=None, yinterp=None,
+                                        label1='1', label2='2')
+
+        self.ax.pcolormesh.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
+        self.ax.set_xlim.assert_called_once_with(1, 3)
+        self.ax.set_ylim.assert_called_once_with(10, 1000)
+        mock_colourbar.assert_called_once()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
+        self.assertEqual(mock_resolve.call_count, 2)
+        self.assertEqual(mock_interpolate.call_count, 2)
+        mock_zt.assert_not_called()
+        self.assertEqual(l, ['1', '2'])
+
+class PFDiffTest(unittest.TestCase):
+    def setUp(self):
+        c =   [[1, 1],
+               [1, 2]]
+        s =   [[1, 1],
+               [1, 1]]
+        t = [1, 2]
+        d = [10, 100]
+        self.data = {'conductivity':                    c,
+                     'seebeck':                         s,
+                     'temperature':                     t,
+                     'doping':                          d,
+                     'meta':                            {'units':        {},
+                                                         'dimensions':   {}}}
+        self.data2 = dict(self.data)
+        self.data2['power_factor'] = [[1, 2],
+                                      [4, 8]]
+        self.ax = Mock()
+
+    @patch.object(tp.calculate, 'power_factor_fromdict')
+    @patch.object(tp.calculate, 'interpolate')
+    @patch.object(tp.data.utilities, 'resolve')
+    @patch.object(plt, 'colorbar')
+    def test_default(self, mock_colourbar, mock_resolve, mock_interpolate,
+                     mock_pf):
+        mock_pf.return_value = self.data2
+        mock_interpolate.return_value = (self.data2, self.data2)
+        mock_resolve.return_value = self.data
+        cbar, _, l = heatmap.add_pfdiff(self.ax, self.data, self.data,
+                                        xinterp=None, yinterp=None,
+                                        label1='1', label2='2')
+
+        self.ax.pcolormesh.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
+        self.ax.set_xlim.assert_called_once_with(1, 3)
+        self.ax.set_ylim.assert_called_once_with(10, 1000)
+        mock_colourbar.assert_called_once()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
+        self.assertEqual(mock_resolve.call_count, 2)
+        self.assertEqual(mock_interpolate.call_count, 2)
+        self.assertEqual(mock_pf.call_count, 2)
+        self.assertEqual(l, ['1', '2'])
+
+    @patch.object(tp.calculate, 'power_factor_fromdict')
+    @patch.object(tp.calculate, 'interpolate')
+    @patch.object(tp.data.utilities, 'resolve')
+    @patch.object(plt, 'colorbar')
+    def test_precalculated(self, mock_colourbar, mock_resolve,
+                           mock_interpolate, mock_pf):
+        mock_interpolate.return_value = (self.data2, self.data2)
+        mock_resolve.return_value = self.data2
+        cbar, _, l = heatmap.add_pfdiff(self.ax, self.data2, self.data2,
+                                        kdata1=self.data, kdata2=self.data,
+                                        xinterp=None, yinterp=None,
+                                        label1='1', label2='2')
+
+        self.ax.pcolormesh.assert_called_once()
+        self.ax.set_xscale.assert_called_once_with('linear')
+        self.ax.set_yscale.assert_called_once_with('log')
+        self.ax.set_xlim.assert_called_once_with(1, 3)
+        self.ax.set_ylim.assert_called_once_with(10, 1000)
+        mock_colourbar.assert_called_once()
+        cbar.ax.set_yscale.assert_called_once_with('linear')
+        self.assertEqual(mock_resolve.call_count, 2)
+        self.assertEqual(mock_interpolate.call_count, 2)
+        mock_pf.assert_not_called()
+        self.assertEqual(l, ['1', '2'])
 
 if __name__ == '__main__':
     unittest.main()

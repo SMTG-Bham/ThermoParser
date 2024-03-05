@@ -160,9 +160,7 @@ def lifetime(gamma, use_tprc=True):
     return lifetime
 
 def mfp(gamma, group_velocity, use_tprc=True):
-    """
-    Calculates mean free path from imaginary self-energy (Gamma) and
-    group velocity.
+    """Calculates mean free path from imaginary self-energy (Gamma) and group velocity.
 
     Arguments
     ---------
@@ -225,8 +223,9 @@ def fd_occupation(energy, temperature, fermi_level, use_tprc=True):
         temperature = to_tp('temperature', temperature)
         fermi_level = to_tp('fermi_level', fermi_level)
 
-    occupation = (np.exp(np.divide(np.add.outer(-fermi_level, energy),
-                                   kb * temperature[None, :, None, None])) + 1) ** -1
+    occupation = (np.exp(np.divide(np.add.outer(-np.array(fermi_level),
+                                                energy),
+                  kb * np.array(temperature)[None, :, None, None])) + 1) ** -1
 
     if use_tprc:
         occupation = from_tp('occupation', occupation)
@@ -262,7 +261,7 @@ def be_occupation(frequency, temperature, use_tprc=True):
         temperature = to_tp('temperature', temperature)
 
     frequency = np.array(frequency)
-    occupation = np.expm1(np.divide.outer(kb * temperature,
+    occupation = np.expm1(np.divide.outer(kb * np.array(temperature),
                                           frequency * 1e12 * hbar) ** -1) ** -1
 
     if use_tprc:
@@ -270,7 +269,7 @@ def be_occupation(frequency, temperature, use_tprc=True):
 
     return occupation
 
-def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
+def dfdde(energy, fermi_level, temperature, amset_order=False,
           use_tprc=True):
     """Derivative of the Fermi-Dirac distribution wrt energy.
 
@@ -283,8 +282,6 @@ def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
             fermi level per temperature and dopant (by default in eV).
         temperature : array-like
             temperatures (by default in K).
-        doping : array-like
-            doping concentrations (by default in cm-3).
 
         amset_order : bool, optional
             doping index before temperature index. Default: False.
@@ -304,7 +301,6 @@ def dfdde(energy, fermi_level, temperature, doping, amset_order=False,
         energy = to_tp('energy', energy)
         fermi_level = to_tp('energy', fermi_level)
         temperature = to_tp('temperature', temperature)
-        doping = to_tp('doping', doping)
 
     kbt = np.multiply(kb, temperature)
     de = -np.subtract.outer(fermi_level, energy)

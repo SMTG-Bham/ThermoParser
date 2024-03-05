@@ -87,14 +87,18 @@ def __dir__():
             'to_boltztrap',
             'to_phono3py',
 
+            'conversions',
             'amset_conversions',
             'boltztrap_conversions',
             'phonopy_conversions',
             'phono3py_conversions',
             'units',
+            'dimensions',
+            'boltztrap_dimensions',
             'labels',
             'inverted_labels',
             'long_labels',
+            'medium_labels',
             'short_labels']
 
    return names

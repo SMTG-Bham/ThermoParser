@@ -130,7 +130,7 @@ scattering (the widest bands scatter the most). Via the command-line:</p>
 <span class="n">poscar</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/POSCAR&#39;</span>
 <span class="n">temperature</span> <span class="o">=</span> <span class="mi">300</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kappafile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kappafile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="n">colour</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#000000&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff0000&#39;</span><span class="p">]</span>
 
@@ -203,7 +203,7 @@ plot. It can be plotted in python with:</p>
 <span class="n">kfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/kappa-m404021.hdf5&#39;</span>
 <span class="n">poscar</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/POSCAR&#39;</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="n">projected</span> <span class="o">=</span> <span class="s1">&#39;lifetime&#39;</span>
 <span class="n">quantities</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span> <span class="s1">&#39;dispersion&#39;</span><span class="p">]</span>

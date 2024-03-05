@@ -14,7 +14,7 @@ colour = {'IMP':   'red',
 # Example only shenanegans
 from os import path
 if not path.isfile(f) or path.getsize(f) < 1024*1024*10:
-    raise Exception('File not found, please use get-data.sh')
+    raise Exception('File not found, please use get-data.sh in the folder above.')
 # End of example only shenanegans
 
 # Axes

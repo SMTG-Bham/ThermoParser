@@ -6,7 +6,7 @@ import tp
 bfile = '../data/zno/boltztrap.hdf5'
 kfile = '../data/zno/kappa-m404021.hdf5'
 if not path.isfile(kfile) or (path.getsize(kfile) < 1024*1024*100):
-    raise Exception('File not found, please use get-data.sh')
+    raise Exception('File not found, please use get-data.sh in the folder above.')
 
 direction = 'x'
 colour = '#800080'

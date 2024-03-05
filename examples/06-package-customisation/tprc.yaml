@@ -39,12 +39,12 @@ units:
 
 # updated axis labels`
 long_labels:
-    conductivity: 'Conductivity (S cm$\mathregular{^{-1}}$)'
-    cumulative_kappa: 'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)'
+    conductivity: r'Conductivity (S cm$\mathregular{^{-1}}$)'
+    cumulative_kappa: r'Lat. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)'
 medium_labels:
-    conductivity: 'Conductivity (S cm$\mathregular{^{-1}}$)'
+    conductivity: r'Conductivity (S cm$\mathregular{^{-1}}$)'
 short_labels:
-    conductivity: '$\mathregular{\sigma\ (S\ cm^{-1}}$)'
+    conductivity: r'$\mathregular{\sigma\ (S\ cm^{-1}}$)'
 
 # The following should contain either long, medium or short, to point to
 # the dictionaries of long_, medium_ or short_labels.

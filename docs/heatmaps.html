@@ -126,7 +126,7 @@ heatmap. This can be plotted at the command line with:</p>
 <span class="n">bfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/boltztrap.hdf5&#39;</span>
 <span class="n">kfile</span> <span class="o">=</span> <span class="s1">&#39;../data/zno/kappa-m404021.hdf5&#39;</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
 <span class="n">colour</span> <span class="o">=</span> <span class="s1">&#39;#800080&#39;</span>
@@ -270,7 +270,7 @@ dopabilities. At the command line:</p>
 <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ZnO&#39;</span><span class="p">,</span> <span class="s1">&#39;BaSnO$_3$&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">kfiles</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">100</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 
 <span class="c1"># Axes</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">add_legend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">one_colourbar</span><span class="p">()</span>
