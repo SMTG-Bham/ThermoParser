@@ -18,7 +18,28 @@ explanations. More details on each of the plots, including the scripts
 and specific commands used are available by clicking on the figures, and we
 also have `tutorials`_!
 
+The data files provided are mostly from published work\ :sup:`1`, which
+looks at the effectiveness of four transparent conducting oxides (TCOs)
+as thermoelectrics. Using a pre-release version of this code, the main
+problem was found to be their large lattice thermal conductivities,
+contributed to most by their low-frequency modes which have large
+mean free paths and group velocities. This is old work, and at the time
+the constant relaxation time approximation (CRTA) via BoltzTraP was
+used to calculate the electronic transport properties. Since then, we
+have recalculated the properties with the momentum relaxation time
+approximation (MRTA) via AMSET, and found using explicit electronic
+relaxation times via MRTA significantly alters the results. This is both
+due to the inclusion of more realistic scattering trends with
+temperature and carrier concentration (`average-rates`_), and the ability
+to alter the electronic scattering rates rather than just the phononic
+ones when simulating nanostructuring. This leads to a much reduced
+electrical conductivity in BaSnO\ :sub:`3`, and therefore a much lower
+ZT (`ztdiff`_), although these trends will vary significantly by
+material.
+
 .. _tutorials: https://smtg-bham.github.io/ThermoParser/tutorials.html
+.. _average-rates: https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates
+.. _ztdiff: https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps
 
 .. hint::
     Click on the images to see the script which generated them.
@@ -157,15 +178,4 @@ labels.
 Reference
 ---------
 
-.. code-block:: bibtex
-
-    @article{Maradudin1962,
-      title={Scattering of neutrons by an anharmonic crystal},
-      author={Maradudin, AA and Fein, AE},
-      journal={Physical Review},
-      volume={128},
-      number={6},
-      pages={2589},
-      year={1962},
-      publisher={APS}
-    }
+[1] A. A. Maradudin and A. E. Fein, _Phys. Rev._, **1962**, 128, 2589.

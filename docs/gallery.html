@@ -91,6 +91,24 @@
 explanations. More details on each of the plots, including the scripts
 and specific commands used are available by clicking on the figures, and we
 also have <a class="reference external" href="https://smtg-bham.github.io/ThermoParser/tutorials.html">tutorials</a>!</p>
+<p>The data files provided are mostly from published work<sup>1</sup>, which
+looks at the effectiveness of four transparent conducting oxides (TCOs)
+as thermoelectrics. Using a pre-release version of this code, the main
+problem was found to be their large lattice thermal conductivities,
+contributed to most by their low-frequency modes which have large
+mean free paths and group velocities. This is old work, and at the time
+the constant relaxation time approximation (CRTA) via BoltzTraP was
+used to calculate the electronic transport properties. Since then, we
+have recalculated the properties with the momentum relaxation time
+approximation (MRTA) via AMSET, and found using explicit electronic
+relaxation times via MRTA significantly alters the results. This is both
+due to the inclusion of more realistic scattering trends with
+temperature and carrier concentration (<a class="reference external" href="https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates">average-rates</a>), and the ability
+to alter the electronic scattering rates rather than just the phononic
+ones when simulating nanostructuring. This leads to a much reduced
+electrical conductivity in BaSnO<sub>3</sub>, and therefore a much lower
+ZT (<a class="reference external" href="https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps">ztdiff</a>), although these trends will vary significantly by
+material.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Click on the images to see the script which generated them.</p>
@@ -174,18 +192,7 @@ ThermoParser, e.g. the custom colourmaps, legend formatting tools and axes
 labels.</p>
 <div class="section" id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">Maradudin1962</span><span class="p">,</span>
-  <span class="na">title</span><span class="p">=</span><span class="s">{Scattering of neutrons by an anharmonic crystal}</span><span class="p">,</span>
-  <span class="na">author</span><span class="p">=</span><span class="s">{Maradudin, AA and Fein, AE}</span><span class="p">,</span>
-  <span class="na">journal</span><span class="p">=</span><span class="s">{Physical Review}</span><span class="p">,</span>
-  <span class="na">volume</span><span class="p">=</span><span class="s">{128}</span><span class="p">,</span>
-  <span class="na">number</span><span class="p">=</span><span class="s">{6}</span><span class="p">,</span>
-  <span class="na">pages</span><span class="p">=</span><span class="s">{2589}</span><span class="p">,</span>
-  <span class="na">year</span><span class="p">=</span><span class="s">{1962}</span><span class="p">,</span>
-  <span class="na">publisher</span><span class="p">=</span><span class="s">{APS}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<p>[1] A. A. Maradudin and A. E. Fein, _Phys. Rev._, <strong>1962</strong>, 128, 2589.</p>
 </div>
 </div>
 
