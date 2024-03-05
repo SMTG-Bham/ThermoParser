@@ -103,4 +103,4 @@ ztmap
    :alt: ZT against carrier concentration and temperature.
    :target: https://github.com/smtg-bham/ThermoParser/tree/master/examples/ztmap
 
-[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, _J. Mater. Chem. A _, **2020**, 8, 11948.
+[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, *J. Mater. Chem. A*, **2020**, 8, 11948.

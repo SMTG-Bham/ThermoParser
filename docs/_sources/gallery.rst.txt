@@ -134,7 +134,7 @@ plotting, to enable nicely formatted multi-axes plots...
 As well as projecting third-order phonon properties onto each other as
 above, so below we see there are also a number of functions for
 projecting these properties onto phonon dispersions. The former is an
-oft plotted widening of the bands due to scattering,\ :sup:`1` and the
+oft plotted widening of the bands due to scattering,\ :sup:`2` and the
 latter shows the same data, but in a more quantitative way.
 
 .. image:: figures/wideband.png
@@ -178,4 +178,5 @@ labels.
 Reference
 ---------
 
-[1] A. A. Maradudin and A. E. Fein, _Phys. Rev._, **1962**, 128, 2589.
+[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, *J. Mater. Chem. A*, **2020**, 8, 11948.
+[2] A. A. Maradudin and A. E. Fein, *Phys. Rev.*, **1962**, 128, 2589.

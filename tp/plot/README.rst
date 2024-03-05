@@ -138,4 +138,4 @@ Functions which assist in plotting.
 Reference
 ---------
 
-[1] A. A. Maradudin and A. E. Fein, _Phys. Rev._, **1962**, 128, 2589.
+[1] A. A. Maradudin and A. E. Fein, *Phys. Rev.*, **1962**, 128, 2589.
