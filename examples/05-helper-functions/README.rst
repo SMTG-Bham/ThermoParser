@@ -2,6 +2,11 @@
 Tutorial-05: Helper Functions
 -----------------------------
 
+This shows simple line plots of electrical conductivity, Seebeck
+coefficient and lattice thermal conductivity. Thermoelectrics require a
+balance of high electrical conductivity and Seebeck coefficient, but
+low thermal conductivity to be efficient.
+
 .. image:: tutorial-05.png
    :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`
 

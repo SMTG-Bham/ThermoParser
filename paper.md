@@ -32,18 +32,18 @@ affiliations:
    index: 2
  - name: Thomas Young Centre, University College London, Gower Street, London WC1E 6BT, United Kingdom
    index: 3
-date: 12 February 2024
+date: 28 February 2024
 bibliography: ref.bib
 ---
 
 # Summary
 
-Thermoelectric materials, which convert heat into electricity, could be an important renewable energy source to help slow the encroaching climate crisis.
+Thermoelectric materials, which convert heat into electricity, could be an important renewable energy source to help slow the encroaching climate crisis, not only by displacing fossil fuels, but by recycling waste heat, which makes up around 50 % of generated energy [@Firth2019].
 With the growing computational capacity and development of several codes to calculate the key properties of thermoelectrics, they have become an increasingly popular area of computational materials research in recent years.
-Thermal transport packages include Phonopy [@Togo2015a], Phono3py [@Togo2015], ShengBTE/ almaBTE [@Li2014], ALAMODE [@Tadano2014], TDEP [@Hellman2011] and HiPhive [@Eriksson2019]; and electronic transport packages include BoltzTraP(2) [@Madsen2006;@Madsen2018], EPW [@Noffsinger2010], EPA [@Samsonidze2018], EPIC STAR [@Deng2020], AMSET [@Ganose2021], Perturbo [@Zhou2021], TOSSPB [@Poehls2022] and ElecTra [@Graziosi2023].
+Thermal transport packages include Phonopy [@Togo2015a], Phono3py [@Togo2015], ShengBTE/ almaBTE [@Li2014], ALAMODE [@Tadano2014], TDEP [@Hellman2011] and HiPhive [@Eriksson2019]; and electronic transport packages include BoltzTraP [@Madsen2006], BoltzTraP2 [@Madsen2018], EPW [@Noffsinger2010], EPA [@Samsonidze2018], EPIC STAR [@Deng2020], AMSET [@Ganose2021], Perturbo [@Zhou2021], TOSSPB [@Poehls2022] and ElecTra [@Graziosi2023].
 While separate packages are required for such different calculations, this makes data analysis complex, needing to load in different file formats, account for different data arrangements (e.g. array shapes), and convert to consistent units, even before one begins analysing anything.
 ThermoParser deals with these time-consuming and error-prone problems by loading data from multiple codes into a consistent data format with informative metadata, and facilitates the post-processing of thermoelectric properties by using this to accurately calculate and visualise them through an easy-to-use command-line interface (CLI) and a fully customisable Python package.
-Some of its utility can be seen by its use in the literature [@Spooner2020;@Einhorn2020;@Kavanagh2021;@Spooner2021;@Brlec2022;@HerringRodriguez2023;@Willis2023;@Han2024].
+Some of its utility can be seen by its use in the literature (sometimes under its former name, ThermoPlotter) [@Kavanagh2021;@Spooner2021;@Brlec2022;@HerringRodriguez2023;@Willis2023;@Han2024].
 
 # Statement of Need
 
@@ -99,14 +99,15 @@ Scaling the linear-scaled DoS data to the log-scaled waterfall axes would be tim
 
 ![Waterfall plot overlaid on a DoS for BaSnO$_3$. \label{fig:waterfall}](joss_figures/waterfall.png)
 
-Future directions for ThermoParser include increasing the number of supported codes; and functions to extract and add metadata to experimental data to enable easier comparison of theoretical and experimental results.
+In the future, ThermoParser could be expanded to include an increased number of analysis types and supported codes.
+On top of this, support for uploading experimental data into the ThermoParser format, including the appropriate metadata, could allow easier comparison of theoretical and experimental results.
 
 # Author Contributions
 
-The primary code base was largely written by KBS based on standalone scripts written by KBS and ME.
-ME implemented functions to plot the density of phonon modes.
-DWD provided day-to-day supervision and guidance and DOS provided the initial idea and motivation for the code.
-The first draft of the manuscript was written by KBS and DWD with input from all co-authors.
+K.B.S.: Conceptualization, data curation, formal analysis, investigation, methodology, software, validation, visualization, writing - original draft, writing - review and editing.
+M.E.: Formal analysis, software, visualization, writing - review and editing.
+D.W.D.: Software, writing - original draft, writing - review and editing.
+D.O.S.: Funding acquisition, project administration, resources, supervision.
 The code is currently maintained by KBS.
 
 # Conflicts of Interest
