@@ -14,15 +14,15 @@ and relatively even larger fonts, which is better suited for
 presentations, posters and non-columnated text. legend is for legend
 handling, which is primarily used internally but may be useful if you
 make your own axes from scratch.
-
-Modules
--------
-
-    small
-
-    large
-    
-    legend
 """
+#Modules
+#-------
+#
+#    small
+#
+#    large
+#    
+#    legend
+#"""
 
 from . import small, large, legend

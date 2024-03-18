@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -73,26 +73,26 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tp.plot.colour</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Colour scheme and colourmap generators.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Colour scheme and colourmap generators.&quot;&quot;&quot;</span>
 
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    linear:</span>
-<span class="sd">        linear between two colours.</span>
-<span class="sd">    uniform:</span>
-<span class="sd">        bigradient colourmap for higher contrast.</span>
-<span class="sd">    elbow:</span>
-<span class="sd">        like uniform, except one can chose the midpoint location.</span>
-<span class="sd">    highlight:</span>
-<span class="sd">        takes an existing map and highlights specific entries.</span>
-<span class="sd">    skelton:</span>
-<span class="sd">        rainbowy discreet colourmap.</span>
-
-
-<span class="sd">    hsb2rgb:</span>
-<span class="sd">        colour converter.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    linear:</span>
+<span class="c1">#        linear between two colours.</span>
+<span class="c1">#    uniform:</span>
+<span class="c1">#        bigradient colourmap for higher contrast.</span>
+<span class="c1">#    elbow:</span>
+<span class="c1">#        like uniform, except one can chose the midpoint location.</span>
+<span class="c1">#    highlight:</span>
+<span class="c1">#        takes an existing map and highlights specific entries.</span>
+<span class="c1">#    skelton:</span>
+<span class="c1">#        rainbowy discreet colourmap.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    hsb2rgb:</span>
+<span class="c1">#        colour converter.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">to_rgba</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

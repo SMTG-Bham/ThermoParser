@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -73,40 +73,40 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tp.cli.options</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Provides groups of options to streamline the CLI</span>
+<span></span><span class="sd">&quot;&quot;&quot;Provides groups of options to streamline the CLI&quot;&quot;&quot;</span>
 
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    direction_function:</span>
-<span class="sd">        function for picking the --direction (-d).</span>
-<span class="sd">    doping_type_option:</span>
-<span class="sd">        function for picking the doping --type (-t).</span>
-<span class="sd">    doping_function:</span>
-<span class="sd">        function for picking the doping --concentration (-n).</span>
-<span class="sd">    dos_function:</span>
-<span class="sd">        function for setting DoS formatting.</span>
-<span class="sd">    inputs_function:</span>
-<span class="sd">        function for picking the input file(s) argument.</span>
-<span class="sd">    interpolate_options:</span>
-<span class="sd">        function for setting interpolation options.</span>
-<span class="sd">    kpoints_options:</span>
-<span class="sd">        function for handling KPOINTS files.</span>
-<span class="sd">    legend_options:</span>
-<span class="sd">        function for formatting legends.</span>
-<span class="sd">    line_options:</span>
-<span class="sd">        function for formatting line plots.</span>
-<span class="sd">    fill_options:</span>
-<span class="sd">        function for formatting fillable line plots.</span>
-<span class="sd">    plot_io_function:</span>
-<span class="sd">        function for formatting plot outputs.</span>
-<span class="sd">    temperature_option:</span>
-<span class="sd">        function for picking the --temperature (-t).</span>
-<span class="sd">    verbose_option:</span>
-<span class="sd">        function for increasing the verbosity.</span>
-<span class="sd">    axes_limit_function</span>
-<span class="sd">        function for setting the axis limits.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    direction_function:</span>
+<span class="c1">#        function for picking the --direction (-d).</span>
+<span class="c1">#    doping_type_option:</span>
+<span class="c1">#        function for picking the doping --type (-t).</span>
+<span class="c1">#    doping_function:</span>
+<span class="c1">#        function for picking the doping --concentration (-n).</span>
+<span class="c1">#    dos_function:</span>
+<span class="c1">#        function for setting DoS formatting.</span>
+<span class="c1">#    inputs_function:</span>
+<span class="c1">#        function for picking the input file(s) argument.</span>
+<span class="c1">#    interpolate_options:</span>
+<span class="c1">#        function for setting interpolation options.</span>
+<span class="c1">#    kpoints_options:</span>
+<span class="c1">#        function for handling KPOINTS files.</span>
+<span class="c1">#    legend_options:</span>
+<span class="c1">#        function for formatting legends.</span>
+<span class="c1">#    line_options:</span>
+<span class="c1">#        function for formatting line plots.</span>
+<span class="c1">#    fill_options:</span>
+<span class="c1">#        function for formatting fillable line plots.</span>
+<span class="c1">#    plot_io_function:</span>
+<span class="c1">#        function for formatting plot outputs.</span>
+<span class="c1">#    temperature_option:</span>
+<span class="c1">#        function for picking the --temperature (-t).</span>
+<span class="c1">#    verbose_option:</span>
+<span class="c1">#        function for increasing the verbosity.</span>
+<span class="c1">#    axes_limit_function</span>
+<span class="c1">#        function for setting the axis limits.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">click</span>
 

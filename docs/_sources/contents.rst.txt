@@ -12,7 +12,7 @@ ThermoParser
    Gallery <gallery>
    Tutorials <tutorials>
    Introduction <index>
-   Python Package <modules>
+   Python API <modules>
 
 Indices and tables
 ==================

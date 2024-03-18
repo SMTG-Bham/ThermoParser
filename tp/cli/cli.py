@@ -1,59 +1,59 @@
-"""Provides a command line interface.
+"""Provides a command line interface."""
 
-Functions
----------
-
-    tp
-        gen
-            kpar
-                suggest kpar ignoring zero-weighted k-points.
-            kpoints
-                generate zero-weighted KPOINTS file.
-        get
-            amset
-                get specific data from amset transport json or mesh h5.
-            occupation
-                get charge carrier occupation
-            boltztrap
-                get specific data from tp boltztrap hdf5.
-            phono3py
-                get specific data from phono3py kappa hdf5.
-            zt
-                get zt from an electronic and a phononic file.
-        run
-            boltztrap
-                efficient boltztrap runner to hdf5.
-        save
-            cumkappa
-                save cumulative kappa data to dat.
-            kappa
-                save lattice thermal conductivity to dat.
-            zt
-                save zt to hdf5.
-        plot
-            avg_rates
-                plot scattering rates against temperature and doping.
-            cumkappa
-                plot cumulative kappa against frequency or mfp.
-            dos
-                plot phonon DoS.
-            kappa
-                plot thermal conductivity against temperature.
-            kappa_target
-                plot target lattice thermal conductivity heatmap.
-            phonons
-                plot phonon dispersion(s) (and optional DoS).
-            transport
-                plot transport properties.
-            waterfall
-                plot scatter plots by band and q-point.
-            wideband
-                plot broadened phonon dispersion.
-            ztmap
-                plot zt or pf against temperature and doping.
-            ztdiff
-                plot zt or pf difference against temperature and doping.
-"""
+#Functions
+#---------
+#
+#    tp
+#        gen
+#            kpar
+#                suggest kpar ignoring zero-weighted k-points.
+#            kpoints
+#                generate zero-weighted KPOINTS file.
+#        get
+#            amset
+#                get specific data from amset transport json or mesh h5.
+#            occupation
+#                get charge carrier occupation
+#            boltztrap
+#                get specific data from tp boltztrap hdf5.
+#            phono3py
+#                get specific data from phono3py kappa hdf5.
+#            zt
+#                get zt from an electronic and a phononic file.
+#        run
+#            boltztrap
+#                efficient boltztrap runner to hdf5.
+#        save
+#            cumkappa
+#                save cumulative kappa data to dat.
+#            kappa
+#                save lattice thermal conductivity to dat.
+#            zt
+#                save zt to hdf5.
+#        plot
+#            avg_rates
+#                plot scattering rates against temperature and doping.
+#            cumkappa
+#                plot cumulative kappa against frequency or mfp.
+#            dos
+#                plot phonon DoS.
+#            kappa
+#                plot thermal conductivity against temperature.
+#            kappa_target
+#                plot target lattice thermal conductivity heatmap.
+#            phonons
+#                plot phonon dispersion(s) (and optional DoS).
+#            transport
+#                plot transport properties.
+#            waterfall
+#                plot scatter plots by band and q-point.
+#            wideband
+#                plot broadened phonon dispersion.
+#            ztmap
+#                plot zt or pf against temperature and doping.
+#            ztdiff
+#                plot zt or pf difference against temperature and doping.
+#"""
 
 import click
 import matplotlib as mpl

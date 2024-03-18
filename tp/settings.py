@@ -6,63 +6,64 @@ presented and add abbreviations that can be used when loading data.
 Custom defaults can be set by saving a copy of tprc.yaml (found in the
 main ThermoParser directory) to ``~/.config/tprc.yaml`` and editing
 that.
-
-Functions
----------
-
-    style:
-        default style sheet.
-    large_style:
-        style sheet for large axes.
-    locator:
-        default tick locators.
-
-
-    to_tp:
-        convert names to tp conventions.
-    to_amset:
-        convert names to amset conventions.
-    to_boltztrap:
-        convert names to boltztrap conventions.
-    to_phono3py:
-        convert names to phono3py conventions.
-
-
-    conversions:
-        default unit conversions.
-    amset_conversions:
-        unit conversions.
-    boltztrap_conversions:
-        unit conversions.
-    phonopy_conversions:
-        unit conversions.
-    phono3py_conversions:
-        unit conversions.
-
-
-    units:
-        default units used.
-    dimensions:
-        dimensions of each variable.
-    boltztrap_dimensions:
-        updated dimensions for BoltzTraP.
-
-    labels:
-        default axis labels.
-    inverted_labels:
-        default labels for a dos-style axis.
-    large_labels:
-        default labels for a large axis.
-    long_labels:
-        list of long axis labels.
-    medium_labels:
-        list of slightly abbreviated axis labels.
-    short_labels:
-        list of fully contracted axis labels.
-
-    get_workers:
-        number of workers for parallelisation
 """
+
+#Functions
+#---------
+#
+#    style:
+#        default style sheet.
+#    large_style:
+#        style sheet for large axes.
+#    locator:
+#        default tick locators.
+#
+#
+#    to_tp:
+#        convert names to tp conventions.
+#    to_amset:
+#        convert names to amset conventions.
+#    to_boltztrap:
+#        convert names to boltztrap conventions.
+#    to_phono3py:
+#        convert names to phono3py conventions.
+#
+#
+#    conversions:
+#        default unit conversions.
+#    amset_conversions:
+#        unit conversions.
+#    boltztrap_conversions:
+#        unit conversions.
+#    phonopy_conversions:
+#        unit conversions.
+#    phono3py_conversions:
+#        unit conversions.
+#
+#
+#    units:
+#        default units used.
+#    dimensions:
+#        dimensions of each variable.
+#    boltztrap_dimensions:
+#        updated dimensions for BoltzTraP.
+#
+#    labels:
+#        default axis labels.
+#    inverted_labels:
+#        default labels for a dos-style axis.
+#    large_labels:
+#        default labels for a large axis.
+#    long_labels:
+#        list of long axis labels.
+#    medium_labels:
+#        list of slightly abbreviated axis labels.
+#    short_labels:
+#        list of fully contracted axis labels.
+#
+#    get_workers:
+#        number of workers for parallelisation
+#"""
 
 import os
 import warnings

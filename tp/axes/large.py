@@ -4,38 +4,39 @@ Each function returns a figure, a set of axes or an array of sets of
 axes and an add_legend function. The legend function comes with a
 choice of positions and takes normal ax.legend arguments. Drawing large
 figures is significantly slower than small ones.
-
-Functions
----------
-
-    one
-
-    one_colourbar
-
-    one_dos
-    
-    one_dos_colourbar
-    
-    two_h
-    
-    two_h_colourbars
-    
-    two_v
-    
-    two_v_colourbars
-    
-    three_h
-    
-    three_h_colourbars
-    
-    three_square
-    
-    three_square_colourbars
-    
-    four_square
-    
-    four_square_colourbars
 """
+
+#Functions
+#---------
+#
+#    one
+#
+#    one_colourbar
+#
+#    one_dos
+#    
+#    one_dos_colourbar
+#    
+#    two_h
+#    
+#    two_h_colourbars
+#    
+#    two_v
+#    
+#    two_v_colourbars
+#    
+#    three_h
+#    
+#    three_h_colourbars
+#    
+#    three_square
+#    
+#    three_square_colourbars
+#    
+#    four_square
+#    
+#    four_square_colourbars
+#"""
 
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec

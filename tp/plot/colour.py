@@ -1,23 +1,23 @@
-"""Colour scheme and colourmap generators.
+"""Colour scheme and colourmap generators."""
 
-Functions
----------
-
-    linear:
-        linear between two colours.
-    uniform:
-        bigradient colourmap for higher contrast.
-    elbow:
-        like uniform, except one can chose the midpoint location.
-    highlight:
-        takes an existing map and highlights specific entries.
-    skelton:
-        rainbowy discreet colourmap.
-
-
-    hsb2rgb:
-        colour converter.
-"""
+#Functions
+#---------
+#
+#    linear:
+#        linear between two colours.
+#    uniform:
+#        bigradient colourmap for higher contrast.
+#    elbow:
+#        like uniform, except one can chose the midpoint location.
+#    highlight:
+#        takes an existing map and highlights specific entries.
+#    skelton:
+#        rainbowy discreet colourmap.
+#
+#
+#    hsb2rgb:
+#        colour converter.
+#"""
 
 from matplotlib.colors import ListedColormap, to_rgba
 import numpy as np

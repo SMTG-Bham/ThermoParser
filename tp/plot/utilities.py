@@ -1,17 +1,17 @@
-"""Utilities to aid the plotting scripts.
+"""Utilities to aid the plotting scripts."""
 
-Functions
----------
-
-    colour_scale:
-        sorts colour limits and colourbar format.
-    parse_colours
-        returns a colour map from a range of input types.
-    scale_to_axis
-        scales data to axes limits
-    set_locators:
-        set locators one-liner.
-"""
+#Functions
+#---------
+#
+#    colour_scale:
+#        sorts colour limits and colourbar format.
+#    parse_colours
+#        returns a colour map from a range of input types.
+#    scale_to_axis
+#        scales data to axes limits
+#    set_locators:
+#        set locators one-liner.
+#"""
 
 import matplotlib as mpl
 import numpy as np
