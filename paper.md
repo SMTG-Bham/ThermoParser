@@ -65,7 +65,7 @@ The package interfaces with Phonopy, Phono3py, AMSET and BoltzTraP.
 
 The package is modular, with a separate function for loading from each code, plotting each graph-type and preparing each axis arrangement, as well as numerous helper functions for calculating properties, manipulating data, and fomatting outputs.
 Therefore, in order to add support for a new code, calculated property or plot-type, one needs only create a single function able to read/write the common format, and perhaps some metadata, and the rest should just work.
-Everything loaded into the common format has a `meta` directory, containing all the metadata needed to understand the data: the code it was loaded from, the shape of the array (e.g. if the first index is temperature) and the units, as well as any conditions imposed, such as if the data has been reduced to a particular temperature.
+Everything loaded into the common format has a `meta` dictionary, containing all the metadata needed to understand the data: the code it was loaded from, the shape of the array (e.g. if the first index is temperature) and the units, as well as any conditions imposed, such as if the data has been reduced to a particular temperature.
 All dependent variables are also loaded by default.
 A `tprc.yaml` config file is supplied, which enables the user to automatically convert units, and update the units as they appear in the metadata and on axis labels.
 This data is used by CLI functions provided to retrieve data from files, which verbosely describes the conditions under which it was measured for maximum transparency.
@@ -83,7 +83,7 @@ In general, raw data is converted to high-quality plots in four stages:
  4. Save: Use `fig.savefig` or similar.
 
 The `tprc.yaml` file allows users to set a range of defaults, including axis labels, tick locators, style sheets and more.
-While a [gallery](https://smtg-ucl.github.io/ThermoPlotter/gallery.html) is curated to demonstrate all plotting functionality, we highlight some key examples in Figures 1 and 2.
+While a [gallery](https://smtg-bham.github.io/ThermoParser/gallery.html) is curated to demonstrate all plotting functionality, we highlight some key examples in Figures 1 and 2.
 
 \autoref{fig:phonon}a shows a phonon dispersion with an element-decomposed DoS sharing the y-axis.
 Different environments for the same atom type can be specified, if desired, and it is possible to overlay multiple dispersions to assess calculation convergence.
