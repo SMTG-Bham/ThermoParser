@@ -17,9 +17,17 @@
     |____________________________________:_______________________/____________:_____/
 
 
-.. image:: https://travis-ci.com/smtg-bham/ThermoParser.svg?branch=master
-    :alt: The travis-ci badge
-    :target: https://travis-ci.com/smtg-bham/ThermoParser
+.. image:: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/build.yml/badge.svg
+    :alt: The build status badge
+    :target: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/build.yml
+
+.. image:: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/tests.yml/badge.svg
+    :alt: The tests status badge
+    :target: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/tests.yml
+
+.. image:: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/docs.yml/badge.svg
+    :alt: The docs status badge
+    :target: https://smtg-bham.github.io/ThermoParser/
 
 ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
