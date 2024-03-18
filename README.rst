@@ -168,7 +168,7 @@ Testing
 
 Tests use the `unittest`_ package, and can be run from the test directory
 with ``python3 -m unittest``. If you don't already have unittest installed, it
-can be directly with ``pip install unittest`` or, e.g., ``pip install .[tests]``
+can be directly with ``pip install unitest`` or, e.g., ``pip install .[tests]``
 from the ThermoParser directory.
 
 .. _unittest: https://docs.python.org/3/library/unittest.html
