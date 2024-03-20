@@ -3,26 +3,27 @@
 Loads data from codes into a dictionary, with units and array structures
 standardised. Also adds a ``meta`` subdictionary, which contains units,
 array dimensions and the data source.
-
-Functions
----------
-
-    amset:
-        from the amset transport json.
-    amset_mesh:
-        from the amset mesh h5.
-    boltztrap:
-        from the tp boltztrap hdf5.
-    phono3py:
-        from the phono3py kappa hdf5.
-    phonopy_dispersion:
-        from the phonopy or sumo band.yaml.
-    phonopy_dos:
-        from the phonopy projected_dos.dat.
-
-    get_path:
-        gets high path from phonopy dispersion data.
 """
+
+#Functions
+#---------
+#
+#    amset:
+#        from the amset transport json.
+#    amset_mesh:
+#        from the amset mesh h5.
+#    boltztrap:
+#        from the tp boltztrap hdf5.
+#    phono3py:
+#        from the phono3py kappa hdf5.
+#    phonopy_dispersion:
+#        from the phonopy or sumo band.yaml.
+#    phonopy_dos:
+#        from the phonopy projected_dos.dat.
+#
+#    get_path:
+#        gets high path from phonopy dispersion data.
+#"""
 
 import numpy as np
 import tp

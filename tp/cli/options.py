@@ -1,37 +1,37 @@
-"""Provides groups of options to streamline the CLI
+"""Provides groups of options to streamline the CLI"""
 
-Functions
----------
-
-    direction_function:
-        function for picking the --direction (-d).
-    doping_type_option:
-        function for picking the doping --type (-t).
-    doping_function:
-        function for picking the doping --concentration (-n).
-    dos_function:
-        function for setting DoS formatting.
-    inputs_function:
-        function for picking the input file(s) argument.
-    interpolate_options:
-        function for setting interpolation options.
-    kpoints_options:
-        function for handling KPOINTS files.
-    legend_options:
-        function for formatting legends.
-    line_options:
-        function for formatting line plots.
-    fill_options:
-        function for formatting fillable line plots.
-    plot_io_function:
-        function for formatting plot outputs.
-    temperature_option:
-        function for picking the --temperature (-t).
-    verbose_option:
-        function for increasing the verbosity.
-    axes_limit_function
-        function for setting the axis limits.
-"""
+#Functions
+#---------
+#
+#    direction_function:
+#        function for picking the --direction (-d).
+#    doping_type_option:
+#        function for picking the doping --type (-t).
+#    doping_function:
+#        function for picking the doping --concentration (-n).
+#    dos_function:
+#        function for setting DoS formatting.
+#    inputs_function:
+#        function for picking the input file(s) argument.
+#    interpolate_options:
+#        function for setting interpolation options.
+#    kpoints_options:
+#        function for handling KPOINTS files.
+#    legend_options:
+#        function for formatting legends.
+#    line_options:
+#        function for formatting line plots.
+#    fill_options:
+#        function for formatting fillable line plots.
+#    plot_io_function:
+#        function for formatting plot outputs.
+#    temperature_option:
+#        function for picking the --temperature (-t).
+#    verbose_option:
+#        function for increasing the verbosity.
+#    axes_limit_function
+#        function for setting the axis limits.
+#"""
 
 import click
 

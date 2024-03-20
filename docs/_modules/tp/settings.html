@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -81,63 +81,64 @@
 <span class="sd">Custom defaults can be set by saving a copy of tprc.yaml (found in the</span>
 <span class="sd">main ThermoParser directory) to ``~/.config/tprc.yaml`` and editing</span>
 <span class="sd">that.</span>
-
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    style:</span>
-<span class="sd">        default style sheet.</span>
-<span class="sd">    large_style:</span>
-<span class="sd">        style sheet for large axes.</span>
-<span class="sd">    locator:</span>
-<span class="sd">        default tick locators.</span>
-
-
-<span class="sd">    to_tp:</span>
-<span class="sd">        convert names to tp conventions.</span>
-<span class="sd">    to_amset:</span>
-<span class="sd">        convert names to amset conventions.</span>
-<span class="sd">    to_boltztrap:</span>
-<span class="sd">        convert names to boltztrap conventions.</span>
-<span class="sd">    to_phono3py:</span>
-<span class="sd">        convert names to phono3py conventions.</span>
-
-
-<span class="sd">    conversions:</span>
-<span class="sd">        default unit conversions.</span>
-<span class="sd">    amset_conversions:</span>
-<span class="sd">        unit conversions.</span>
-<span class="sd">    boltztrap_conversions:</span>
-<span class="sd">        unit conversions.</span>
-<span class="sd">    phonopy_conversions:</span>
-<span class="sd">        unit conversions.</span>
-<span class="sd">    phono3py_conversions:</span>
-<span class="sd">        unit conversions.</span>
-
-
-<span class="sd">    units:</span>
-<span class="sd">        default units used.</span>
-<span class="sd">    dimensions:</span>
-<span class="sd">        dimensions of each variable.</span>
-<span class="sd">    boltztrap_dimensions:</span>
-<span class="sd">        updated dimensions for BoltzTraP.</span>
-
-<span class="sd">    labels:</span>
-<span class="sd">        default axis labels.</span>
-<span class="sd">    inverted_labels:</span>
-<span class="sd">        default labels for a dos-style axis.</span>
-<span class="sd">    large_labels:</span>
-<span class="sd">        default labels for a large axis.</span>
-<span class="sd">    long_labels:</span>
-<span class="sd">        list of long axis labels.</span>
-<span class="sd">    medium_labels:</span>
-<span class="sd">        list of slightly abbreviated axis labels.</span>
-<span class="sd">    short_labels:</span>
-<span class="sd">        list of fully contracted axis labels.</span>
-
-<span class="sd">    get_workers:</span>
-<span class="sd">        number of workers for parallelisation</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    style:</span>
+<span class="c1">#        default style sheet.</span>
+<span class="c1">#    large_style:</span>
+<span class="c1">#        style sheet for large axes.</span>
+<span class="c1">#    locator:</span>
+<span class="c1">#        default tick locators.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    to_tp:</span>
+<span class="c1">#        convert names to tp conventions.</span>
+<span class="c1">#    to_amset:</span>
+<span class="c1">#        convert names to amset conventions.</span>
+<span class="c1">#    to_boltztrap:</span>
+<span class="c1">#        convert names to boltztrap conventions.</span>
+<span class="c1">#    to_phono3py:</span>
+<span class="c1">#        convert names to phono3py conventions.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    conversions:</span>
+<span class="c1">#        default unit conversions.</span>
+<span class="c1">#    amset_conversions:</span>
+<span class="c1">#        unit conversions.</span>
+<span class="c1">#    boltztrap_conversions:</span>
+<span class="c1">#        unit conversions.</span>
+<span class="c1">#    phonopy_conversions:</span>
+<span class="c1">#        unit conversions.</span>
+<span class="c1">#    phono3py_conversions:</span>
+<span class="c1">#        unit conversions.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    units:</span>
+<span class="c1">#        default units used.</span>
+<span class="c1">#    dimensions:</span>
+<span class="c1">#        dimensions of each variable.</span>
+<span class="c1">#    boltztrap_dimensions:</span>
+<span class="c1">#        updated dimensions for BoltzTraP.</span>
+<span class="c1">#</span>
+<span class="c1">#    labels:</span>
+<span class="c1">#        default axis labels.</span>
+<span class="c1">#    inverted_labels:</span>
+<span class="c1">#        default labels for a dos-style axis.</span>
+<span class="c1">#    large_labels:</span>
+<span class="c1">#        default labels for a large axis.</span>
+<span class="c1">#    long_labels:</span>
+<span class="c1">#        list of long axis labels.</span>
+<span class="c1">#    medium_labels:</span>
+<span class="c1">#        list of slightly abbreviated axis labels.</span>
+<span class="c1">#    short_labels:</span>
+<span class="c1">#        list of fully contracted axis labels.</span>
+<span class="c1">#</span>
+<span class="c1">#    get_workers:</span>
+<span class="c1">#        number of workers for parallelisation</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>

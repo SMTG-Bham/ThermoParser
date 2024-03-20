@@ -5,24 +5,25 @@ and and an ``invert`` argument to plot sideways by a phonon dispersion,
 and a main argument, which determines if axes limits are set and
 sometimes how scaling is handled, which helps if plotting multiple
 quantities on the same axes.
-
-Functions
----------
-
-    add_dos:
-        phonon dos.
-    add_cum_kappa:
-        cumulative kappa vs frequency.
-    add_waterfall:
-        scatter plots of various values.
-    add_projected_waterfall:
-        waterfall, but with a second quantity projected.
-    add_density:
-        density of phonon modes for a property vs frequency.
-
-    format_waterfall:
-        formatting for the waterfall and density plots.
 """
+
+#Functions
+#---------
+#
+#    add_dos:
+#        phonon dos.
+#    add_cum_kappa:
+#        cumulative kappa vs frequency.
+#    add_waterfall:
+#        scatter plots of various values.
+#    add_projected_waterfall:
+#        waterfall, but with a second quantity projected.
+#    add_density:
+#        density of phonon modes for a property vs frequency.
+#
+#    format_waterfall:
+#        formatting for the waterfall and density plots.
+#"""
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt

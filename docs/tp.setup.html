@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
@@ -95,16 +95,7 @@
 <h1>tp.setup package<a class="headerlink" href="#tp-setup-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-tp.setup">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tp.setup" title="Permalink to this headline">¶</a></h2>
-<p>Tools for setting up calculations and inputs</p>
-<div class="section" id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>vasp</dt><dd><p>currently contains KPOINTS generators</p>
-</dd>
-</dl>
-</div></blockquote>
-</div>
+<p>Tools for setting up calculations and inputs.</p>
 </div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -112,18 +103,6 @@
 <div class="section" id="module-tp.setup.vasp">
 <span id="tp-setup-vasp-module"></span><h2>tp.setup.vasp module<a class="headerlink" href="#module-tp.setup.vasp" title="Permalink to this headline">¶</a></h2>
 <p>Helps set up VASP calculations.</p>
-<div class="section" id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>gen_ibz</dt><dd><p>generate irreducible kpoints</p>
-</dd>
-<dt>get_kpar</dt><dd><p>gives kpar suggestions based on kpoints</p>
-</dd>
-<dt>get_kpoints</dt><dd><p>generates kpoints file including zero-weighted kpoints</p>
-</dd>
-</dl>
-</div></blockquote>
 <dl class="py function">
 <dt id="tp.setup.vasp.gen_ibz">
 <code class="sig-prename descclassname">tp.setup.vasp.</code><code class="sig-name descname">gen_ibz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span></em>, <em class="sig-param"><span class="n">poscar</span><span class="o">=</span><span class="default_value">'POSCAR'</span></em>, <em class="sig-param"><span class="n">symprec</span><span class="o">=</span><span class="default_value">1e-05</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/setup/vasp.html#gen_ibz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.setup.vasp.gen_ibz" title="Permalink to this definition">¶</a></dt>
@@ -202,7 +181,6 @@ Default: no zero-weighted kpoints.</p></li>
 </dl>
 </dd></dl>
 
-</div>
 </div>
 </div>
 
