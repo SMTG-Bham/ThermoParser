@@ -8,7 +8,7 @@ This contains much the same information as the broadening in
 tutorial-02, with smaller values showing more scattering and lower
 lattice thermal conductivity.
 
-.. image:: tutorial-04.png
+.. image:: ../../examples/04-layered-plots/tutorial-04.png
    :alt: Phonon dispersion convergence, density of states  and mean free path of BaSnO<sub>3</sub>.
 
 As well as plotting graphs on neighbouring axes, it can be informative
@@ -21,7 +21,7 @@ effort.
 
 The python version of this code is:
 
-.. literalinclude:: tutorial-04.py
+.. literalinclude:: ../../examples/04-layered-plots/tutorial-04.py
    :language: python
    :linenos:
    :emphasize-lines: 29,32,38-44,48-51

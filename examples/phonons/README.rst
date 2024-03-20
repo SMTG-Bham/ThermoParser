@@ -2,19 +2,18 @@
 Phonons
 -------
 
-.. image:: phonons.png
+.. image:: ../../examples/phonons/phonons.png
    :alt: Phonon dispersion and density of states.
 
 This shows a phonon dispersion and density of states (DoS). This is the
 only combined plot currenty possible at the command line, with:
 
-.. code-block::
-
-   tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR -doscolour '#d46ef9' --doscolour '#7b8eff' -c '#f0901f'
+.. literalinclude:: ../../examples/phonons/plot-phonons.sh
+   :language: bash
 
 and in python:
 
-.. literalinclude:: plot-phonons.py
+.. literalinclude:: ../../examples/phonons/plot-phonons.py
    :language: python
    :linenos:
    :emphasize-lines: 22,24
@@ -25,19 +24,18 @@ labels and removes their y-axis labels and tick labels (line 22).
 Currently the axes of the two plots have to be aligned manually, but
 this is simple (line 24).
 
-.. image:: multiphon.png
+.. image:: ../../examples/phonons/multiphon.png
    :alt: Phonon dispersions for different supercell sizes.
 
 This shows phonons dispersions for various supercell sizes for
 convergence:
 
-.. code-block::
-
-   tp plot phonons ../data/basno3/band-*.yaml --legend_title "Supercell Size" -l "2 x 2 x 2" -l "3 x 3 x 3" -l "4 x 4 x 4" -l "5 x 5 x 5"
+.. literalinclude:: ../../examples/phonons/plot-multiphon.sh
+   :language: bash
 
 and in python:
 
-.. literalinclude:: plot-multiphon.py
+.. literalinclude:: ../../examples/phonons/plot-multiphon.py
    :language: python
    :linenos:
    :emphasize-lines: 17,18

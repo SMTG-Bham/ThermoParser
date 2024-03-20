@@ -9,7 +9,7 @@ modes indicates more scattering). More scattering causes a decrease in
 lattice thermal conductivity. The data for the scattering comes from
 Phono3py, which also uses the supercell approach.
 
-.. image:: tutorial-02.png
+.. image:: ../../examples/02-individual-customisation/tutorial-02.png
    :alt: Finite bandwidth phonon dispersion of ZnO.
 
 In most cases, plotting scripts will be more complex than `Tutorial-01`_.
@@ -24,7 +24,7 @@ The CLI version of this code is:
 
 And the python version is:
 
-.. literalinclude:: tutorial-02.py
+.. literalinclude:: ../../examples/02-individual-customisation/tutorial-02.py
    :language: python
    :linenos:
    :emphasize-lines: 6-9,20,23,24,27,28

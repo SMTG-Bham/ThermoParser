@@ -1,0 +1,1 @@
+tp plot ztdiff ../data/zno/transport_75x75x75.json  ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/zno/kappa-m404021.hdf5 -l MRTA -l CRTA
