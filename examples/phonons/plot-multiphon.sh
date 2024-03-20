@@ -1,0 +1,1 @@
+tp plot phonons ../data/basno3/band-*.yaml --legend_title "Supercell Size" -l "2 x 2 x 2" -l "3 x 3 x 3" -l "4 x 4 x 4" -l "5 x 5 x 5"

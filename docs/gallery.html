@@ -118,7 +118,7 @@ from either a python script or the command line, such as the classic
 <code class="docutils literal notranslate"><span class="pre">ztmap</span></code> heatmap (the power factor <code class="docutils literal notranslate"><span class="pre">pfmap</span></code> is also available):</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of ZT against carrier concentration and temperature" src="_images/ztmap.png" /></a>
 <p>Click on the plot to see the script, or one could use</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztmap boltztrap.hdf5 -k kappa-m&lt;xxx&gt;.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">`</span>tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x
 </pre></div>
 </div>
 <p>A related plot we hope people find useful for screening materials to
@@ -126,23 +126,23 @@ run three+ phonon calculations on is the <code class="docutils literal notransla
 calculates the lattice thermal conductivity required to reach a given
 ZT, in this case 2.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of target lattice thermal conductivity against carrier concentration and temperature" src="_images/kappa-target.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot kappa-target boltztrap.hdf5 -c <span class="s1">&#39;#008080&#39;</span> -d x
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot kappa-target ../data/zno/boltztrap.hdf5 -c <span class="s1">&#39;#008080&#39;</span> -d x
 </pre></div>
 </div>
 <p>Or on the analytical end of the process, <code class="docutils literal notranslate"><span class="pre">zdiff</span></code> and <code class="docutils literal notranslate"><span class="pre">pfdiff</span></code> allow
 comparison among different datasets.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of differentce in ZT against carrier concentration and temperature" src="_images/ztdiff.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff &lt;x&gt;/boltztrap.hdf5 &lt;y&gt;/boltztrap.hdf5 -k &lt;x&gt;/kappa-m&lt;xxx&gt;.hdf5 &lt;y&gt;/kappa-m&lt;yyy&gt;.hdf5 -l &lt;x&gt; &lt;y&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff ../data/zno/transport_75x75x75.json  ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/zno/kappa-m404021.hdf5 -l MRTA -l CRTA
 </pre></div>
 </div>
 <p>Slightly more complex plots also with command line scripts are the
 phonon dispersions, which can be overlayed and plotted with DoSs.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/phonons.html"><img alt="A plot converging phonon dispersions against supercell size" src="_images/multiphon.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons &lt;list of band.yamls&gt; -l &lt;list of labels&gt; -t <span class="s1">&#39;Supercell\ Size&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/basno3/band-*.yaml --legend_title <span class="s2">&quot;Supercell Size&quot;</span> -l <span class="s2">&quot;2 x 2 x 2&quot;</span> -l <span class="s2">&quot;3 x 3 x 3&quot;</span> -l <span class="s2">&quot;4 x 4 x 4&quot;</span> -l <span class="s2">&quot;5 x 5 x 5&quot;</span>
 </pre></div>
 </div>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/phonons.html"><img alt="A phonon dispersion and DoS" src="_images/phonons.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons band.yaml -c <span class="s1">&#39;#ff8000&#39;</span> -d projected_dos.dat --doscolour <span class="s1">&#39;#ffff00&#39;</span> <span class="s1">&#39;#00ffff&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR -doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> -c <span class="s1">&#39;#f0901f&#39;</span>
 </pre></div>
 </div>
 <p>This is where some of the more useful functions of <code class="docutils literal notranslate"><span class="pre">ThermoParser</span></code>
@@ -151,8 +151,12 @@ simplicity of compound axes in the latter. Another example is the ability to
 add gaussian smearing to a DoS plot during plotting, removing the need to rerun
 e.g. Phonopy or maintain multiple data files.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/dos.html"><img alt="A DoS plot without and with gaussian smearing (sigma=0.2)" src="_images/dos1.png" /></a>
-<p>The right-hand plot can be plotted with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot dos projected_dos.dat --atoms <span class="s2">&quot;Ba Sn O O_2 2&quot;</span> --sigma <span class="m">0</span>.2 --location <span class="m">1</span> -c magenta -c cyan -c red -c orange
+<p>The left-hand plot can be plotted with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot dos ../data/basno3/projected_dos.dat --total --nolegend -c pink -c cyan -c red -p ../data/basno3/POSCAR
+</pre></div>
+</div>
+<p>And the right-hand plot can be plotted with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot dos ../data/basno3/projected_dos.dat --atoms <span class="s2">&quot;Ba Sn O O_2 2&quot;</span> --sigma <span class="m">0</span>.2 --location <span class="m">1</span> -c magenta -c cyan -c red -c orange
 </pre></div>
 </div>
 <p>There are command-line scripts, but the main functionality is
@@ -167,7 +171,7 @@ projecting these properties onto phonon dispersions. The former is an
 oft plotted widening of the bands due to scattering,<sup>2</sup> and the
 latter shows the same data, but in a more quantitative way.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/prophon.html"><img alt="A phonon dispersion where widened bands show phonon scattering" src="_images/wideband.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband band.yaml kappa-m&lt;xxx&gt;.hdf5 -c <span class="s1">&#39;#000000&#39;</span> <span class="s1">&#39;#ff0000&#39;</span> -s dark_background
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 -c black -c red -s dark_background -p POSCAR
 </pre></div>
 </div>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/prophon.html"><img alt="A phonon dispersion where dark colours show phonn scattering" src="_images/prophon.png" /></a>
@@ -178,8 +182,8 @@ retrieval (<code class="docutils literal notranslate"><span class="pre">tp.utili
 because thats long… many of these outlined in the <a class="reference external" href="https://smtg-bham.github.io/ThermoParser/tutorials.html">tutorials</a>, and some are
 demonstrated in this line plot, which is not available as a python command,
 but is easily scripted or plotted at the command line:</p>
-<a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/avg-rates.html"><img alt="A plot of weighted average scattering rates against temperature and carrier concnetration." src="_images/avg-rates.png" /></a>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">avg</span><span class="o">-</span><span class="n">rates</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">mesh_75x75x75</span><span class="o">.</span><span class="n">h5</span> <span class="o">-</span><span class="n">t</span> <span class="mi">1000</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="mf">1e19</span> <span class="o">--</span><span class="n">location</span> <span class="mi">2</span> <span class="o">--</span><span class="n">large</span> <span class="o">-</span><span class="n">c</span> <span class="n">red</span> <span class="o">-</span><span class="n">c</span> <span class="n">blue</span> <span class="o">-</span><span class="n">c</span> <span class="n">magenta</span>
+<a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/avg-rates.html"><img alt="A plot of weighted average scattering rates against temperature and carrier concnetration." src="_images/avg-rates1.png" /></a>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t <span class="m">1000</span> -n -1e19 --location <span class="m">2</span> --large -c red -c blue -c magenta
 </pre></div>
 </div>
 <p>It shows the k-point and Fermi-Dirac weighted scattering rates against

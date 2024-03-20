@@ -54,9 +54,8 @@ from either a python script or the command line, such as the classic
 
 Click on the plot to see the script, or one could use
 
-.. code-block:: bash
-
-   tp plot ztmap boltztrap.hdf5 -k kappa-m<xxx>.hdf5 -c '#800080' -d x
+.. literalinclude:: ../../examples/heatmaps/plot-zt.sh
+   :language: bash
 
 A related plot we hope people find useful for screening materials to
 run three+ phonon calculations on is the ``kappa-target`` plot, which
@@ -67,9 +66,8 @@ ZT, in this case 2.
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
    :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
-.. code-block:: bash
-
-   tp plot kappa-target boltztrap.hdf5 -c '#008080' -d x
+.. literalinclude:: ../../examples/heatmaps/plot-kappa-target.sh
+   :language: bash
 
 Or on the analytical end of the process, ``zdiff`` and ``pfdiff`` allow
 comparison among different datasets.
@@ -78,9 +76,8 @@ comparison among different datasets.
    :alt: A heatmap of differentce in ZT against carrier concentration and temperature
    :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
-.. code-block:: bash
-
-   tp plot ztdiff <x>/boltztrap.hdf5 <y>/boltztrap.hdf5 -k <x>/kappa-m<xxx>.hdf5 <y>/kappa-m<yyy>.hdf5 -l <x> <y>
+.. literalinclude:: ../../examples/heatmaps/plot-ztdiff.sh
+   :language: bash
 
 Slightly more complex plots also with command line scripts are the
 phonon dispersions, which can be overlayed and plotted with DoSs.
@@ -89,17 +86,15 @@ phonon dispersions, which can be overlayed and plotted with DoSs.
    :alt: A plot converging phonon dispersions against supercell size
    :target: https://smtg-bham.github.io/ThermoParser/phonons.html
 
-.. code-block:: bash
-
-   tp plot phonons <list of band.yamls> -l <list of labels> -t 'Supercell\ Size'
+.. literalinclude:: ../../examples/phonons/plot-multiphon.sh
+   :language: bash
 
 .. image:: figures/phonons.png
    :alt: A phonon dispersion and DoS
    :target: https://smtg-bham.github.io/ThermoParser/phonons.html
 
-.. code-block:: bash
-
-   tp plot phonons band.yaml -c '#ff8000' -d projected_dos.dat --doscolour '#ffff00' '#00ffff'
+.. literalinclude:: ../../examples/phonons/plot-phonons.sh
+   :language: bash
 
 This is where some of the more useful functions of ``ThermoParser``
 come in, e.g. the rescaling of the x axis in the former plot, and the
@@ -111,11 +106,15 @@ e.g. Phonopy or maintain multiple data files.
    :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
    :target: https://smtg-bham.github.io/ThermoParser/dos.html
 
-The right-hand plot can be plotted with:
+The left-hand plot can be plotted with:
 
-.. code-block:: bash
+.. literalinclude:: ../../examples/dos/plot-dos-total.sh
+   :language: bash
 
-   tp plot dos projected_dos.dat --atoms "Ba Sn O O_2 2" --sigma 0.2 --location 1 -c magenta -c cyan -c red -c orange
+And the right-hand plot can be plotted with:
+
+.. literalinclude:: ../../examples/dos/plot-dos-smeared.sh
+   :language: bash
 
 There are command-line scripts, but the main functionality is
 intended as a python package, which enables much more customisable
@@ -141,9 +140,8 @@ latter shows the same data, but in a more quantitative way.
    :alt: A phonon dispersion where widened bands show phonon scattering
    :target: https://smtg-bham.github.io/ThermoParser/prophon.html
 
-.. code-block:: bash
-
-   tp plot wideband band.yaml kappa-m<xxx>.hdf5 -c '#000000' '#ff0000' -s dark_background
+.. literalinclude:: ../../examples/projected-phonons/plot-wideband.sh
+   :language: bash
 
 .. image:: figures/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
@@ -157,13 +155,12 @@ because thats long... many of these outlined in the `tutorials`_, and some are
 demonstrated in this line plot, which is not available as a python command,
 but is easily scripted or plotted at the command line:
 
-.. image:: avg-rates.png
+.. image:: ../../examples/avg-rates/avg-rates.png
    :alt: A plot of weighted average scattering rates against temperature and carrier concnetration.
    :target: https://smtg-bham.github.io/ThermoParser/avg-rates.html
 
-.. code-block::
-
-   tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t 1000 -n -1e19 --location 2 --large -c red -c blue -c magenta
+.. literalinclude:: ../../examples/avg-rates/plot-avg-rates.sh
+   :language: bash
 
 It shows the k-point and Fermi-Dirac weighted scattering rates against
 temperature and carrier concentration, to give an accurate picture of their

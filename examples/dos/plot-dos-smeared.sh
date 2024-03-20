@@ -1,0 +1,1 @@
+tp plot dos ../data/basno3/projected_dos.dat --atoms "Ba Sn O O_2 2" --sigma 0.2 --location 1 -c magenta -c cyan -c red -c orange

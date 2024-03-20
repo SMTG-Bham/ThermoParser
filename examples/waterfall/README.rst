@@ -2,7 +2,7 @@
 Waterfall
 ---------
 
-.. image:: waterfall.png
+.. image:: ../../examples/waterfall/waterfall.png
    :alt: Waterfall plot of mean free path against frequency with lattice thermal conductivity projected.
 
 This shows a plot of mean free path against frequency with lattice
@@ -15,13 +15,12 @@ character.
 While plots cannot be layered at the command line like this, the
 waterfall section can be plotted with:
 
-.. code-block::
-   
-   tp plot waterfall ../data/basno3/kappa-m363636.hdf5 -y mfp --projected kappa
+.. literalinclude:: ../../examples/waterfall/plot-waterfall.sh
+   :language: shell
 
 And in python:
 
-.. literalinclude:: plot-waterfall.py
+.. literalinclude:: ../../examples/waterfall/plot-waterfall.py
    :language: python
    :linenos:
    :emphasize-lines: 36,37
@@ -36,7 +35,7 @@ removes the projection, and colours it with a single colour or by band
 index as you prefer. This is achieved by removing the ``--projected``
 tag at the command line.
 
-.. image:: density.png
+.. image:: ../../examples/waterfall/density.png
    :alt: Density waterfall plot of mean free path against frequency.
 
 This is an alternative of the waterfall plot, where the colour darkness
@@ -45,12 +44,11 @@ adjusting the alpha parameter on the regular waterfall plot.
 
 It can be plotted at the command line with:
 
-.. code-block::
-
-   tp plot waterfall ../data/basno3/kappa-m363636.hdf5 -y mfp --projected density -c Blues
+.. literalinclude:: ../../examples/waterfall/plot-density.sh
+   :language: shell
 
 Or in python with:
 
-.. literalinclude:: plot-density.py
+.. literalinclude:: ../../examples/waterfall/plot-density.py
    :language: python
    :linenos:

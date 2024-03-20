@@ -86,13 +86,13 @@
              
   <div class="section" id="average-rates">
 <h1>Average Rates<a class="headerlink" href="#average-rates" title="Permalink to this headline">¶</a></h1>
-<img alt="A plot of weighted average scattering rates against temperature and carrier concnetration." src="_images/avg-rates.png" />
+<img alt="A plot of weighted average scattering rates against temperature and carrier concnetration." src="_images/avg-rates1.png" />
 <p>This shows the average scattering rates against temperature, averaged
 across k-points and weighted by the derivative of the Fermi-Dirac
 distribution, as they are when calculating the conductivity, thereby
 giving a representative image of the effect the scattering processes
 play in the material. This can be plotted at the command line with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">avg</span><span class="o">-</span><span class="n">rates</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">mesh_75x75x75</span><span class="o">.</span><span class="n">h5</span> <span class="o">-</span><span class="n">t</span> <span class="mi">1000</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="mf">1e19</span> <span class="o">--</span><span class="n">location</span> <span class="mi">2</span> <span class="o">--</span><span class="n">large</span> <span class="o">-</span><span class="n">c</span> <span class="n">red</span> <span class="o">-</span><span class="n">c</span> <span class="n">blue</span> <span class="o">-</span><span class="n">c</span> <span class="n">magenta</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t <span class="m">1000</span> -n -1e19 --location <span class="m">2</span> --large -c red -c blue -c magenta
 </pre></div>
 </div>
 <p>If rates are included in the file but are very low, you may want to
