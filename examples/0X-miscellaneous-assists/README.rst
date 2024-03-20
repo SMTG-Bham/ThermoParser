@@ -1,11 +1,11 @@
--------------------------
-Tutorial-0X: VASP Assists
--------------------------
+----------------------------------
+Tutorial-0X: Miscellaneous Assists
+----------------------------------
 
 Some of the calculations required to obtain the data to run e.g. AMSET
 and Phono3py can be very expensive. To reduce that burden, there are a
-few basic functions to make calculations more efficient, at least in
-VASP.
+few basic functions to make calculations more efficient. The first is
+specific to VASP, but the rest are more general.
 
 Zero-Weighted k-points
 ----------------------
@@ -40,15 +40,14 @@ weighted k-points.
 Target Lattice Thermal Conducitivity
 ------------------------------------
 
-While not related to VASP, here seems a good point to mention the
-kappa-target plot, which shows what lattice thermal conductivity would
-be required to achieve a specified ZT. If its too low, you may not want
+The kappa-target plot shows what lattice thermal conductivity would be
+required to achieve a specified ZT. If it's too low, you may not want
 to bother with the expensive third-order+ phonon caculations!
 
 Merge
 -----
 
-Bonus 2: ``tp.data.utilities.merge`` uses the tp metadata to combine
+``tp.data.utilities.merge`` uses the tp metadata to combine
 multiple data dictionaries, so one can obtain denser data for memory-
 intensive calculations (such as AMSET) by running multiple times and
 merging the data dictionaries before plotting.

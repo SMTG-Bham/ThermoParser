@@ -37,6 +37,16 @@ electrical conductivity in BaSnO\ :sub:`3`, and therefore a much lower
 ZT (`ztdiff`_), although these trends will vary significantly by
 material.
 
+Note:
+^^^^^
+
+Some examples require large data files to run, which haven't been
+included in the data folder, but can be downloaded using the
+``get-data.sh`` script provided in the examples directory. If ``wget`` doesn't
+work for you, navigate to the URL (``repo`` in ``get-data.sh``) in your
+browser to download the required file and add it to the ``../data``
+directory (``f`` in ``get-data.sh``).
+
 .. _tutorials: https://smtg-bham.github.io/ThermoParser/tutorials.html
 .. _average-rates: https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates
 .. _ztdiff: https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps
@@ -48,7 +58,7 @@ At its simplest, ``ThermoParser`` is a way to quickly plot useful data
 from either a python script or the command line, such as the classic
 ``ztmap`` heatmap (the power factor ``pfmap`` is also available):
 
-.. image:: figures/ztmap.png
+.. image:: ../../examples/heatmaps/ztmap.png
    :alt: A heatmap of ZT against carrier concentration and temperature
    :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
@@ -62,7 +72,7 @@ run three+ phonon calculations on is the ``kappa-target`` plot, which
 calculates the lattice thermal conductivity required to reach a given
 ZT, in this case 2.
 
-.. image:: figures/kappa-target.png
+.. image:: ../../examples/heatmaps/kappa-target.png
    :alt: A heatmap of target lattice thermal conductivity against carrier concentration and temperature
    :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
@@ -72,7 +82,7 @@ ZT, in this case 2.
 Or on the analytical end of the process, ``zdiff`` and ``pfdiff`` allow
 comparison among different datasets.
 
-.. image:: figures/ztdiff.png
+.. image:: ../../examples/heatmaps/ztdiff.png
    :alt: A heatmap of differentce in ZT against carrier concentration and temperature
    :target: https://smtg-bham.github.io/ThermoParser/heatmaps.html
 
@@ -82,14 +92,14 @@ comparison among different datasets.
 Slightly more complex plots also with command line scripts are the
 phonon dispersions, which can be overlayed and plotted with DoSs.
 
-.. image:: figures/multiphon.png
+.. image:: ../../examples/phonons/multiphon.png
    :alt: A plot converging phonon dispersions against supercell size
    :target: https://smtg-bham.github.io/ThermoParser/phonons.html
 
 .. literalinclude:: ../../examples/phonons/plot-multiphon.sh
    :language: bash
 
-.. image:: figures/phonons.png
+.. image:: ../../examples/phonons/phonons.png
    :alt: A phonon dispersion and DoS
    :target: https://smtg-bham.github.io/ThermoParser/phonons.html
 
@@ -102,7 +112,7 @@ simplicity of compound axes in the latter. Another example is the ability to
 add gaussian smearing to a DoS plot during plotting, removing the need to rerun
 e.g. Phonopy or maintain multiple data files.
 
-.. image:: figures/dos.png
+.. image:: ../../examples/dos/dos.png
    :alt: A DoS plot without and with gaussian smearing (sigma=0.2)
    :target: https://smtg-bham.github.io/ThermoParser/dos.html
 
@@ -120,13 +130,13 @@ There are command-line scripts, but the main functionality is
 intended as a python package, which enables much more customisable
 plotting, to enable nicely formatted multi-axes plots...
 
-.. image:: figures/cumkappa.png
+.. image:: ../../examples/cumkappa/cumkappa.png
    :alt: Cumulative kappa against frequency and mean free path, broken down by direction
    :target: https://smtg-bham.github.io/ThermoParser/cumkappa.html
 
 \...and multi-plot axes, to highlight particular interactions.
 
-.. image:: figures/waterfall.png
+.. image:: ../../examples/waterfall/waterfall.png
    :alt: A plot of mean free path and lattice thermal conductivity against frequency overlaid on a DoS
    :target: https://smtg-bham.github.io/ThermoParser/waterfall.html
 
@@ -136,14 +146,14 @@ projecting these properties onto phonon dispersions. The former is an
 oft plotted widening of the bands due to scattering,\ :sup:`2` and the
 latter shows the same data, but in a more quantitative way.
 
-.. image:: figures/wideband.png
+.. image:: ../../examples/projected-phonons/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
    :target: https://smtg-bham.github.io/ThermoParser/prophon.html
 
 .. literalinclude:: ../../examples/projected-phonons/plot-wideband.sh
    :language: bash
 
-.. image:: figures/prophon.png
+.. image:: ../../examples/projected-phonons/prophon.png
    :alt: A phonon dispersion where dark colours show phonn scattering
    :target: https://smtg-bham.github.io/ThermoParser/prophon.html
 

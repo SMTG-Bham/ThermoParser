@@ -4,9 +4,12 @@ Tutorial-04: Layered Plots
 
 On top of the information in tutorial-03, this adds a plot of the
 phonon mean free path at each band and q-point in the simulation.
-This contains much the same information as the broadening in
-tutorial-02, with smaller values showing more scattering and lower
-lattice thermal conductivity.
+The colour in this case corresponds to the band index, although a range of
+more informative variables can be projected onto the colour axis with
+``add_projected_waterfall``. This colouring can also be removed by specifying a
+single colour rather than a colourmap. This contains much the same information
+as the broadening in tutorial-02, with smaller values showing more scattering
+and lower lattice thermal conductivity.
 
 .. image:: ../../examples/04-layered-plots/tutorial-04.png
    :alt: Phonon dispersion convergence, density of states  and mean free path of BaSnO<sub>3</sub>.
@@ -16,8 +19,8 @@ to plot them on the same axes to highlight links, for example how the
 mean free paths of phonons in BaSnO\ :sub:`3` dip where Ba has a
 strong contribution to the DoS, or how a phonon dispersion converges
 with supercell size. Although this can start to make scripts more
-complicated, and is not yet supported by the CLI, it is often worth the
-effort.
+complicated, and is not yet supported by the CLI (with the exception of phonon
+convergence), it is often worth the effort.
 
 The python version of this code is:
 

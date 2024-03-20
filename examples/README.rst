@@ -25,6 +25,8 @@ material.
 .. _average-rates: https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates
 .. _ztdiff: https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps
 
+Note:
+^^^^^
 
 Some examples require large data files to run, which haven't been
 included in the data folder, but can be downloaded using the
