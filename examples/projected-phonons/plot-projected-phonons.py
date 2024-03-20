@@ -14,19 +14,26 @@ quantities = ['frequency', projected, 'dispersion']
 temperature = 300
 colour = 'viridis'
 
-# Axes
-fig, ax, add_legend = tp.axes.small.one_colourbar()
+# running this section as a function is particularly important for mac users
+# due to its use of multiprocessing (this is the case for all projected phonon
+# plots including alt_phonons and wideband)
+def main():
+    # Axes
+    fig, ax, add_legend = tp.axes.small.one_colourbar()
+    
+    # Load
+    data = tp.data.load.phono3py(kfile, quantities=quantities)
+    pdata = tp.data.load.phonopy_dispersion(pfile)
+    
+    # Add
+    tp.plot.phonons.add_projected_dispersion(ax, data, pdata, projected,
+                                             temperature=temperature,
+                                             colour=colour, poscar=poscar)
+    
+    # Save
+    
+    fig.savefig('prophon.pdf')
+    fig.savefig('prophon.png')
 
-# Load
-data = tp.data.load.phono3py(kfile, quantities=quantities)
-pdata = tp.data.load.phonopy_dispersion(pfile)
-
-# Add
-tp.plot.phonons.add_projected_dispersion(ax, data, pdata, projected,
-                                         temperature=temperature,
-                                         colour=colour, poscar=poscar)
-
-# Save
-
-fig.savefig('prophon.pdf')
-fig.savefig('prophon.png')
+if __name__ == "__main__":
+    main()

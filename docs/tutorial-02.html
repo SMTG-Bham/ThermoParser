@@ -138,7 +138,14 @@ customise plots with colours and stuff.</p>
 28
 29
 30
-31</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+31
+32
+33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
 <span class="kn">import</span> <span class="nn">tp</span>
 
@@ -156,19 +163,26 @@ customise plots with colours and stuff.</p>
     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;File not found, please use get-data.sh in the folder above.&#39;</span><span class="p">)</span>
 <span class="c1"># Stop ignoring!</span>
 
-<span class="c1"># Axes</span>
-<span class="hll"><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">large</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
-</span>
-<span class="c1"># Load</span>
-<span class="hll"><span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;wideband&#39;</span><span class="p">)</span>
-</span><span class="hll"><span class="n">pdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dispersion</span><span class="p">(</span><span class="n">pfile</span><span class="p">)</span>
-</span>
-<span class="c1"># Plot</span>
-<span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">phonons</span><span class="o">.</span><span class="n">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
-</span><span class="hll">                             <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="n">poscar</span><span class="p">)</span>
-</span>
-<span class="c1"># Save</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tutorial-02.png&#39;</span><span class="p">)</span>
+<span class="c1"># running this section as a function is particularly important for mac users</span>
+<span class="hll"><span class="c1"># due to its use of multiprocessing (this is the case for all projected phonon</span>
+</span><span class="c1"># plots including alt_phonons and wideband)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="hll">    <span class="c1"># Axes</span>
+</span><span class="hll">    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">large</span><span class="o">.</span><span class="n">one</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
+</span>    
+    <span class="c1"># Load</span>
+<span class="hll">    <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="s1">&#39;wideband&#39;</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">pdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dispersion</span><span class="p">(</span><span class="n">pfile</span><span class="p">)</span>
+</span>    
+    <span class="c1"># Plot</span>
+    <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">phonons</span><span class="o">.</span><span class="n">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                                 <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="n">poscar</span><span class="p">)</span>
+    
+    <span class="c1"># Save</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tutorial-02.png&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <div class="section" id="variables-lines-6-9">
