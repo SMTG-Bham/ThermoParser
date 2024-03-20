@@ -37,6 +37,16 @@ electrical conductivity in BaSnO\ :sub:`3`, and therefore a much lower
 ZT (`ztdiff`_), although these trends will vary significantly by
 material.
 
+Note:
+^^^^^
+
+Some examples require large data files to run, which haven't been
+included in the data folder, but can be downloaded using the
+``get-data.sh`` script provided in the examples directory. If ``wget`` doesn't
+work for you, navigate to the URL (``repo`` in ``get-data.sh``) in your
+browser to download the required file and add it to the ``../data``
+directory (``f`` in ``get-data.sh``).
+
 .. _tutorials: https://smtg-bham.github.io/ThermoParser/tutorials.html
 .. _average-rates: https://github.com/smtg-bham/ThermoParser/tree/master/examples/avg-rates
 .. _ztdiff: https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps

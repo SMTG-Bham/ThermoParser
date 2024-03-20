@@ -44,7 +44,10 @@
 <li class="toctree-l2"><a class="reference internal" href="waterfalls.html">Waterfalls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="prophon.html">Projected Phonons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="avg-rates.html">Average Scattering Rates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#note">Note:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
@@ -109,6 +112,14 @@ ones when simulating nanostructuring. This leads to a much reduced
 electrical conductivity in BaSnO<sub>3</sub>, and therefore a much lower
 ZT (<a class="reference external" href="https://github.com/smtg-bham/ThermoParser/tree/master/examples/heatmaps">ztdiff</a>), although these trends will vary significantly by
 material.</p>
+<div class="section" id="note">
+<h2>Note:<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
+<p>Some examples require large data files to run, which haven’t been
+included in the data folder, but can be downloaded using the
+<code class="docutils literal notranslate"><span class="pre">get-data.sh</span></code> script provided in the examples directory. If <code class="docutils literal notranslate"><span class="pre">wget</span></code> doesn’t
+work for you, navigate to the URL (<code class="docutils literal notranslate"><span class="pre">repo</span></code> in <code class="docutils literal notranslate"><span class="pre">get-data.sh</span></code>) in your
+browser to download the required file and add it to the <code class="docutils literal notranslate"><span class="pre">../data</span></code>
+directory (<code class="docutils literal notranslate"><span class="pre">f</span></code> in <code class="docutils literal notranslate"><span class="pre">get-data.sh</span></code>).</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Click on the images to see the script which generated them.</p>
@@ -132,7 +143,7 @@ ZT, in this case 2.</p>
 <p>Or on the analytical end of the process, <code class="docutils literal notranslate"><span class="pre">zdiff</span></code> and <code class="docutils literal notranslate"><span class="pre">pfdiff</span></code> allow
 comparison among different datasets.</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of differentce in ZT against carrier concentration and temperature" src="_images/ztdiff.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff ../data/zno/transport_75x75x75.json  ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/zno/kappa-m404021.hdf5 -l MRTA -l CRTA
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff ../data/basno3/transport_75x75x75.json  ../data/basno3/boltztrap.hdf5 -k ../data/basno3/kappa-m363636.hdf5 ../data/basno3/kappa-m363636.hdf5 -l MRTA -l CRTA
 </pre></div>
 </div>
 <p>Slightly more complex plots also with command line scripts are the
@@ -195,9 +206,10 @@ the python interface, which may be of interest outside the main scope of
 ThermoParser, e.g. the custom colourmaps, legend formatting tools and axes
 labels.</p>
 <div class="section" id="reference">
-<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<h3>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h3>
 <p>[1] K. B. Spooner, A. M. Ganose and D. O. Scanlon, <em>J. Mater. Chem. A</em>, <strong>2020</strong>, 8, 11948.
 [2] A. A. Maradudin and A. E. Fein, <em>Phys. Rev.</em>, <strong>1962</strong>, 128, 2589.</p>
+</div>
 </div>
 </div>
 
