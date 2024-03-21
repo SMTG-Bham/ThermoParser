@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -73,52 +73,53 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tp.calculate</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Calculates stuff.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Calculates quantities used in other modules.</span>
 
 <span class="sd">Uses tp units by default, but can read the tprc.yaml to customise.</span>
-
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    cumulate:</span>
-<span class="sd">        sorts and cumulates.</span>
-<span class="sd">    gaussian:</span>
-<span class="sd">        gaussian distribution of height 1.</span>
-<span class="sd">    lorentzian:</span>
-<span class="sd">        area conserved lorentzian distribution.</span>
-<span class="sd">    lifetime:</span>
-<span class="sd">        particle lifetime.</span>
-<span class="sd">    mfp:</span>
-<span class="sd">        particle mean free path.</span>
-<span class="sd">    fd_occupation:</span>
-<span class="sd">        fermion occupation.</span>
-<span class="sd">    be_occupation:</span>
-<span class="sd">        boson occupation.</span>
-<span class="sd">    dfdde:</span>
-<span class="sd">        derivative of the Fermi-Dirac distribution.</span>
-<span class="sd">    thermal_conductivity:</span>
-<span class="sd">        total thermal conductivity.</span>
-<span class="sd">    power_factor:</span>
-<span class="sd">        power factor.</span>
-<span class="sd">    zt:</span>
-<span class="sd">        ZT.</span>
-<span class="sd">    kl:</span>
-<span class="sd">        lattice thermal conductivity for target ZT.</span>
-
-<span class="sd">    power_factor_fromdict:</span>
-<span class="sd">        adds power factor to dictionary.</span>
-<span class="sd">    zt_fromdict:</span>
-<span class="sd">        adds zt to dictionary.</span>
-<span class="sd">    kl_fromdict:</span>
-<span class="sd">        adds lattice thermal conductivity for target ZT to dictionary.</span>
-
-<span class="sd">    to_tp:</span>
-<span class="sd">        converts quantities to tp defaults from tprc.yaml.</span>
-<span class="sd">    from_tp:</span>
-<span class="sd">        converts quantities from tp defaults from tprc.yaml.</span>
-<span class="sd">    interpolate:</span>
-<span class="sd">        shrinks to smallest data size and interpolates.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    cumulate:</span>
+<span class="c1">#        sorts and cumulates.</span>
+<span class="c1">#    gaussian:</span>
+<span class="c1">#        gaussian distribution of height 1.</span>
+<span class="c1">#    lorentzian:</span>
+<span class="c1">#        area conserved lorentzian distribution.</span>
+<span class="c1">#    lifetime:</span>
+<span class="c1">#        particle lifetime.</span>
+<span class="c1">#    mfp:</span>
+<span class="c1">#        particle mean free path.</span>
+<span class="c1">#    fd_occupation:</span>
+<span class="c1">#        fermion occupation.</span>
+<span class="c1">#    be_occupation:</span>
+<span class="c1">#        boson occupation.</span>
+<span class="c1">#    dfdde:</span>
+<span class="c1">#        derivative of the Fermi-Dirac distribution.</span>
+<span class="c1">#    thermal_conductivity:</span>
+<span class="c1">#        total thermal conductivity.</span>
+<span class="c1">#    power_factor:</span>
+<span class="c1">#        power factor.</span>
+<span class="c1">#    zt:</span>
+<span class="c1">#        ZT.</span>
+<span class="c1">#    kl:</span>
+<span class="c1">#        lattice thermal conductivity for target ZT.</span>
+<span class="c1">#</span>
+<span class="c1">#    power_factor_fromdict:</span>
+<span class="c1">#        adds power factor to dictionary.</span>
+<span class="c1">#    zt_fromdict:</span>
+<span class="c1">#        adds zt to dictionary.</span>
+<span class="c1">#    kl_fromdict:</span>
+<span class="c1">#        adds lattice thermal conductivity for target ZT to dictionary.</span>
+<span class="c1">#</span>
+<span class="c1">#    to_tp:</span>
+<span class="c1">#        converts quantities to tp defaults from tprc.yaml.</span>
+<span class="c1">#    from_tp:</span>
+<span class="c1">#        converts quantities from tp defaults from tprc.yaml.</span>
+<span class="c1">#    interpolate:</span>
+<span class="c1">#        shrinks to smallest data size and interpolates.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">tp</span>

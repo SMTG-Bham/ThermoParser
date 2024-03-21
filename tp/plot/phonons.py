@@ -2,31 +2,32 @@
 
 Contains the traditional phonon dispersion plotter, as well as various
 ways of projecting other quantitites onto a high-symmetry path.
-
-Functions
----------
-
-    add_dispersion:
-        phonon dispersion.
-    add_multi:
-        phonon dispersions.
-    add_alt_dispersion:
-        phono3py quantity against high symmetry path.
-    add_projected_dispersion:
-        phonon dispersion with phono3py quantity on colour axis.
-    add_alt_projected_dispersion:
-        alt_dispersion + projection.
-    add_wideband:
-        phonon dispersion broadened according to scattering.
-
-    get_equivalent_qpoint:
-        converts phonopy to phono3py qpoints.
-
-    formatting:
-        formatting axes.
-    tile_properties:
-        tiling properties semi-intelligently.
 """
+
+#Functions
+#---------
+#
+#    add_dispersion:
+#        phonon dispersion.
+#    add_multi:
+#        phonon dispersions.
+#    add_alt_dispersion:
+#        phono3py quantity against high symmetry path.
+#    add_projected_dispersion:
+#        phonon dispersion with phono3py quantity on colour axis.
+#    add_alt_projected_dispersion:
+#        alt_dispersion + projection.
+#    add_wideband:
+#        phonon dispersion broadened according to scattering.
+#
+#    get_equivalent_qpoint:
+#        converts phonopy to phono3py qpoints.
+#
+#    formatting:
+#        formatting axes.
+#    tile_properties:
+#        tiling properties semi-intelligently.
+#"""
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt

@@ -1,49 +1,50 @@
-"""Calculates stuff.
+"""Calculates quantities used in other modules.
 
 Uses tp units by default, but can read the tprc.yaml to customise.
-
-Functions
----------
-
-    cumulate:
-        sorts and cumulates.
-    gaussian:
-        gaussian distribution of height 1.
-    lorentzian:
-        area conserved lorentzian distribution.
-    lifetime:
-        particle lifetime.
-    mfp:
-        particle mean free path.
-    fd_occupation:
-        fermion occupation.
-    be_occupation:
-        boson occupation.
-    dfdde:
-        derivative of the Fermi-Dirac distribution.
-    thermal_conductivity:
-        total thermal conductivity.
-    power_factor:
-        power factor.
-    zt:
-        ZT.
-    kl:
-        lattice thermal conductivity for target ZT.
-
-    power_factor_fromdict:
-        adds power factor to dictionary.
-    zt_fromdict:
-        adds zt to dictionary.
-    kl_fromdict:
-        adds lattice thermal conductivity for target ZT to dictionary.
-
-    to_tp:
-        converts quantities to tp defaults from tprc.yaml.
-    from_tp:
-        converts quantities from tp defaults from tprc.yaml.
-    interpolate:
-        shrinks to smallest data size and interpolates.
 """
+
+#Functions
+#---------
+#
+#    cumulate:
+#        sorts and cumulates.
+#    gaussian:
+#        gaussian distribution of height 1.
+#    lorentzian:
+#        area conserved lorentzian distribution.
+#    lifetime:
+#        particle lifetime.
+#    mfp:
+#        particle mean free path.
+#    fd_occupation:
+#        fermion occupation.
+#    be_occupation:
+#        boson occupation.
+#    dfdde:
+#        derivative of the Fermi-Dirac distribution.
+#    thermal_conductivity:
+#        total thermal conductivity.
+#    power_factor:
+#        power factor.
+#    zt:
+#        ZT.
+#    kl:
+#        lattice thermal conductivity for target ZT.
+#
+#    power_factor_fromdict:
+#        adds power factor to dictionary.
+#    zt_fromdict:
+#        adds zt to dictionary.
+#    kl_fromdict:
+#        adds lattice thermal conductivity for target ZT to dictionary.
+#
+#    to_tp:
+#        converts quantities to tp defaults from tprc.yaml.
+#    from_tp:
+#        converts quantities from tp defaults from tprc.yaml.
+#    interpolate:
+#        shrinks to smallest data size and interpolates.
+#"""
 
 import numpy as np
 import tp

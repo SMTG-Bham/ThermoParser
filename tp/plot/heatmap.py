@@ -3,23 +3,24 @@
 ``add_heatmap`` is a base function, which handles axes limits, colourbar
 formatting and extra colourmap options compared to ``matplotlib.pyplot.pcolormesh``.
 The other functions plot specific quantites using this function.
-
-Functions
----------
-
-    add_heatmap:
-        heatmap.
-    add_pfmap:
-        power factor vs temperature and carrier concentration.
-    add_pfdiff:
-        power factor difference vs temperature and carrier concentration.
-    add_ztmap:
-        ZT vs temperature and carrier concentration.
-    add_ztdiff:
-        ZT difference vs temperature and carrier concentration.
-    add_kappa_target:
-        kappa_l needed to reach a given ZT.
 """
+
+#Functions
+#---------
+#
+#    add_heatmap:
+#        heatmap.
+#    add_pfmap:
+#        power factor vs temperature and carrier concentration.
+#    add_pfdiff:
+#        power factor difference vs temperature and carrier concentration.
+#    add_ztmap:
+#        ZT vs temperature and carrier concentration.
+#    add_ztdiff:
+#        ZT difference vs temperature and carrier concentration.
+#    add_kappa_target:
+#        kappa_l needed to reach a given ZT.
+#"""
 
 from copy import copy
 import matplotlib as mpl

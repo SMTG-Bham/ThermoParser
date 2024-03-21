@@ -7,7 +7,7 @@ coefficient and lattice thermal conductivity. Thermoelectrics require a
 balance of high electrical conductivity and Seebeck coefficient, but
 low thermal conductivity to be efficient.
 
-.. image:: tutorial-05.png
+.. image:: ../../examples/05-helper-functions/tutorial-05.png
    :alt: Electrical conductivity, Seebeck coefficient and lattice thermal conductivity of BaSnO\ :sub:`3`
 
 ThermoParser contains a number of helper functions that may be useful
@@ -21,7 +21,7 @@ CLI:
 
 In Python, it is:
 
-.. literalinclude:: tutorial-05.py
+.. literalinclude:: ../../examples/05-helper-functions/tutorial-05.py
    :language: python
    :linenos:
    :emphasize-lines: 20,36,38,41,45-49,51-54

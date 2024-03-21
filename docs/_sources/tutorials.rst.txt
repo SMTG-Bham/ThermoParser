@@ -15,7 +15,7 @@ Tutorials
     Tutorial-04: Layered Plots <tutorial-04>
     Tutorial-05: Helper Functions <tutorial-05>
     Tutorial-06: Package Customaisation <tutorial-06>
-    Tutorial-0X: VASP Assists <tutorial-0X>
+    Tutorial-0X: Miscellaneous Assists <tutorial-0X>
 
 Here we have compiled a series of tutorials hoping to introduce the
 structure of tp (particularly tutorials 01-04), as well as more
@@ -50,7 +50,7 @@ types in the `gallery`_.
  * Information on the ``tprc.yaml``, which lets you customise default
    units, labels and styles; and a note on expanding ThermoParser.
 
-`Tutorial-0X`_: VASP Assists
+`Tutorial-0X`_: Miscellaneous Assists
  * A selection of scripts to help get the most out of VASP calculations,
    and some extras.
 

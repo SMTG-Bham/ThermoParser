@@ -1,0 +1,1 @@
+tp plot kappa-target ../data/zno/boltztrap.hdf5 -c '#008080' -d x

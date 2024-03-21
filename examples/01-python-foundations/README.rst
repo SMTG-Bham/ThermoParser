@@ -10,7 +10,7 @@ thermal conductivity; and if there are negative-frequency (imaginary)
 modes, it indicates kinetic instability. More information can also be
 gleaned, which is covered in later tutorials.
 
-.. image:: tutorial-01.png
+.. image:: ../../examples/01-python-foundations/tutorial-01.png
    :alt: Phonon dispersion of ZnO.
 
 The most basic plots in ThermoParser consist of four commands:
@@ -31,7 +31,7 @@ The CLI version of this code is:
 
 And the python version is:
 
-.. literalinclude:: tutorial-01.py
+.. literalinclude:: ../../examples/01-python-foundations/tutorial-01.py
    :language: python
    :linenos:
    :emphasize-lines: 6,9,12,15

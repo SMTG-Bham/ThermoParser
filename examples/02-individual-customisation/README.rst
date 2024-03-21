@@ -9,7 +9,7 @@ modes indicates more scattering). More scattering causes a decrease in
 lattice thermal conductivity. The data for the scattering comes from
 Phono3py, which also uses the supercell approach.
 
-.. image:: tutorial-02.png
+.. image:: ../../examples/02-individual-customisation/tutorial-02.png
    :alt: Finite bandwidth phonon dispersion of ZnO.
 
 In most cases, plotting scripts will be more complex than `Tutorial-01`_.
@@ -24,10 +24,10 @@ The CLI version of this code is:
 
 And the python version is:
 
-.. literalinclude:: tutorial-02.py
+.. literalinclude:: ../../examples/02-individual-customisation/tutorial-02.py
    :language: python
    :linenos:
-   :emphasize-lines: 6-9,20,23,24,27,28
+   :emphasize-lines: 6-9,24,27,28,31,32
 
 Variables (lines 6-9)
 ---------------------
@@ -36,7 +36,7 @@ It's handy to put variables you might want to edit at the top of the
 script, and also tidy in the case of long paths like here, so all
 future examples will be written this way.
 
-Axes (line 20)
+Axes (line 24)
 --------------
 
 All axes can take a style sheet or list of style sheets as arguments.
@@ -45,7 +45,7 @@ own and put them in ``~/.config/matplotlib/stylelib/``. I've installed
 a couple for you already. You can list them by importing pyplot
 and typing ``print(plt.style.available)`` in Python.
 
-Load (lines 23-24)
+Load (lines 27-28)
 ------------------
 
 Several plot functions, including all of the projected phonon
@@ -55,7 +55,7 @@ argument, which tells them exactly what to load, and can be a list or a
 space-delimited string. In this case, there is a shorthand,
 ``wideband``, which stands in for ``'frequency gamma'``.
 
-Plot (lines 27-28)
+Plot (lines 31-32)
 ------------------
 
 Plot commands take a wide range of arguments, from the standard
