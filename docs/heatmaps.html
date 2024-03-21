@@ -89,7 +89,7 @@
 <img alt="ZT against carrier concentration and temperature." src="_images/ztmap1.png" />
 <p>This shows the classic ZT against carrier concentration and temperature
 heatmap. This can be plotted at the command line with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">`</span>tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">`</span>tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x --discrete
 </pre></div>
 </div>
 <p>and in python with:</p>
@@ -118,7 +118,8 @@ heatmap. This can be plotted at the command line with:</p>
 23
 24
 25
-26</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">import</span> <span class="nn">tp</span>
@@ -139,8 +140,9 @@ heatmap. This can be plotted at the command line with:</p>
 <span class="n">kdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">)</span>
 
 <span class="c1"># Add</span>
-<span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">heatmap</span><span class="o">.</span><span class="n">add_ztmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">adata</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">)</span>
-</span>
+<span class="hll"><span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">heatmap</span><span class="o">.</span><span class="n">add_ztmap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">adata</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span>
+</span>                          <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
 <span class="c1"># Save</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ztmap.pdf&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ztmap.png&#39;</span><span class="p">)</span>
