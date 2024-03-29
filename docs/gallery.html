@@ -129,7 +129,7 @@ from either a python script or the command line, such as the classic
 <code class="docutils literal notranslate"><span class="pre">ztmap</span></code> heatmap (the power factor <code class="docutils literal notranslate"><span class="pre">pfmap</span></code> is also available):</p>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/heatmaps.html"><img alt="A heatmap of ZT against carrier concentration and temperature" src="_images/ztmap1.png" /></a>
 <p>Click on the plot to see the script, or one could use</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">`</span>tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x --discrete
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c <span class="s1">&#39;#800080&#39;</span> -d x --discrete
 </pre></div>
 </div>
 <p>A related plot we hope people find useful for screening materials to
@@ -153,7 +153,7 @@ phonon dispersions, which can be overlayed and plotted with DoSs.</p>
 </pre></div>
 </div>
 <a class="reference external image-reference" href="https://smtg-bham.github.io/ThermoParser/phonons.html"><img alt="A phonon dispersion and DoS" src="_images/phonons1.png" /></a>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR -doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> -c <span class="s1">&#39;#f0901f&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> -c <span class="s1">&#39;#f0901f&#39;</span>
 </pre></div>
 </div>
 <p>This is where some of the more useful functions of <code class="docutils literal notranslate"><span class="pre">ThermoParser</span></code>
