@@ -62,8 +62,7 @@ setuptools.setup(
     test_suite='setup.load_test_suite',
     install_requires=['click', 'h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy', 'setuptools', 'wheel'],
-    extras_require={'docs':  ['sphinx', 'sphinx_rtd_theme'],
-                    'tests': ['unitest']},
+    extras_require={'docs':  ['sphinx', 'sphinx_rtd_theme']},
     python_requires='>=3.6',
     cmdclass={'install': PostInstallMoveFile},
     entry_points={'console_scripts': ['tp = tp.cli.cli:tp_cli']})
