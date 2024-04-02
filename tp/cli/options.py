@@ -3,6 +3,10 @@
 #Functions
 #---------
 #
+#    administrative_options
+#        function for help and version display.
+#    axes_limit_function
+#        function for setting the axis limits.
 #    direction_function:
 #        function for picking the --direction (-d).
 #    doping_type_option:
@@ -29,11 +33,99 @@
 #        function for picking the --temperature (-t).
 #    verbose_option:
 #        function for increasing the verbosity.
-#    axes_limit_function
-#        function for setting the axis limits.
 #"""
 
 import click
+
+def adminsitrative_options(f):
+    """Help and version options.
+
+    Allows -h for help (click-nonstandard).
+
+    Options
+    -------
+
+        --help, -h
+            show help and exit
+        --version
+            show version and exit
+    """
+
+    f = click.help_option('-h', '--help')(f)
+    f = click.version_option(package_name='tp')(f)
+
+    return f
+
+def axes_limit_function(multiple=False, c=False):
+    """Function for creating axes limit options.
+
+    Arguments
+    ---------
+
+        multiple : bool, optional
+            allow multiple limits. Default: False.
+        c : bool, optional
+            include colour limits. Default: False.
+
+    Returns
+    -------
+        decorator
+            axes limit options decorator.
+    """
+
+    def axes_limit_options(f):
+        """Options for axes limits.
+        
+        Options
+        -------
+
+            --xmin : float, optional
+                override minimum x.
+            --xmax : float, optional
+                override maximum x.
+            --ymin : float, optional
+                override minimum y.
+            --ymax : float, optional
+                override maximum y.
+            --cmin : float, optional
+                override minimum colour.
+            --cmax : float, optional
+                override maximum colour.
+
+        Returns
+        -------
+
+            decorator
+                axes limits options decorator.
+        """
+    
+        f = click.option('--xmin',
+                         help='Override minimum x.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--xmax',
+                         help='Override maximum x.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--ymin',
+                         help='Override minimum y.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--ymax',
+                         help='Override maximum y.',
+                         multiple=multiple,
+                         type=float)(f)
+        if c:
+            f = click.option('--cmin',
+                             help='Override minimum colour value.',
+                             multiple=multiple,
+                             type=float)(f)
+            f = click.option('--cmax',
+                             help='Override maximum colour value.',
+                             multiple=multiple,
+                             type=float)(f)
+        return f
+    return axes_limit_options
 
 def direction_function(multiple=False):
     """Function to create direction options.
@@ -625,74 +717,3 @@ def verbose_option(f):
                      show_default=False)(f)
 
     return f
-
-def axes_limit_function(multiple=False, c=False):
-    """Function for creating axes limit options.
-
-    Arguments
-    ---------
-
-        multiple : bool, optional
-            allow multiple limits. Default: False.
-        c : bool, optional
-            include colour limits. Default: False.
-
-    Returns
-    -------
-        decorator
-            axes limit options decorator.
-    """
-
-    def axes_limit_options(f):
-        """Options for axes limits.
-        
-        Options
-        -------
-
-            --xmin : float, optional
-                override minimum x.
-            --xmax : float, optional
-                override maximum x.
-            --ymin : float, optional
-                override minimum y.
-            --ymax : float, optional
-                override maximum y.
-            --cmin : float, optional
-                override minimum colour.
-            --cmax : float, optional
-                override maximum colour.
-
-        Returns
-        -------
-
-            decorator
-                axes limits options decorator.
-        """
-    
-        f = click.option('--xmin',
-                         help='Override minimum x.',
-                         multiple=multiple,
-                         type=float)(f)
-        f = click.option('--xmax',
-                         help='Override maximum x.',
-                         multiple=multiple,
-                         type=float)(f)
-        f = click.option('--ymin',
-                         help='Override minimum y.',
-                         multiple=multiple,
-                         type=float)(f)
-        f = click.option('--ymax',
-                         help='Override maximum y.',
-                         multiple=multiple,
-                         type=float)(f)
-        if c:
-            f = click.option('--cmin',
-                             help='Override minimum colour value.',
-                             multiple=multiple,
-                             type=float)(f)
-            f = click.option('--cmax',
-                             help='Override maximum colour value.',
-                             multiple=multiple,
-                             type=float)(f)
-        return f
-    return axes_limit_options

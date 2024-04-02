@@ -8,8 +8,8 @@ practical differences for the user:
 1. The modular structure: the overarching command is ``tp``, running
    this lists the sub commands, likewise with each of those (e.g. ``tp
    plot``). The full command currently has three parts, e.g. ``tp plot
-   waterfall``, after which you add the arguments. ``--help`` grants
-   information at every step.
+   waterfall``, after which you add the arguments. ``--help`` or ``-h``
+   grants information at every step.
 2. Multiple arguments must use the ``--thing`` every time, i.e. in
    ``argparse`` you may type ``-d a b c``, but in ``click`` you must
    type ``-d a -d b -d c``. The exception is in ``ztdiff``, where kappa
