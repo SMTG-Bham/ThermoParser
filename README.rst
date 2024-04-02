@@ -13,7 +13,7 @@
     | |   |___   ___  |___  |_____   ___ :|___/  ___   |___   ___   ___  |___ \
     | |   |   | /   \ |   \ |  |  | /   \:|     /   |  |   \ /     /   \ |   \/
     | |   |   | |___/ |     |  |  | |   |:|     |   |  |     \___  |___/ |    \_____
-    | |   |   | \___  |     |  |  | \___/:|     \___|_ |         \ \___  |    :3.1.3\
+    | |   |   | \___  |     |  |  | \___/:|     \___|_ |         \ \___  |    :3.1.4\
     |____________________________________:_______________________/____________:_____/
 
 
@@ -196,6 +196,13 @@ Roughly chronologically, they are so far:
 * Warda Rahim
 * Katarina Brlec
 * Joe Willis
+
+Thanks also to the `JOSS`_ reviewers, Evan Walter Clarke
+Spotte-Smith, Enric Tomás Grau-Luque, and Francesco Nattino; and the
+editor Mojtaba Barzegari. An unintimidating and productive review
+process, which I would recommend if the opportunity arises!
+
+.. _JOSS: https://joss.theoj.org/
 
 License
 -------

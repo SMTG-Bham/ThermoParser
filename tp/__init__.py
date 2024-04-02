@@ -9,6 +9,8 @@
 #        default values and metadata
 #"""
 
+__version__ = '3.1.4'
+
 def docstring_replace(**kwargs):
     def d(f):
         f.__doc__ = f.__doc__.format(**kwargs)

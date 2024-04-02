@@ -78,6 +78,10 @@
 <span class="c1">#Functions</span>
 <span class="c1">#---------</span>
 <span class="c1">#</span>
+<span class="c1">#    administrative_options</span>
+<span class="c1">#        function for help and version display.</span>
+<span class="c1">#    axes_limit_function</span>
+<span class="c1">#        function for setting the axis limits.</span>
 <span class="c1">#    direction_function:</span>
 <span class="c1">#        function for picking the --direction (-d).</span>
 <span class="c1">#    doping_type_option:</span>
@@ -104,11 +108,99 @@
 <span class="c1">#        function for picking the --temperature (-t).</span>
 <span class="c1">#    verbose_option:</span>
 <span class="c1">#        function for increasing the verbosity.</span>
-<span class="c1">#    axes_limit_function</span>
-<span class="c1">#        function for setting the axis limits.</span>
 <span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">click</span>
+
+<div class="viewcode-block" id="adminsitrative_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.adminsitrative_options">[docs]</a><span class="k">def</span> <span class="nf">adminsitrative_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Help and version options.</span>
+
+<span class="sd">    Allows -h for help (click-nonstandard).</span>
+
+<span class="sd">    Options</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        --help, -h</span>
+<span class="sd">            show help and exit</span>
+<span class="sd">        --version</span>
+<span class="sd">            show version and exit</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">help_option</span><span class="p">(</span><span class="s1">&#39;-h&#39;</span><span class="p">,</span> <span class="s1">&#39;--help&#39;</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">version_option</span><span class="p">(</span><span class="n">package_name</span><span class="o">=</span><span class="s1">&#39;tp&#39;</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="axes_limit_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.axes_limit_function">[docs]</a><span class="k">def</span> <span class="nf">axes_limit_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function for creating axes limit options.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        multiple : bool, optional</span>
+<span class="sd">            allow multiple limits. Default: False.</span>
+<span class="sd">        c : bool, optional</span>
+<span class="sd">            include colour limits. Default: False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        decorator</span>
+<span class="sd">            axes limit options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">axes_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Options for axes limits.</span>
+<span class="sd">        </span>
+<span class="sd">        Options</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            --xmin : float, optional</span>
+<span class="sd">                override minimum x.</span>
+<span class="sd">            --xmax : float, optional</span>
+<span class="sd">                override maximum x.</span>
+<span class="sd">            --ymin : float, optional</span>
+<span class="sd">                override minimum y.</span>
+<span class="sd">            --ymax : float, optional</span>
+<span class="sd">                override maximum y.</span>
+<span class="sd">            --cmin : float, optional</span>
+<span class="sd">                override minimum colour.</span>
+<span class="sd">            --cmax : float, optional</span>
+<span class="sd">                override maximum colour.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                axes limits options decorator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmin&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmax&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymin&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymax&#39;</span><span class="p">,</span>
+                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y.&#39;</span><span class="p">,</span>
+                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmin&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour value.&#39;</span><span class="p">,</span>
+                             <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                             <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmax&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour value.&#39;</span><span class="p">,</span>
+                             <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
+                             <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">axes_limit_options</span></div>
 
 <div class="viewcode-block" id="direction_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.direction_function">[docs]</a><span class="k">def</span> <span class="nf">direction_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to create direction options.</span>
@@ -222,31 +314,6 @@
         <span class="k">return</span> <span class="n">f</span>
     <span class="k">return</span> <span class="n">doping_option</span></div>
 
-<div class="viewcode-block" id="heatmap_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.heatmap_options">[docs]</a><span class="k">def</span> <span class="nf">heatmap_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Options for heatmaps.&quot;&quot;&quot;</span>
-
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--discrete/--continuous&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Discretise colourmap.  [default: continuous]&#39;</span><span class="p">,</span>
-                     <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--levels&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Levels for discrete plots. Lists directly &#39;</span>
-                          <span class="s1">&#39;specify the contour levels, while integers &#39;</span>
-                          <span class="s1">&#39;specify the maximum-1 number of &quot;nice&quot; &#39;</span>
-                          <span class="s1">&#39;levels to plot.&#39;</span><span class="p">,</span>
-                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--contours&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Contours to plot.&#39;</span><span class="p">,</span>
-                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
-                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--contourcolours&#39;</span><span class="p">,</span>
-                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;contour colours&#39;</span><span class="p">,</span>
-                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">f</span></div>
-
 <div class="viewcode-block" id="dos_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.dos_function">[docs]</a><span class="k">def</span> <span class="nf">dos_function</span><span class="p">(</span><span class="n">dosargs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--colour&#39;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Function for creating DoS options.</span>
 
@@ -340,6 +407,31 @@
     
         <span class="k">return</span> <span class="n">f</span>
     <span class="k">return</span> <span class="n">dos_options</span></div>
+
+<div class="viewcode-block" id="heatmap_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.heatmap_options">[docs]</a><span class="k">def</span> <span class="nf">heatmap_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Options for heatmaps.&quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--discrete/--continuous&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Discretise colourmap.  [default: continuous]&#39;</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--levels&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Levels for discrete plots. Lists directly &#39;</span>
+                          <span class="s1">&#39;specify the contour levels, while integers &#39;</span>
+                          <span class="s1">&#39;specify the maximum-1 number of &quot;nice&quot; &#39;</span>
+                          <span class="s1">&#39;levels to plot.&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--contours&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Contours to plot.&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--contourcolours&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;contour colours&#39;</span><span class="p">,</span>
+                     <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">])(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="inputs_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.inputs_function">[docs]</a><span class="k">def</span> <span class="nf">inputs_function</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;filenames&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function for creating input arguments.</span>
@@ -700,77 +792,6 @@
                      <span class="n">show_default</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">f</span></div>
-
-<div class="viewcode-block" id="axes_limit_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.axes_limit_function">[docs]</a><span class="k">def</span> <span class="nf">axes_limit_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Function for creating axes limit options.</span>
-
-<span class="sd">    Arguments</span>
-<span class="sd">    ---------</span>
-
-<span class="sd">        multiple : bool, optional</span>
-<span class="sd">            allow multiple limits. Default: False.</span>
-<span class="sd">        c : bool, optional</span>
-<span class="sd">            include colour limits. Default: False.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">        decorator</span>
-<span class="sd">            axes limit options decorator.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">axes_limit_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Options for axes limits.</span>
-<span class="sd">        </span>
-<span class="sd">        Options</span>
-<span class="sd">        -------</span>
-
-<span class="sd">            --xmin : float, optional</span>
-<span class="sd">                override minimum x.</span>
-<span class="sd">            --xmax : float, optional</span>
-<span class="sd">                override maximum x.</span>
-<span class="sd">            --ymin : float, optional</span>
-<span class="sd">                override minimum y.</span>
-<span class="sd">            --ymax : float, optional</span>
-<span class="sd">                override maximum y.</span>
-<span class="sd">            --cmin : float, optional</span>
-<span class="sd">                override minimum colour.</span>
-<span class="sd">            --cmax : float, optional</span>
-<span class="sd">                override maximum colour.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-
-<span class="sd">            decorator</span>
-<span class="sd">                axes limits options decorator.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    
-        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmin&#39;</span><span class="p">,</span>
-                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum x.&#39;</span><span class="p">,</span>
-                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
-                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--xmax&#39;</span><span class="p">,</span>
-                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum x.&#39;</span><span class="p">,</span>
-                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
-                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymin&#39;</span><span class="p">,</span>
-                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum y.&#39;</span><span class="p">,</span>
-                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
-                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--ymax&#39;</span><span class="p">,</span>
-                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum y.&#39;</span><span class="p">,</span>
-                         <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
-                         <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmin&#39;</span><span class="p">,</span>
-                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override minimum colour value.&#39;</span><span class="p">,</span>
-                             <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
-                             <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cmax&#39;</span><span class="p">,</span>
-                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override maximum colour value.&#39;</span><span class="p">,</span>
-                             <span class="n">multiple</span><span class="o">=</span><span class="n">multiple</span><span class="p">,</span>
-                             <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">f</span>
-    <span class="k">return</span> <span class="n">axes_limit_options</span></div>
 </pre></div>
 
            </div>

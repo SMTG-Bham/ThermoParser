@@ -10,7 +10,7 @@ type the full thing in, e.g. ``tp get``, to get a similar list of the
 available functions. Then type in all three parts to get a detailed
 description of how to use the function, e.g. ``tp get zt``.
 If further arguments have been given, this can be accessed with
-``--help``, but note ``-h`` is *not* a substitute for ``--help``.
+``--help`` or ``-h``.
 
 Typically, you will need one or more data files, which are inputted
 directly after the command, e.g. ``tp plot avg-rates mesh.h5``. The

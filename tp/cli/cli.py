@@ -64,18 +64,21 @@ from copy import deepcopy
 from tp.cli.options import *
 
 @click.group()
+@adminsitrative_options
 def tp_cli():
     """Command line tools for transport properties."""
     return
 
 
 @tp_cli.group()
+@adminsitrative_options
 def gen():
     """Tools for generating calculation inputs."""
     return
 
 
 @gen.command(no_args_is_help=True)
+@adminsitrative_options
 @kpoints_options
 def kpar(kpoints, mesh, poscar):
     """Suggests KPAR values for VASP.
@@ -99,6 +102,7 @@ def kpar(kpoints, mesh, poscar):
 
 
 @gen.command(no_args_is_help=True)
+@adminsitrative_options
 @kpoints_options
 @click.option('-z', '--zero-kpoints', '--zero-ibzkpt',
               help='IBZKPT file path. Overrides --zero-mesh.',
@@ -137,12 +141,14 @@ def kpoints(kpoints, mesh, poscar, zero_kpoints, zero_mesh, output):
 
 
 @tp_cli.group()
+@adminsitrative_options
 def get():
     """Tools for accessing data."""
     return
 
 
 @get.command('amset', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('amset_file', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -270,6 +276,7 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
     return
 
 @get.command('occupation')
+@adminsitrative_options
 @inputs_function('amset_mesh_file', nargs=1)
 @doping_type_option
 @doping_function()
@@ -340,6 +347,7 @@ def get_occupation(amset_mesh_file, dtype, doping, temperature, spin, poscar):
 
 
 @get.command('boltztrap')
+@adminsitrative_options
 @inputs_function('boltztrap_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -399,6 +407,7 @@ def get_boltztrap(boltztrap_hdf5, quantity, dtype, doping, direction, temperatur
 
 
 @get.command('phono3py', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -492,6 +501,7 @@ def get_phono3py(kappa_hdf5, quantity, direction, temperature, band, qpoint,
 
 
 @get.command('zt', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('-k', '--kappa',
               help='Phono3py kappa-mxxx.hdf5.',
@@ -559,12 +569,14 @@ def get_zt(transport_file, kappa, dtype, doping, direction, temperature, max):
 
 
 @tp_cli.group()
+@adminsitrative_options
 def run():
     """Tools for transport properties postprocessing."""
     return
 
 
 @run.command(no_args_is_help=True)
+@adminsitrative_options
 
 @click.option('--tmin',
               help='Set minimum temperature in K. Does not speed up '
@@ -651,12 +663,14 @@ def boltztrap(tmin, tmax, tstep, dmin, dmax, ndope, relaxation_time, lpfac,
 
 
 @tp_cli.group()
+@adminsitrative_options
 def save():
     """Tools for saving data."""
     return
 
 
 @save.command('cumkappa', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -690,6 +704,7 @@ def save_cumkappa(kappa_hdf5, mfp, direction, temperature, output, extension):
 
 
 @save.command('kappa', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @direction_function(multiple=True)
 @click.option('-o', '--output',
@@ -720,6 +735,7 @@ def save_kappa(kappa_hdf5, direction, output):
 
 
 @save.command('zt', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('-k', '--kappa',
               help='Phono3py kappa-mxxx.hdf5.',
@@ -749,12 +765,14 @@ def save_zt(transport_file, kappa, dtype, direction, interpolate, kind, output):
 
 
 @tp_cli.group()
+@adminsitrative_options
 def plot():
     """Tools for plotting."""
     return
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('mesh_h5')
 @click.option('--mfp/--rate',
               help='Plot mfp instead of rate.  [default: rate]',
@@ -978,6 +996,7 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5')
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -1098,6 +1117,7 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('dos_dat', nargs=1)
 @dos_function()
 @fill_options
@@ -1160,6 +1180,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a '
                    '--component of lattice or total.',
@@ -1413,6 +1434,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('-z', '--zt',
               help='Target ZT.',
@@ -1489,6 +1511,7 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
 
 
 @plot.command('phonons', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('band_yaml')
 @click.option('--bandmin',
               help='Minimum band index.',
@@ -1600,6 +1623,7 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file')
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a --quantity '
@@ -1994,6 +2018,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('-y',
               help='y-axis quantity. Options include frequency, kappa, '
@@ -2149,6 +2174,7 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('band_yaml', nargs=1)
 @inputs_function('kappa_hdf5', nargs=1)
 
@@ -2204,6 +2230,7 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('--pf/--zt',
               help='Power factor instead of ZT.  [default: zt]',
@@ -2280,6 +2307,7 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_files', nargs=2)
 @click.option('--pf/--zt',
               help='Power factor instead of ZT.  [default: zt]',

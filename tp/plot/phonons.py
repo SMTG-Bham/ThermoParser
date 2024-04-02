@@ -803,7 +803,7 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     cbar.set_alpha(1)
     cbar.set_label(axlabels[quantity])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
-    cbar.draw_all()
+    cbar._draw_all()
 
     if main:
         if round(np.amin(f), 1) == 0:
@@ -1045,7 +1045,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
-    cbar.draw_all()
+    cbar._draw_all()
 
     if main:
         ax.set_ylim(ymin, ymax)

@@ -246,17 +246,16 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # plotting
     if discrete:
         kwargs.pop('rasterized')
-        if levels is None or levels == ():
-            heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
-                               **kwargs)
+        if levels in [None, (), [None], (None,)]:
+            levels = 10
         else:
             if isinstance(levels, (list, np.ndarray, tuple)) and len(levels) == 1:
                 levels = int(levels[0])
             elif isinstance(levels, float):
-                raise TypeError('levels must be an int or array-like, not float')
-            if levels is not None and levels != ():
-                heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
-                                   levels=levels, **kwargs)
+                raise TypeError(
+                                'levels must be an int or array-like, not float')
+        heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
+                           levels=levels, **kwargs)
     else:
         heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
     fig = ax.get_figure()
@@ -267,7 +266,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         cbar = plt.colorbar(heat, ax=ax, extend=extend)
 
     # contours
-    if contours is not None and contours != ():
+    if contours not in [None, [None], (), (None,)]:
         if contourkwargs == None:
             contourkwargs = {}
         if not isinstance(contours, (list, np.ndarray)):

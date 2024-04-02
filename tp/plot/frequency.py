@@ -893,7 +893,7 @@ def add_projected_waterfall(ax, data, quantity, projected,
     cbar.set_alpha(1)
     cbar.set_label(axlabels[projected])
     tp.plot.utilities.set_locators(cbar.ax, y=cbar.ax.yaxis.get_scale())
-    cbar.draw_all()
+    cbar._draw_all()
 
     if main:
         data[xquantity] = x
