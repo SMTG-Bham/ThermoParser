@@ -85,7 +85,7 @@ In general, raw data is converted to high-quality plots in four stages:
 The `tprc.yaml` file allows users to set a range of defaults, including axis labels, tick locators, style sheets and more.
 While a [gallery](https://smtg-bham.github.io/ThermoParser/gallery.html) is curated to demonstrate all plotting functionality, we highlight some key examples in Figures 1 and 2.
 
-\autoref{fig:phonon}a shows a phonon dispersion with an element-decomposed DoS sharing the y-axis.
+\autoref{fig:phonon}a shows a phonon dispersion with an element-decomposed density of states (DoS) sharing the y-axis.
 Different environments for the same atom type can be specified, if desired, and it is possible to overlay multiple dispersions to assess calculation convergence.
 \autoref{fig:phonon}b shows the same dispersion with lifetime projected on the colour axis.
 Data from both Phono3py and Phonopy is parsed, and ThermoParser internally calculates the mean free path and phonon lifetime.
