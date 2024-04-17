@@ -53,7 +53,7 @@ ThermoParser brings three key novelties to the existing software landscape:
 
 * The automatic parsing of outputs from multiple codes for both electronic and phononic calculations;
 * A data system which is transparent in the origin, arrangement and units of the data, customisable, and accessible regardless of Python aptitude;
-* Plotting tools for the creation of publication-ready figures through an intuitive Python API, accessible to Python novices while fully customisable for making complex, information-rich graphics, with the most common plots also availble via a CLI.
+* Plotting tools for the creation of publication-ready figures through an intuitive Python API, accessible to Python novices while fully customisable for making complex, information-rich graphics, with the most common plots also available via a CLI.
 
 To complement these capabilities, there is also a range of ancillary functions which streamline all parts of the process.
 
@@ -63,7 +63,7 @@ ThermoParser is a Python package for analysing and plotting thermoelectric prope
 The main dependencies are matplotlib [@Hunter2007] for plotting, pymatgen [@Ong2013] for symmetry analysis, numpy for calculations and click for the CLI.
 The package interfaces with Phonopy, Phono3py, AMSET and BoltzTraP.
 
-The package is modular, with a separate function for loading from each code, plotting each graph-type and preparing each axis arrangement, as well as numerous helper functions for calculating properties, manipulating data, and fomatting outputs.
+The package is modular, with a separate function for loading from each code, plotting each graph-type and preparing each axis arrangement, as well as numerous helper functions for calculating properties, manipulating data, and formatting outputs.
 Therefore, in order to add support for a new code, calculated property or plot-type, one needs only create a single function able to read/write the common format, and perhaps some metadata, and the rest should just work.
 Everything loaded into the common format has a `meta` dictionary, containing all the metadata needed to understand the data: the code it was loaded from, the shape of the array (e.g. if the first index is temperature) and the units, as well as any conditions imposed, such as if the data has been reduced to a particular temperature.
 All dependent variables are also loaded by default.
@@ -88,14 +88,14 @@ While a [gallery](https://smtg-bham.github.io/ThermoParser/gallery.html) is cura
 \autoref{fig:phonon}a shows a phonon dispersion with an element-decomposed DoS sharing the y-axis.
 Different environments for the same atom type can be specified, if desired, and it is possible to overlay multiple dispersions to assess calculation convergence.
 \autoref{fig:phonon}b shows the same dispersion with lifetime projected on the colour axis.
-Data from both Phono3py and Phonopy is parsed, and ThermoParser internally calculates mean free path and phonon lifetime.
+Data from both Phono3py and Phonopy is parsed, and ThermoParser internally calculates the mean free path and phonon lifetime.
 Several other ways of projecting a range of properties onto a phonon dispersion are implemented, including the broadened bands plot (`tp.plot.frequency.add_wideband`), which is more commonly seen in the literature [@Togo2015].
 This also demonstrates the utility of ThermoParser's consistent data format: as well as Phono3py data, Gruneisen parameter data from Phonopy can be projected onto phonon dispersions in the same way, by changing only which data is loaded and setting `quantity='gruneisen'` rather than `'lifetime'`.
 
 ![Phonon dispersions for ZnO with a) DoS and b) phonon lifetime projected on the colour axis. \label{fig:phonon}](joss_figures/phonons-subfigs.png)
 
 \autoref{fig:waterfall} is a waterfall plot of mean free path against frequency overlaying a DoS plot, clearly showing the relationship between elemental composition and scattering.
-Scaling the linear-scaled DoS data to the log-scaled waterfall axes would be time-consuming on a case-by-case basis, whereas the `tp.plot.frequency.add_dos` function wil autodetect the data range and rescale appropriately if the `scale` argument is set to `True`.
+Scaling the linear-scaled DoS data to the log-scaled waterfall axes would be time-consuming on a case-by-case basis, whereas the `tp.plot.frequency.add_dos` function will autodetect the data range and rescale appropriately if the `scale` argument is set to `True`.
 
 ![Waterfall plot overlaid on a DoS for BaSnO$_3$. \label{fig:waterfall}](joss_figures/waterfall.png)
 
