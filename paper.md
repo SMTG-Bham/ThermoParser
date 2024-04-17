@@ -116,9 +116,8 @@ There are no conflicts to declare.
 
 # Acknowledgements
 
-KBS, DWD and DOS acknowledge support from the European Research Council (grant 758345).
 This work made use of the ARCHER2 UK National Supercomputing Service via the Materials Chemistry Consortium, which is funded by EPSRC (EP/L000202), and resources made available via the UK Materials and Molecular Modelling Hub, which is partially funded by EPSRC (EP/P020194/1).
 K.B.S and D.O.S acknowledge the University of Birmingham’s BlueBEAR HPC service (http://www.birmingham.ac.uk/bear); the Baskerville Tier 2 HPC service (https://www.baskerville.ac.uk/), which was funded by the EPSRC and UKRI through the World Class Labs scheme (EP/T022221/1) and the Digital Research Infrastructure programme (EP/W032244/1) and is operated by Advanced Research Computing at the University of Birmingham; and the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick, which is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
-We would like to acknowledge contributions of ideas and time from Katarina Brlec, Bonan Zhu, Seán R. Kavanagh, Warda Rahim, Joe Willis, Luisa Herring--Rodriguez and Sabrine Hachmioune.
+We would like to acknowledge contributions of ideas and time from Katarina Brlec, Bonan Zhu, Seán R. Kavanagh, Warda Rahim, Joe Willis, Luisa Herring--Rodriguez, Sabrine Hachmioune, Evan Walter Clarke Spotte-Smith, Enric Tomás Grau-Luque, Francesco Nattino and Mojtaba Barzegari.
 
 # References
