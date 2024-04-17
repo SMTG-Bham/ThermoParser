@@ -117,7 +117,7 @@ class MultiTest(unittest.TestCase):
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
         self.ax.set_xlim.assert_called_once_with(0, 1)
-        self.ax.set_ylim.assert_not_called()
+        self.ax.set_ylim.assert_called_once_with(bottom=0)
 
     def test_bandmax(self):
         self.ax.spines['bottom'].get_linewidth().return_value = 1

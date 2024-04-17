@@ -346,11 +346,15 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
         else:
             bandmax = np.amin([len(data[0]['frequency'][0]), bandmax])
 
-        f = [d['frequency'] for d in data]
-        f = np.array(f)[:,:,bandmin:bandmax]
-
-        if round(np.amin(f), 1) == 0:
-            ax.set_ylim(bottom=0)
+        if bandmin < 3:
+            f = [d['frequency'] for d in data]
+            noim = True
+            for ff in f:
+                ff = np.array(ff)[:,bandmin:bandmax]
+                if round(np.amin(ff), 1) < 0:
+                         noim = False
+            if noim == True:
+                ax.set_ylim(bottom=0)
         formatting(ax, data[0], 'frequency', **xmarkkwargs)
 
     return
