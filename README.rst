@@ -29,6 +29,10 @@
     :alt: The docs status badge
     :target: https://smtg-bham.github.io/ThermoParser/
 
+.. image:: https://joss.theoj.org/papers/10.21105/joss.06340/status.svg
+   :alt: The JOSS publication badge
+   :target: https://doi.org/10.21105/joss.06340
+
 ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
 thermoelectrics, but also useful for anything pertaining to electronic
