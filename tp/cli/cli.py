@@ -1549,13 +1549,15 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
 @fill_options
 
 @legend_function(toggle=False)
+@axes_limit_function()
 @plot_io_function('tp-phonons')
 
 def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
                      marker, xmarkcolour, xmarklinestyle, dos, poscar, atoms,
                      projected, sigma, total, total_label, total_colour,
                      doscolour, fill, fillalpha, line, label, legend_title,
-                     location, style, large, save, show, extension, output):
+                     location, xmin, xmax, ymin, ymax, style, large, save, show,
+                     extension, output):
     """Plots and overlays phonon dispersions.
 
     Can have optional DoS on the side.
@@ -1605,6 +1607,30 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
                                   totalcolour=total_colour, fill=fill,
                                   fillalpha=fillalpha, line=line, invert=True)
         dosax.set_ylim(ax.get_ylim())
+    
+    if xmin is not None:
+        if xmax is not None:
+            ax.set_xlim(xmin, xmax)
+        else:
+            ax.set_xlim(left=xmin)
+    elif xmax is not None:
+        ax.set_xlim(right=xmax)
+
+    if ymin is not None:
+        if ymax is not None:
+            ax.set_ylim(ymin, ymax)
+            if dos is not None:
+                dosax.set_ylim(ymin, ymax)
+        else:
+            ax.set_ylim(bottom=ymin)
+            if dos is not None:
+                dosax.set_ylim(bottom=ymin)
+    elif ymax is not None:
+        ax.set_ylim(top=ymax)
+        if dos is not None:
+            dosax.set_ylim(top=ymax)
+
+    if dos is not None:
         tp.plot.utilities.set_locators(dosax, dos=True)
 
     if label != [None] or dos is not None:
@@ -2198,11 +2224,13 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
               default=5,
               show_default=True)
 
+@axes_limit_function()
 @plot_io_function('tp-wideband')
 @verbose_option
 
-def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, style,
-             large, save, show, extension, output, verbose):
+def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing,
+             style, xmin, xmax, ymin, ymax, large, save, show, extension,
+             output, verbose):
     """Plots a broadened phonon dispersion."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -2219,6 +2247,22 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
     tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=temperature,
                                  poscar=poscar, smoothing=smoothing,
                                  colour=colour, verbose=verbose)
+
+    if xmin is not None:
+        if xmax is not None:
+            ax.set_xlim(xmin, xmax)
+        else:
+            ax.set_xlim(left=xmin)
+    elif xmax is not None:
+        ax.set_xlim(right=xmax)
+
+    if ymin is not None:
+        if ymax is not None:
+            ax.set_ylim(ymin, ymax)
+        else:
+            ax.set_ylim(bottom=ymin)
+    elif ymax is not None:
+        ax.set_ylim(top=ymax)
 
     if save:
         for ext in extension:
