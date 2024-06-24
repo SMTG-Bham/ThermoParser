@@ -1,19 +1,37 @@
-cff-version: 1.2.0
-message: "If you use ThermoParser, please cite it as below:"
+cff-version: "1.2.0"
 authors:
-- family-names: "Spooner"
-  given-names: "Kieran B."
-  orcid: "https://orcid.org/0000-0002-4078-3148"
-- family-names: "Einhorn"
-  given-names: "Maud"
-  orcid: "https://orcid.org/0000-0003-0371-0262"
-- family-names: "Davies"
-  given-names: "Daniel W."
-  orcid: "https://orcid.org/0000-0003-4094-5992"
-- family-names: "Scanlon"
-  given-names: "David O."
-  orcid: "https://orcid.org/0000-0001-9174-8601"
+- family-names: Spooner
+  given-names: Kieran B.
+- family-names: Einhorn
+  given-names: Maud
+- family-names: Davies
+  given-names: Daniel W.
+- family-names: Scanlon
+  given-names: David O.
+doi: 10.5281/zenodo.10987923
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Spooner
+    given-names: Kieran B.
+  - family-names: Einhorn
+    given-names: Maud
+  - family-names: Davies
+    given-names: Daniel W.
+  - family-names: Scanlon
+    given-names: David O.
+  date-published: 2024-05-25
+  doi: 10.21105/joss.06340
+  issn: 2475-9066
+  issue: 97
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 6340
+  title: "ThermoParser: Streamlined Analysis of Thermoelectric
+    Properties"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.06340"
+  volume: 9
 title: "ThermoParser: Streamlined Analysis of Thermoelectric Properties"
-version: 3.0.0
-date-released: 2023-08-16
-url: "https://github.com/smtg-bham/ThermoParser"
