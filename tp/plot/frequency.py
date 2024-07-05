@@ -702,7 +702,10 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     s = np.shape(data[xquantity])
     try:
-        colour = mpl.cm.get_cmap(colour)
+        try:
+            colour = mpl.cm.get_cmap(colour)
+        except AttributeError:
+            colour = mpl.colormaps[colour]
         colours = [colour(i) for i in np.linspace(0, 1, s[1])]
         colours = np.tile(colours, (s[0], 1))
     except ValueError:

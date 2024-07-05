@@ -53,8 +53,8 @@ except FileNotFoundError:
 workers = tp.settings.get_workers()
 
 def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
-                   label=None, colour='#800080', linestyle='solid',
-                   marker=None, xmarkkwargs={}, **kwargs):
+                   label=None, colour='#800080', linestyle='solid', marker=None,
+                   xmarkkwargs={}, **kwargs):
     """Adds a phonon band structure to a set of axes.
 
     Labels, colours and linestyles can be given one for the whole
@@ -195,6 +195,8 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
+        else:
+            ax.set_ylim(bottom=np.amin(f))
         if sdata is None: sdata = data
         formatting(ax, sdata, 'frequency', **xmarkkwargs)
 
@@ -291,7 +293,10 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     # line appearance
 
     try:
-        colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, len(data)))
+        try:
+            colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, len(data)))
+        except AttributeError:
+            colours = mpl.colormaps[colour](np.linspace(0, 1, len(data)))
         colours = [[c] for c in colours]
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
@@ -812,6 +817,8 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
+        else:
+            ax.set_ylim(bottom=np.amin(f))
         formatting(ax, pdata, 'frequency', **xmarkkwargs)
 
     return cbar
@@ -1058,9 +1065,10 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     return cbar
 
 @tp.docstring_replace(workers=str(workers))
-def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
-                 smoothing=5, colour='viridis', workers=workers,
-                 xmarkkwargs={}, verbose=False, **kwargs):
+def add_wideband(ax, kdata, pdata, temperature=300, bandmin=None, bandmax=None,
+                 ymin=None, ymax=None, poscar='POSCAR', main=True, smoothing=5,
+                 colour='viridis', workers=workers, xmarkkwargs={},
+                 verbose=False, **kwargs):
     """Plots a phonon dispersion with broadened bands.
 
     Requires a POSCAR.
@@ -1096,6 +1104,14 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
 
         temperature : float, optional
             approximate temperature in K (finds closest). Default: 300.
+        bandmin : int, optional
+            zero-indexed minimum band index to plot. Default: None.
+        bandmax : int, optional
+            zero-indexed maximum band index to plot. Default: None.
+        ymin : float, optional
+            minimum y-value plotted.
+        ymax : float, optional
+            maximum y-value plotted.
 
         poscar : str, optional
             VASP POSCAR filepath. Default: POSCAR.
@@ -1180,6 +1196,19 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     c = np.array(kdata['gamma'])
     qk = kdata['qpoint']
 
+    # data selection
+
+    if bandmin is None:
+        bandmin = 0
+    else:
+        bandmin = np.amax([0, bandmin])
+    if bandmax is None:
+        bandmax = len(pdata['frequency'][0])
+    else:
+        bandmax = np.amin([len(pdata['frequency'][0]), bandmax])
+
+    c = c[:,bandmin:bandmax]
+
     # Phonopy data formatting
 
     qp = pdata['qpoint']
@@ -1199,20 +1228,18 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
         min_id = pool.map(geq, qpi)
     c2 = c[min_id, :]
 
-    x, indices = np.unique(x, return_index=True)
-    f = np.array(pdata['frequency'])[indices]
-    where = np.where(c2 == np.amax(c2))
-
     # interpolate
 
+    x, indices = np.unique(x, return_index=True)
+    f = np.array(pdata['frequency'])[indices,bandmin:bandmax]
     x2 = np.linspace(min(x), max(x), 2500)
     finterp = interp1d(x, f, kind='cubic', axis=0)
     f = finterp(x2)
 
     cinterp = interp1d(xi, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
-    fmax = np.amax(np.add(f, c2))
-    fmin = np.amin(np.subtract(f, c2))
+    fmax = np.amax(np.add(f, c2)) if ymax is None else ymax
+    fmin = np.amin(np.subtract(f, c2)) if ymin is None else ymin
     c2 = np.where(c2==0, np.nanmin(c2[np.nonzero(c2)]), c2)
     f2 = np.linspace(fmin, fmax, 2500)
 
@@ -1231,7 +1258,10 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     # the min and max values.
 
     try:
-        cmap = mpl.cm.get_cmap(colour)
+        try:
+            cmap = mpl.cm.get_cmap(colour)
+        except AttributeError:
+            cmap = mpl.colormaps[colour]
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = colour
@@ -1256,6 +1286,8 @@ def add_wideband(ax, kdata, pdata, temperature=300, poscar='POSCAR', main=True,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
+        else:
+            ax.set_ylim(bottom=fmin)
         formatting(ax, pdata, 'frequency', **xmarkkwargs)
 
     return

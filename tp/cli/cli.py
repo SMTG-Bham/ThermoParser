@@ -879,7 +879,10 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
         colour = colour[0]
 
     try:
-        colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, nlines))
+        try:
+            colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, nlines))
+        except AttributeError:
+            colours = mpl.colormaps[colour](np.linspace(0, 1, nlines))
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour, str) and colour == 'skelton':
@@ -1369,7 +1372,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             legend_title = defleg['title']
 
     try:
-        colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
+        try:
+            colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
+        except AttributeError:
+            colours = mpl.colormaps[colour[0]](np.linspace(0, 1, len(data)))
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour[0], str) and colour[0] == 'skelton':
@@ -1513,12 +1519,7 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
 @plot.command('phonons', no_args_is_help=True)
 @adminsitrative_options
 @inputs_function('band_yaml')
-@click.option('--bandmin',
-              help='Minimum band index.',
-              type=click.IntRange(0))
-@click.option('--bandmax',
-              help='Maximum band index.',
-              type=click.IntRange(0))
+@bandrange_options
 
 @click.option('-c', '--colour',
               help='Colourmap name or min and max colours or list of '
@@ -1959,7 +1960,11 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                         q:             edata2[q]})
 
     try:
-        colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))
+        try:
+            colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))
+        except AttributeError:
+            colours = mpl.colormaps[colour[0]](np.linspace(0, 1, lendata))
+
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour[0], str) and colour[0] == 'skelton':
@@ -2203,6 +2208,7 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
 @adminsitrative_options
 @inputs_function('band_yaml', nargs=1)
 @inputs_function('kappa_hdf5', nargs=1)
+@bandrange_options
 
 @temperature_option
 @click.option('-p', '--poscar',
@@ -2228,9 +2234,9 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
 @plot_io_function('tp-wideband')
 @verbose_option
 
-def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing,
-             style, xmin, xmax, ymin, ymax, large, save, show, extension,
-             output, verbose):
+def wideband(band_yaml, kappa_hdf5, bandmin, bandmax, temperature, poscar,
+             colour, smoothing, style, xmin, xmax, ymin, ymax, large, save,
+             show, extension, output, verbose):
     """Plots a broadened phonon dispersion."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -2244,9 +2250,11 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing,
 
     fig, ax, _ = axes.one(style)
 
-    tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=temperature,
-                                 poscar=poscar, smoothing=smoothing,
-                                 colour=colour, verbose=verbose)
+    tp.plot.phonons.add_wideband(ax, kdata, pdata, bandmin=bandmin,
+                                 bandmax=bandmax, ymin=ymin, ymax=ymax,
+                                 temperature=temperature, poscar=poscar,
+                                 smoothing=smoothing, colour=colour,
+                                 verbose=verbose)
 
     if xmin is not None:
         if xmax is not None:
