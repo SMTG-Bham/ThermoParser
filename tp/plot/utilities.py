@@ -141,7 +141,10 @@ def parse_colours(colour):
     from copy import copy
 
     try:
-        cmap = copy(mpl.cm.get_cmap(colour))
+        try:
+            cmap = copy(mpl.cm.get_cmap(colour))
+        except AttributeError:
+            cmap = copy(mpl.colormaps[colour])
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = copy(colour)

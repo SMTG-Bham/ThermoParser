@@ -190,7 +190,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
 
     try:
-        colours = copy(mpl.cm.get_cmap(colour))
+        try:
+            colours = copy(mpl.cm.get_cmap(colour))
+        except AttributeError:
+            colours = copy(mpl.colormaps[colour])
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
@@ -282,7 +285,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         cmap = None
         try:
             cmap = contourcolours
-            contourcolours = mpl.cm.get_cmap(contourcolours)(ctnorm)
+            try:
+                contourcolours = mpl.cm.get_cmap(contourcolours)(ctnorm)
+            except AttributeError:
+                contourcolours = mpl.colormaps[contourcolours](ctnorm)
             plt.contour(x[:-1], y[:-1], c, contours, cmap=cmap,
                         **contourkwargs)
         except ValueError:

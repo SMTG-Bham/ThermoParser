@@ -7,6 +7,8 @@
 #        function for help and version display.
 #    axes_limit_function
 #        function for setting the axis limits.
+#    bandrange_options
+#        option for range of bands plotted.
 #    direction_function:
 #        function for picking the --direction (-d).
 #    doping_type_option:
@@ -126,6 +128,33 @@ def axes_limit_function(multiple=False, c=False):
                              type=float)(f)
         return f
     return axes_limit_options
+
+def bandrange_options(f):
+    """Options for specifying bands plotted.
+    
+    Options
+    -------
+
+        --bandmin : float, optional
+            minimum band index (0-indexed, inclusive).
+        --bandmax : float, optional
+            maximum band index (0-indexed, exclusive).
+
+    Returns
+    -------
+
+        decorator
+            band range options decorator.
+    """
+
+    f = click.option('--bandmin',
+                     help="Minimum band index.",
+                     type=click.IntRange(0))(f)
+    f = click.option('--bandmax',
+                     help="Maximum band index.",
+                     type=click.IntRange(0))(f)
+
+    return f
 
 def direction_function(multiple=False):
     """Function to create direction options.
@@ -334,7 +363,27 @@ def dos_function(dosargs=['-c', '--colour']):
     return dos_options
 
 def heatmap_options(f):
-    """Options for heatmaps."""
+    """Options for heatmaps.
+    
+    Options
+    -------
+
+        --discrete/--continuous : bool, optional
+            discretise the colourmap. Default: --continuous
+        -l, --levels : int or array-like, optional
+            boundaries for discrete plots. Lists specify actual values
+            while integers specify maximum-1 number of boundaries.
+        --contours : float or array-like, optional
+            contour line values.
+        --contourcolours: str or array-like, optional
+            contour colours. Default: black.
+
+    Returns
+    -------
+
+        decorator
+            heatmap options decorator.
+    """
 
     f = click.option('--discrete/--continuous',
                      help='Discretise colourmap.  [default: continuous]',
