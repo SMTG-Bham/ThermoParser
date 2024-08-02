@@ -25,6 +25,124 @@ from sys import exit
 import tp
 import yaml
 
+def shengbte(prefix, output='tp-shengbte', structure='CONTROL',
+             atoms=None, kappa_mode='converged'):
+    """Saves ShengBTE outputs to a single hdf5 file.
+
+    Also saves dependant properties and metadata.
+
+    Arguments
+    ---------
+
+        prefix : str
+            ShengBTE data prefix. May include filepath.
+        output : str, optional
+            output file name (no extension). Default: tp-shengbte.
+        structure : str, optional
+            structure source. Accepts ShengBTE CONTROL file or VASP POSCAR.
+            Overwritten by atoms. Default: CONTROL.
+        atoms : str or array-like, optional
+            atoms in CONTROL order. Must match number in CONTROL. Overwrites
+            structure.
+        kappa_mode : str, optional
+            method of kappa calculation:
+
+                converged (default):
+                    full BTE result.
+                rta:
+                    relaxation time approximation.
+                sg:
+                    small grain limit.
+
+    Returns
+    -------
+
+        none
+            instead writes to hdf5.
+    """
+
+    def get_meta(data, q):
+        data['meta']['units'][q] = tp.settings.units()[q]
+        data['meta']['dimensions'][q] = tp.settings.dimensions()[q]
+        return
+
+    ltc = 'lattice_thermal_conductivity'
+    kappa_name = {'converged': 'CONV',
+                  'rta':       'RTA',
+                  'sg':        'sg'}
+    data = {'meta': {'kappa_source': 'shengbte_{}'.format(kappa_mode),
+                     'units':        {},
+                     'dimensions':   {}}}
+    
+    kdata = np.loadtxt('{}.KappaTensorVsT_{}'.format(prefix, kappa_name[kappa_mode]))
+    try:
+        data['temperature'] = kdata[:,0].tolist()
+        # should probably change kappa to ltc in a future release
+        data['kappa'] = np.reshape(kdata[:,1:10], (-1,3,3)).tolist()
+    except IndexError:
+        data['temperature'] = [kdata[0].tolist()]
+        # see above
+        data['kappa'] = [np.reshape(kdata[1:10], (3,3)).tolist()]
+    get_meta(data, 'temperature')
+    get_meta(data, ltc)
+
+    qdata = np.loadtxt('{}.qpoints'.format(prefix))
+    data['weight'] = qdata[:,2].tolist()
+    get_meta(data, 'weight')
+    data['qpoint'] = qdata[:,3:].tolist()
+    get_meta(data, 'qpoint')
+
+    data['frequency'] = (np.loadtxt('{}.omega'.format(prefix)) / (2*np.pi)).tolist()
+    get_meta(data, 'frequency')
+    nq, nbands = np.shape(data['frequency'])
+
+    if atoms is None:
+        from pymatgen.io.vasp.inputs import Poscar
+        try:
+            poscar = Poscar.from_file(structure, check_for_POTCAR=False,
+                                      read_velocities=False).as_dict()
+            atoms = [p['label'] for p in poscar['structure']['sites']]
+        except (FileNotFoundError, ValueError): # CONTROL file
+            import re
+            with open(structure, 'r') as f:
+                atoms = re.search(' elements.*\n', f.read()).group()[10:]
+                atoms = atoms.split()
+                atoms = [a.strip('"') for a in atoms]
+    elif isinstance(atoms, str):
+        atoms = atoms.split()
+    
+    data['dos'] = {}
+    data['dos']['total'] = np.loadtxt('{}.dos'.format(prefix))[:,1].tolist()
+    pdos = np.loadtxt('{}.pdos'.format(prefix))
+    for i, a in enumerate(atoms):
+        data['dos'][a] = pdos[:,i+1].tolist()
+    get_meta(data, 'dos')
+
+    data['gruneisen'] = np.loadtxt('{}.gruneisen'.format(prefix)).tolist()
+    get_meta(data, 'gruneisen')
+
+    v = np.loadtxt('{}.v'.format(prefix))
+    v = np.swapaxes(np.reshape(v, (nbands, nq, 3)), 0, 1)
+    data['group_velocity'] = v.tolist()
+    get_meta(data, 'group_velocity')
+
+    tau = np.loadtxt('{}.w_isotopic'.format(prefix))[:,1]
+    tau = np.swapaxes(np.reshape(tau, (nbands, nq)), 0, 1)
+    data['lifetime'] = tau.tolist()
+    data['gamma'] = (0.5 * np.reciprocal(tau)).tolist()
+    get_meta(data, 'lifetime')
+    get_meta(data, 'gamma')
+
+    try:
+        data['heat_capacity'] = np.loadtxt('{}.cvVsT'.format(prefix))[:,1].tolist()
+    except IndexError:
+        data['heat_capacity'] = [np.loadtxt('{}.cvVsT'.format(prefix))[1].tolist()]
+    get_meta(data, 'heat_capacity')
+
+    hdf5(data, '{}.hdf5'.format(output))
+
+    return
+
 def phono3py(filename, quantities, output='tp-phono3py', force=False):
     """Save calculated properties to hdf5.
 
