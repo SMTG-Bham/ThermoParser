@@ -203,8 +203,6 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
-        else:
-            ax.set_ylim(bottom=np.amin(f))
         if sdata is None: sdata = data
         formatting(ax, sdata, 'frequency', **xmarkkwargs)
 
@@ -833,8 +831,6 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
-        else:
-            ax.set_ylim(bottom=np.amin(f))
         formatting(ax, pdata, 'frequency', **xmarkkwargs)
 
     return cbar
