@@ -186,9 +186,17 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
 
     # plotting
 
+    # avoid connecting bands at disconnected q-points
+    split_indices = [0, *np.where(np.diff(x) == 0)[0] + 1, len(x)]
     for n in range(len(f[0])):
-        ax.plot(x, f[:,n], color=colour[n], linestyle=linestyle[n],
-                marker=marker[n], label=label[n], **kwargs)
+        for i in range(len(split_indices)-1):
+            starting_index = split_indices[i]
+            ending_index = split_indices[i+1]
+            x_i = x[starting_index:ending_index]
+            f_ni = f[starting_index:ending_index, n]
+            label_ni = label[n] if i == 0 else None
+            ax.plot(x_i, f_ni, color=colour[n], linestyle=linestyle[n],
+                    label=label_ni, marker=marker[n], **kwargs)
 
     # axes formatting
 
@@ -577,13 +585,21 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
 
     # plotting
 
+    # avoid connecting bands at disconnected q-points
+    split_indices = [0, *np.where(np.diff(x2) == 0)[0] + 1, len(x2)]
     for n in range(len(y2[0])):
         if scatter:
             ax.scatter(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
                        label=label[n], marker=marker[n], **kwargs)
         else:
-            ax.plot(x2, y2[:,n], color=colour[n], linestyle=linestyle[n],
-                    label=label[n], marker=marker[n], **kwargs)
+            for i in range(len(split_indices)-1):
+                starting_index = split_indices[i]
+                ending_index = split_indices[i+1]
+                x2_i = x2[starting_index:ending_index]
+                y2_ni = y2[starting_index:ending_index, n]
+                label_ni = label[n] if i == 0 else None
+                ax.plot(x2_i, y2_ni, color=colour[n], linestyle=linestyle[n],
+                        label=label_ni, marker=marker[n], **kwargs)
 
     # axes formatting
 
