@@ -69,7 +69,7 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
     elif name == 'occupation':
         csort = np.ravel(np.ma.masked_invalid(np.ma.masked_equal(c, 0)).compressed())
         csort = csort[csort.argsort()]
-        clim = csort[int(round(len(csort)*99.9/100 - 1, 0))]
+        clim = csort[int(round(len(csort)*99/100 - 1, 0))]
         if cmin is None:
             cmin = np.nanmin(c)
             if unoccupied is not None and cmin < 1:

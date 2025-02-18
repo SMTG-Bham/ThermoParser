@@ -1098,7 +1098,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
                                         data2[axis], 0)).compressed()
             sort = sort[sort.argsort()]
             lim[axis] = [sort[int(round(len(sort)/100, 0))] * 0.95,
-                         sort[int(round(len(sort)*99.9/100, 0))] * 1.05]
+                         sort[int(round(len(sort)*99/100, 0))] * 1.05]
             limit[axis](lim[axis][0], lim[axis][1])
             loc[axis] = 'log'
 
