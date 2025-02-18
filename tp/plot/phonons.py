@@ -568,8 +568,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     y2 = np.abs(yinterp(x2))
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
-    ymin = ysort[int(round(len(ysort)/100 - 1, 0))]
-    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))]
+    ymin = ysort[int(round(len(ysort)/100 - 1, 0))] * 0.95
+    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))] * 1.05
 
     # line appearance
 
@@ -1041,8 +1041,8 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     y2 = np.abs(yinterp(x2))
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
-    ymin = ysort[int(round(len(ysort)/100 - 1, 0))]
-    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))]
+    ymin = ysort[int(round(len(ysort)/100 - 1, 0))] * 0.95
+    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))] * 1.05
 
     cinterp = interp1d(x, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))

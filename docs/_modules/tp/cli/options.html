@@ -82,6 +82,8 @@
 <span class="c1">#        function for help and version display.</span>
 <span class="c1">#    axes_limit_function</span>
 <span class="c1">#        function for setting the axis limits.</span>
+<span class="c1">#    bandrange_options</span>
+<span class="c1">#        option for range of bands plotted.</span>
 <span class="c1">#    direction_function:</span>
 <span class="c1">#        function for picking the --direction (-d).</span>
 <span class="c1">#    doping_type_option:</span>
@@ -201,6 +203,33 @@
                              <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span>
     <span class="k">return</span> <span class="n">axes_limit_options</span></div>
+
+<div class="viewcode-block" id="bandrange_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.bandrange_options">[docs]</a><span class="k">def</span> <span class="nf">bandrange_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Options for specifying bands plotted.</span>
+<span class="sd">    </span>
+<span class="sd">    Options</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        --bandmin : float, optional</span>
+<span class="sd">            minimum band index (0-indexed, inclusive).</span>
+<span class="sd">        --bandmax : float, optional</span>
+<span class="sd">            maximum band index (0-indexed, exclusive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        decorator</span>
+<span class="sd">            band range options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--bandmin&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Minimum band index.&quot;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">IntRange</span><span class="p">(</span><span class="mi">0</span><span class="p">))(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--bandmax&#39;</span><span class="p">,</span>
+                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Maximum band index.&quot;</span><span class="p">,</span>
+                     <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">IntRange</span><span class="p">(</span><span class="mi">0</span><span class="p">))(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="direction_function"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.direction_function">[docs]</a><span class="k">def</span> <span class="nf">direction_function</span><span class="p">(</span><span class="n">multiple</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function to create direction options.</span>
@@ -409,7 +438,27 @@
     <span class="k">return</span> <span class="n">dos_options</span></div>
 
 <div class="viewcode-block" id="heatmap_options"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.heatmap_options">[docs]</a><span class="k">def</span> <span class="nf">heatmap_options</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Options for heatmaps.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Options for heatmaps.</span>
+<span class="sd">    </span>
+<span class="sd">    Options</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        --discrete/--continuous : bool, optional</span>
+<span class="sd">            discretise the colourmap. Default: --continuous</span>
+<span class="sd">        -l, --levels : int or array-like, optional</span>
+<span class="sd">            boundaries for discrete plots. Lists specify actual values</span>
+<span class="sd">            while integers specify maximum-1 number of boundaries.</span>
+<span class="sd">        --contours : float or array-like, optional</span>
+<span class="sd">            contour line values.</span>
+<span class="sd">        --contourcolours: str or array-like, optional</span>
+<span class="sd">            contour colours. Default: black.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        decorator</span>
+<span class="sd">            heatmap options decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--discrete/--continuous&#39;</span><span class="p">,</span>
                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Discretise colourmap.  [default: continuous]&#39;</span><span class="p">,</span>

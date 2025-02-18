@@ -249,8 +249,8 @@ class WaterfallTest(unittest.TestCase):
         self.assertEqual(self.ax.scatter.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_called_once_with(0, 999)
-        self.ax.set_ylim.assert_called_once_with(11, 999)
+        self.ax.set_xlim.assert_called_once_with(0, 999*1.05)
+        self.ax.set_ylim.assert_called_once_with(11*0.95, 999*1.05)
         self.assertEqual(mock_resolve.call_count, 2)
 
     @patch.object(tp.data.utilities, 'resolve')
@@ -278,8 +278,8 @@ class WaterfallTest(unittest.TestCase):
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_not_called()
         self.ax.tick_params.assert_called_once()
-        self.ax.set_xlim.assert_called_once_with(11, 999)
-        self.ax.set_ylim.assert_called_once_with(0, 999)
+        self.ax.set_xlim.assert_called_once_with(11*0.95, 999*1.05)
+        self.ax.set_ylim.assert_called_once_with(0, 999*1.05)
         self.assertEqual(mock_resolve.call_count, 2)
 
 class DensityTest(unittest.TestCase):
@@ -301,8 +301,8 @@ class DensityTest(unittest.TestCase):
         self.assertEqual(self.ax.scatter.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_called_once_with(0, 999)
-        self.ax.set_ylim.assert_called_once_with(11, 999)
+        self.ax.set_xlim.assert_called_once_with(0, 999*1.05)
+        self.ax.set_ylim.assert_called_once_with(11*0.95, 999*1.05)
         self.assertEqual(mock_resolve.call_count, 2)
 
     @patch.object(tp.data.utilities, 'resolve')
@@ -330,8 +330,8 @@ class DensityTest(unittest.TestCase):
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_not_called()
         self.ax.tick_params.assert_called_once()
-        self.ax.set_xlim.assert_called_once_with(11, 999)
-        self.ax.set_ylim.assert_called_once_with(0, 999)
+        self.ax.set_xlim.assert_called_once_with(11*0.95, 999*1.05)
+        self.ax.set_ylim.assert_called_once_with(0, 999*1.05)
         self.assertEqual(mock_resolve.call_count, 2)
 
 class ProjectedWaterfallTest(unittest.TestCase):
@@ -356,8 +356,8 @@ class ProjectedWaterfallTest(unittest.TestCase):
         self.assertEqual(self.ax.scatter.call_count, 2)
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_called_once()
-        self.ax.set_xlim.assert_called_once_with(0, 999)
-        self.ax.set_ylim.assert_called_once_with(11, 999)
+        self.ax.set_xlim.assert_called_once_with(0, 999*1.05)
+        self.ax.set_ylim.assert_called_once_with(11*0.95, 999*1.05)
         mock_colourbar.assert_called_once()
         self.assertEqual(mock_resolve.call_count, 2)
 
@@ -395,8 +395,8 @@ class ProjectedWaterfallTest(unittest.TestCase):
         self.ax.set_xlabel.assert_called_once()
         self.ax.set_ylabel.assert_not_called()
         self.ax.tick_params.assert_called_once()
-        self.ax.set_xlim.assert_called_once_with(11, 999)
-        self.ax.set_ylim.assert_called_once_with(0, 999)
+        self.ax.set_xlim.assert_called_once_with(11*0.95, 999*1.05)
+        self.ax.set_ylim.assert_called_once_with(0, 999*1.05)
         mock_colourbar.assert_called_once()
         self.assertEqual(mock_resolve.call_count, 2)
 

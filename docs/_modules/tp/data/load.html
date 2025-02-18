@@ -831,11 +831,23 @@
 
     <span class="c1"># load data</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
     <span class="n">pconversions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">phonopy_conversions</span><span class="p">()</span>
     <span class="n">conversions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">conversions</span><span class="p">()</span>
     <span class="n">units</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">n</span><span class="o">-=</span><span class="mi">1</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
     <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
              <span class="s1">&#39;meta&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;phonon_dos_source&#39;</span><span class="p">:</span> <span class="s1">&#39;phonopy&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]},</span>

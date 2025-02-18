@@ -200,6 +200,7 @@ Roughly chronologically, they are so far:
 * Warda Rahim
 * Katarina Brlec
 * Joe Willis
+* Dale Gaines II
 
 Thanks also to the `JOSS`_ reviewers, Evan Walter Clarke
 Spotte-Smith, Enric Tomás Grau-Luque, and Francesco Nattino; and the
