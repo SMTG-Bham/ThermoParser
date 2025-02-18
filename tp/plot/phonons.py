@@ -431,7 +431,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
             Default: ['Longitudinal', 'Transverse$_1$', 'Transverse$_2$',
             'Optic'].
         scatter : bool, optional
-            plot scatter rather than line graph. Default: False.
+            plot scatter rather than line graph. A stylistic choice,
+            which could be useful with outliers. Default: False.
 
         poscar : str, optional
             VASP POSCAR filepath. Default: POSCAR.
@@ -569,7 +570,7 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
     ymin = ysort[int(round(len(ysort)/100 - 1, 0))] * 0.95
-    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))] * 1.05
+    ymax = ysort[int(round(len(ysort)*99/100 - 1, 0))] * 1.05
 
     # line appearance
 
@@ -1042,7 +1043,7 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
     ymin = ysort[int(round(len(ysort)/100 - 1, 0))] * 0.95
-    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))] * 1.05
+    ymax = ysort[int(round(len(ysort)*99/100 - 1, 0))] * 1.05
 
     cinterp = interp1d(x, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
