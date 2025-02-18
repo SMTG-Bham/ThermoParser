@@ -265,7 +265,10 @@
     <span class="c1"># #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">colours</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="n">colour</span><span class="p">])</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
             <span class="n">colours</span> <span class="o">=</span> <span class="n">colour</span>
@@ -357,7 +360,10 @@
         <span class="n">cmap</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">contourcolours</span>
-            <span class="n">contourcolours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">)(</span><span class="n">ctnorm</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">contourcolours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">contourcolours</span><span class="p">)(</span><span class="n">ctnorm</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">contourcolours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="n">contourcolours</span><span class="p">](</span><span class="n">ctnorm</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
                         <span class="o">**</span><span class="n">contourkwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>

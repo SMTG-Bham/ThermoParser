@@ -203,8 +203,6 @@ def add_dispersion(ax, data, sdata=None, bandmin=None, bandmax=None, main=True,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
-        else:
-            ax.set_ylim(bottom=np.amin(f))
         if sdata is None: sdata = data
         formatting(ax, sdata, 'frequency', **xmarkkwargs)
 
@@ -570,8 +568,8 @@ def add_alt_dispersion(ax, data, pdata, quantity, bandmin=None, bandmax=None,
     y2 = np.abs(yinterp(x2))
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
-    ymin = ysort[int(round(len(ysort)/100 - 1, 0))]
-    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))]
+    ymin = ysort[int(round(len(ysort)/100 - 1, 0))] * 0.95
+    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))] * 1.05
 
     # line appearance
 
@@ -833,8 +831,6 @@ def add_projected_dispersion(ax, data, pdata, quantity, bandmin=None,
     if main:
         if round(np.amin(f), 1) == 0:
             ax.set_ylim(bottom=0)
-        else:
-            ax.set_ylim(bottom=np.amin(f))
         formatting(ax, pdata, 'frequency', **xmarkkwargs)
 
     return cbar
@@ -1045,8 +1041,8 @@ def add_alt_projected_dispersion(ax, data, pdata, quantity, projected,
     y2 = np.abs(yinterp(x2))
     ysort = np.ravel(y2)
     ysort = ysort[ysort.argsort()]
-    ymin = ysort[int(round(len(ysort)/100 - 1, 0))]
-    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))]
+    ymin = ysort[int(round(len(ysort)/100 - 1, 0))] * 0.95
+    ymax = ysort[int(round(len(ysort)*99.9/100 - 1, 0))] * 1.05
 
     cinterp = interp1d(x, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
@@ -1254,8 +1250,12 @@ def add_wideband(ax, kdata, pdata, temperature=300, bandmin=None, bandmax=None,
 
     cinterp = interp1d(xi, c2, kind='cubic', axis=0)
     c2 = np.abs(cinterp(x2))
-    fmax = np.amax(np.add(f, c2)) if ymax is None else ymax
-    fmin = np.amin(np.subtract(f, c2)) if ymin is None else ymin
+    fmax = np.amax(np.add(f, c2))
+    fmin = np.amin(np.subtract(f, c2))
+    margin = (fmax - fmin) * 0.05
+    fmax = fmax + margin if ymax is None else ymax
+    fmin = fmin - margin if ymin is None else ymin
+
     c2 = np.where(c2==0, np.nanmin(c2[np.nonzero(c2)]), c2)
     f2 = np.linspace(fmin, fmax, 2500)
 
@@ -1301,9 +1301,9 @@ def add_wideband(ax, kdata, pdata, temperature=300, bandmin=None, bandmax=None,
 
     if main:
         if round(np.amin(f), 1) == 0:
-            ax.set_ylim(bottom=0)
+            ax.set_ylim(bottom=0, top=fmax)
         else:
-            ax.set_ylim(bottom=fmin)
+            ax.set_ylim(bottom=fmin, top=fmax)
         formatting(ax, pdata, 'frequency', **xmarkkwargs)
 
     return
