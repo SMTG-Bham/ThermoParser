@@ -756,11 +756,23 @@ def phonopy_dos(filename, poscar='POSCAR', atoms=None):
 
     # load data
 
-    data = np.transpose(np.loadtxt(filename))
     pconversions = settings.phonopy_conversions()
     conversions = settings.conversions()
     units = tp.settings.units()
     dimensions = settings.dimensions()
+
+    data = np.transpose(np.loadtxt(filename))
+    n = 0
+    d = []
+    while np.sum(data[1:,n+1]) == 0.0:
+        d.append(n)
+        n+=1
+    n = -1
+    while np.sum(data[1:,n-1]) == 0.0:
+        d.append(n)
+        n-=1
+    data = np.delete(data, d, axis=1)
+
     data2 = {'frequency': data[0],
              'meta':      {'phonon_dos_source': 'phonopy',
                            'units':      {'frequency': units['frequency']},

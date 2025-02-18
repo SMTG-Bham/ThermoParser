@@ -89,7 +89,7 @@
 <img alt="Phonon dispersion with broadened bands." src="_images/wideband1.png" />
 <p>This shows a phonon dispersion with bands broadened to indicate
 scattering (the widest bands scatter the most). Via the command-line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 -c black -c red -s dark_background -p POSCAR
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 -c black -c red -s dark_background -p ../data/zno/POSCAR
 </pre></div>
 </div>
 <p>and in python:</p>
@@ -237,18 +237,18 @@ plot. It can be plotted in python with:</p>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="c1"># Axes</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">add_legend</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">one_colourbar</span><span class="p">()</span>
-    
+
     <span class="c1"># Load</span>
 <span class="hll">    <span class="n">data</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phono3py</span><span class="p">(</span><span class="n">kfile</span><span class="p">,</span> <span class="n">quantities</span><span class="o">=</span><span class="n">quantities</span><span class="p">)</span>
 </span><span class="hll">    <span class="n">pdata</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">phonopy_dispersion</span><span class="p">(</span><span class="n">pfile</span><span class="p">)</span>
-</span><span class="hll">    
+</span><span class="hll">
 </span>    <span class="c1"># Add</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">phonons</span><span class="o">.</span><span class="n">add_projected_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">projected</span><span class="p">,</span>
                                              <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
                                              <span class="n">colour</span><span class="o">=</span><span class="n">colour</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="n">poscar</span><span class="p">)</span>
-    
+
     <span class="c1"># Save</span>
-    
+
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;prophon.pdf&#39;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;prophon.png&#39;</span><span class="p">)</span>
 

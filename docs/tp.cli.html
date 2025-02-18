@@ -146,6 +146,28 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="tp.cli.options.bandrange_options">
+<code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">bandrange_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#bandrange_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.bandrange_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for specifying bands plotted.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–bandmin<span class="classifier">float, optional</span></dt><dd><p>minimum band index (0-indexed, inclusive).</p>
+</dd>
+<dt>–bandmax<span class="classifier">float, optional</span></dt><dd><p>maximum band index (0-indexed, exclusive).</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>band range options decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="tp.cli.options.direction_function">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">direction_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiple</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#direction_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.direction_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to create direction options.</p>
@@ -245,6 +267,27 @@ Default: 0.2.</p>
 <dt id="tp.cli.options.heatmap_options">
 <code class="sig-prename descclassname">tp.cli.options.</code><code class="sig-name descname">heatmap_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/cli/options.html#heatmap_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.cli.options.heatmap_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options for heatmaps.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>–discrete/–continuous<span class="classifier">bool, optional</span></dt><dd><p>discretise the colourmap. Default: –continuous</p>
+</dd>
+<dt>-l, –levels<span class="classifier">int or array-like, optional</span></dt><dd><p>boundaries for discrete plots. Lists specify actual values
+while integers specify maximum-1 number of boundaries.</p>
+</dd>
+<dt>–contours<span class="classifier">float or array-like, optional</span></dt><dd><p>contour line values.</p>
+</dd>
+<dt>–contourcolours: str or array-like, optional</dt><dd><p>contour colours. Default: black.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>heatmap options decorator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>decorator</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

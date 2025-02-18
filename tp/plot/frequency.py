@@ -325,8 +325,7 @@ def add_dos(ax, data, sigma=None, projected=True, total=False,
 
     if sigma is not None:
         fmax += sigma
-    else:
-        fmax *= 1.01
+    fmax *= 1.05
 
     if main:
         if invert:
@@ -1086,7 +1085,11 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
 
     for axis, quantity in zip(['x', 'y'], [xquantity, yquantity]):
         if quantity in ['frequency', 'heat_capacity']:
-            lim[axis] = [np.amin(data2[axis]), np.amax(data2[axis])]
+            lim[axis] = [np.amin(data2[axis]), np.amax(data2[axis])*1.05]
+            if quantity == 'frequency':
+                lim[axis][0] *= 1.05
+            else:
+                lim[axis][0] *= 0.95
             limit[axis](lim[axis][0], lim[axis][1])
             loc[axis] = 'linear'
         else:
@@ -1094,8 +1097,8 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
             sort = np.ma.masked_invalid(np.ma.masked_equal(
                                         data2[axis], 0)).compressed()
             sort = sort[sort.argsort()]
-            lim[axis] = [sort[int(round(len(sort)/100, 0))],
-                         sort[int(round(len(sort)*99.9/100, 0))]]
+            lim[axis] = [sort[int(round(len(sort)/100, 0))] * 0.95,
+                         sort[int(round(len(sort)*99.9/100, 0))] * 1.05]
             limit[axis](lim[axis][0], lim[axis][1])
             loc[axis] = 'log'
 

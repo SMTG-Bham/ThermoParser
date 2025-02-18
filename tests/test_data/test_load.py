@@ -479,19 +479,25 @@ class PhonopyDispersionTest(unittest.TestCase):
                       mock_data2.__getitem__.call_args_list)
 
 class PhonopyDoSTest(unittest.TestCase):
+    @patch.object(np, 'delete')
     @patch.object(settings, 'phonopy_conversions')
     @patch.object(settings, 'conversions')
     @patch.object(Poscar, 'from_file')
     @patch.object(np, 'loadtxt')
     def test_default(self, mock_load, mock_poscar, mock_conversions,
-                     mock_pconversions):
+                     mock_pconversions, mock_delete):
         mock_pconversions.return_value = {}
         mock_conversions.return_value = {}
         mock_data = MagicMock()
         mock_load.return_value = mock_data
+        mock_delete.return_value = mock_data
         mock_POSCAR = MagicMock()
         mock_poscar.return_value = mock_POSCAR
 
         data2 = load.phonopy_dos('mock')
         mock_load.assert_called_once()
         mock_poscar.assert_called_once()
+        mock_delete.assert_called_once()
+
+if __name__ == '__main__':
+    unittest.main()

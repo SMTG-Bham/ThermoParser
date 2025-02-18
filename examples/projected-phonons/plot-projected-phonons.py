@@ -20,18 +20,18 @@ colour = 'viridis'
 def main():
     # Axes
     fig, ax, add_legend = tp.axes.small.one_colourbar()
-    
+
     # Load
     data = tp.data.load.phono3py(kfile, quantities=quantities)
     pdata = tp.data.load.phonopy_dispersion(pfile)
-    
+
     # Add
     tp.plot.phonons.add_projected_dispersion(ax, data, pdata, projected,
                                              temperature=temperature,
                                              colour=colour, poscar=poscar)
-    
+
     # Save
-    
+
     fig.savefig('prophon.pdf')
     fig.savefig('prophon.png')
 

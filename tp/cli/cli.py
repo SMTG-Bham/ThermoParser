@@ -1595,11 +1595,23 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
         dosax = ax[1]
         ax = ax[0]
 
-    tp.plot.phonons.add_multi(ax, data, colour=colour, linestyle=linestyle,
-                              marker=marker, label=label, bandmin=bandmin,
-                              bandmax=bandmax, alpha=alpha,
-                              xmarkkwargs={'color':     xmarkcolour,
-                                           'linestyle': xmarklinestyle})
+    if len(band_yaml) == 1:
+        try:
+            colour = mpl.cm.get_cmap(colour)([0])
+        except ValueError:
+            pass
+        tp.plot.phonons.add_dispersion(ax, data[0], colour=colour,
+                                       linestyle=linestyle[0], marker=marker[0],
+                                       label=label, bandmin=bandmin,
+                                       bandmax=bandmax, alpha=alpha,
+                                       xmarkkwargs={'color':     xmarkcolour,
+                                                 'linestyle': xmarklinestyle})
+    else:
+        tp.plot.phonons.add_multi(ax, data, colour=colour, linestyle=linestyle,
+                                  marker=marker, label=label, bandmin=bandmin,
+                                  bandmax=bandmax, alpha=alpha,
+                                  xmarkkwargs={'color':     xmarkcolour,
+                                               'linestyle': xmarklinestyle})
     if dos is not None:
         dosdata = tp.data.load.phonopy_dos(dos, poscar, atoms)
         tp.plot.frequency.add_dos(dosax, dosdata, projected=projected,
