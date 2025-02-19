@@ -3,7 +3,7 @@
 __name__ =       'ThermoParser'
 __author__ =     'Kieran B. Spooner'
 __copyright__ =  'Copyright Scanlon Materials Theory Group (2024)'
-__version__ =    '3.1.4' # Remember to update the main README header too!
+__version__ =    '3.2.0' # Remember to update the main README header too!
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'k.b.spooner@bham.ac.uk'
 __date__ =       'April 1st 2024'
