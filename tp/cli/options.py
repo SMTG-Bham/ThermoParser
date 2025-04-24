@@ -1,39 +1,162 @@
-"""Provides groups of options to streamline the CLI
+"""Provides groups of options to streamline the CLI"""
 
-Functions
----------
-
-    direction_function:
-        function for picking the --direction (-d).
-    doping_type_option:
-        function for picking the doping --type (-t).
-    doping_function:
-        function for picking the doping --concentration (-n).
-    dos_function:
-        function for setting DoS formatting.
-    inputs_function:
-        function for picking the input file(s) argument.
-    interpolate_options:
-        function for setting interpolation options.
-    kpoints_options:
-        function for handling KPOINTS files.
-    legend_options:
-        function for formatting legends.
-    line_options:
-        function for formatting line plots.
-    fill_options:
-        function for formatting fillable line plots.
-    plot_io_function:
-        function for formatting plot outputs.
-    temperature_option:
-        function for picking the --temperature (-t).
-    verbose_option:
-        function for increasing the verbosity.
-    axes_limit_function
-        function for setting the axis limits.
-"""
+#Functions
+#---------
+#
+#    administrative_options
+#        function for help and version display.
+#    axes_limit_function
+#        function for setting the axis limits.
+#    bandrange_options
+#        option for range of bands plotted.
+#    direction_function:
+#        function for picking the --direction (-d).
+#    doping_type_option:
+#        function for picking the doping --type (-t).
+#    doping_function:
+#        function for picking the doping --concentration (-n).
+#    dos_function:
+#        function for setting DoS formatting.
+#    inputs_function:
+#        function for picking the input file(s) argument.
+#    interpolate_options:
+#        function for setting interpolation options.
+#    kpoints_options:
+#        function for handling KPOINTS files.
+#    legend_options:
+#        function for formatting legends.
+#    line_options:
+#        function for formatting line plots.
+#    fill_options:
+#        function for formatting fillable line plots.
+#    plot_io_function:
+#        function for formatting plot outputs.
+#    supercell_argument:
+#        arguement for supercell dimensions.
+#    temperature_option:
+#        function for picking the --temperature (-t).
+#    verbose_option:
+#        function for increasing the verbosity.
+#"""
 
 import click
+
+def adminsitrative_options(f):
+    """Help and version options.
+
+    Allows -h for help (click-nonstandard).
+
+    Options
+    -------
+
+        --help, -h
+            show help and exit
+        --version
+            show version and exit
+    """
+
+    f = click.help_option('-h', '--help')(f)
+    f = click.version_option(package_name='tp')(f)
+
+    return f
+
+def axes_limit_function(multiple=False, c=False):
+    """Function for creating axes limit options.
+
+    Arguments
+    ---------
+
+        multiple : bool, optional
+            allow multiple limits. Default: False.
+        c : bool, optional
+            include colour limits. Default: False.
+
+    Returns
+    -------
+        decorator
+            axes limit options decorator.
+    """
+
+    def axes_limit_options(f):
+        """Options for axes limits.
+        
+        Options
+        -------
+
+            --xmin : float, optional
+                override minimum x.
+            --xmax : float, optional
+                override maximum x.
+            --ymin : float, optional
+                override minimum y.
+            --ymax : float, optional
+                override maximum y.
+            --cmin : float, optional
+                override minimum colour.
+            --cmax : float, optional
+                override maximum colour.
+
+        Returns
+        -------
+
+            decorator
+                axes limits options decorator.
+        """
+    
+        f = click.option('--xmin',
+                         help='Override minimum x.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--xmax',
+                         help='Override maximum x.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--ymin',
+                         help='Override minimum y.',
+                         multiple=multiple,
+                         type=float)(f)
+        f = click.option('--ymax',
+                         help='Override maximum y.',
+                         multiple=multiple,
+                         type=float)(f)
+        if c:
+            f = click.option('--cmin',
+                             help='Override minimum colour value.',
+                             multiple=multiple,
+                             type=float)(f)
+            f = click.option('--cmax',
+                             help='Override maximum colour value.',
+                             multiple=multiple,
+                             type=float)(f)
+        return f
+    return axes_limit_options
+
+def bandrange_options(f):
+    """Options for specifying bands plotted.
+    
+    Options
+    -------
+
+        --bandmin : float, optional
+            minimum band index (0-indexed, inclusive).
+        --bandmax : float, optional
+            maximum band index (0-indexed, exclusive).
+
+    Returns
+    -------
+
+        decorator
+            band range options decorator.
+    """
+
+    f = click.option('--bandmin',
+                     help="Minimum band index.",
+                     type=click.IntRange(0))(f)
+    f = click.option('--bandmax',
+                     help="Maximum band index.",
+                     type=click.IntRange(0))(f)
+
+    return f
 
 def direction_function(multiple=False):
     """Function to create direction options.
@@ -147,31 +270,6 @@ def doping_function(multiple=False):
         return f
     return doping_option
 
-def heatmap_options(f):
-    """Options for heatmaps."""
-
-    f = click.option('--discrete/--continuous',
-                     help='Discretise colourmap.  [default: continuous]',
-                     default=False,
-                     show_default=False)(f)
-    f = click.option('-l', '--levels',
-                     help='Levels for discrete plots. Lists directly '
-                          'specify the contour levels, while integers '
-                          'specify the maximum-1 number of "nice" '
-                          'levels to plot.',
-                     multiple=True,
-                     default=[None])(f)
-    f = click.option('--contours',
-                     help='Contours to plot.',
-                     multiple=True,
-                     type=float,
-                     default=[None])(f)
-    f = click.option('--contourcolours',
-                     help='contour colours',
-                     multiple=True,
-                     default=['black'])(f)
-    return f
-
 def dos_function(dosargs=['-c', '--colour']):
     """Function for creating DoS options.
 
@@ -265,6 +363,51 @@ def dos_function(dosargs=['-c', '--colour']):
     
         return f
     return dos_options
+
+def heatmap_options(f):
+    """Options for heatmaps.
+    
+    Options
+    -------
+
+        --discrete/--continuous : bool, optional
+            discretise the colourmap. Default: --continuous
+        -l, --levels : int or array-like, optional
+            boundaries for discrete plots. Lists specify actual values
+            while integers specify maximum-1 number of boundaries.
+        --contours : float or array-like, optional
+            contour line values.
+        --contourcolours: str or array-like, optional
+            contour colours. Default: black.
+
+    Returns
+    -------
+
+        decorator
+            heatmap options decorator.
+    """
+
+    f = click.option('--discrete/--continuous',
+                     help='Discretise colourmap.  [default: continuous]',
+                     default=False,
+                     show_default=False)(f)
+    f = click.option('-l', '--levels',
+                     help='Levels for discrete plots. Lists directly '
+                          'specify the contour levels, while integers '
+                          'specify the maximum-1 number of "nice" '
+                          'levels to plot.',
+                     multiple=True,
+                     default=[None])(f)
+    f = click.option('--contours',
+                     help='Contours to plot.',
+                     multiple=True,
+                     type=float,
+                     default=[None])(f)
+    f = click.option('--contourcolours',
+                     help='contour colours',
+                     multiple=True,
+                     default=['black'])(f)
+    return f
 
 def inputs_function(name='filenames', nargs=-1):
     """Function for creating input arguments.
@@ -579,6 +722,28 @@ def plot_io_function(name):
         return f
     return plot_io_options
 
+def supercell_argument(f):
+    """Argument for supercell dimensions.
+
+        Arguments:
+        ----------
+            
+            dim : int
+                supercell dimension. Can be an isotropic scale factor,
+                3x1, 3x3 (xx, xy, xz, yx, .. zz) or 6x1 matrix.
+
+        Returns:
+        --------
+
+            decorator
+                supercell argument decorator.
+    """
+
+    f = click.argument('dim',
+                       type=str)(f)
+    
+    return f
+
 def temperature_option(f):
     """Option for temperature selection.
         
@@ -625,74 +790,3 @@ def verbose_option(f):
                      show_default=False)(f)
 
     return f
-
-def axes_limit_function(multiple=False, c=False):
-    """Function for creating axes limit options.
-
-    Arguments
-    ---------
-
-        multiple : bool, optional
-            allow multiple limits. Default: False.
-        c : bool, optional
-            include colour limits. Default: False.
-
-    Returns
-    -------
-        decorator
-            axes limit options decorator.
-    """
-
-    def axes_limit_options(f):
-        """Options for axes limits.
-        
-        Options
-        -------
-
-            --xmin : float, optional
-                override minimum x.
-            --xmax : float, optional
-                override maximum x.
-            --ymin : float, optional
-                override minimum y.
-            --ymax : float, optional
-                override maximum y.
-            --cmin : float, optional
-                override minimum colour.
-            --cmax : float, optional
-                override maximum colour.
-
-        Returns
-        -------
-
-            decorator
-                axes limits options decorator.
-        """
-    
-        f = click.option('--xmin',
-                         help='Override minimum x.',
-                         multiple=multiple,
-                         type=float)(f)
-        f = click.option('--xmax',
-                         help='Override maximum x.',
-                         multiple=multiple,
-                         type=float)(f)
-        f = click.option('--ymin',
-                         help='Override minimum y.',
-                         multiple=multiple,
-                         type=float)(f)
-        f = click.option('--ymax',
-                         help='Override maximum y.',
-                         multiple=multiple,
-                         type=float)(f)
-        if c:
-            f = click.option('--cmin',
-                             help='Override minimum colour value.',
-                             multiple=multiple,
-                             type=float)(f)
-            f = click.option('--cmax',
-                             help='Override maximum colour value.',
-                             multiple=multiple,
-                             type=float)(f)
-        return f
-    return axes_limit_options

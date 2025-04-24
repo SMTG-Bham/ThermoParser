@@ -50,7 +50,7 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial-04.html"> Tutorial-04: Layered Plots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial-05.html"> Tutorial-05: Helper Functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial-06.html"> Tutorial-06: Package Customaisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: Miscellaneous Assists</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
@@ -61,7 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -104,7 +104,7 @@ together. Here, the DoS shows which atoms affect which parts of the
 phonon dispersion. ThermoParser offers a number of ways to streamline
 comparing graphs, including compound axes and enhanced legend handling.</p>
 <p>The CLI version of this code is:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml -c <span class="s1">&#39;#f0901f&#39;</span> --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> --legend_title ZnO --location <span class="m">2</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml -c <span class="s1">&#39;#f0901f&#39;</span> --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour<span class="o">={</span><span class="s1">&#39;#d46ef9&#39;</span>,<span class="s1">&#39;#7b8eff&#39;</span><span class="o">}</span> --legend_title ZnO --location <span class="m">2</span>
 </pre></div>
 </div>
 <p>And the python version is:</p>

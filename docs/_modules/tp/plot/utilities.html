@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -73,20 +73,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tp.plot.utilities</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Utilities to aid the plotting scripts.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Utilities to aid the plotting scripts.&quot;&quot;&quot;</span>
 
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    colour_scale:</span>
-<span class="sd">        sorts colour limits and colourbar format.</span>
-<span class="sd">    parse_colours</span>
-<span class="sd">        returns a colour map from a range of input types.</span>
-<span class="sd">    scale_to_axis</span>
-<span class="sd">        scales data to axes limits</span>
-<span class="sd">    set_locators:</span>
-<span class="sd">        set locators one-liner.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    colour_scale:</span>
+<span class="c1">#        sorts colour limits and colourbar format.</span>
+<span class="c1">#    parse_colours</span>
+<span class="c1">#        returns a colour map from a range of input types.</span>
+<span class="c1">#    scale_to_axis</span>
+<span class="c1">#        scales data to axes limits</span>
+<span class="c1">#    set_locators:</span>
+<span class="c1">#        set locators one-liner.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -144,7 +144,7 @@
     <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;occupation&#39;</span><span class="p">:</span>
         <span class="n">csort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">compressed</span><span class="p">())</span>
         <span class="n">csort</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="n">csort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
-        <span class="n">clim</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+        <span class="n">clim</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">*</span><span class="mi">99</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
         <span class="k">if</span> <span class="n">cmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">unoccupied</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cmin</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -167,7 +167,7 @@
         <span class="n">csort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">compressed</span><span class="p">())</span>
         <span class="n">csort</span> <span class="o">=</span> <span class="n">csort</span><span class="p">[</span><span class="n">csort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
         <span class="n">clim</span> <span class="o">=</span> <span class="p">[</span><span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))],</span>
-                <span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]]</span>
+                <span class="n">csort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">csort</span><span class="p">)</span><span class="o">*</span><span class="mi">99</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]]</span>
         <span class="k">if</span> <span class="n">cmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cmin</span> <span class="o">=</span> <span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">cmin</span> <span class="o">&gt;</span> <span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -216,7 +216,10 @@
     <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="n">colour</span><span class="p">])</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>

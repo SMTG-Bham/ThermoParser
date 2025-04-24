@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -78,26 +78,27 @@
 <span class="sd">Loads data from codes into a dictionary, with units and array structures</span>
 <span class="sd">standardised. Also adds a ``meta`` subdictionary, which contains units,</span>
 <span class="sd">array dimensions and the data source.</span>
-
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    amset:</span>
-<span class="sd">        from the amset transport json.</span>
-<span class="sd">    amset_mesh:</span>
-<span class="sd">        from the amset mesh h5.</span>
-<span class="sd">    boltztrap:</span>
-<span class="sd">        from the tp boltztrap hdf5.</span>
-<span class="sd">    phono3py:</span>
-<span class="sd">        from the phono3py kappa hdf5.</span>
-<span class="sd">    phonopy_dispersion:</span>
-<span class="sd">        from the phonopy or sumo band.yaml.</span>
-<span class="sd">    phonopy_dos:</span>
-<span class="sd">        from the phonopy projected_dos.dat.</span>
-
-<span class="sd">    get_path:</span>
-<span class="sd">        gets high path from phonopy dispersion data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    amset:</span>
+<span class="c1">#        from the amset transport json.</span>
+<span class="c1">#    amset_mesh:</span>
+<span class="c1">#        from the amset mesh h5.</span>
+<span class="c1">#    boltztrap:</span>
+<span class="c1">#        from the tp boltztrap hdf5.</span>
+<span class="c1">#    phono3py:</span>
+<span class="c1">#        from the phono3py kappa hdf5.</span>
+<span class="c1">#    phonopy_dispersion:</span>
+<span class="c1">#        from the phonopy or sumo band.yaml.</span>
+<span class="c1">#    phonopy_dos:</span>
+<span class="c1">#        from the phonopy projected_dos.dat.</span>
+<span class="c1">#</span>
+<span class="c1">#    get_path:</span>
+<span class="c1">#        gets high path from phonopy dispersion data.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">tp</span>
@@ -830,11 +831,23 @@
 
     <span class="c1"># load data</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
     <span class="n">pconversions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">phonopy_conversions</span><span class="p">()</span>
     <span class="n">conversions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">conversions</span><span class="p">()</span>
     <span class="n">units</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">units</span><span class="p">()</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">dimensions</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">n</span><span class="o">-=</span><span class="mi">1</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
     <span class="n">data2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
              <span class="s1">&#39;meta&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;phonon_dos_source&#39;</span><span class="p">:</span> <span class="s1">&#39;phonopy&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]},</span>

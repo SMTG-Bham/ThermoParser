@@ -2,7 +2,7 @@
 Cumulative Lattice Thermal Conductivity
 ---------------------------------------
 
-.. image:: cumkappa.png
+.. image:: ../../examples/cumkappa/cumkappa.png
    :alt: Cumulative lattice thermal conductivity against frequency and mean free path.
 
 This shows two plots of cumulative lattice thermal conductivity. The
@@ -19,9 +19,8 @@ to 100 nanometers may reduce the lattice thermal conductivity by around
 
 The right plot can be plotted at the command line with:
 
-.. code-block::
-
-   tp plot cumkappa ../data/zno/kappa-m404021.hdf5 --mfp --percent -d x -d y -c '#59c605' -c '#ffcf06' --nofill --xmarkers 1e-7 -l x -l y --location in
+.. literalinclude:: ../../examples/cumkappa/plot-cumkappa.sh
+   :language: bash
 
 And while the layering of the DoS plot is not yet supported at the
 command line, the cumkappa part of the left graph can be plotted by
@@ -29,7 +28,7 @@ removing ``--mfp --percent --xmarkers 1e-7`` from the above.
 
 The python version is as follows:
 
-.. literalinclude:: plot-cumkappa.py
+.. literalinclude:: ../../examples/cumkappa/plot-cumkappa.py
    :language: python
    :linenos:
    :emphasize-lines: 33-35,37

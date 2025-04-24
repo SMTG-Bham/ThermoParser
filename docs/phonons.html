@@ -44,7 +44,7 @@
 <li class="toctree-l2"><a class="reference internal" href="waterfalls.html">Waterfalls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="prophon.html">Projected Phonons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="avg-rates.html">Average Scattering Rates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gallery.html#reference">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#note">Note:</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -89,7 +89,7 @@
 <img alt="Phonon dispersion and density of states." src="_images/phonons1.png" />
 <p>This shows a phonon dispersion and density of states (DoS). This is the
 only combined plot currenty possible at the command line, with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">phonons</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">band</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">dos</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">projected_dos</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">poscar</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">zno</span><span class="o">/</span><span class="n">POSCAR</span> <span class="o">-</span><span class="n">doscolour</span> <span class="s1">&#39;#d46ef9&#39;</span> <span class="o">--</span><span class="n">doscolour</span> <span class="s1">&#39;#7b8eff&#39;</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;#f0901f&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour<span class="o">={</span><span class="s1">&#39;#d46ef9&#39;</span>,<span class="s1">&#39;#7b8eff&#39;</span><span class="o">}</span> -c <span class="s1">&#39;#f0901f&#39;</span>
 </pre></div>
 </div>
 <p>and in python:</p>
@@ -160,7 +160,7 @@ this is simple (line 24).</p>
 <img alt="Phonon dispersions for different supercell sizes." src="_images/multiphon1.png" />
 <p>This shows phonons dispersions for various supercell sizes for
 convergence:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">phonons</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">band</span><span class="o">-*.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">legend_title</span> <span class="s2">&quot;Supercell Size&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;2 x 2 x 2&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;3 x 3 x 3&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;4 x 4 x 4&quot;</span> <span class="o">-</span><span class="n">l</span> <span class="s2">&quot;5 x 5 x 5&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/basno3/band-*.yaml --legend_title <span class="s2">&quot;Supercell Size&quot;</span> -l<span class="o">{</span><span class="s2">&quot;2 x 2 x 2&quot;</span>,<span class="s2">&quot;3 x 3 x 3&quot;</span>,<span class="s2">&quot;4 x 4 x 4&quot;</span>,<span class="s2">&quot;5 x 5 x 5&quot;</span><span class="o">}</span>
 </pre></div>
 </div>
 <p>and in python:</p>

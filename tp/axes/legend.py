@@ -1,15 +1,15 @@
-"""Functions for dealing with legends.
+"""Functions for dealing with legends."""
 
-Functions
----------
-
-    consolidate
-        combine legends.
-    add_add_legend
-        add add_legend function.
-    alphabetise
-        alphabetises or enumerates axes.
-"""
+#Functions
+#---------
+#
+#    consolidate
+#        combine legends.
+#    add_add_legend
+#        add add_legend function.
+#    alphabetise
+#        alphabetises or enumerates axes.
+#"""
 
 import numpy as np
 import tp

@@ -111,7 +111,10 @@ class HeatmapTest(unittest.TestCase):
 
     @patch.object(plt, 'colorbar')
     def test_colourmap(self, mock_colourbar):
-        cmap = mpl.cm.get_cmap('viridis')
+        try:
+            cmap = mpl.cm.get_cmap('viridis')
+        except AttributeError:
+            cmap = mpl.colormaps['viridis']
         cbar = heatmap.add_heatmap(self.ax, self.x, self.y, self.c,
                                    xinterp=None, yinterp=None, xscale='linear',
                                    yscale='linear', cscale='linear',

@@ -1,13 +1,15 @@
-"""Everything.
+"""A package for postprocessings transport calculations."""
 
-Modules
--------
+#Modules
+#-------
+#
+#    calculate
+#        tools for calculating derived properties and interpolating
+#    settings
+#        default values and metadata
+#"""
 
-    calculate
-        tools for calculating derived properties and interpolating
-    settings
-        default values and metadata
-"""
+__version__ = '3.1.4'
 
 def docstring_replace(**kwargs):
     def d(f):

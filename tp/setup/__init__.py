@@ -1,10 +1,10 @@
-"""Tools for setting up calculations and inputs
+"""Tools for setting up calculations and inputs."""
 
-Modules
--------
+#Modules
+#-------
+#
+#    vasp
+#        currently contains KPOINTS generators
+#"""
 
-    vasp
-        currently contains KPOINTS generators
-"""
-
-from . import vasp
+from . import vasp, phonopy

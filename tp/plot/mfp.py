@@ -1,14 +1,14 @@
-"""Function for plotting mean free path on the x-axis.
+"""Function for plotting mean free path on the x-axis."""
 
-Functions
----------
-
-    add_cum_kappa:
-        cumulative kappa vs mean free path.
-
-    add_markers:
-        add markers lines to a linear plot.
-"""
+#Functions
+#---------
+#
+#    add_cum_kappa:
+#        cumulative kappa vs mean free path.
+#
+#    add_markers:
+#        add markers lines to a linear plot.
+#"""
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt

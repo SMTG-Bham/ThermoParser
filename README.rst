@@ -13,13 +13,25 @@
     | |   |___   ___  |___  |_____   ___ :|___/  ___   |___   ___   ___  |___ \
     | |   |   | /   \ |   \ |  |  | /   \:|     /   |  |   \ /     /   \ |   \/
     | |   |   | |___/ |     |  |  | |   |:|     |   |  |     \___  |___/ |    \_____
-    | |   |   | \___  |     |  |  | \___/:|     \___|_ |         \ \___  |    :3.1.2\
+    | |   |   | \___  |     |  |  | \___/:|     \___|_ |         \ \___  |    :3.3.0\
     |____________________________________:_______________________/____________:_____/
 
 
-.. image:: https://travis-ci.com/smtg-bham/ThermoParser.svg?branch=master
-    :alt: The travis-ci badge
-    :target: https://travis-ci.com/smtg-bham/ThermoParser
+.. image:: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/build.yml/badge.svg
+    :alt: The build status badge
+    :target: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/build.yml
+
+.. image:: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/tests.yml/badge.svg
+    :alt: The tests status badge
+    :target: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/tests.yml
+
+.. image:: https://github.com/SMTG-Bham/ThermoParser/actions/workflows/docs.yml/badge.svg
+    :alt: The docs status badge
+    :target: https://smtg-bham.github.io/ThermoParser/
+
+.. image:: https://joss.theoj.org/papers/10.21105/joss.06340/status.svg
+   :alt: The JOSS publication badge
+   :target: https://doi.org/10.21105/joss.06340
 
 ThermoParser is a toolkit used to simplify the analysis of data
 produced by specialist materials science codes, centred around
@@ -154,7 +166,9 @@ while contributions can be made using the `fork and pull`_ approach.
 Contributions should include comprehensive docstrings, and where
 appropriate `examples`_, further `documentation`_ and `tests`_ are greatly
 appreciated. Documentation uses the `sphinx`_ package, and can be built from
-the ``docs`` directory with ``sphinx-build -b html src/ .``.
+the ``docs`` directory with ``sphinx-build -b html src/ .``. In order to build
+the docs, download the extra dependencies with, e.g., ``pip install .[docs]``
+from the ThermoParser directory.
 
 .. _issue tracker: https://github.com/smtg-bham/ThermoParser/issues
 .. _fork and pull: https://guides.github.com/activities/forking
@@ -165,7 +179,9 @@ Testing
 -------
 
 Tests use the `unittest`_ package, and can be run from the test directory
-with ``python3 -m unittest``.
+with ``python3 -m unittest``. If you don't already have unittest installed, it
+can be directly with ``pip install unitest`` or, e.g., ``pip install .[tests]``
+from the ThermoParser directory.
 
 .. _unittest: https://docs.python.org/3/library/unittest.html
 
@@ -184,6 +200,14 @@ Roughly chronologically, they are so far:
 * Warda Rahim
 * Katarina Brlec
 * Joe Willis
+* Dale Gaines II
+
+Thanks also to the `JOSS`_ reviewers, Evan Walter Clarke
+Spotte-Smith, Enric Tomás Grau-Luque, and Francesco Nattino; and the
+editor Mojtaba Barzegari. An unintimidating and productive review
+process, which I would recommend if the opportunity arises!
+
+.. _JOSS: https://joss.theoj.org/
 
 License
 -------

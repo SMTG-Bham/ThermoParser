@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -77,31 +77,32 @@
 
 <span class="sd">Contains the traditional phonon dispersion plotter, as well as various</span>
 <span class="sd">ways of projecting other quantitites onto a high-symmetry path.</span>
-
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    add_dispersion:</span>
-<span class="sd">        phonon dispersion.</span>
-<span class="sd">    add_multi:</span>
-<span class="sd">        phonon dispersions.</span>
-<span class="sd">    add_alt_dispersion:</span>
-<span class="sd">        phono3py quantity against high symmetry path.</span>
-<span class="sd">    add_projected_dispersion:</span>
-<span class="sd">        phonon dispersion with phono3py quantity on colour axis.</span>
-<span class="sd">    add_alt_projected_dispersion:</span>
-<span class="sd">        alt_dispersion + projection.</span>
-<span class="sd">    add_wideband:</span>
-<span class="sd">        phonon dispersion broadened according to scattering.</span>
-
-<span class="sd">    get_equivalent_qpoint:</span>
-<span class="sd">        converts phonopy to phono3py qpoints.</span>
-
-<span class="sd">    formatting:</span>
-<span class="sd">        formatting axes.</span>
-<span class="sd">    tile_properties:</span>
-<span class="sd">        tiling properties semi-intelligently.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    add_dispersion:</span>
+<span class="c1">#        phonon dispersion.</span>
+<span class="c1">#    add_multi:</span>
+<span class="c1">#        phonon dispersions.</span>
+<span class="c1">#    add_alt_dispersion:</span>
+<span class="c1">#        phono3py quantity against high symmetry path.</span>
+<span class="c1">#    add_projected_dispersion:</span>
+<span class="c1">#        phonon dispersion with phono3py quantity on colour axis.</span>
+<span class="c1">#    add_alt_projected_dispersion:</span>
+<span class="c1">#        alt_dispersion + projection.</span>
+<span class="c1">#    add_wideband:</span>
+<span class="c1">#        phonon dispersion broadened according to scattering.</span>
+<span class="c1">#</span>
+<span class="c1">#    get_equivalent_qpoint:</span>
+<span class="c1">#        converts phonopy to phono3py qpoints.</span>
+<span class="c1">#</span>
+<span class="c1">#    formatting:</span>
+<span class="c1">#        formatting axes.</span>
+<span class="c1">#    tile_properties:</span>
+<span class="c1">#        tiling properties semi-intelligently.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -127,8 +128,8 @@
 <span class="n">workers</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get_workers</span><span class="p">()</span>
 
 <div class="viewcode-block" id="add_dispersion"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_dispersion">[docs]</a><span class="k">def</span> <span class="nf">add_dispersion</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                   <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span>
-                   <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                   <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;#800080&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Adds a phonon band structure to a set of axes.</span>
 
 <span class="sd">    Labels, colours and linestyles can be given one for the whole</span>
@@ -260,9 +261,17 @@
 
     <span class="c1"># plotting</span>
 
+    <span class="c1"># avoid connecting bands at disconnected q-points</span>
+    <span class="n">split_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
-                <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">split_indices</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">starting_index</span> <span class="o">=</span> <span class="n">split_indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">ending_index</span> <span class="o">=</span> <span class="n">split_indices</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">x_i</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">starting_index</span><span class="p">:</span><span class="n">ending_index</span><span class="p">]</span>
+            <span class="n">f_ni</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">starting_index</span><span class="p">:</span><span class="n">ending_index</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="n">label_ni</span> <span class="o">=</span> <span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">f_ni</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">label_ni</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -365,7 +374,10 @@
     <span class="c1"># line appearance</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">colours</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="n">colour</span><span class="p">](</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
         <span class="n">colours</span> <span class="o">=</span> <span class="p">[[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colours</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
@@ -420,11 +432,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
 
-        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">)[:,:,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bandmin</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+            <span class="n">noim</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">ff</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">ff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ff</span><span class="p">)[:,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">ff</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                         <span class="n">noim</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">noim</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
 
     <span class="k">return</span></div>
@@ -490,7 +506,8 @@
 <span class="sd">            Default: [&#39;Longitudinal&#39;, &#39;Transverse$_1$&#39;, &#39;Transverse$_2$&#39;,</span>
 <span class="sd">            &#39;Optic&#39;].</span>
 <span class="sd">        scatter : bool, optional</span>
-<span class="sd">            plot scatter rather than line graph. Default: False.</span>
+<span class="sd">            plot scatter rather than line graph. A stylistic choice,</span>
+<span class="sd">            which could be useful with outliers. Default: False.</span>
 
 <span class="sd">        poscar : str, optional</span>
 <span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
@@ -627,8 +644,8 @@
     <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="n">ysort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">*</span> <span class="mf">0.95</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">*</span><span class="mi">99</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">*</span> <span class="mf">1.05</span>
 
     <span class="c1"># line appearance</span>
 
@@ -642,13 +659,21 @@
 
     <span class="c1"># plotting</span>
 
+    <span class="c1"># avoid connecting bands at disconnected q-points</span>
+    <span class="n">split_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">)]</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
         <span class="k">if</span> <span class="n">scatter</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
                        <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[:,</span><span class="n">n</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
-                    <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">split_indices</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">starting_index</span> <span class="o">=</span> <span class="n">split_indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">ending_index</span> <span class="o">=</span> <span class="n">split_indices</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">x2_i</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[</span><span class="n">starting_index</span><span class="p">:</span><span class="n">ending_index</span><span class="p">]</span>
+                <span class="n">y2_ni</span> <span class="o">=</span> <span class="n">y2</span><span class="p">[</span><span class="n">starting_index</span><span class="p">:</span><span class="n">ending_index</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+                <span class="n">label_ni</span> <span class="o">=</span> <span class="n">label</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x2_i</span><span class="p">,</span> <span class="n">y2_ni</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colour</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">label_ni</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># axes formatting</span>
 
@@ -877,7 +902,7 @@
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">quantity</span><span class="p">])</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">())</span>
-    <span class="n">cbar</span><span class="o">.</span><span class="n">draw_all</span><span class="p">()</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">_draw_all</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1092,8 +1117,8 @@
     <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">yinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
     <span class="n">ysort</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="n">ysort</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
-    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
-    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">*</span><span class="mf">99.9</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">*</span> <span class="mf">0.95</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="n">ysort</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ysort</span><span class="p">)</span><span class="o">*</span><span class="mi">99</span><span class="o">/</span><span class="mi">100</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">*</span> <span class="mf">1.05</span>
 
     <span class="n">cinterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
@@ -1119,7 +1144,7 @@
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">axlabels</span><span class="p">[</span><span class="n">projected</span><span class="p">])</span>
     <span class="n">tp</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">set_locators</span><span class="p">(</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">())</span>
-    <span class="n">cbar</span><span class="o">.</span><span class="n">draw_all</span><span class="p">()</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">_draw_all</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
@@ -1128,9 +1153,10 @@
     <span class="k">return</span> <span class="n">cbar</span></div>
 
 <div class="viewcode-block" id="add_wideband"><a class="viewcode-back" href="../../../tp.plot.html#tp.plot.phonons.add_wideband">[docs]</a><span class="nd">@tp</span><span class="o">.</span><span class="n">docstring_replace</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
-                 <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">add_wideband</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">kdata</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bandmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">poscar</span><span class="o">=</span><span class="s1">&#39;POSCAR&#39;</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smoothing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">colour</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span> <span class="n">xmarkkwargs</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plots a phonon dispersion with broadened bands.</span>
 
 <span class="sd">    Requires a POSCAR.</span>
@@ -1166,6 +1192,14 @@
 
 <span class="sd">        temperature : float, optional</span>
 <span class="sd">            approximate temperature in K (finds closest). Default: 300.</span>
+<span class="sd">        bandmin : int, optional</span>
+<span class="sd">            zero-indexed minimum band index to plot. Default: None.</span>
+<span class="sd">        bandmax : int, optional</span>
+<span class="sd">            zero-indexed maximum band index to plot. Default: None.</span>
+<span class="sd">        ymin : float, optional</span>
+<span class="sd">            minimum y-value plotted.</span>
+<span class="sd">        ymax : float, optional</span>
+<span class="sd">            maximum y-value plotted.</span>
 
 <span class="sd">        poscar : str, optional</span>
 <span class="sd">            VASP POSCAR filepath. Default: POSCAR.</span>
@@ -1250,6 +1284,19 @@
     <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">])</span>
     <span class="n">qk</span> <span class="o">=</span> <span class="n">kdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
 
+    <span class="c1"># data selection</span>
+
+    <span class="k">if</span> <span class="n">bandmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">bandmin</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">bandmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bandmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">bandmax</span><span class="p">])</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
+
     <span class="c1"># Phonopy data formatting</span>
 
     <span class="n">qp</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">]</span>
@@ -1269,12 +1316,10 @@
         <span class="n">min_id</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">geq</span><span class="p">,</span> <span class="n">qpi</span><span class="p">)</span>
     <span class="n">c2</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">min_id</span><span class="p">,</span> <span class="p">:]</span>
 
-    <span class="n">x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])[</span><span class="n">indices</span><span class="p">]</span>
-    <span class="n">where</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">c2</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">c2</span><span class="p">))</span>
-
     <span class="c1"># interpolate</span>
 
+    <span class="n">x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])[</span><span class="n">indices</span><span class="p">,</span><span class="n">bandmin</span><span class="p">:</span><span class="n">bandmax</span><span class="p">]</span>
     <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">2500</span><span class="p">)</span>
     <span class="n">finterp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">finterp</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
@@ -1283,6 +1328,10 @@
     <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cinterp</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="n">fmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
     <span class="n">fmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="p">(</span><span class="n">fmax</span> <span class="o">-</span> <span class="n">fmin</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.05</span>
+    <span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span> <span class="o">+</span> <span class="n">margin</span> <span class="k">if</span> <span class="n">ymax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ymax</span>
+    <span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span> <span class="o">-</span> <span class="n">margin</span> <span class="k">if</span> <span class="n">ymin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ymin</span>
+
     <span class="n">c2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">c2</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">c2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">c2</span><span class="p">)]),</span> <span class="n">c2</span><span class="p">)</span>
     <span class="n">f2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span>
 
@@ -1301,7 +1350,10 @@
     <span class="c1"># the min and max values.</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colour</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="n">colour</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">):</span>
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">colour</span>
@@ -1325,7 +1377,9 @@
 
     <span class="k">if</span> <span class="n">main</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">fmax</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">fmax</span><span class="p">)</span>
         <span class="n">formatting</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">xmarkkwargs</span><span class="p">)</span>
 
     <span class="k">return</span></div>

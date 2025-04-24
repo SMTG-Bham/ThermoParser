@@ -19,7 +19,8 @@ adata = tp.data.load.boltztrap(bfile)
 kdata = tp.data.load.phono3py(kfile)
 
 # Add
-tp.plot.heatmap.add_ztmap(ax, adata, kdata, direction=direction, colour=colour)
+tp.plot.heatmap.add_ztmap(ax, adata, kdata, direction=direction, colour=colour,
+                          discrete=True)
 
 # Save
 fig.savefig('ztmap.pdf')

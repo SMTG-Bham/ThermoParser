@@ -2,7 +2,7 @@
 Average Rates
 -------------
 
-.. image:: avg-rates.png
+.. image:: ../../examples/avg-rates/avg-rates.png
    :alt: A plot of weighted average scattering rates against temperature and carrier concnetration.
 
 This shows the average scattering rates against temperature, averaged
@@ -11,9 +11,8 @@ distribution, as they are when calculating the conductivity, thereby
 giving a representative image of the effect the scattering processes
 play in the material. This can be plotted at the command line with:
 
-.. code-block::
-
-   tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t 1000 -n -1e19 --location 2 --large -c red -c blue -c magenta
+.. literalinclude:: ../../examples/avg-rates/plot-avg-rates.sh
+   :language: bash
 
 If rates are included in the file but are very low, you may want to
 ``--exclude`` them; ``--exclude PIE`` may be particularly popular.
@@ -21,7 +20,7 @@ While ThermoParser does not currently have python functions to plot
 line graphs, it does calculate the weighted rates and the ancillary
 functions should make this relatively straightforward:
 
-.. literalinclude:: plot-avg-rates.py
+.. literalinclude:: ../../examples/avg-rates/plot-avg-rates.py
    :language: python
    :linenos:
    :emphasize-lines: 7,24,26,27

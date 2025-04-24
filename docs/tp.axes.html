@@ -46,7 +46,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python Package</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="tp.html">tp package</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="tp.html#module-tp">Module contents</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="tp.html#subpackages">Subpackages</a><ul class="current">
@@ -111,14 +111,6 @@ and relatively even larger fonts, which is better suited for
 presentations, posters and non-columnated text. legend is for legend
 handling, which is primarily used internally but may be useful if you
 make your own axes from scratch.</p>
-<div class="section" id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>small</p>
-<p>large</p>
-<p>legend</p>
-</div></blockquote>
-</div>
 </div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -129,24 +121,6 @@ make your own axes from scratch.</p>
 <p>Each function returns a figure, a set of axes or an array of sets of
 axes and an add_legend function. The legend function comes with a
 choice of positions and takes normal ax.legend arguments.</p>
-<div class="section" id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>one</p>
-<p>one_colourbar</p>
-<p>one_dos</p>
-<p>one_dos_colourbar</p>
-<p>two_h</p>
-<p>two_h_colourbars</p>
-<p>two_v</p>
-<p>two_v_colourbars</p>
-<p>three_h</p>
-<p>three_h_colourbars</p>
-<p>three_square</p>
-<p>three_square_colourbars</p>
-<p>four_square</p>
-<p>four_square_colourbars</p>
-</div></blockquote>
 <dl class="py function">
 <dt id="tp.axes.small.four_square">
 <code class="sig-prename descclassname">tp.axes.small.</code><code class="sig-name descname">four_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/small.html#four_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.small.four_square" title="Permalink to this definition">¶</a></dt>
@@ -422,7 +396,6 @@ choice of positions and takes normal ax.legend arguments.</p>
 </dd></dl>
 
 </div>
-</div>
 <div class="section" id="module-tp.axes.large">
 <span id="tp-axes-large-module"></span><h2>tp.axes.large module<a class="headerlink" href="#module-tp.axes.large" title="Permalink to this headline">¶</a></h2>
 <p>Provides pre-sized figures for presentation-sized figures.</p>
@@ -430,24 +403,6 @@ choice of positions and takes normal ax.legend arguments.</p>
 axes and an add_legend function. The legend function comes with a
 choice of positions and takes normal ax.legend arguments. Drawing large
 figures is significantly slower than small ones.</p>
-<div class="section" id="id1">
-<h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>one</p>
-<p>one_colourbar</p>
-<p>one_dos</p>
-<p>one_dos_colourbar</p>
-<p>two_h</p>
-<p>two_h_colourbars</p>
-<p>two_v</p>
-<p>two_v_colourbars</p>
-<p>three_h</p>
-<p>three_h_colourbars</p>
-<p>three_square</p>
-<p>three_square_colourbars</p>
-<p>four_square</p>
-<p>four_square_colourbars</p>
-</div></blockquote>
 <dl class="py function">
 <dt id="tp.axes.large.four_square">
 <code class="sig-prename descclassname">tp.axes.large.</code><code class="sig-name descname">four_square</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/large.html#four_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.large.four_square" title="Permalink to this definition">¶</a></dt>
@@ -723,22 +678,9 @@ figures is significantly slower than small ones.</p>
 </dd></dl>
 
 </div>
-</div>
 <div class="section" id="module-tp.axes.legend">
 <span id="tp-axes-legend-module"></span><h2>tp.axes.legend module<a class="headerlink" href="#module-tp.axes.legend" title="Permalink to this headline">¶</a></h2>
 <p>Functions for dealing with legends.</p>
-<div class="section" id="id2">
-<h3>Functions<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><dl class="simple">
-<dt>consolidate</dt><dd><p>combine legends.</p>
-</dd>
-<dt>add_add_legend</dt><dd><p>add add_legend function.</p>
-</dd>
-<dt>alphabetise</dt><dd><p>alphabetises or enumerates axes.</p>
-</dd>
-</dl>
-</div></blockquote>
 <dl class="py function">
 <dt id="tp.axes.legend.add_add_legend">
 <code class="sig-prename descclassname">tp.axes.legend.</code><code class="sig-name descname">add_add_legend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">locations</span></em>, <em class="sig-param"><span class="n">names</span></em>, <em class="sig-param"><span class="n">defloc</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/axes/legend.html#add_add_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.axes.legend.add_add_legend" title="Permalink to this definition">¶</a></dt>
@@ -824,7 +766,6 @@ order at the end. Ordinal integers added automatically.</p></li>
 </dl>
 </dd></dl>
 
-</div>
 </div>
 </div>
 

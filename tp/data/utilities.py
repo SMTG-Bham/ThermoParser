@@ -1,16 +1,17 @@
-"""Resolves quantities by temperature and/ or direction.
+"""Utilities to manipulate data.
 
 Reads variables and selects specific conditions. Requires
 ['meta']['dimensions'] subdictionaries provided by tp load modules.
-
-Functions
----------
-
-    merge:
-        merge data from multiple files.
-    resolve:
-        selects data based on dependent variables.
 """
+
+#Functions
+#---------
+#
+#    merge:
+#        merge data from multiple files.
+#    resolve:
+#        selects data based on dependent variables.
+#"""
 
 import numpy as np
 import warnings

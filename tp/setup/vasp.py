@@ -1,15 +1,15 @@
-"""Helps set up VASP calculations.
+"""Helps set up VASP calculations."""
 
-Functions
----------
-
-    gen_ibz
-        generate irreducible kpoints
-    get_kpar
-        gives kpar suggestions based on kpoints
-    get_kpoints
-        generates kpoints file including zero-weighted kpoints
-"""
+#Functions
+#---------
+#
+#    gen_ibz
+#        generate irreducible kpoints
+#    get_kpar
+#        gives kpar suggestions based on kpoints
+#    get_kpoints
+#        generates kpoints file including zero-weighted kpoints
+#"""
 
 import numpy as np
 import pymatgen as pmg

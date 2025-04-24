@@ -44,7 +44,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Waterfalls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="prophon.html">Projected Phonons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="avg-rates.html">Average Scattering Rates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gallery.html#reference">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery.html#note">Note:</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -95,7 +95,7 @@ phonon mean free path in the frequencies with high amounts of Ba
 character.</p>
 <p>While plots cannot be layered at the command line like this, the
 waterfall section can be plotted with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">waterfall</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">y</span> <span class="n">mfp</span> <span class="o">--</span><span class="n">projected</span> <span class="n">kappa</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>tp plot waterfall ../data/basno3/kappa-m363636.hdf5 -y mfp --projected kappa
 </pre></div>
 </div>
 <p>And in python:</p>
@@ -211,7 +211,7 @@ tag at the command line.</p>
 shows the density of the points, which is often clearer than just
 adjusting the alpha parameter on the regular waterfall plot.</p>
 <p>It can be plotted at the command line with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">waterfall</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">y</span> <span class="n">mfp</span> <span class="o">--</span><span class="n">projected</span> <span class="n">density</span> <span class="o">-</span><span class="n">c</span> <span class="n">Blues</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>tp plot waterfall ../data/basno3/kappa-m363636.hdf5 -y mfp --projected density -c Blues
 </pre></div>
 </div>
 <p>Or in python with:</p>

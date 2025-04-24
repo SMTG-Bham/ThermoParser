@@ -44,7 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -73,19 +73,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tp.data.utilities</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Resolves quantities by temperature and/ or direction.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Utilities to manipulate data.</span>
 
 <span class="sd">Reads variables and selects specific conditions. Requires</span>
 <span class="sd">[&#39;meta&#39;][&#39;dimensions&#39;] subdictionaries provided by tp load modules.</span>
-
-<span class="sd">Functions</span>
-<span class="sd">---------</span>
-
-<span class="sd">    merge:</span>
-<span class="sd">        merge data from multiple files.</span>
-<span class="sd">    resolve:</span>
-<span class="sd">        selects data based on dependent variables.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#Functions</span>
+<span class="c1">#---------</span>
+<span class="c1">#</span>
+<span class="c1">#    merge:</span>
+<span class="c1">#        merge data from multiple files.</span>
+<span class="c1">#    resolve:</span>
+<span class="c1">#        selects data based on dependent variables.</span>
+<span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>

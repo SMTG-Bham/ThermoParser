@@ -51,7 +51,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial-06.html"> Tutorial-06: Package Customaisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: VASP Assists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial-0X.html"> Tutorial-0X: Miscellaneous Assists</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html#contributors">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#requirements">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API</a></li>
 </ul>
 
         </div>
@@ -101,7 +101,7 @@ low thermal conductivity to be efficient.</p>
 even when not using the core functionality. We will cover several of
 these here, however this particular example is also plottable via the
 CLI:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">transport</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">transport_75x75x75</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">q</span> <span class="n">conductivity</span> <span class="o">-</span><span class="n">q</span> <span class="n">seebeck</span> <span class="o">-</span><span class="n">q</span> <span class="n">lattice_thermal_conductivity</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e18</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e19</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e20</span> <span class="o">-</span><span class="n">n</span> <span class="mf">1e21</span> <span class="o">--</span><span class="n">tmin</span> <span class="mi">0</span> <span class="o">--</span><span class="n">location</span> <span class="mi">3</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">plot</span> <span class="n">transport</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">transport_75x75x75</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">k</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">basno3</span><span class="o">/</span><span class="n">kappa</span><span class="o">-</span><span class="n">m363636</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">q</span><span class="p">{</span><span class="n">conductivity</span><span class="p">,</span><span class="n">seebeck</span><span class="p">,</span><span class="n">lattice_thermal_conductivity</span><span class="p">}</span> <span class="o">-</span><span class="n">n</span><span class="p">{</span><span class="mf">1e18</span><span class="p">,</span><span class="mf">1e19</span><span class="p">,</span><span class="mf">1e20</span><span class="p">,</span><span class="mf">1e21</span><span class="p">}</span> <span class="o">--</span><span class="n">tmin</span> <span class="mi">0</span> <span class="o">--</span><span class="n">location</span> <span class="mi">3</span>
 </pre></div>
 </div>
 <p>In Python, it is:</p>

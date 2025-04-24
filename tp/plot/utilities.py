@@ -1,17 +1,17 @@
-"""Utilities to aid the plotting scripts.
+"""Utilities to aid the plotting scripts."""
 
-Functions
----------
-
-    colour_scale:
-        sorts colour limits and colourbar format.
-    parse_colours
-        returns a colour map from a range of input types.
-    scale_to_axis
-        scales data to axes limits
-    set_locators:
-        set locators one-liner.
-"""
+#Functions
+#---------
+#
+#    colour_scale:
+#        sorts colour limits and colourbar format.
+#    parse_colours
+#        returns a colour map from a range of input types.
+#    scale_to_axis
+#        scales data to axes limits
+#    set_locators:
+#        set locators one-liner.
+#"""
 
 import matplotlib as mpl
 import numpy as np
@@ -69,7 +69,7 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
     elif name == 'occupation':
         csort = np.ravel(np.ma.masked_invalid(np.ma.masked_equal(c, 0)).compressed())
         csort = csort[csort.argsort()]
-        clim = csort[int(round(len(csort)*99.9/100 - 1, 0))]
+        clim = csort[int(round(len(csort)*99/100 - 1, 0))]
         if cmin is None:
             cmin = np.nanmin(c)
             if unoccupied is not None and cmin < 1:
@@ -92,7 +92,7 @@ def colour_scale(c, name, cmap, cmin=None, cmax=None, cscale=None,
         csort = np.ravel(np.ma.masked_invalid(np.ma.masked_equal(c, 0)).compressed())
         csort = csort[csort.argsort()]
         clim = [csort[int(round(len(csort)/100 - 1, 0))],
-                csort[int(round(len(csort)*99.9/100 - 1, 0))]]
+                csort[int(round(len(csort)*99/100 - 1, 0))]]
         if cmin is None:
             cmin = clim[0]
         elif cmin > clim[0]:
@@ -141,7 +141,10 @@ def parse_colours(colour):
     from copy import copy
 
     try:
-        cmap = copy(mpl.cm.get_cmap(colour))
+        try:
+            cmap = copy(mpl.cm.get_cmap(colour))
+        except AttributeError:
+            cmap = copy(mpl.colormaps[colour])
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = copy(colour)

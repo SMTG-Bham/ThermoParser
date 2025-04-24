@@ -1,1 +1,1 @@
-.. include:: ../../examples/0X-vasp-assists/README.rst
+.. include:: ../../examples/0X-miscellaneous-assists/README.rst

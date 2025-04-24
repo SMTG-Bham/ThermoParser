@@ -2,19 +2,18 @@
 Projected Phonons
 -----------------
 
-.. image:: wideband.png
+.. image:: ../../examples/projected-phonons/wideband.png
    :alt: Phonon dispersion with broadened bands.
 
 This shows a phonon dispersion with bands broadened to indicate
 scattering (the widest bands scatter the most). Via the command-line:
 
-.. code-block::
-
-   tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 -c black -c red -s dark_background -p POSCAR
+.. literalinclude:: ../../examples/projected-phonons/plot-wideband.sh
+   :language: bash
 
 and in python:
 
-.. literalinclude:: plot-wideband.py
+.. literalinclude:: ../../examples/projected-phonons/plot-wideband.py
    :language: python
    :linenos:
    :emphasize-lines: 16,19,23,24
@@ -29,14 +28,14 @@ the default one which is more suited to papers. Instead of the actual
 quantities you want to load, ``wideband`` can select all necessary for
 this plot.
 
-.. image:: prophon.png
+.. image:: ../../examples/projected-phonons/prophon.png
    :alt: Phonon dispersion with phonon lifetime projected.
 
 This shows a phonon dispersion with phonon lifetime projected on the
 colour axis. It is a more quantitative version of the above wideband
 plot. It can be plotted in python with:
 
-.. literalinclude:: plot-projected-phonons.py
+.. literalinclude:: ../../examples/projected-phonons/plot-projected-phonons.py
    :language: python
    :linenos:
    :emphasize-lines: 25-27

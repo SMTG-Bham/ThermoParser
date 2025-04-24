@@ -1,59 +1,59 @@
-"""Provides a command line interface.
+"""Provides a command line interface."""
 
-Functions
----------
-
-    tp
-        gen
-            kpar
-                suggest kpar ignoring zero-weighted k-points.
-            kpoints
-                generate zero-weighted KPOINTS file.
-        get
-            amset
-                get specific data from amset transport json or mesh h5.
-            occupation
-                get charge carrier occupation
-            boltztrap
-                get specific data from tp boltztrap hdf5.
-            phono3py
-                get specific data from phono3py kappa hdf5.
-            zt
-                get zt from an electronic and a phononic file.
-        run
-            boltztrap
-                efficient boltztrap runner to hdf5.
-        save
-            cumkappa
-                save cumulative kappa data to dat.
-            kappa
-                save lattice thermal conductivity to dat.
-            zt
-                save zt to hdf5.
-        plot
-            avg_rates
-                plot scattering rates against temperature and doping.
-            cumkappa
-                plot cumulative kappa against frequency or mfp.
-            dos
-                plot phonon DoS.
-            kappa
-                plot thermal conductivity against temperature.
-            kappa_target
-                plot target lattice thermal conductivity heatmap.
-            phonons
-                plot phonon dispersion(s) (and optional DoS).
-            transport
-                plot transport properties.
-            waterfall
-                plot scatter plots by band and q-point.
-            wideband
-                plot broadened phonon dispersion.
-            ztmap
-                plot zt or pf against temperature and doping.
-            ztdiff
-                plot zt or pf difference against temperature and doping.
-"""
+#Functions
+#---------
+#
+#    tp
+#        gen
+#            kpar
+#                suggest kpar ignoring zero-weighted k-points.
+#            kpoints
+#                generate zero-weighted KPOINTS file.
+#        get
+#            amset
+#                get specific data from amset transport json or mesh h5.
+#            occupation
+#                get charge carrier occupation
+#            boltztrap
+#                get specific data from tp boltztrap hdf5.
+#            phono3py
+#                get specific data from phono3py kappa hdf5.
+#            zt
+#                get zt from an electronic and a phononic file.
+#        run
+#            boltztrap
+#                efficient boltztrap runner to hdf5.
+#        save
+#            cumkappa
+#                save cumulative kappa data to dat.
+#            kappa
+#                save lattice thermal conductivity to dat.
+#            zt
+#                save zt to hdf5.
+#        plot
+#            avg_rates
+#                plot scattering rates against temperature and doping.
+#            cumkappa
+#                plot cumulative kappa against frequency or mfp.
+#            dos
+#                plot phonon DoS.
+#            kappa
+#                plot thermal conductivity against temperature.
+#            kappa_target
+#                plot target lattice thermal conductivity heatmap.
+#            phonons
+#                plot phonon dispersion(s) (and optional DoS).
+#            transport
+#                plot transport properties.
+#            waterfall
+#                plot scatter plots by band and q-point.
+#            wideband
+#                plot broadened phonon dispersion.
+#            ztmap
+#                plot zt or pf against temperature and doping.
+#            ztdiff
+#                plot zt or pf difference against temperature and doping.
+#"""
 
 import click
 import matplotlib as mpl
@@ -64,18 +64,125 @@ from copy import deepcopy
 from tp.cli.options import *
 
 @click.group()
+@adminsitrative_options
 def tp_cli():
     """Command line tools for transport properties."""
     return
 
 
 @tp_cli.group()
+@adminsitrative_options
 def gen():
     """Tools for generating calculation inputs."""
     return
 
 
 @gen.command(no_args_is_help=True)
+@adminsitrative_options
+@supercell_argument
+@click.option('-p', '--preset',
+              help='path formalism. bradley requires sumo is installed. '
+                   'Overridden by --path. Default: pymatgen.',
+              type=click.Choice(['bradley', 'bradley_cracknell', 'bradcrack',
+                                 'hinuma', 'seekpath',
+                                 'latimer', 'latimer_munro',
+                                 'setyawan', 'setyawan_cutarolo', 'pymatgen']),
+              default='pymatgen')
+@click.option('--path',
+              help='custom high symmetry path. Overrides --preset.',
+              type=str)
+@click.option('--labels',
+              help='labels for custom high symmetry path',
+              type=str)
+@click.option('-s', '--symprec',
+              help='symmetry tolerance for spacegroup identification in AA. '
+                   'Default: 1e-5',
+              default=1e-5,
+              type=float)
+@click.option('--points',
+              help='number of points per q-path. Default: 101',
+              default=101,
+              type=int)
+@click.option('-c', '--connection',
+              help='attempt to maintain band order at hihg-symmetry points. '
+              'Default: True',
+              default=True,
+              type=bool)
+@click.option('-e', '--eigenvectors',
+              help='print eigenvectors to file. Default: True',
+              default=True,
+              type=bool)
+@click.option('-n', '--nac',
+              help='use non-analytical correction. Requires phonopy BORN file. '
+                    'Default: False',
+              default=False,
+              type=bool)
+@click.option('--poscar',
+              help='POSCAR path. Default: POSCAR',
+              default='POSCAR',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@click.option('-o', '--output',
+              help='output path. Default: band.conf',
+              default='band.conf',
+              type=str)
+def band_conf(dim, preset, path, labels, symprec, points, connection,
+              eigenvectors, nac, poscar, output):
+    """Writes a band.conf file for phononpy.
+
+    Supercell dimensions required (can be an isotropic scale factor,
+    3x1, 3x3 (xx, xy, xz, yx, ..., zz) or 6x1 matrix).
+    """
+
+    tp.setup.phonopy.gen_band_conf(dim=dim, preset=preset, path=path,
+                                   labels=labels, symprec=symprec,
+                                   points=points, connection=connection,
+                                   eigenvectors=eigenvectors, nac=nac,
+                                   poscar=poscar, output=output)
+    
+    return
+
+
+@gen.command(no_args_is_help=True)
+@adminsitrative_options
+@supercell_argument
+@click.option('-m', '--mesh',
+              help='3x1 q-point mesh. Default: 24 24 24.',
+              nargs=3,
+              default=[24, 24, 24],
+              type=int)
+@click.option('-e', '--eigenvectors',
+              help='print eigenvectors to file. Default: True',
+              default=True,
+              type=bool)
+@click.option('-g', '--gamma',
+              help='Gamma-centred q-mesh. Default: True',
+              default=True,
+              type=bool)
+@click.option('-n', '--nac',
+              help='use non-analytical correction. Requires phonopy BORN file. '
+                    'Default: False',
+              default=False,
+              type=bool)
+@click.option('--poscar',
+              help='POSCAR path. Default: POSCAR',
+              default='POSCAR',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@click.option('-o', '--output',
+              help='output path. Default: dos.conf',
+              default='dos.conf',
+              type=str)
+def dos_conf(dim, mesh, eigenvectors, gamma, nac, poscar, output):
+    """Writes a dos.conf file for phononpy."""
+
+    tp.setup.phonopy.gen_dos_conf(dim=dim, mesh=mesh, gamma=gamma,
+                                  eigenvectors=eigenvectors, nac=nac,
+                                  poscar=poscar, output=output)
+    
+    return
+
+
+@gen.command(no_args_is_help=True)
+@adminsitrative_options
 @kpoints_options
 def kpar(kpoints, mesh, poscar):
     """Suggests KPAR values for VASP.
@@ -99,6 +206,7 @@ def kpar(kpoints, mesh, poscar):
 
 
 @gen.command(no_args_is_help=True)
+@adminsitrative_options
 @kpoints_options
 @click.option('-z', '--zero-kpoints', '--zero-ibzkpt',
               help='IBZKPT file path. Overrides --zero-mesh.',
@@ -137,12 +245,14 @@ def kpoints(kpoints, mesh, poscar, zero_kpoints, zero_mesh, output):
 
 
 @tp_cli.group()
+@adminsitrative_options
 def get():
     """Tools for accessing data."""
     return
 
 
 @get.command('amset', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('amset_file', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -270,6 +380,7 @@ def get_amset(amset_file, quantity, dtype, doping, direction, temperature, spin,
     return
 
 @get.command('occupation')
+@adminsitrative_options
 @inputs_function('amset_mesh_file', nargs=1)
 @doping_type_option
 @doping_function()
@@ -340,6 +451,7 @@ def get_occupation(amset_mesh_file, dtype, doping, temperature, spin, poscar):
 
 
 @get.command('boltztrap')
+@adminsitrative_options
 @inputs_function('boltztrap_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -399,6 +511,7 @@ def get_boltztrap(boltztrap_hdf5, quantity, dtype, doping, direction, temperatur
 
 
 @get.command('phono3py', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('-q', '--quantity',
               help='Quantity to read.',
@@ -492,6 +605,7 @@ def get_phono3py(kappa_hdf5, quantity, direction, temperature, band, qpoint,
 
 
 @get.command('zt', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('-k', '--kappa',
               help='Phono3py kappa-mxxx.hdf5.',
@@ -559,12 +673,14 @@ def get_zt(transport_file, kappa, dtype, doping, direction, temperature, max):
 
 
 @tp_cli.group()
+@adminsitrative_options
 def run():
     """Tools for transport properties postprocessing."""
     return
 
 
 @run.command(no_args_is_help=True)
+@adminsitrative_options
 
 @click.option('--tmin',
               help='Set minimum temperature in K. Does not speed up '
@@ -651,12 +767,14 @@ def boltztrap(tmin, tmax, tstep, dmin, dmax, ndope, relaxation_time, lpfac,
 
 
 @tp_cli.group()
+@adminsitrative_options
 def save():
     """Tools for saving data."""
     return
 
 
 @save.command('cumkappa', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -690,6 +808,7 @@ def save_cumkappa(kappa_hdf5, mfp, direction, temperature, output, extension):
 
 
 @save.command('kappa', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @direction_function(multiple=True)
 @click.option('-o', '--output',
@@ -720,6 +839,7 @@ def save_kappa(kappa_hdf5, direction, output):
 
 
 @save.command('zt', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('-k', '--kappa',
               help='Phono3py kappa-mxxx.hdf5.',
@@ -749,12 +869,14 @@ def save_zt(transport_file, kappa, dtype, direction, interpolate, kind, output):
 
 
 @tp_cli.group()
+@adminsitrative_options
 def plot():
     """Tools for plotting."""
     return
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('mesh_h5')
 @click.option('--mfp/--rate',
               help='Plot mfp instead of rate.  [default: rate]',
@@ -861,7 +983,10 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
         colour = colour[0]
 
     try:
-        colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, nlines))
+        try:
+            colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, nlines))
+        except AttributeError:
+            colours = mpl.colormaps[colour](np.linspace(0, 1, nlines))
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour, str) and colour == 'skelton':
@@ -978,6 +1103,7 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5')
 @click.option('--mfp/--frequency',
               help='x-axis quantity.  [default: frequency]',
@@ -1098,8 +1224,10 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('dos_dat', nargs=1)
 @dos_function()
+@interpolate_options
 @fill_options
 @line_options
 
@@ -1108,9 +1236,9 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 @plot_io_function('tp-dos')
 
 def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
-        total_colour, colour, fill, fillalpha, line, linestyle, marker,
-        xmin, xmax, ymin, ymax, legend, legend_title, location, style,
-        large, save, show, extension, output):
+        total_colour, colour, interpolate, kind, fill, fillalpha, line,
+        linestyle, marker, xmin, xmax, ymin, ymax, legend, legend_title,
+        location, style, large, save, show, extension, output):
     """Plots a phonon density of states."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1124,6 +1252,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
 
     data = tp.data.load.phonopy_dos(dos_dat, poscar, atoms)
     tp.plot.frequency.add_dos(ax, data, projected=projected, sigma=sigma,
+                              interpolate=interpolate, kind=kind,
                               total=total, totallabel=total_label,
                               colour=colour, totalcolour=total_colour,
                               fill=fill, fillalpha=fillalpha, line=line,
@@ -1160,6 +1289,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a '
                    '--component of lattice or total.',
@@ -1348,7 +1478,10 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             legend_title = defleg['title']
 
     try:
-        colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
+        try:
+            colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
+        except AttributeError:
+            colours = mpl.colormaps[colour[0]](np.linspace(0, 1, len(data)))
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour[0], str) and colour[0] == 'skelton':
@@ -1413,6 +1546,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('-z', '--zt',
               help='Target ZT.',
@@ -1489,13 +1623,9 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
 
 
 @plot.command('phonons', no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('band_yaml')
-@click.option('--bandmin',
-              help='Minimum band index.',
-              type=click.IntRange(0))
-@click.option('--bandmax',
-              help='Maximum band index.',
-              type=click.IntRange(0))
+@bandrange_options
 
 @click.option('-c', '--colour',
               help='Colourmap name or min and max colours or list of '
@@ -1526,13 +1656,15 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
 @fill_options
 
 @legend_function(toggle=False)
+@axes_limit_function()
 @plot_io_function('tp-phonons')
 
 def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
                      marker, xmarkcolour, xmarklinestyle, dos, poscar, atoms,
                      projected, sigma, total, total_label, total_colour,
                      doscolour, fill, fillalpha, line, label, legend_title,
-                     location, style, large, save, show, extension, output):
+                     location, xmin, xmax, ymin, ymax, style, large, save, show,
+                     extension, output):
     """Plots and overlays phonon dispersions.
 
     Can have optional DoS on the side.
@@ -1569,11 +1701,23 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
         dosax = ax[1]
         ax = ax[0]
 
-    tp.plot.phonons.add_multi(ax, data, colour=colour, linestyle=linestyle,
-                              marker=marker, label=label, bandmin=bandmin,
-                              bandmax=bandmax, alpha=alpha,
-                              xmarkkwargs={'color':     xmarkcolour,
-                                           'linestyle': xmarklinestyle})
+    if len(band_yaml) == 1:
+        try:
+            colour = mpl.cm.get_cmap(colour)([0])
+        except ValueError:
+            pass
+        tp.plot.phonons.add_dispersion(ax, data[0], colour=colour,
+                                       linestyle=linestyle[0], marker=marker[0],
+                                       label=label, bandmin=bandmin,
+                                       bandmax=bandmax, alpha=alpha,
+                                       xmarkkwargs={'color':     xmarkcolour,
+                                                 'linestyle': xmarklinestyle})
+    else:
+        tp.plot.phonons.add_multi(ax, data, colour=colour, linestyle=linestyle,
+                                  marker=marker, label=label, bandmin=bandmin,
+                                  bandmax=bandmax, alpha=alpha,
+                                  xmarkkwargs={'color':     xmarkcolour,
+                                               'linestyle': xmarklinestyle})
     if dos is not None:
         dosdata = tp.data.load.phonopy_dos(dos, poscar, atoms)
         tp.plot.frequency.add_dos(dosax, dosdata, projected=projected,
@@ -1582,6 +1726,30 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
                                   totalcolour=total_colour, fill=fill,
                                   fillalpha=fillalpha, line=line, invert=True)
         dosax.set_ylim(ax.get_ylim())
+    
+    if xmin is not None:
+        if xmax is not None:
+            ax.set_xlim(xmin, xmax)
+        else:
+            ax.set_xlim(left=xmin)
+    elif xmax is not None:
+        ax.set_xlim(right=xmax)
+
+    if ymin is not None:
+        if ymax is not None:
+            ax.set_ylim(ymin, ymax)
+            if dos is not None:
+                dosax.set_ylim(ymin, ymax)
+        else:
+            ax.set_ylim(bottom=ymin)
+            if dos is not None:
+                dosax.set_ylim(bottom=ymin)
+    elif ymax is not None:
+        ax.set_ylim(top=ymax)
+        if dos is not None:
+            dosax.set_ylim(top=ymax)
+
+    if dos is not None:
         tp.plot.utilities.set_locators(dosax, dos=True)
 
     if label != [None] or dos is not None:
@@ -1600,6 +1768,7 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file')
 @click.option('-k', '--kfile',
               help='Thermal data filename(s). Required for a --quantity '
@@ -1909,7 +2078,11 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                         q:             edata2[q]})
 
     try:
-        colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))
+        try:
+            colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))
+        except AttributeError:
+            colours = mpl.colormaps[colour[0]](np.linspace(0, 1, lendata))
+
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour[0], str) and colour[0] == 'skelton':
@@ -1994,6 +2167,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
 @click.option('-y',
               help='y-axis quantity. Options include frequency, kappa, '
@@ -2149,8 +2323,10 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('band_yaml', nargs=1)
 @inputs_function('kappa_hdf5', nargs=1)
+@bandrange_options
 
 @temperature_option
 @click.option('-p', '--poscar',
@@ -2172,11 +2348,13 @@ def waterfall(kappa_hdf5, y, x, projected, direction, temperature, colour, alpha
               default=5,
               show_default=True)
 
+@axes_limit_function()
 @plot_io_function('tp-wideband')
 @verbose_option
 
-def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, style,
-             large, save, show, extension, output, verbose):
+def wideband(band_yaml, kappa_hdf5, bandmin, bandmax, temperature, poscar,
+             colour, smoothing, style, xmin, xmax, ymin, ymax, large, save,
+             show, extension, output, verbose):
     """Plots a broadened phonon dispersion."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -2190,9 +2368,27 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
 
     fig, ax, _ = axes.one(style)
 
-    tp.plot.phonons.add_wideband(ax, kdata, pdata, temperature=temperature,
-                                 poscar=poscar, smoothing=smoothing,
-                                 colour=colour, verbose=verbose)
+    tp.plot.phonons.add_wideband(ax, kdata, pdata, bandmin=bandmin,
+                                 bandmax=bandmax, ymin=ymin, ymax=ymax,
+                                 temperature=temperature, poscar=poscar,
+                                 smoothing=smoothing, colour=colour,
+                                 verbose=verbose)
+
+    if xmin is not None:
+        if xmax is not None:
+            ax.set_xlim(xmin, xmax)
+        else:
+            ax.set_xlim(left=xmin)
+    elif xmax is not None:
+        ax.set_xlim(right=xmax)
+
+    if ymin is not None:
+        if ymax is not None:
+            ax.set_ylim(ymin, ymax)
+        else:
+            ax.set_ylim(bottom=ymin)
+    elif ymax is not None:
+        ax.set_ylim(top=ymax)
 
     if save:
         for ext in extension:
@@ -2204,6 +2400,7 @@ def wideband(band_yaml, kappa_hdf5, temperature, poscar, colour, smoothing, styl
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_file', nargs=1)
 @click.option('--pf/--zt',
               help='Power factor instead of ZT.  [default: zt]',
@@ -2280,6 +2477,7 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind,
 
 
 @plot.command(no_args_is_help=True)
+@adminsitrative_options
 @inputs_function('transport_files', nargs=2)
 @click.option('--pf/--zt',
               help='Power factor instead of ZT.  [default: zt]',

@@ -2,19 +2,18 @@
 Heatmaps
 --------
 
-.. image:: ztmap.png
+.. image:: ../../examples/heatmaps/ztmap.png
    :alt: ZT against carrier concentration and temperature.
 
 This shows the classic ZT against carrier concentration and temperature
 heatmap. This can be plotted at the command line with:
 
-.. code-block::
-
-   tp plot ztmap ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 -c '#800080' -d x
+.. literalinclude:: ../../examples/heatmaps/plot-zt.sh
+   :language: bash
 
 and in python with:
 
-.. literalinclude:: plot-zt.py
+.. literalinclude:: ../../examples/heatmaps/plot-zt.py
    :language: python
    :linenos:
    :emphasize-lines: 22
@@ -32,7 +31,7 @@ highlight colour and black, or three colours of your choosing. There
 are several other heatmap functions in ThermoParser, including the
 equivalent for power factor, ``add_pfmap``, and those below...
 
-.. image:: kappa-target.png
+.. image:: ../../examples/heatmaps/kappa-target.png
    :alt: Lattice thermal conductivity required to reach a given ZT against carrier concentration and temperature.
 
 It is possible to plot a ztmap without lattice thermal conductivity
@@ -43,18 +42,17 @@ lattice thermal conductivity required to reach a specified ZT. We hope
 this is a valuable tool to help decide wether to run expensive lattice
 thermal conductivity calculations on a material. The CLI is:
 
-.. code-block::
-
-   tp plot kappa-target ../data/zno/boltztrap.hdf5 -c '#008080' -d x
+.. literalinclude:: ../../examples/heatmaps/plot-kappa-target.sh
+   :language: bash
 
 and python:
 
-.. literalinclude:: plot-kappa-target.py
+.. literalinclude:: ../../examples/heatmaps/plot-kappa-target.py
    :language: python
    :linenos:
    :emphasize-lines: 18,19
 
-.. image:: ztdiff.png
+.. image:: ../../examples/heatmaps/ztdiff.png
    :alt: Difference between two ZTs against carrier concentration and temperature.
 
 The final heatmap is the ztdiff, which compares the ZTs of two
@@ -66,13 +64,12 @@ related materials with similar dopabilities. Here we compare the
 momentum relaxation time approximation via AMSET with the constant
 relaxation approximation via BoltzTraP. At the command line:
 
-.. code-block::
-   
-   tp plot ztdiff ../data/zno/transport_75x75x75.json  ../data/zno/boltztrap.hdf5 -k ../data/zno/kappa-m404021.hdf5 ../data/zno/kappa-m404021.hdf5 -l MRTA -l CRTA
+.. literalinclude:: ../../examples/heatmaps/plot-ztdiff.sh
+   :language: bash
 
 and in python:
 
-.. literalinclude:: plot-ztdiff.py
+.. literalinclude:: ../../examples/heatmaps/plot-ztdiff.py
    :language: python
    :linenos:
    :emphasize-lines: 19,20,23

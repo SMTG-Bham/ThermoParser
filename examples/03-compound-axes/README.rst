@@ -10,7 +10,7 @@ of the heat, are dominated by Zn. Frequency-localised DoSs of a
 particular atom can indicate spacially localised, poorly-conductive
 phonons. The DoS is also calculated via Phonopy.
 
-.. image:: tutorial-03.png
+.. image:: ../../examples/03-compound-axes/tutorial-03.png
    :alt: Phonon dispersion and density of states of ZnO.
 
 Often, a good way to draw links between data is to position them
@@ -22,11 +22,11 @@ The CLI version of this code is:
 
 .. code-block:: bash
    
-   tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour '#d46ef9' --doscolour '#7b8eff' --legend_title ZnO --location 2
+   tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour={'#d46ef9','#7b8eff'} --legend_title ZnO --location 2
 
 And the python version is:
 
-.. literalinclude:: tutorial-03.py
+.. literalinclude:: ../../examples/03-compound-axes/tutorial-03.py
    :language: python
    :linenos:
    :emphasize-lines: 15,22,23,27

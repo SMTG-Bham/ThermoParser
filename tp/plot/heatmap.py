@@ -3,23 +3,24 @@
 ``add_heatmap`` is a base function, which handles axes limits, colourbar
 formatting and extra colourmap options compared to ``matplotlib.pyplot.pcolormesh``.
 The other functions plot specific quantites using this function.
-
-Functions
----------
-
-    add_heatmap:
-        heatmap.
-    add_pfmap:
-        power factor vs temperature and carrier concentration.
-    add_pfdiff:
-        power factor difference vs temperature and carrier concentration.
-    add_ztmap:
-        ZT vs temperature and carrier concentration.
-    add_ztdiff:
-        ZT difference vs temperature and carrier concentration.
-    add_kappa_target:
-        kappa_l needed to reach a given ZT.
 """
+
+#Functions
+#---------
+#
+#    add_heatmap:
+#        heatmap.
+#    add_pfmap:
+#        power factor vs temperature and carrier concentration.
+#    add_pfdiff:
+#        power factor difference vs temperature and carrier concentration.
+#    add_ztmap:
+#        ZT vs temperature and carrier concentration.
+#    add_ztdiff:
+#        ZT difference vs temperature and carrier concentration.
+#    add_kappa_target:
+#        kappa_l needed to reach a given ZT.
+#"""
 
 from copy import copy
 import matplotlib as mpl
@@ -29,7 +30,7 @@ import os
 import tp
 import warnings
 import yaml
-from scipy.interpolate import interp2d
+from scipy.interpolate import RectBivariateSpline as rbs
 
 warnings.filterwarnings('ignore', module='matplotlib')
 
@@ -43,7 +44,7 @@ except yaml.parser.ParserError:
 except FileNotFoundError:
     conf = None
 
-def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
+def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, order=1,
                 xscale='linear', yscale='linear', cscale='linear', xmin=None,
                 xmax=None, ymin=None, ymax=None, cmin=None, cmax=None,
                 colour='viridis', undercolour=None, overcolour=None,
@@ -70,8 +71,8 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             density of interpolation. None turns it off. Default: None.
         yinterp : int, optional
             density of interpolation. None turns it off. Default: None.
-        kind : str, optional
-            interpolation kind. Default: linear.
+        order : int, optional
+            interpolation order (1=linear, 3=cubic etc.). Default: 1.
 
         xscale : str, optional
             x scale (linear or log). Default: linear.
@@ -189,7 +190,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # #rrggbb colour as the highlight colour for a tp.plot.colour.uniform.
 
     try:
-        colours = copy(mpl.cm.get_cmap(colour))
+        try:
+            colours = copy(mpl.cm.get_cmap(colour))
+        except AttributeError:
+            colours = copy(mpl.colormaps[colour])
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             colours = colour
@@ -215,7 +219,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # data interpolation
 
     if xinterp is not None or yinterp is not None:
-        cinterp = interp2d(x, y, np.transpose(c), kind=kind)
+        rs = rbs(x, y, c, kx=order, ky=order)
         if xinterp is not None:
             if xscale == 'linear': x = np.linspace(x[0], x[-1], xinterp)
             if xscale == 'log': x = np.geomspace(x[0], x[-1], xinterp)
@@ -224,6 +228,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
             if yscale == 'log': y = np.geomspace(y[0], y[-1], yinterp)
         x = np.array(x)
         y = np.array(y)
+        cinterp = lambda x, y: rs(x, y).T
         c = cinterp(x, y)
     else:
         c = np.transpose(c)
@@ -245,17 +250,16 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     # plotting
     if discrete:
         kwargs.pop('rasterized')
-        if levels is None or levels == ():
-            heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
-                               **kwargs)
+        if levels in [None, (), [None], (None,)]:
+            levels = 10
         else:
             if isinstance(levels, (list, np.ndarray, tuple)) and len(levels) == 1:
                 levels = int(levels[0])
             elif isinstance(levels, float):
-                raise TypeError('levels must be an int or array-like, not float')
-            if levels is not None and levels != ():
-                heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
-                                   levels=levels, **kwargs)
+                raise TypeError(
+                                'levels must be an int or array-like, not float')
+        heat = ax.contourf(x[:-1], y[:-1], c, cmap=colours, norm=cnorm,
+                           levels=levels, **kwargs)
     else:
         heat = ax.pcolormesh(x, y, c, cmap=colours, norm=cnorm, **kwargs)
     fig = ax.get_figure()
@@ -266,7 +270,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         cbar = plt.colorbar(heat, ax=ax, extend=extend)
 
     # contours
-    if contours is not None and contours != ():
+    if contours not in [None, [None], (), (None,)]:
         if contourkwargs == None:
             contourkwargs = {}
         if not isinstance(contours, (list, np.ndarray)):
@@ -282,7 +286,10 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
         cmap = None
         try:
             cmap = contourcolours
-            contourcolours = mpl.cm.get_cmap(contourcolours)(ctnorm)
+            try:
+                contourcolours = mpl.cm.get_cmap(contourcolours)(ctnorm)
+            except AttributeError:
+                contourcolours = mpl.colormaps[contourcolours](ctnorm)
             plt.contour(x[:-1], y[:-1], c, contours, cmap=cmap,
                         **contourkwargs)
         except ValueError:
@@ -312,7 +319,7 @@ def add_heatmap(ax, x, y, c, xinterp=None, yinterp=None, kind='linear',
     return cbar
 
 def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
-              kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
+              order=1, xmin=None, xmax=None, ymin=None, ymax=None,
               cmin=None, cmax=None, colour='viridis', discrete=False,
               levels=None, contours=None, contourcolours='black',
               contourkwargs=None, **kwargs):
@@ -337,8 +344,8 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
             density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
-        kind : str, optional
-            interpolation kind. Default: linear.
+        order : int, optional
+            interpolation order (1=linear, 3=cubic etc.). Default: 1.
 
         xmin : float, optional
             override temperature minimum. Default: None.
@@ -414,7 +421,7 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
                        data['power_factor'], xinterp=xinterp, yinterp=yinterp,
-                       kind=kind, yscale='log', xmin=xmin, xmax=xmax,
+                       order=order, yscale='log', xmin=xmin, xmax=xmax,
                        ymin=ymin, ymax=ymax, cmin=cmin, cmax=cmax,
                        colour=colour, discrete=discrete, levels=levels,
                        contours=contours, countourcolours=contourcolours,
@@ -430,7 +437,7 @@ def add_pfmap(ax, data, direction='avg', xinterp=200, yinterp=200,
     return cbar
 
 def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
-               kind='linear', xmin=None, xmax=None, ymin=None, ymax=None,
+               order=1, xmin=None, xmax=None, ymin=None, ymax=None,
                cmin=None, cmax=None, colour1='#800080', colour2='#FF8000',
                midcolour='#FFFFFF', label1=None, label2=None, discrete=False,
                levels=None, contours=None, contourcolours='black',
@@ -457,8 +464,8 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
             density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
-        kind : str, optional
-            interpolation kind. Default: linear.
+        order : int, optional
+            interpolation order (1=linear, 3=cubic etc.). Default: 1.
 
         xmin : float, optional
             override temperature minimum. Default: None.
@@ -571,7 +578,7 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
     # plotting
 
     cbar = add_heatmap(ax, data[0]['temperature'], list(data[0]['doping']),
-                       diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       diff, xinterp=xinterp, yinterp=yinterp, order=order,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
                        discrete=discrete, levels=levels, contours=contours,
@@ -588,7 +595,7 @@ def add_pfdiff(ax, data1, data2, direction='avg', xinterp=200, yinterp=200,
     return cbar, h, l
 
 def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
-              yinterp=200, kind='linear', xmin=None, xmax=None, ymin=None,
+              yinterp=200, order=1, xmin=None, xmax=None, ymin=None,
               ymax=None, cmin=None, cmax=None, colour='viridis',
               discrete=False, levels=None, contours=None,
               contourcolours='black', contourkwargs=None, **kwargs):
@@ -617,8 +624,8 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
             density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
-        kind : str, optional
-            interpolation kind. Default: linear.
+        order : int, optional
+            interpolation order (1=linear, 3=cubic etc.). Default: 1.
 
         xmin : float, optional
             override temperature minimum. Default: None.
@@ -712,7 +719,7 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       data['zt'], xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       data['zt'], xinterp=xinterp, yinterp=yinterp, order=order,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
                        discrete=discrete, levels=levels, contours=contours,
@@ -729,7 +736,7 @@ def add_ztmap(ax, data, kdata=1., direction='avg', xinterp=200,
     return cbar
 
 def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
-               xinterp=200, yinterp=200, kind='linear', xmin=None, xmax=None,
+               xinterp=200, yinterp=200, order=1, xmin=None, xmax=None,
                ymin=None, ymax=None, cmin=None, cmax=None, colour1='#800080',
                colour2='#FF8000', midcolour='#FFFFFF', label1=None,
                label2=None, discrete=False, levels=None, contours=None,
@@ -760,8 +767,8 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
             density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
-        kind : str, optional
-            interpolation kind. Default: linear.
+        order : int, optional
+            interpolation order (1=linear, 3=cubic etc.). Default: 1.
 
         xmin : float, optional
             override temperature minimum. Default: None.
@@ -894,7 +901,7 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
     # plotting
 
     cbar = add_heatmap(ax, data[0]['temperature'], list(data[0]['doping']),
-                       diff, xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       diff, xinterp=xinterp, yinterp=yinterp, order=order,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
                        discrete=discrete, levels=levels, contours=contours,
@@ -911,7 +918,7 @@ def add_ztdiff(ax, data1, data2, kdata1=1., kdata2=1., direction='avg',
     return cbar, h, l
     
 def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
-                     yinterp=200, kind='linear', xmin=None, xmax=None,
+                     yinterp=200, order=1, xmin=None, xmax=None,
                      ymin=None, ymax=None, cmin=0, cmax=None, colour='viridis',
                      negativecolour='grey', discrete=False, levels=None,
                      contours=None, contourcolours='black', contourkwargs=None,
@@ -940,8 +947,8 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
             density of interpolation. None turns it off. Default: 200.
         yinterp : int, optional
             density of interpolation. None turns it off. Default: 200.
-        kind : str, optional
-            interpolation kind. Default: linear.
+        order : int, optional
+            interpolation order (1=linear, 3=cubic etc.). Default: 1.
 
         xmin : float, optional
             override temperature minimum. Default: None.
@@ -1017,7 +1024,7 @@ def add_kappa_target(ax, data, zt=2, direction='avg', xinterp=200,
     # plotting
 
     cbar = add_heatmap(ax, data['temperature'], list(np.abs(data['doping'])),
-                       data[ltc], xinterp=xinterp, yinterp=yinterp, kind=kind,
+                       data[ltc], xinterp=xinterp, yinterp=yinterp, order=order,
                        yscale='log', xmin=xmin, xmax=xmax, ymin=ymin,
                        ymax=ymax, cmin=cmin, cmax=cmax, colour=colour,
                        undercolour=negativecolour, discrete=discrete,
