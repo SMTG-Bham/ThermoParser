@@ -22,7 +22,7 @@ The CLI version of this code is:
 
 .. code-block:: bash
    
-   tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour '#d46ef9' --doscolour '#7b8eff' --legend_title ZnO --location 2
+   tp plot phonons ../data/zno/band.yaml -c '#f0901f' --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour={'#d46ef9','#7b8eff'} --legend_title ZnO --location 2
 
 And the python version is:
 

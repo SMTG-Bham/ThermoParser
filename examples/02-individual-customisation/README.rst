@@ -20,7 +20,7 @@ The CLI version of this code is:
 
 .. code-block:: bash
 
-   tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 --large -s dark_background -c '#000000' -c '#ff0000' --poscar ../data/zno/POSCAR
+   tp plot wideband ../data/zno/band.yaml ../data/zno/kappa-m404021.hdf5 --large -s dark_background -c{'#000000','#ff0000'} --poscar ../data/zno/POSCAR
 
 And the python version is:
 

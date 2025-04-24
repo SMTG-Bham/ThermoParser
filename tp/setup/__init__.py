@@ -7,4 +7,4 @@
 #        currently contains KPOINTS generators
 #"""
 
-from . import vasp
+from . import vasp, phonopy

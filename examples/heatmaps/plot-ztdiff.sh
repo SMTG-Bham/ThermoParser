@@ -1,1 +1,1 @@
-tp plot ztdiff ../data/basno3/transport_75x75x75.json  ../data/basno3/boltztrap.hdf5 -k ../data/basno3/kappa-m363636.hdf5 ../data/basno3/kappa-m363636.hdf5 -l MRTA -l CRTA
+tp plot ztdiff ../data/basno3/transport_75x75x75.json  ../data/basno3/boltztrap.hdf5 -k ../data/basno3/kappa-m363636.hdf5 ../data/basno3/kappa-m363636.hdf5 -l{MRTA,CRTA}

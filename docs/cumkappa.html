@@ -97,7 +97,7 @@ to add markers has been included, e.g. here you can see nanostructuring
 to 100 nanometers may reduce the lattice thermal conductivity by around
 40 %.</p>
 <p>The right plot can be plotted at the command line with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot cumkappa ../data/zno/kappa-m404021.hdf5 --mfp --percent -d x -d y -c <span class="s1">&#39;#59c605&#39;</span> -c <span class="s1">&#39;#ffcf06&#39;</span> --nofill --xmarkers 1e-7 -l x -l y --location in
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot cumkappa ../data/zno/kappa-m404021.hdf5 --mfp --percent -d<span class="o">{</span>x,y<span class="o">}</span> -c<span class="o">{</span><span class="s1">&#39;#59c605&#39;</span>,<span class="s1">&#39;#ffcf06&#39;</span><span class="o">}</span> --nofill --xmarkers 1e-7 -l<span class="o">{</span>x,y<span class="o">}</span> --location in
 </pre></div>
 </div>
 <p>And while the layering of the DoS plot is not yet supported at the

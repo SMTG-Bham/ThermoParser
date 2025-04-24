@@ -31,6 +31,8 @@
 #        function for formatting fillable line plots.
 #    plot_io_function:
 #        function for formatting plot outputs.
+#    supercell_argument:
+#        arguement for supercell dimensions.
 #    temperature_option:
 #        function for picking the --temperature (-t).
 #    verbose_option:
@@ -719,6 +721,28 @@ def plot_io_function(name):
 
         return f
     return plot_io_options
+
+def supercell_argument(f):
+    """Argument for supercell dimensions.
+
+        Arguments:
+        ----------
+            
+            dim : int
+                supercell dimension. Can be an isotropic scale factor,
+                3x1, 3x3 (xx, xy, xz, yx, .. zz) or 6x1 matrix.
+
+        Returns:
+        --------
+
+            decorator
+                supercell argument decorator.
+    """
+
+    f = click.argument('dim',
+                       type=str)(f)
+    
+    return f
 
 def temperature_option(f):
     """Option for temperature selection.

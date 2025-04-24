@@ -79,6 +79,110 @@ def gen():
 
 @gen.command(no_args_is_help=True)
 @adminsitrative_options
+@supercell_argument
+@click.option('-p', '--preset',
+              help='path formalism. bradley requires sumo is installed. '
+                   'Overridden by --path. Default: pymatgen.',
+              type=click.Choice(['bradley', 'bradley_cracknell', 'bradcrack',
+                                 'hinuma', 'seekpath',
+                                 'latimer', 'latimer_munro',
+                                 'setyawan', 'setyawan_cutarolo', 'pymatgen']),
+              default='pymatgen')
+@click.option('--path',
+              help='custom high symmetry path. Overrides --preset.',
+              type=str)
+@click.option('--labels',
+              help='labels for custom high symmetry path',
+              type=str)
+@click.option('-s', '--symprec',
+              help='symmetry tolerance for spacegroup identification in AA. '
+                   'Default: 1e-5',
+              default=1e-5,
+              type=float)
+@click.option('--points',
+              help='number of points per q-path. Default: 101',
+              default=101,
+              type=int)
+@click.option('-c', '--connection',
+              help='attempt to maintain band order at hihg-symmetry points. '
+              'Default: True',
+              default=True,
+              type=bool)
+@click.option('-e', '--eigenvectors',
+              help='print eigenvectors to file. Default: True',
+              default=True,
+              type=bool)
+@click.option('-n', '--nac',
+              help='use non-analytical correction. Requires phonopy BORN file. '
+                    'Default: False',
+              default=False,
+              type=bool)
+@click.option('--poscar',
+              help='POSCAR path. Default: POSCAR',
+              default='POSCAR',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@click.option('-o', '--output',
+              help='output path. Default: band.conf',
+              default='band.conf',
+              type=str)
+def band_conf(dim, preset, path, labels, symprec, points, connection,
+              eigenvectors, nac, poscar, output):
+    """Writes a band.conf file for phononpy.
+
+    Supercell dimensions required (can be an isotropic scale factor,
+    3x1, 3x3 (xx, xy, xz, yx, ..., zz) or 6x1 matrix).
+    """
+
+    tp.setup.phonopy.gen_band_conf(dim=dim, preset=preset, path=path,
+                                   labels=labels, symprec=symprec,
+                                   points=points, connection=connection,
+                                   eigenvectors=eigenvectors, nac=nac,
+                                   poscar=poscar, output=output)
+    
+    return
+
+
+@gen.command(no_args_is_help=True)
+@adminsitrative_options
+@supercell_argument
+@click.option('-m', '--mesh',
+              help='3x1 q-point mesh. Default: 24 24 24.',
+              nargs=3,
+              default=[24, 24, 24],
+              type=int)
+@click.option('-e', '--eigenvectors',
+              help='print eigenvectors to file. Default: True',
+              default=True,
+              type=bool)
+@click.option('-g', '--gamma',
+              help='Gamma-centred q-mesh. Default: True',
+              default=True,
+              type=bool)
+@click.option('-n', '--nac',
+              help='use non-analytical correction. Requires phonopy BORN file. '
+                    'Default: False',
+              default=False,
+              type=bool)
+@click.option('--poscar',
+              help='POSCAR path. Default: POSCAR',
+              default='POSCAR',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@click.option('-o', '--output',
+              help='output path. Default: dos.conf',
+              default='dos.conf',
+              type=str)
+def dos_conf(dim, mesh, eigenvectors, gamma, nac, poscar, output):
+    """Writes a dos.conf file for phononpy."""
+
+    tp.setup.phonopy.gen_dos_conf(dim=dim, mesh=mesh, gamma=gamma,
+                                  eigenvectors=eigenvectors, nac=nac,
+                                  poscar=poscar, output=output)
+    
+    return
+
+
+@gen.command(no_args_is_help=True)
+@adminsitrative_options
 @kpoints_options
 def kpar(kpoints, mesh, poscar):
     """Suggests KPAR values for VASP.
@@ -1123,6 +1227,7 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 @adminsitrative_options
 @inputs_function('dos_dat', nargs=1)
 @dos_function()
+@interpolate_options
 @fill_options
 @line_options
 
@@ -1131,9 +1236,9 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 @plot_io_function('tp-dos')
 
 def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
-        total_colour, colour, fill, fillalpha, line, linestyle, marker,
-        xmin, xmax, ymin, ymax, legend, legend_title, location, style,
-        large, save, show, extension, output):
+        total_colour, colour, interpolate, kind, fill, fillalpha, line,
+        linestyle, marker, xmin, xmax, ymin, ymax, legend, legend_title,
+        location, style, large, save, show, extension, output):
     """Plots a phonon density of states."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1147,6 +1252,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
 
     data = tp.data.load.phonopy_dos(dos_dat, poscar, atoms)
     tp.plot.frequency.add_dos(ax, data, projected=projected, sigma=sigma,
+                              interpolate=interpolate, kind=kind,
                               total=total, totallabel=total_label,
                               colour=colour, totalcolour=total_colour,
                               fill=fill, fillalpha=fillalpha, line=line,

@@ -106,6 +106,8 @@
 <span class="c1">#        function for formatting fillable line plots.</span>
 <span class="c1">#    plot_io_function:</span>
 <span class="c1">#        function for formatting plot outputs.</span>
+<span class="c1">#    supercell_argument:</span>
+<span class="c1">#        arguement for supercell dimensions.</span>
 <span class="c1">#    temperature_option:</span>
 <span class="c1">#        function for picking the --temperature (-t).</span>
 <span class="c1">#    verbose_option:</span>
@@ -794,6 +796,28 @@
 
         <span class="k">return</span> <span class="n">f</span>
     <span class="k">return</span> <span class="n">plot_io_options</span></div>
+
+<div class="viewcode-block" id="supercell_argument"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.supercell_argument">[docs]</a><span class="k">def</span> <span class="nf">supercell_argument</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Argument for supercell dimensions.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        ----------</span>
+<span class="sd">            </span>
+<span class="sd">            dim : int</span>
+<span class="sd">                supercell dimension. Can be an isotropic scale factor,</span>
+<span class="sd">                3x1, 3x3 (xx, xy, xz, yx, .. zz) or 6x1 matrix.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+
+<span class="sd">            decorator</span>
+<span class="sd">                supercell argument decorator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">&#39;dim&#39;</span><span class="p">,</span>
+                       <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="temperature_option"><a class="viewcode-back" href="../../../tp.cli.html#tp.cli.options.temperature_option">[docs]</a><span class="k">def</span> <span class="nf">temperature_option</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Option for temperature selection.</span>

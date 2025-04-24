@@ -2,11 +2,11 @@
 
 __name__ =       'ThermoParser'
 __author__ =     'Kieran B. Spooner'
-__copyright__ =  'Copyright Scanlon Materials Theory Group (2024)'
-__version__ =    '3.2.0' # Remember to update the main README header too!
+__copyright__ =  'Copyright Scanlon Materials Theory Group (2025)'
+__version__ =    '3.3.0' # Remember to update the main README header too!
 __maintainer__ = 'Kieran B. Spooner'
 __email__ =      'k.b.spooner@bham.ac.uk'
-__date__ =       'April 1st 2024'
+__date__ =       'April 24th 2025'
 
 import os
 import setuptools
@@ -62,7 +62,8 @@ setuptools.setup(
     test_suite='setup.load_test_suite',
     install_requires=['click', 'h5py', 'matplotlib', 'numpy', 'pymatgen',
                       'pyyaml', 'scipy', 'setuptools', 'wheel'],
-    extras_require={'docs':  ['sphinx', 'sphinx_rtd_theme']},
+    extras_require={'docs':  ['sphinx', 'sphinx_rtd_theme'],
+                    'bradcrack': ['sumo']},
     python_requires='>=3.8',
     cmdclass={'install': PostInstallMoveFile},
     entry_points={'console_scripts': ['tp = tp.cli.cli:tp_cli']})

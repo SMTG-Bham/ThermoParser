@@ -35,7 +35,29 @@ weighted k-points.
 
 .. code-block::
 
-    tp gen kpar-k KPOINTS
+    tp gen kpar -k KPOINTS
+
+Phonopy Config Files
+--------------------
+
+If you generate phonopy data from the command line, configuration files are
+useful to save time regenerating and record inputs. ThermoParser will generate
+these for you based on a ``POSCAR`` and your inputs.
+
+.. code-block:: python
+
+    tp.setup.get_band_conf('supercell size')
+    tp.setup.get_dos_conf('supercell size')
+
+.. code-block::
+
+    tp gen band-conf 'supercell size'
+    tp gen dos-conf 'supercell size'
+
+The required argument ``'dim'``, i.e. the supercell size, can be a string or an
+array (the latter in python only), and accepts 1x1, 3x1, 3x3 and 6x1 arrays,
+that is to say ``2``, ``'2 2 2'``, ``'2 0 0  0 2 0  0 0 2'`` and
+``'2 2 2 0 0 0'`` all give the same result.
 
 Target Lattice Thermal Conducitivity
 ------------------------------------

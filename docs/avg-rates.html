@@ -92,7 +92,7 @@ across k-points and weighted by the derivative of the Fermi-Dirac
 distribution, as they are when calculating the conductivity, thereby
 giving a representative image of the effect the scattering processes
 play in the material. This can be plotted at the command line with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t <span class="m">1000</span> -n -1e19 --location <span class="m">2</span> --large -c red -c blue -c magenta
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot avg-rates ../data/basno3/mesh_75x75x75.h5 -t <span class="m">1000</span> -n -1e19 --location <span class="m">2</span> --large -c<span class="o">{</span>red,blue,magenta<span class="o">}</span>
 </pre></div>
 </div>
 <p>If rates are included in the file but are very low, you may want to
