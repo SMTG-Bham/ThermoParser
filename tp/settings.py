@@ -35,6 +35,8 @@ that.
 #        unit conversions.
 #    boltztrap_conversions:
 #        unit conversions.
+#    boltztrap2_conversions:
+#        unit conversions.
 #    phonopy_conversions:
 #        unit conversions.
 #    phono3py_conversions:
@@ -218,6 +220,20 @@ def to_boltztrap():
 
     return names
 
+def to_boltztrap2():
+    """Get dictionary to translate to boltztrap2."""
+
+    names = {'etc':                  'electronic_thermal_conductivity',
+             'kappa':                'electronic_thermal_conductivity',
+             'kappae':               'electronic_thermal_conductivity',
+             'ke':                   'electronic_thermal_conductivity'}
+
+    if conf is not None and 'to_boltztrap' in conf and \
+       conf['to_boltztrap'] is not None:
+        names = {**names, **conf['to_boltztrap2']}
+
+    return names
+
 def to_phono3py():
     """Get dictionary to convert to phono3py."""
 
@@ -263,6 +279,13 @@ def boltztrap_conversions():
 
     return conversions
 
+def boltztrap2_conversions():
+    """Get dictionary of unit conversions for boltztrap to tp."""
+
+    conversions = {}
+
+    return conversions
+
 def phonopy_conversions():
     """Get dictionary of unit conversions for phonopy to tp."""
 
@@ -297,6 +320,7 @@ def units(use_tprc=True):
              'doping':                          'cm-3',
              'efermi':                          'eV',
              'effective_mass':                  'm_e',
+             'electronic_heat_capacity':        'J mol-1 K-1',
              'electronic_thermal_conductivity': 'W m-1 K-1',
              'energy':                          'eV',
              'fd_weights':                      '',
@@ -306,6 +330,7 @@ def units(use_tprc=True):
              'group_velocity':                  'm s-1',
              'gruneisen':                       '',
              'gv_by_gv':                        'm2 s-2',
+             'hall':                            'm3 C-1',
              'hall_carrier_concentration':      'cm-3',
              'heat_capacity':                   'J K-1',
              'ibz_weights':                     '',
@@ -347,6 +372,7 @@ def dimensions():
             'doping':                          ['doping'],
             'efermi':                          [],
             'effective_mass':                  ['temperature', 'doping', 3, 3],
+            'electronic_heat_capacity':        ['temperature', 'doping'],
             'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
             'energy':                          ['band', 'kpoint'],
             'fd_weights':                      ['temperature', 'doping', 'band', 'kpoint'],
@@ -356,6 +382,7 @@ def dimensions():
             'group_velocity':                  ['qpoint', 'band', 3],
             'gruneisen':                       ['qpoint', 'band'],
             'gv_by_gv':                        ['qpoint', 'band', 6],
+            'hall':                            ['temperature', 'doping', 3, 3, 3],
             'hall_carrier_concentration':      [],
             'heat_capacity':                   ['temperature', 'qpoint', 'band'],
             'ibz_weights':                     ['kpoint'],
@@ -467,6 +494,8 @@ def long_labels():
                   r'Effective Mass (m$\mathregular{_e}$)',
               'energy':
                   'Energy (eV)',
+              'electronic_heat_capacity':
+                  r'Electronic Specific Heat Capacity (J mol$\mathregular{^{-1}\ K^-1}$)',
               'electronic_thermal_conductivity':
                   r'Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'fermi_level':
@@ -481,6 +510,8 @@ def long_labels():
                   'Gruneisen Parameter',
               'gv_by_gv':
                   r'Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)',
+              'hall':
+                  r'Hall Coefficient (m$\mathregular{^3\ C^{-1}}$)',
               'heat_capacity':
                   r'Heat Capacity (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
@@ -547,6 +578,8 @@ def medium_labels():
                   r'Effective Mass (m$\mathregular{_e}$)',
               'energy':
                   'Energy (eV)',
+              'electronic_heat_capacity':
+                  r'Elec. Spec. Heat Cap. (J mol$\mathregular{^{-1}\ K^-1}$)',
               'electronic_thermal_conductivity':
                   r'Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)',
               'fermi_level':
@@ -561,6 +594,8 @@ def medium_labels():
                   'Gruneisen Parameter',
               'gv_by_gv':
                   r'Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)',
+              'hall':
+                  r'Hall Coefficient (m$\mathregular{^3\ C^{-1}}$)',
               'heat_capacity':
                   r'Heat Capacity (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
@@ -627,6 +662,8 @@ def short_labels():
                   r'$\mathregular{m*\ (m_e})$',
               'energy':
                   'E (eV)',
+              'electronic_heat_capacity':
+                  r'e- c_V (J mol$\mathregular{^{-1}\ K^-1}$)',
               'electronic_thermal_conductivity':
                   r'$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$',
               'fermi_level':
@@ -641,8 +678,10 @@ def short_labels():
                   r'$\gamma$',
               'gv_by_gv':
                   r'$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$',
+              'hall':
+                  r'$\mathregular{R_H\ (m^3\ C^{-1}}$)',
               'heat_capacity':
-                  r'C (J K$\mathregular{^{-1}}$)',
+                  r'C_V (J K$\mathregular{^{-1}}$)',
               'lattice_thermal_conductivity':
                   r'$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$',
               'lifetime':
