@@ -89,7 +89,7 @@
 <img alt="Phonon dispersion and density of states." src="_images/phonons1.png" />
 <p>This shows a phonon dispersion and density of states (DoS). This is the
 only combined plot currenty possible at the command line, with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour <span class="s1">&#39;#d46ef9&#39;</span> --doscolour <span class="s1">&#39;#7b8eff&#39;</span> -c <span class="s1">&#39;#f0901f&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/zno/band.yaml --dos ../data/zno/projected_dos.dat --poscar ../data/zno/POSCAR --doscolour<span class="o">={</span><span class="s1">&#39;#d46ef9&#39;</span>,<span class="s1">&#39;#7b8eff&#39;</span><span class="o">}</span> -c <span class="s1">&#39;#f0901f&#39;</span>
 </pre></div>
 </div>
 <p>and in python:</p>
@@ -160,7 +160,7 @@ this is simple (line 24).</p>
 <img alt="Phonon dispersions for different supercell sizes." src="_images/multiphon1.png" />
 <p>This shows phonons dispersions for various supercell sizes for
 convergence:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/basno3/band-*.yaml --legend_title <span class="s2">&quot;Supercell Size&quot;</span> -l <span class="s2">&quot;2 x 2 x 2&quot;</span> -l <span class="s2">&quot;3 x 3 x 3&quot;</span> -l <span class="s2">&quot;4 x 4 x 4&quot;</span> -l <span class="s2">&quot;5 x 5 x 5&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot phonons ../data/basno3/band-*.yaml --legend_title <span class="s2">&quot;Supercell Size&quot;</span> -l<span class="o">{</span><span class="s2">&quot;2 x 2 x 2&quot;</span>,<span class="s2">&quot;3 x 3 x 3&quot;</span>,<span class="s2">&quot;4 x 4 x 4&quot;</span>,<span class="s2">&quot;5 x 5 x 5&quot;</span><span class="o">}</span>
 </pre></div>
 </div>
 <p>and in python:</p>

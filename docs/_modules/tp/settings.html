@@ -110,6 +110,8 @@
 <span class="c1">#        unit conversions.</span>
 <span class="c1">#    boltztrap_conversions:</span>
 <span class="c1">#        unit conversions.</span>
+<span class="c1">#    boltztrap2_conversions:</span>
+<span class="c1">#        unit conversions.</span>
 <span class="c1">#    phonopy_conversions:</span>
 <span class="c1">#        unit conversions.</span>
 <span class="c1">#    phono3py_conversions:</span>
@@ -293,6 +295,20 @@
 
     <span class="k">return</span> <span class="n">names</span></div>
 
+<span class="k">def</span> <span class="nf">to_boltztrap2</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary to translate to boltztrap2.&quot;&quot;&quot;</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;etc&#39;</span><span class="p">:</span>                  <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kappa&#39;</span><span class="p">:</span>                <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;kappae&#39;</span><span class="p">:</span>               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;ke&#39;</span><span class="p">:</span>                   <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;to_boltztrap&#39;</span> <span class="ow">in</span> <span class="n">conf</span> <span class="ow">and</span> \
+       <span class="n">conf</span><span class="p">[</span><span class="s1">&#39;to_boltztrap&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">names</span><span class="p">,</span> <span class="o">**</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;to_boltztrap2&#39;</span><span class="p">]}</span>
+
+    <span class="k">return</span> <span class="n">names</span>
+
 <div class="viewcode-block" id="to_phono3py"><a class="viewcode-back" href="../../tp.html#tp.settings.to_phono3py">[docs]</a><span class="k">def</span> <span class="nf">to_phono3py</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary to convert to phono3py.&quot;&quot;&quot;</span>
 
@@ -338,6 +354,13 @@
 
     <span class="k">return</span> <span class="n">conversions</span></div>
 
+<span class="k">def</span> <span class="nf">boltztrap2_conversions</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for boltztrap to tp.&quot;&quot;&quot;</span>
+
+    <span class="n">conversions</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">return</span> <span class="n">conversions</span>
+
 <div class="viewcode-block" id="phonopy_conversions"><a class="viewcode-back" href="../../tp.html#tp.settings.phonopy_conversions">[docs]</a><span class="k">def</span> <span class="nf">phonopy_conversions</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get dictionary of unit conversions for phonopy to tp.&quot;&quot;&quot;</span>
 
@@ -372,6 +395,7 @@
              <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="s1">&#39;cm-3&#39;</span><span class="p">,</span>
              <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>                          <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
              <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>                  <span class="s1">&#39;m_e&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>        <span class="s1">&#39;J mol-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;energy&#39;</span><span class="p">:</span>                          <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
              <span class="s1">&#39;fd_weights&#39;</span><span class="p">:</span>                      <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -381,6 +405,7 @@
              <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>                  <span class="s1">&#39;m s-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>                       <span class="s1">&#39;&#39;</span><span class="p">,</span>
              <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="s1">&#39;m2 s-2&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;hall&#39;</span><span class="p">:</span>                            <span class="s1">&#39;m3 C-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="s1">&#39;cm-3&#39;</span><span class="p">,</span>
              <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="s1">&#39;J K-1&#39;</span><span class="p">,</span>
              <span class="s1">&#39;ibz_weights&#39;</span><span class="p">:</span>                     <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -422,6 +447,7 @@
             <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
             <span class="s1">&#39;efermi&#39;</span><span class="p">:</span>                          <span class="p">[],</span>
             <span class="s1">&#39;effective_mass&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
             <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;energy&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
             <span class="s1">&#39;fd_weights&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
@@ -431,6 +457,7 @@
             <span class="s1">&#39;group_velocity&#39;</span><span class="p">:</span>                  <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;gruneisen&#39;</span><span class="p">:</span>                       <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>                        <span class="p">[</span><span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+            <span class="s1">&#39;hall&#39;</span><span class="p">:</span>                            <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="s1">&#39;hall_carrier_concentration&#39;</span><span class="p">:</span>      <span class="p">[],</span>
             <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>                   <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;qpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;band&#39;</span><span class="p">],</span>
             <span class="s1">&#39;ibz_weights&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;kpoint&#39;</span><span class="p">],</span>
@@ -542,6 +569,8 @@
                   <span class="sa">r</span><span class="s1">&#39;Effective Mass (m$\mathregular</span><span class="si">{_e}</span><span class="s1">$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Energy (eV)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>
+                  <span class="sa">r</span><span class="s1">&#39;Electronic Specific Heat Capacity (J mol$\mathregular{^{-1}\ K^-1}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;Electronic Thermal Conductivity (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>
@@ -556,6 +585,8 @@
                   <span class="s1">&#39;Gruneisen Parameter&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;Group Velocity Outer Product (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;hall&#39;</span><span class="p">:</span>
+                  <span class="sa">r</span><span class="s1">&#39;Hall Coefficient (m$\mathregular{^3\ C^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;Heat Capacity (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>
@@ -622,6 +653,8 @@
                   <span class="sa">r</span><span class="s1">&#39;Effective Mass (m$\mathregular</span><span class="si">{_e}</span><span class="s1">$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;Energy (eV)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>
+                  <span class="sa">r</span><span class="s1">&#39;Elec. Spec. Heat Cap. (J mol$\mathregular{^{-1}\ K^-1}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;Elec. Therm. Cond. (W m$\mathregular{^{-1}\ K^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>
@@ -636,6 +669,8 @@
                   <span class="s1">&#39;Gruneisen Parameter&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;Group Vel. Outer Prod. (m$\mathregular{^2\ s^{-2}}$)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;hall&#39;</span><span class="p">:</span>
+                  <span class="sa">r</span><span class="s1">&#39;Hall Coefficient (m$\mathregular{^3\ C^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;Heat Capacity (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>
@@ -702,6 +737,8 @@
                   <span class="sa">r</span><span class="s1">&#39;$\mathregular{m*\ (m_e})$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;energy&#39;</span><span class="p">:</span>
                   <span class="s1">&#39;E (eV)&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>
+                  <span class="sa">r</span><span class="s1">&#39;e- c_V (J mol$\mathregular{^{-1}\ K^-1}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_e\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>
@@ -716,8 +753,10 @@
                   <span class="sa">r</span><span class="s1">&#39;$\gamma$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;gv_by_gv&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;$\mathregular{g_v \otimes g_v\ (m^2\ s^{-2})}$&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;hall&#39;</span><span class="p">:</span>
+                  <span class="sa">r</span><span class="s1">&#39;$\mathregular{R_H\ (m^3\ C^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;heat_capacity&#39;</span><span class="p">:</span>
-                  <span class="sa">r</span><span class="s1">&#39;C (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
+                  <span class="sa">r</span><span class="s1">&#39;C_V (J K$\mathregular{^{-1}}$)&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lattice_thermal_conductivity&#39;</span><span class="p">:</span>
                   <span class="sa">r</span><span class="s1">&#39;$\mathregular{\kappa_l\ (W\ m^{-1}\ K^{-1})}$&#39;</span><span class="p">,</span>
               <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span>

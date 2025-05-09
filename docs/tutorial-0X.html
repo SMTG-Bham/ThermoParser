@@ -47,6 +47,7 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial-06.html"> Tutorial-06: Package Customaisation</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> Tutorial-0X: Miscellaneous Assists</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#zero-weighted-k-points">Zero-Weighted k-points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phonopy-config-files">Phonopy Config Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#target-lattice-thermal-conducitivity">Target Lattice Thermal Conducitivity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#merge">Merge</a></li>
 </ul>
@@ -115,9 +116,27 @@ weighted k-points.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">get_kpar</span><span class="p">(</span><span class="s1">&#39;KPOINTS&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">gen</span> <span class="n">kpar</span><span class="o">-</span><span class="n">k</span> <span class="n">KPOINTS</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">gen</span> <span class="n">kpar</span> <span class="o">-</span><span class="n">k</span> <span class="n">KPOINTS</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="phonopy-config-files">
+<h2>Phonopy Config Files<a class="headerlink" href="#phonopy-config-files" title="Permalink to this headline">¶</a></h2>
+<p>If you generate phonopy data from the command line, configuration files are
+useful to save time regenerating and record inputs. ThermoParser will generate
+these for you based on a <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code> and your inputs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">get_band_conf</span><span class="p">(</span><span class="s1">&#39;supercell size&#39;</span><span class="p">)</span>
+<span class="n">tp</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">get_dos_conf</span><span class="p">(</span><span class="s1">&#39;supercell size&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tp</span> <span class="n">gen</span> <span class="n">band</span><span class="o">-</span><span class="n">conf</span> <span class="s1">&#39;supercell size&#39;</span>
+<span class="n">tp</span> <span class="n">gen</span> <span class="n">dos</span><span class="o">-</span><span class="n">conf</span> <span class="s1">&#39;supercell size&#39;</span>
+</pre></div>
+</div>
+<p>The required argument <code class="docutils literal notranslate"><span class="pre">'dim'</span></code>, i.e. the supercell size, can be a string or an
+array (the latter in python only), and accepts 1x1, 3x1, 3x3 and 6x1 arrays,
+that is to say <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">'2</span> <span class="pre">2</span> <span class="pre">2'</span></code>, <code class="docutils literal notranslate"><span class="pre">'2</span> <span class="pre">0</span> <span class="pre">0</span>&#160; <span class="pre">0</span> <span class="pre">2</span> <span class="pre">0</span>&#160; <span class="pre">0</span> <span class="pre">0</span> <span class="pre">2'</span></code> and
+<code class="docutils literal notranslate"><span class="pre">'2</span> <span class="pre">2</span> <span class="pre">2</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">0'</span></code> all give the same result.</p>
 </div>
 <div class="section" id="target-lattice-thermal-conducitivity">
 <h2>Target Lattice Thermal Conducitivity<a class="headerlink" href="#target-lattice-thermal-conducitivity" title="Permalink to this headline">¶</a></h2>

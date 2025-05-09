@@ -46,10 +46,11 @@ except yaml.parser.ParserError:
 except FileNotFoundError:
     conf = None
 
-def add_dos(ax, data, sigma=None, projected=True, total=False,
-            totallabel='Total', main=True, invert=False, scale=False,
-            colour='tab10', totalcolour=None, fill=True, fillalpha=0.2,
-            line=True, linestyle='-', marker=None, **kwargs):
+def add_dos(ax, data, sigma=None, interpolate=200, kind='linear',
+            projected=True, total=False, totallabel='Total', main=True,
+            invert=False, scale=False, colour='tab10', totalcolour=None,
+            fill=True, fillalpha=0.2, line=True, linestyle='-',
+            marker=None, **kwargs):
     """Adds a phonon density of states (DoS) to a set of axes.
 
     Arguments
@@ -62,6 +63,10 @@ def add_dos(ax, data, sigma=None, projected=True, total=False,
         sigma : float
             Gaussian broadening. 0.2 is a good place to start. Does not
             know if you've already broadened it. Default: None.
+        interpolate : int
+            number of frequency values to generate. Default: 200.
+        kind : str
+            kind of interpolation. Default: linear.
 
         projected : bool, optional
             plot atom-projected DoS. Default: True.
@@ -122,6 +127,8 @@ def add_dos(ax, data, sigma=None, projected=True, total=False,
     """
 
     # defaults
+    
+    from scipy.interpolate import interp1d
 
     defkwargs = {'rasterized': False}
 
@@ -165,6 +172,10 @@ def add_dos(ax, data, sigma=None, projected=True, total=False,
             for i, d in enumerate(data[key]):
                 data2[key] += d * tp.calculate.gaussian(f, f[i], sigma)
         data = data2
+    finterp = np.linspace(np.min(f), np.max(f), interpolate)
+    for atom in data:
+        data[atom] = interp1d(f, data[atom], kind=kind)(finterp)
+
 
     if scale:
         axscale = [0, 100] if main else None
@@ -258,66 +269,66 @@ def add_dos(ax, data, sigma=None, projected=True, total=False,
     if total:
         if invert:
             if fill and line:
-                ax.fill_between(totaldata, f, facecolor=colour['total'],
+                ax.fill_between(totaldata, finterp, facecolor=colour['total'],
                                 linewidth=0, alpha=fillalpha,
                                 rasterized=kwargs['rasterized'])
-                ax.plot(totaldata, f, label=totallabel, color=colour['total'],
+                ax.plot(totaldata, finterp, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
             elif fill and not line:
-                ax.fill_between(totaldata, f, label=totallabel, linewidth=0,
+                ax.fill_between(totaldata, finterp, label=totallabel, linewidth=0,
                                 facecolor=colour['total'], alpha=fillalpha,
                                 rasterized=kwargs['rasterized'])
             else:
-                ax.plot(totaldata, f, label=totallabel, color=colour['total'],
+                ax.plot(totaldata, finterp, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
         else:
             if fill and line:
-                ax.fill_between(f, totaldata, facecolor=colour['total'],
+                ax.fill_between(finterp, totaldata, facecolor=colour['total'],
                                 linewidth=0, alpha=fillalpha,
                                 rasterized=kwargs['rasterized'])
-                ax.plot(f, totaldata, label=totallabel, color=colour['total'],
+                ax.plot(finterp, totaldata, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
             elif fill and not line:
-                ax.fill_between(f, totaldata, label=totallabel,
+                ax.fill_between(finterp, totaldata, label=totallabel,
                                 facecolor=colour['total'], linewidth=0,
                                 alpha=fillalpha, **kwargs)
             else:
-                ax.plot(f, totaldata, label=totallabel, color=colour['total'],
+                ax.plot(finterp, totaldata, label=totallabel, color=colour['total'],
                         linestyle=linestyles['total'], marker=markers['total'],
                         **kwargs)
     if projected:
         for key in data:
             if invert:
                 if fill and line:
-                    ax.fill_between(data[key], f, facecolor=colour[key],
+                    ax.fill_between(data[key], finterp, facecolor=colour[key],
                                     linewidth=0, alpha=fillalpha)
-                    ax.plot(data[key], f, label='${}$'.format(key),
+                    ax.plot(data[key], finterp, label='${}$'.format(key),
                             color=colour[key], linestyle=linestyles[key],
                             marker=markers[key], **kwargs)
                 elif fill and not line:
-                    ax.fill_between(data[key], f, label='${}$'.format(key),
+                    ax.fill_between(data[key], finterp, label='${}$'.format(key),
                                     facecolor=colour[key], linewidth=0,
                                     alpha=fillalpha)
                 else:
-                    ax.plot(data[key], f, label='${}$'.format(key),
+                    ax.plot(data[key], finterp, label='${}$'.format(key),
                             color=colour[key], linestyle=linestyles[key],
                             marker=markers[key], **kwargs)
             else:
                 if fill and line:
-                    ax.fill_between(f, data[key], facecolor=colour[key],
+                    ax.fill_between(finterp, data[key], facecolor=colour[key],
                                     linewidth=0, alpha=fillalpha)
-                    ax.plot(f, data[key], color=colour[key],
+                    ax.plot(finterp, data[key], color=colour[key],
                             label='${}$'.format(key), linestyle=linestyles[key],
                             marker=markers[key], **kwargs)
                 elif fill and not line:
-                    ax.fill_between(f, data[key], label='${}$'.format(key),
+                    ax.fill_between(finterp, data[key], label='${}$'.format(key),
                                     facecolor=colour[key], linewidth=0,
                                     alpha=fillalpha)
                 else:
-                    ax.plot(f, data[key], label='${}$'.format(key),
+                    ax.plot(finterp, data[key], label='${}$'.format(key),
                             color=colour[key], linestyle=linestyles[key],
                             marker=markers[key], **kwargs)
 
@@ -1073,7 +1084,7 @@ def format_waterfall(ax, data, yquantity, xquantity='frequency',
 
     if invert:
         xquantity, yquantity = yquantity, xquantity
-        
+
     data2 = tp.data.utilities.resolve(data, [xquantity, yquantity],
                                     temperature=temperature,
                                     direction=direction)

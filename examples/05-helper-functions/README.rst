@@ -17,7 +17,7 @@ CLI:
 
 .. code-block::
 
-    tp plot transport ../data/basno3/transport_75x75x75.json -k ../data/basno3/kappa-m363636.hdf5 -q conductivity -q seebeck -q lattice_thermal_conductivity -n 1e18 -n 1e19 -n 1e20 -n 1e21 --tmin 0 --location 3
+    tp plot transport ../data/basno3/transport_75x75x75.json -k ../data/basno3/kappa-m363636.hdf5 -q{conductivity,seebeck,lattice_thermal_conductivity} -n{1e18,1e19,1e20,1e21} --tmin 0 --location 3
 
 In Python, it is:
 

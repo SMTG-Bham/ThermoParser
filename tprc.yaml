@@ -27,6 +27,7 @@ locator:
 to_tp:                null
 to_amset:             null
 to_boltztrap:         null
+to_boltztrap2:        null
 to_phono3py:          null
 
 # unit conversions from the tp standards (see settings.py for reference)

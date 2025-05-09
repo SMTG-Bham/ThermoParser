@@ -21,7 +21,8 @@ list of optional inputs for customisation. Options with a slash, e.g.
 while other options normally require something else written afterwards,
 e.g. ``-n 1e19``. If there is a list in square brackets, the appended
 text must be from that list. Many options can take multiple values, in
-which case the tag will usually need to be repeated: ``-m '*' -m 'o'``.
+which case the tag will usually need to be repeated: ``-m '*' -m 'o'``,
+or more simply ``-m{'*','o'}`` or ``--marker={'*','o'}``.
 A notable exception is in ``tp plot ztdiff``.
 
 Later tutorials will mention if the CLI can be used instead, but will

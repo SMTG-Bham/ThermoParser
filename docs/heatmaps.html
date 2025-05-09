@@ -228,7 +228,7 @@ nanostructuring), although this method is most appropriate for closely
 related materials with similar dopabilities. Here we compare the
 momentum relaxation time approximation via AMSET with the constant
 relaxation approximation via BoltzTraP. At the command line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff ../data/basno3/transport_75x75x75.json  ../data/basno3/boltztrap.hdf5 -k ../data/basno3/kappa-m363636.hdf5 ../data/basno3/kappa-m363636.hdf5 -l MRTA -l CRTA
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tp plot ztdiff ../data/basno3/transport_75x75x75.json  ../data/basno3/boltztrap.hdf5 -k ../data/basno3/kappa-m363636.hdf5 ../data/basno3/kappa-m363636.hdf5 -l<span class="o">{</span>MRTA,CRTA<span class="o">}</span>
 </pre></div>
 </div>
 <p>and in python:</p>

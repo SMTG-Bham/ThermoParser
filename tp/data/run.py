@@ -4,11 +4,14 @@
 #---------
 #
 #    boltztrap
+#    boltztrap2
 #"""
 
 import numpy as np
 import shutil
 import tp
+
+workers = tp.settings.get_workers()
 
 def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
               ke_mode='boltzmann', vasprun='vasprun.xml', kpoints=None,
@@ -35,7 +38,7 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
         doping : array-like, optional
             doping concentrations in cm-1.
             Default: np.logspace(18, 21, 17).
-        k_mode : str, optional
+        ke_mode : str, optional
             method for calculating the electronic thermal conductivity.
             Options:
 
@@ -115,6 +118,8 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
         meta : dict
             metadata:
 
+                dimensions : dict
+                    dimensions of each property above.
                 interpolation_factor : int
                     lpfac.
                 ke_mode : str
@@ -267,5 +272,230 @@ def boltztrap(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 17),
         if clean:
             shutil.rmtree(btr_dir)
             os.remove(os.path.join(run_dir, 'boltztrap.out'))
+
+    return
+
+@tp.docstring_replace(workers=str(workers))
+def boltztrap2(tmax=1001, tstep=50, tmin=None, doping=np.logspace(18, 21, 22),
+               scissor=None, relaxation_time=1e-14, interpolate=True, lpfac=10,
+               emin=-0.2, emax=0.2, dosbins=4000, run=True, prefix='tp',
+               dos_dir='.', run_dir='.', workers=workers):
+    """Runs BoltzTraP2 from a density of states (DoS).
+
+    Heavily based on the official tutorial and CLI dope function, but
+    outputs to a tp hdf5 file.
+
+    Arguments
+    ---------
+
+        tmax : float, optional
+            maximum temperature in K. Default: 1000.
+        tstep : float, optional
+            temperature step in K. Default: 50.
+        tmin : float, optional
+            minimum temperature in K. Default: tstep.
+        doping : array-like, optional
+            doping concentrations in cm-1.
+            Default: np.logspace(18, 21, 22).
+        scissor : float, optionao
+            target band gap in eV. Default: None.
+
+        relaxation_time : float, optional
+            charge carrier relaxation time. Default: 1e-14.
+        interpolate : bool, optional
+            run DoS interpolation. Default: True.
+        lpfac : int, optional
+            DoS interpolation factor. Default: 10.
+        emin : float, optional
+            minimum energy from the Fermi level to include bands during
+            interpolation. Default: -0.2.
+        emax : float, optional
+            maximum energy from the Fermi level to include bands during
+            interpolation. Default: +0.2.
+        dosbins : int, optional
+            number of energy bins to sort the DoS into. Default: 4000.
+
+        run : bool, optional
+            run BoltzTraP2. Default: True.
+        prefix : str, optional
+            output filename prefix. Default: tp.
+        dos_dir : str, optional
+            path to dft DoS output. Default: current directory.
+        run_dir : str, optional
+            path to run boltztrap in. Default: current directory.
+        workers : int, optional
+            number of workers for paralellised section.
+            Default: {workers}.
+
+    Returns
+    -------
+
+        None
+            instead prints to hdf5 (see below).
+
+    hdf5 File Contents
+    ------------------
+
+        conductivity : array-like
+            electric conductivity in S m-1.
+            Shape: (temperatures, concentrations, 3, 3).
+        doping : array-like
+            carrier concentration in cm-1. Identical to input.
+        electronic_heat_capacity : array-like
+            electronic contributions to the specific heat capacity in
+            J mol-1 K-1. Shape (temperatures, concentrations)
+        electronic_thermal_conductivity : array-like
+            electronic thermal conductivity in W m-1 K-1.
+            Shape (temperatures, concentrations, 3, 3).
+        fermi_level : array-like
+            fermi level at different temperatures in eV.
+            Shape: (temperatures, concentrations).
+        hall : array-like
+            Hall coefficient in J C-1.
+            Shape: (temperatures, concentrations, 3, 3, 3).
+        power_factor : array-like
+            power factor in W m-1 K-2.
+            Shape: (temperatures, concentrations, 3, 3).
+        seebeck : dict
+            Seebeck coefficient in muV K-1.
+            Shape: (temperatures, concentrations, 3, 3).
+        temperature : numpy array
+            temperatures in K.
+        meta : dict
+            metadata:
+
+                dimensions : dict
+                    dimensions of each property above.
+                interpolation_factor : int
+                    lpfac.
+                relaxation_time : float
+                    as input.
+                units : dict
+                    units of each property above.
+    """
+
+    import os
+    from BoltzTraP2 import bandlib as bl
+    from BoltzTraP2 import dft
+    from BoltzTraP2 import fite, serialization, sphere, units
+
+    # check inputs
+
+    for name, value in zip(['run', 'interpolate'],
+                           [ run,   interpolate]):
+        assert isinstance(value, bool), '{} must be True or False'.format(name)
+
+    run_dir = os.path.abspath(run_dir)
+    dos_dir = os.path.abspath(dos_dir)
+    ifile = os.path.join(dos_dir, f'{prefix}.btp2')
+
+    tmax += tstep
+    tmin = tstep if tmin is None else tmin
+    temperature = np.arange(tmin, tmax, tstep)
+
+    if interpolate:
+        print('Loading DFT data...')
+        data = dft.DFTData(dos_dir)
+        print('Interpolating DFT data...')
+        data.bandana(emin=data.fermi+emin, emax=data.fermi+emax)
+        eq = sphere.get_equivalences(data.atoms, data.magmom,
+                                     nkpt=len(data.kpoints) * lpfac)
+        coeffs = fite.fitde3D(data, eq)
+        meta = serialization.gen_bt2_metadata(data, data.mommat is not None)
+        serialization.save_calculation(ifile, data, eq, coeffs, meta)
+    else:
+        print('Loading interpolated DoS...')
+        data, eq, coeffs, meta = serialization.load_calculation(ifile)
+
+    if run:
+        print('Running BoltzTraP2...')
+        lattvec = data.get_lattvec()
+        eband, vvband, cband = fite.getBTPbands(eq, coeffs, lattvec,
+                                                curvature=True, nworkers=workers)
+        epsilon, dos, vvdos, cdos = bl.BTPDOS(eband, vvband, cband,
+                                              npts=dosbins, Tmin=tmin)
+        if scissor is not None:
+            scissor *= units.eV
+            eband = bl.apply_scissor(epsilon, dos, data.nelect, eband, scissor,
+                                     data.dosweight)
+            epsilon, dos, vvdos, cdos = bl.BTPDOS(eband, vvband, cband,
+                                                  npts=dosbins, tmin=tmin)
+        margin = 9. * units.BOLTZMANN * temperature.max()
+        mumin = epsilon.min() + margin
+        mumax = epsilon.max() - margin
+
+        v = data.atoms.get_volume() * units.Angstrom**3
+        vcm = data.atoms.get_volume() * 1e-24
+        mu = np.empty((len(temperature), len(doping)))
+        #sdos = np.empty((len(temperature), len(doping)))
+        cv = np.empty((len(temperature), len(doping)))
+        n = np.empty((len(temperature), len(doping)))
+        l0 = np.empty((len(temperature), len(doping), 3, 3))
+        l1 = np.empty((len(temperature), len(doping), 3, 3))
+        l2 = np.empty((len(temperature), len(doping), 3, 3))
+        lm11 = np.empty((len(temperature), len(doping), 3, 3, 3))
+        sigma = np.empty((len(temperature), len(doping), 3, 3))
+        seebeck = np.empty((len(temperature), len(doping), 3, 3))
+        kappa = np.empty((len(temperature), len(doping), 3, 3))
+        hall = np.empty((len(temperature), len(doping), 3, 3, 3))
+        for i, t in enumerate(temperature):
+            dmin = (bl.calc_N(epsilon, dos, mumax, t, data.dosweight) \
+                 +  data.nelect) / vcm
+            dmax = (bl.calc_N(epsilon, dos, mumin, t, data.dosweight) \
+                 +  data.nelect) / vcm
+            if doping.min() <= dmin or doping.max() >= dmax:
+                raise ValueError(f'doping must be between {dmin:.2g} and '
+                                 f'{dmax:.2g} at {t:.2f}.')
+
+            for j, d in enumerate(doping):
+                ne = data.nelect - d * vcm
+                mu[i, j] = bl.solve_for_mu(epsilon, dos, ne, t, data.dosweight,
+                                           refine=True, try_center=False)
+                
+            #sdos[i,:] = bl.smoothen_DOS_direct(epsilon, dos, t, mu[i, :])
+            cv[i] = bl.calc_cv(epsilon, dos, mu[i,:], np.array([t]),
+                               dosweight=data.dosweight)
+            n[i], l0[i], l1[i], l2[i], lm11[i] = bl.fermiintegrals(
+                epsilon, dos, vvdos, mur=mu[i], Tr=np.array([t]),
+                dosweight=data.dosweight, cdos=cdos)
+        sigma, seebeck, kappa, hall = bl.calc_Onsager_coefficients(
+                                          l0, l1, l2, mu, temperature, v, lm11)
+        sigma *= relaxation_time
+        kappa *= relaxation_time
+        seebeck *= 1e6
+
+        data = {'conductivity':                    sigma,
+                'doping':                          doping,
+                'electronic_heat_capacity':        cv,
+                'electronic_thermal_conductivity': kappa,
+                'fermi_level':                     mu,
+                'hall':                            hall,
+                'power_factor':                    sigma*seebeck**2,
+                'seebeck':                         seebeck,
+                'temperature':                     temperature,
+                'meta':
+                    {'units':      {'conductivity':                    'S m-1',
+                                    'doping':                          'cm-1',
+                                    'electronic_heat_capacity':        'J mol-1 K-1',
+                                    'electronic_thermal_conductivity': 'W m-1 K-1',
+                                    'fermi_level':                     'eV',
+                                    'hall':                            'm3 C-1',
+                                    'power_factor':                    'W m-1 K-2',
+                                    'seebeck':                         'muV K-1',
+                                    'temperature':                     'K'},
+                     'dimensions': {'conductivity':                    ['temperature', 'doping', 3, 3],
+                                    'doping':                          ['doping'],
+                                    'electronic_heat_capacity':        ['temperature', 'doping'],
+                                    'electronic_thermal_conductivity': ['temperature', 'doping', 3, 3],
+                                    'fermi_level':                     ['temperature', 'doping'],
+                                    'hall':                            ['temperature', 'doping', 3, 3, 3],
+                                    'power_factor':                    ['temperature', 'doping', 3, 3],
+                                    'seebeck':                         ['temperature', 'doping', 3, 3],
+                                    'temperature':                     ['temperature']},
+                   'interpolation_factor': lpfac,
+                   'relaxation_time':      relaxation_time}}
+
+        print('Done.')
+        tp.data.save.hdf5(data, f'{prefix}-btp2.hdf5')
 
     return

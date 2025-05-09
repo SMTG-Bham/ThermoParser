@@ -16,6 +16,8 @@
 #                get charge carrier occupation
 #            boltztrap
 #                get specific data from tp boltztrap hdf5.
+#            boltztrap2
+#                get specific data from tp boltztrap2 hdf5.
 #            phono3py
 #                get specific data from phono3py kappa hdf5.
 #            zt
@@ -63,6 +65,8 @@ import warnings
 from copy import deepcopy
 from tp.cli.options import *
 
+workers = tp.settings.get_workers()
+
 @click.group()
 @adminsitrative_options
 def tp_cli():
@@ -74,6 +78,110 @@ def tp_cli():
 @adminsitrative_options
 def gen():
     """Tools for generating calculation inputs."""
+    return
+
+
+@gen.command(no_args_is_help=True)
+@adminsitrative_options
+@supercell_argument
+@click.option('-p', '--preset',
+              help='path formalism. bradley requires sumo is installed. '
+                   'Overridden by --path. Default: pymatgen.',
+              type=click.Choice(['bradley', 'bradley_cracknell', 'bradcrack',
+                                 'hinuma', 'seekpath',
+                                 'latimer', 'latimer_munro',
+                                 'setyawan', 'setyawan_cutarolo', 'pymatgen']),
+              default='pymatgen')
+@click.option('--path',
+              help='custom high symmetry path. Overrides --preset.',
+              type=str)
+@click.option('--labels',
+              help='labels for custom high symmetry path',
+              type=str)
+@click.option('-s', '--symprec',
+              help='symmetry tolerance for spacegroup identification in AA. '
+                   'Default: 1e-5',
+              default=1e-5,
+              type=float)
+@click.option('--points',
+              help='number of points per q-path. Default: 101',
+              default=101,
+              type=int)
+@click.option('-c', '--connection',
+              help='attempt to maintain band order at hihg-symmetry points. '
+              'Default: True',
+              default=True,
+              type=bool)
+@click.option('-e', '--eigenvectors',
+              help='print eigenvectors to file. Default: True',
+              default=True,
+              type=bool)
+@click.option('-n', '--nac',
+              help='use non-analytical correction. Requires phonopy BORN file. '
+                    'Default: False',
+              default=False,
+              type=bool)
+@click.option('--poscar',
+              help='POSCAR path. Default: POSCAR',
+              default='POSCAR',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@click.option('-o', '--output',
+              help='output path. Default: band.conf',
+              default='band.conf',
+              type=str)
+def band_conf(dim, preset, path, labels, symprec, points, connection,
+              eigenvectors, nac, poscar, output):
+    """Writes a band.conf file for phononpy.
+
+    Supercell dimensions required (can be an isotropic scale factor,
+    3x1, 3x3 (xx, xy, xz, yx, ..., zz) or 6x1 matrix).
+    """
+
+    tp.setup.phonopy.gen_band_conf(dim=dim, preset=preset, path=path,
+                                   labels=labels, symprec=symprec,
+                                   points=points, connection=connection,
+                                   eigenvectors=eigenvectors, nac=nac,
+                                   poscar=poscar, output=output)
+    
+    return
+
+
+@gen.command(no_args_is_help=True)
+@adminsitrative_options
+@supercell_argument
+@click.option('-m', '--mesh',
+              help='3x1 q-point mesh. Default: 24 24 24.',
+              nargs=3,
+              default=[24, 24, 24],
+              type=int)
+@click.option('-e', '--eigenvectors',
+              help='print eigenvectors to file. Default: True',
+              default=True,
+              type=bool)
+@click.option('-g', '--gamma',
+              help='Gamma-centred q-mesh. Default: True',
+              default=True,
+              type=bool)
+@click.option('-n', '--nac',
+              help='use non-analytical correction. Requires phonopy BORN file. '
+                    'Default: False',
+              default=False,
+              type=bool)
+@click.option('--poscar',
+              help='POSCAR path. Default: POSCAR',
+              default='POSCAR',
+              type=click.Path(exists=True, file_okay=True, dir_okay=False))
+@click.option('-o', '--output',
+              help='output path. Default: dos.conf',
+              default='dos.conf',
+              type=str)
+def dos_conf(dim, mesh, eigenvectors, gamma, nac, poscar, output):
+    """Writes a dos.conf file for phononpy."""
+
+    tp.setup.phonopy.gen_dos_conf(dim=dim, mesh=mesh, gamma=gamma,
+                                  eigenvectors=eigenvectors, nac=nac,
+                                  poscar=poscar, output=output)
+    
     return
 
 
@@ -406,6 +514,63 @@ def get_boltztrap(boltztrap_hdf5, quantity, dtype, doping, direction, temperatur
     return
 
 
+@get.command('boltztrap2')
+@adminsitrative_options
+@inputs_function('boltztrap2_hdf5', nargs=1)
+@click.option('-q', '--quantity',
+              help='Quantity to read.',
+              default='conductivity',
+              show_default=True)
+@doping_function()
+@direction_function()
+@temperature_option
+
+def get_boltztrap2(boltztrap2_hdf5, quantity, doping, direction, temperature):
+    """Prints BoltzTraP2 values at given conditions.
+
+    Requires a tp-btp2.hdf5 file.
+    """
+    # I'm making a few of these for different inputs so it doesn't get
+    # too unwieldly checking which source they're from, but they could
+    # also be combined.
+
+    data = tp.data.load.boltztrap2(boltztrap2_hdf5, quantity)
+
+    dims = data['meta']['dimensions'][quantity]
+    if 'temperature' not in dims:
+        temperature = None
+    if 'doping' not in dims:
+        doping = None
+
+    data = tp.data.utilities.resolve(data, quantity, direction=direction,
+                                     temperature=temperature, doping=doping)
+    printq = ''
+    for l in quantity:
+        if l == '_':
+            printq += ' '
+        else:
+            printq += l
+    if printq[-1] == 's':
+        printq = printq[:-1]
+
+    end = ' '
+    print('The {}'.format(printq), end=' ')
+    if 3 in dims:
+        print('in the {} direction'.format(direction), end=end)
+        while 3 in dims:
+            dims.remove(3)
+    if 'temperature' in dims:
+        if len(dims) == 2:
+            end = ' and '
+        print('at {:d} K'.format(int(data['meta']['temperature'])), end=end)
+        dims.remove('temperature')
+    if 'doping' in dims:
+        print('{:.3e} carriers cm^-3'.format(data['meta']['doping']), end=' ')
+    print('is {:.3} {}.'.format(data[quantity], tp.settings.units()[quantity]))
+
+    return
+
+
 @get.command('phono3py', no_args_is_help=True)
 @adminsitrative_options
 @inputs_function('kappa_hdf5', nargs=1)
@@ -526,8 +691,10 @@ def get_zt(transport_file, kappa, dtype, doping, direction, temperature, max):
     try:
         edata = tp.data.load.amset(transport_file, equants)
     except UnicodeDecodeError:
-        edata = tp.data.load.boltztrap(transport_file, equants, doping=dtype)
-
+        try:
+            edata = tp.data.load.boltztrap(transport_file, equants, doping=dtype)
+        except ValueError:
+            edata = tp.data.load.boltztrap2(transport_file, equants)
     if 'zt' in edata:
         pass
     elif kappa is not None:
@@ -575,7 +742,7 @@ def run():
     return
 
 
-@run.command(no_args_is_help=True)
+@run.command()
 @adminsitrative_options
 
 @click.option('--tmin',
@@ -657,6 +824,106 @@ def boltztrap(tmin, tmax, tstep, dmin, dmax, ndope, relaxation_time, lpfac,
                           ke_mode=kmode, vasprun=vasprun, kpoints=kpoints,
                           relaxation_time=relaxation_time, lpfac=lpfac,
                           run=run, analyse=analyse, output=output)
+
+    return
+
+
+@run.command()
+@adminsitrative_options
+
+@click.option('--tmin',
+              help='Set minimum temperature in K.  [default: tstep]',
+              type=float)
+@click.option('--tmax',
+              help='Maximum temperature in K.',
+              default=1000.,
+              show_default=True)
+@click.option('--tstep',
+              help='Temperature step size in K.',
+              default=50.,
+              show_default=True)
+
+@click.option('--dmin',
+              help='Minimum doping in cm^-3.',
+              default=1e18,
+              show_default=True)
+@click.option('--dmax',
+              help='Maximum doping in cm^-3.',
+              default=1e21,
+              show_default=True)
+@click.option('--ndope',
+              help='number of doping concetrations to calculate.',
+              default=16,
+              show_default=True)
+
+
+@click.option('-s', '--scissor',
+              help='Target band gap in eV.  [default: no scissor]',
+              default=None,
+              show_default=False)
+@click.option('-r', '--relaxation_time',
+              help='Charge carrier relaxation time in s.',
+              default=1e-14,
+              show_default=True)
+
+@click.option('--interpolate/--nointerpolate',
+              help='Interpolate density of states (must be done at least once).  '
+                   '[default: interpolate]',
+              default=True,
+              show_default=False)
+@click.option('-l', '--lpfac',
+              help='Factor to interpolate the DoS density by.',
+              default=10,
+              show_default=True)
+@click.option('--emin',
+              help='Minimum energy in eV from the Fermi level to interpolate.',
+              default=-0.2,
+              show_default=True)
+@click.option('--emax',
+              help='Maximum energy in eV from the Fermi level to interpolate.',
+              default=0.2,
+              show_default=True)
+@click.option('--dosbins',
+              help='Number of bins to sort the dos into.',
+              default=4000,
+              show_default=True)
+              
+@click.option('--run/--norun',
+              help='Run BoltzTraP2.  [default: run]',
+              default=True,
+              show_default=False)
+
+@click.option('-p', '--prefix',
+              help='Filename prefix.',
+              default='tp',
+              show_default=True)
+@click.option('--dos_dir',
+              help='Path to the DoS files.',
+              default='.',
+              type=click.Path(exists=True, file_okay=False, dir_okay=True),
+              show_default=True)
+@click.option('--run_dir',
+              help='Path to run BoltzTraP2 in.',
+              default='.',
+              type=click.Path(exists=True, file_okay=False, dir_okay=True),
+              show_default=True)
+@click.option('-w', '--workers',
+              help='Degree of parallelisation.',
+              default=workers,
+              show_default=True)
+
+def boltztrap2(tmin, tmax, tstep, dmin, dmax, ndope, scissor, relaxation_time,
+               interpolate, lpfac, emin, emax, dosbins, run, prefix, dos_dir,
+               run_dir, workers):
+    """Runs BoltzTraP2 and sends data to hdf5."""
+
+    doping = np.geomspace(dmin, dmax, ndope)
+
+    tp.data.run.boltztrap2(tmax=tmax, tstep=tstep, tmin=tmin, doping=doping,
+                           scissor=scissor, relaxation_time=relaxation_time,
+                           interpolate=interpolate, lpfac=lpfac, emin=emin,
+                           emax=emax, dosbins=dosbins, run=run, prefix=prefix,
+                           dos_dir=dos_dir, run_dir=run_dir, workers=workers)
 
     return
 
@@ -1123,6 +1390,7 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 @adminsitrative_options
 @inputs_function('dos_dat', nargs=1)
 @dos_function()
+@interpolate_options
 @fill_options
 @line_options
 
@@ -1131,9 +1399,9 @@ def cumkappa(kappa_hdf5, mfp, percent, xmarkers, ymarkers, direction,
 @plot_io_function('tp-dos')
 
 def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
-        total_colour, colour, fill, fillalpha, line, linestyle, marker,
-        xmin, xmax, ymin, ymax, legend, legend_title, location, style,
-        large, save, show, extension, output):
+        total_colour, colour, interpolate, kind, fill, fillalpha, line,
+        linestyle, marker, xmin, xmax, ymin, ymax, legend, legend_title,
+        location, style, large, save, show, extension, output):
     """Plots a phonon density of states."""
 
     axes = tp.axes.large if large else tp.axes.small
@@ -1147,6 +1415,7 @@ def dos(dos_dat, poscar, atoms, sigma, projected, total, total_label,
 
     data = tp.data.load.phonopy_dos(dos_dat, poscar, atoms)
     tp.plot.frequency.add_dos(ax, data, projected=projected, sigma=sigma,
+                              interpolate=interpolate, kind=kind,
                               total=total, totallabel=total_label,
                               colour=colour, totalcolour=total_colour,
                               fill=fill, fillalpha=fillalpha, line=line,
@@ -1488,7 +1757,10 @@ def kappa_target(transport_file, zt, direction, interpolate, kind, colour,
     try:
         edata = tp.data.load.amset(transport_file, equants)
     except UnicodeDecodeError:
-        edata = tp.data.load.boltztrap(transport_file, equants)
+        try:
+            edata = tp.data.load.boltztrap(transport_file, equants)
+        except ValueError:
+            edata = tp.data.load.boltztrap2(transport_file, equants)
 
     fig, ax, _ = axes.one_colourbar(style)
 
@@ -1762,7 +2034,10 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
         try:
             edata.append(tp.data.load.amset(f, eqs))
         except UnicodeDecodeError:
-            edata.append(tp.data.load.boltztrap(f, eqs, doping=dtype))
+            try:
+                edata.append(tp.data.load.boltztrap(f, eqs, doping=dtype))
+            except ValueError:
+                edata.append(tp.data.load.boltztrap2(f, eqs))
     if ltc in quantity or tc in quantity:
         if len(kfile) != 0:
             kdata = []
@@ -2335,7 +2610,10 @@ def ztmap(transport_file, pf, kappa, direction, dtype, interpolate, kind,
     try:
         edata = tp.data.load.amset(transport_file)
     except UnicodeDecodeError:
-        edata = tp.data.load.boltztrap(transport_file, doping=dtype)
+        try:
+            edata = tp.data.load.boltztrap(transport_file, doping=dtype)
+        except ValueError:
+            edata = tp.data.load.boltztrap2(transport_file)
 
     fig, ax, _ = axes.one_colourbar(style)
 
@@ -2422,7 +2700,10 @@ def ztdiff(transport_files, pf, kappa, direction, dtype, interpolate, kind,
         try:
             edata.append(tp.data.load.amset(f))
         except UnicodeDecodeError:
-            edata.append(tp.data.load.boltztrap(f, doping=dtype))
+            try:
+                edata.append(tp.data.load.boltztrap(f, doping=dtype))
+            except ValueError:
+                edata.append(tp.data.load.boltztrap2(f))
 
     label = list(label)
     while len(label) < 2:

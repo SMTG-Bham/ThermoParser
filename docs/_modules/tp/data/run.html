@@ -79,11 +79,14 @@
 <span class="c1">#---------</span>
 <span class="c1">#</span>
 <span class="c1">#    boltztrap</span>
+<span class="c1">#    boltztrap2</span>
 <span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tp</span>
+
+<span class="n">workers</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">get_workers</span><span class="p">()</span>
 
 <div class="viewcode-block" id="boltztrap"><a class="viewcode-back" href="../../../tp.data.html#tp.data.run.boltztrap">[docs]</a><span class="k">def</span> <span class="nf">boltztrap</span><span class="p">(</span><span class="n">tmax</span><span class="o">=</span><span class="mi">1001</span><span class="p">,</span> <span class="n">tstep</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span>
               <span class="n">ke_mode</span><span class="o">=</span><span class="s1">&#39;boltzmann&#39;</span><span class="p">,</span> <span class="n">vasprun</span><span class="o">=</span><span class="s1">&#39;vasprun.xml&#39;</span><span class="p">,</span> <span class="n">kpoints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -110,7 +113,7 @@
 <span class="sd">        doping : array-like, optional</span>
 <span class="sd">            doping concentrations in cm-1.</span>
 <span class="sd">            Default: np.logspace(18, 21, 17).</span>
-<span class="sd">        k_mode : str, optional</span>
+<span class="sd">        ke_mode : str, optional</span>
 <span class="sd">            method for calculating the electronic thermal conductivity.</span>
 <span class="sd">            Options:</span>
 
@@ -190,6 +193,8 @@
 <span class="sd">        meta : dict</span>
 <span class="sd">            metadata:</span>
 
+<span class="sd">                dimensions : dict</span>
+<span class="sd">                    dimensions of each property above.</span>
 <span class="sd">                interpolation_factor : int</span>
 <span class="sd">                    lpfac.</span>
 <span class="sd">                ke_mode : str</span>
@@ -342,6 +347,231 @@
         <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">btr_dir</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="s1">&#39;boltztrap.out&#39;</span><span class="p">))</span>
+
+    <span class="k">return</span></div>
+
+<div class="viewcode-block" id="boltztrap2"><a class="viewcode-back" href="../../../tp.data.html#tp.data.run.boltztrap2">[docs]</a><span class="nd">@tp</span><span class="o">.</span><span class="n">docstring_replace</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">boltztrap2</span><span class="p">(</span><span class="n">tmax</span><span class="o">=</span><span class="mi">1001</span><span class="p">,</span> <span class="n">tstep</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doping</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span>
+               <span class="n">scissor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relaxation_time</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lpfac</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+               <span class="n">emin</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">emax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">dosbins</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;tp&#39;</span><span class="p">,</span>
+               <span class="n">dos_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Runs BoltzTraP2 from a density of states (DoS).</span>
+
+<span class="sd">    Heavily based on the official tutorial and CLI dope function, but</span>
+<span class="sd">    outputs to a tp hdf5 file.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">        tmax : float, optional</span>
+<span class="sd">            maximum temperature in K. Default: 1000.</span>
+<span class="sd">        tstep : float, optional</span>
+<span class="sd">            temperature step in K. Default: 50.</span>
+<span class="sd">        tmin : float, optional</span>
+<span class="sd">            minimum temperature in K. Default: tstep.</span>
+<span class="sd">        doping : array-like, optional</span>
+<span class="sd">            doping concentrations in cm-1.</span>
+<span class="sd">            Default: np.logspace(18, 21, 22).</span>
+<span class="sd">        scissor : float, optionao</span>
+<span class="sd">            target band gap in eV. Default: None.</span>
+
+<span class="sd">        relaxation_time : float, optional</span>
+<span class="sd">            charge carrier relaxation time. Default: 1e-14.</span>
+<span class="sd">        interpolate : bool, optional</span>
+<span class="sd">            run DoS interpolation. Default: True.</span>
+<span class="sd">        lpfac : int, optional</span>
+<span class="sd">            DoS interpolation factor. Default: 10.</span>
+<span class="sd">        emin : float, optional</span>
+<span class="sd">            minimum energy from the Fermi level to include bands during</span>
+<span class="sd">            interpolation. Default: -0.2.</span>
+<span class="sd">        emax : float, optional</span>
+<span class="sd">            maximum energy from the Fermi level to include bands during</span>
+<span class="sd">            interpolation. Default: +0.2.</span>
+<span class="sd">        dosbins : int, optional</span>
+<span class="sd">            number of energy bins to sort the DoS into. Default: 4000.</span>
+
+<span class="sd">        run : bool, optional</span>
+<span class="sd">            run BoltzTraP2. Default: True.</span>
+<span class="sd">        prefix : str, optional</span>
+<span class="sd">            output filename prefix. Default: tp.</span>
+<span class="sd">        dos_dir : str, optional</span>
+<span class="sd">            path to dft DoS output. Default: current directory.</span>
+<span class="sd">        run_dir : str, optional</span>
+<span class="sd">            path to run boltztrap in. Default: current directory.</span>
+<span class="sd">        workers : int, optional</span>
+<span class="sd">            number of workers for paralellised section.</span>
+<span class="sd">            Default: {workers}.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">        None</span>
+<span class="sd">            instead prints to hdf5 (see below).</span>
+
+<span class="sd">    hdf5 File Contents</span>
+<span class="sd">    ------------------</span>
+
+<span class="sd">        conductivity : array-like</span>
+<span class="sd">            electric conductivity in S m-1.</span>
+<span class="sd">            Shape: (temperatures, concentrations, 3, 3).</span>
+<span class="sd">        doping : array-like</span>
+<span class="sd">            carrier concentration in cm-1. Identical to input.</span>
+<span class="sd">        electronic_heat_capacity : array-like</span>
+<span class="sd">            electronic contributions to the specific heat capacity in</span>
+<span class="sd">            J mol-1 K-1. Shape (temperatures, concentrations)</span>
+<span class="sd">        electronic_thermal_conductivity : array-like</span>
+<span class="sd">            electronic thermal conductivity in W m-1 K-1.</span>
+<span class="sd">            Shape (temperatures, concentrations, 3, 3).</span>
+<span class="sd">        fermi_level : array-like</span>
+<span class="sd">            fermi level at different temperatures in eV.</span>
+<span class="sd">            Shape: (temperatures, concentrations).</span>
+<span class="sd">        hall : array-like</span>
+<span class="sd">            Hall coefficient in J C-1.</span>
+<span class="sd">            Shape: (temperatures, concentrations, 3, 3, 3).</span>
+<span class="sd">        power_factor : array-like</span>
+<span class="sd">            power factor in W m-1 K-2.</span>
+<span class="sd">            Shape: (temperatures, concentrations, 3, 3).</span>
+<span class="sd">        seebeck : dict</span>
+<span class="sd">            Seebeck coefficient in muV K-1.</span>
+<span class="sd">            Shape: (temperatures, concentrations, 3, 3).</span>
+<span class="sd">        temperature : numpy array</span>
+<span class="sd">            temperatures in K.</span>
+<span class="sd">        meta : dict</span>
+<span class="sd">            metadata:</span>
+
+<span class="sd">                dimensions : dict</span>
+<span class="sd">                    dimensions of each property above.</span>
+<span class="sd">                interpolation_factor : int</span>
+<span class="sd">                    lpfac.</span>
+<span class="sd">                relaxation_time : float</span>
+<span class="sd">                    as input.</span>
+<span class="sd">                units : dict</span>
+<span class="sd">                    units of each property above.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">from</span> <span class="nn">BoltzTraP2</span> <span class="kn">import</span> <span class="n">bandlib</span> <span class="k">as</span> <span class="n">bl</span>
+    <span class="kn">from</span> <span class="nn">BoltzTraP2</span> <span class="kn">import</span> <span class="n">dft</span>
+    <span class="kn">from</span> <span class="nn">BoltzTraP2</span> <span class="kn">import</span> <span class="n">fite</span><span class="p">,</span> <span class="n">serialization</span><span class="p">,</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">units</span>
+
+    <span class="c1"># check inputs</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;interpolate&#39;</span><span class="p">],</span>
+                           <span class="p">[</span> <span class="n">run</span><span class="p">,</span>   <span class="n">interpolate</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> must be True or False&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">run_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">run_dir</span><span class="p">)</span>
+    <span class="n">dos_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">dos_dir</span><span class="p">)</span>
+    <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dos_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">.btp2&#39;</span><span class="p">)</span>
+
+    <span class="n">tmax</span> <span class="o">+=</span> <span class="n">tstep</span>
+    <span class="n">tmin</span> <span class="o">=</span> <span class="n">tstep</span> <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">tmin</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">tstep</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">interpolate</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading DFT data...&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dft</span><span class="o">.</span><span class="n">DFTData</span><span class="p">(</span><span class="n">dos_dir</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Interpolating DFT data...&#39;</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">bandana</span><span class="p">(</span><span class="n">emin</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">fermi</span><span class="o">+</span><span class="n">emin</span><span class="p">,</span> <span class="n">emax</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">fermi</span><span class="o">+</span><span class="n">emax</span><span class="p">)</span>
+        <span class="n">eq</span> <span class="o">=</span> <span class="n">sphere</span><span class="o">.</span><span class="n">get_equivalences</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">magmom</span><span class="p">,</span>
+                                     <span class="n">nkpt</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">kpoints</span><span class="p">)</span> <span class="o">*</span> <span class="n">lpfac</span><span class="p">)</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="n">fite</span><span class="o">.</span><span class="n">fitde3D</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">eq</span><span class="p">)</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">serialization</span><span class="o">.</span><span class="n">gen_bt2_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">mommat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">serialization</span><span class="o">.</span><span class="n">save_calculation</span><span class="p">(</span><span class="n">ifile</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eq</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading interpolated DoS...&#39;</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">eq</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">serialization</span><span class="o">.</span><span class="n">load_calculation</span><span class="p">(</span><span class="n">ifile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">run</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running BoltzTraP2...&#39;</span><span class="p">)</span>
+        <span class="n">lattvec</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_lattvec</span><span class="p">()</span>
+        <span class="n">eband</span><span class="p">,</span> <span class="n">vvband</span><span class="p">,</span> <span class="n">cband</span> <span class="o">=</span> <span class="n">fite</span><span class="o">.</span><span class="n">getBTPbands</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">lattvec</span><span class="p">,</span>
+                                                <span class="n">curvature</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nworkers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+        <span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">vvdos</span><span class="p">,</span> <span class="n">cdos</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">BTPDOS</span><span class="p">(</span><span class="n">eband</span><span class="p">,</span> <span class="n">vvband</span><span class="p">,</span> <span class="n">cband</span><span class="p">,</span>
+                                              <span class="n">npts</span><span class="o">=</span><span class="n">dosbins</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scissor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scissor</span> <span class="o">*=</span> <span class="n">units</span><span class="o">.</span><span class="n">eV</span>
+            <span class="n">eband</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">apply_scissor</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">nelect</span><span class="p">,</span> <span class="n">eband</span><span class="p">,</span> <span class="n">scissor</span><span class="p">,</span>
+                                     <span class="n">data</span><span class="o">.</span><span class="n">dosweight</span><span class="p">)</span>
+            <span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">vvdos</span><span class="p">,</span> <span class="n">cdos</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">BTPDOS</span><span class="p">(</span><span class="n">eband</span><span class="p">,</span> <span class="n">vvband</span><span class="p">,</span> <span class="n">cband</span><span class="p">,</span>
+                                                  <span class="n">npts</span><span class="o">=</span><span class="n">dosbins</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">)</span>
+        <span class="n">margin</span> <span class="o">=</span> <span class="mf">9.</span> <span class="o">*</span> <span class="n">units</span><span class="o">.</span><span class="n">BOLTZMANN</span> <span class="o">*</span> <span class="n">temperature</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">mumin</span> <span class="o">=</span> <span class="n">epsilon</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="n">margin</span>
+        <span class="n">mumax</span> <span class="o">=</span> <span class="n">epsilon</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">margin</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_volume</span><span class="p">()</span> <span class="o">*</span> <span class="n">units</span><span class="o">.</span><span class="n">Angstrom</span><span class="o">**</span><span class="mi">3</span>
+        <span class="n">vcm</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_volume</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e-24</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">)))</span>
+        <span class="c1">#sdos = np.empty((len(temperature), len(doping)))</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">)))</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">)))</span>
+        <span class="n">l0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">l2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">lm11</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">seebeck</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">hall</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">doping</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temperature</span><span class="p">):</span>
+            <span class="n">dmin</span> <span class="o">=</span> <span class="p">(</span><span class="n">bl</span><span class="o">.</span><span class="n">calc_N</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">mumax</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dosweight</span><span class="p">)</span> \
+                 <span class="o">+</span>  <span class="n">data</span><span class="o">.</span><span class="n">nelect</span><span class="p">)</span> <span class="o">/</span> <span class="n">vcm</span>
+            <span class="n">dmax</span> <span class="o">=</span> <span class="p">(</span><span class="n">bl</span><span class="o">.</span><span class="n">calc_N</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">mumin</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dosweight</span><span class="p">)</span> \
+                 <span class="o">+</span>  <span class="n">data</span><span class="o">.</span><span class="n">nelect</span><span class="p">)</span> <span class="o">/</span> <span class="n">vcm</span>
+            <span class="k">if</span> <span class="n">doping</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">dmin</span> <span class="ow">or</span> <span class="n">doping</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">dmax</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;doping must be between </span><span class="si">{</span><span class="n">dmin</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1"> and &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dmax</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1"> at </span><span class="si">{</span><span class="n">t</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doping</span><span class="p">):</span>
+                <span class="n">ne</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">nelect</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">vcm</span>
+                <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">solve_for_mu</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">ne</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dosweight</span><span class="p">,</span>
+                                           <span class="n">refine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">try_center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                
+            <span class="c1">#sdos[i,:] = bl.smoothen_DOS_direct(epsilon, dos, t, mu[i, :])</span>
+            <span class="n">cv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">calc_cv</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t</span><span class="p">]),</span>
+                               <span class="n">dosweight</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dosweight</span><span class="p">)</span>
+            <span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">l0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">l1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">l2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">lm11</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">fermiintegrals</span><span class="p">(</span>
+                <span class="n">epsilon</span><span class="p">,</span> <span class="n">dos</span><span class="p">,</span> <span class="n">vvdos</span><span class="p">,</span> <span class="n">mur</span><span class="o">=</span><span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Tr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t</span><span class="p">]),</span>
+                <span class="n">dosweight</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dosweight</span><span class="p">,</span> <span class="n">cdos</span><span class="o">=</span><span class="n">cdos</span><span class="p">)</span>
+        <span class="n">sigma</span><span class="p">,</span> <span class="n">seebeck</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">hall</span> <span class="o">=</span> <span class="n">bl</span><span class="o">.</span><span class="n">calc_Onsager_coefficients</span><span class="p">(</span>
+                                          <span class="n">l0</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">lm11</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">*=</span> <span class="n">relaxation_time</span>
+        <span class="n">kappa</span> <span class="o">*=</span> <span class="n">relaxation_time</span>
+        <span class="n">seebeck</span> <span class="o">*=</span> <span class="mf">1e6</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="n">sigma</span><span class="p">,</span>
+                <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="n">doping</span><span class="p">,</span>
+                <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>        <span class="n">cv</span><span class="p">,</span>
+                <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="n">kappa</span><span class="p">,</span>
+                <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="n">mu</span><span class="p">,</span>
+                <span class="s1">&#39;hall&#39;</span><span class="p">:</span>                            <span class="n">hall</span><span class="p">,</span>
+                <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="n">sigma</span><span class="o">*</span><span class="n">seebeck</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+                <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="n">seebeck</span><span class="p">,</span>
+                <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="n">temperature</span><span class="p">,</span>
+                <span class="s1">&#39;meta&#39;</span><span class="p">:</span>
+                    <span class="p">{</span><span class="s1">&#39;units&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="s1">&#39;S m-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="s1">&#39;cm-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>        <span class="s1">&#39;J mol-1 K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="s1">&#39;W m-1 K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="s1">&#39;eV&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;hall&#39;</span><span class="p">:</span>                            <span class="s1">&#39;m3 C-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="s1">&#39;W m-1 K-2&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="s1">&#39;muV K-1&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="s1">&#39;K&#39;</span><span class="p">},</span>
+                     <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;conductivity&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;doping&#39;</span><span class="p">:</span>                          <span class="p">[</span><span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;electronic_heat_capacity&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;electronic_thermal_conductivity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;fermi_level&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">],</span>
+                                    <span class="s1">&#39;hall&#39;</span><span class="p">:</span>                            <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;power_factor&#39;</span><span class="p">:</span>                    <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;seebeck&#39;</span><span class="p">:</span>                         <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;doping&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                                    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>                     <span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]},</span>
+                   <span class="s1">&#39;interpolation_factor&#39;</span><span class="p">:</span> <span class="n">lpfac</span><span class="p">,</span>
+                   <span class="s1">&#39;relaxation_time&#39;</span><span class="p">:</span>      <span class="n">relaxation_time</span><span class="p">}}</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
+        <span class="n">tp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">hdf5</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">-btp2.hdf5&#39;</span><span class="p">)</span>
 
     <span class="k">return</span></div>
 </pre></div>
