@@ -184,6 +184,12 @@ def resolve(data, quantities, **kwargs):
                                    data['meta']['dimensions'][q][i] == 3:
                                     # if this is a 3x3 array
                                     del data['meta']['dimensions'][q][i]
+                                    if len(data['meta']['dimensions'][q]) > i and \
+                                       data['meta']['dimensions'][q][i] == 3:
+                                        # if this is a 3x3 array
+                                        raise Exception(
+                                            '3 or higher dimensional arrays '
+                                            'not currently supported')
                                     data[q] = np.moveaxis(data[q], i+1, 1)
                                     data[q] = np.average([data[q][0][0],
                                                           data[q][1][1],
@@ -198,23 +204,34 @@ def resolve(data, quantities, **kwargs):
                                    data['meta']['dimensions'][q][i] == 3:
                                     # if this is a 3x3 array
                                     del data['meta']['dimensions'][q][i]
+                                    if len(data['meta']['dimensions'][q]) > i and \
+                                       data['meta']['dimensions'][q][i] == 3:
+                                        # if this is a 3x3 array
+                                        raise Exception(
+                                            '3 or higher dimensional arrays '
+                                            'not currently supported')
                                     data[q] = np.moveaxis(data[q], i+1, 1)
                                     data[q] = np.square(data[q][0][0]) \
                                             + np.square(data[q][1][1]) \
                                             + np.square(data[q][2][2])
-                                    data[q] = np.sqrt(data[q])
                                 else:
                                     # if this is a 3x1 or 6x1 array
                                     data[q] = np.square(data[q][0]) \
                                             + np.square(data[q][1]) \
                                             + np.square(data[q][2])
-                                    data[q] = np.sqrt(data[q])
+                                data[q] = np.sqrt(data[q])
                                 data['meta'][key] = 'norm'
                             elif val in ['harmonic', 'harm']:
                                 if len(data['meta']['dimensions'][q]) > i and \
                                    data['meta']['dimensions'][q][i] == 3:
                                     # if this is a 3x3 array
                                     del data['meta']['dimensions'][q][i]
+                                    if len(data['meta']['dimensions'][q]) > i and \
+                                       data['meta']['dimensions'][q][i] == 3:
+                                        # if this is a 3x3 array
+                                        raise Exception(
+                                            '3 or higher dimensional arrays '
+                                            'not currently supported')
                                     data[q] = np.moveaxis(data[q], i+1, 1)
                                     data[q] = 1/np.average([1/data[q][0][0],
                                                             1/data[q][1][1],

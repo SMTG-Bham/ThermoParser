@@ -14,6 +14,8 @@ array dimensions and the data source.
 #        from the amset mesh h5.
 #    boltztrap:
 #        from the tp boltztrap hdf5.
+#    boltztrap2:
+#        from the tp boltztrap2 hdf5.
 #    phono3py:
 #        from the phono3py kappa hdf5.
 #    phonopy_dispersion:
@@ -235,7 +237,7 @@ def amset_mesh(filename, quantities='all', doping='n', spin='avg'):
             'mean_free_path': ['scattering_rates', 'velocities', 'mean_free_path'],
             'weighted_mfp':   ['scattering_rates', 'velocities', 'mean_free_path', 'energies', 'fermi_levels', 'weighted_mfp'],
             'occupation':     ['energies', 'fermi_levels', 'occupation']}
-    hasspin = ['energies', 'vb_index', 'scattering_rates', 'velocities']
+    hasspin = ['energies', 'vb_idx', 'scattering_rates', 'velocities']
 
     l = len(quantities)
     i = 0
@@ -488,6 +490,83 @@ def boltztrap(filename, quantities='all', doping='n'):
                 dimensions[q2].remove('dtype')
             else:
                 data[q2] = f[q][()]
+            if q2 in units:
+                data['meta']['units'][q2] = units[q2]
+            if q2 in dimensions:
+                data['meta']['dimensions'][q2] = dimensions[q2]
+
+    for c in bconversions:
+        if c in data:
+            data[c] = np.multiply(data[c], float(bconversions[c]))
+
+    for c in conversions:
+        if c in data:
+            data[c] = np.multiply(data[c], float(conversions[c]))
+
+    return data
+
+def boltztrap2(filename, quantities='all'):
+    """Loads BoltzTraP2 data from the tp tp-btp2.hdf5 file.
+
+    Includes unit conversion and outputs units (see tp.settings).
+
+    Arguments
+    ---------
+
+        filename : str
+            tp-btp2.hdf5 filepath.
+
+        quantites : str or list, optional
+            values to extract. Accepts boltztrap.hdf5 keys or all.
+            Default: all.
+
+    Returns
+    -------
+
+        dict
+            extracted values.
+    """
+
+    import h5py
+
+    # name conversions and abbreviations
+
+    bconversions = settings.boltztrap2_conversions()
+    conversions = settings.conversions()
+    bnames = settings.to_boltztrap2()
+    tnames = settings.to_tp()
+    units = settings.units()
+    dimensions = settings.dimensions()
+    if isinstance(quantities, str): quantities = quantities.split()
+    if 'all' not in quantities:
+        quantities = [bnames[q] if q in bnames else q for q in quantities]
+
+        # add dependent variables
+
+        for d in ['doping', 'temperature']:
+            if d not in quantities:
+                for q in quantities:
+                    if q in tnames:
+                        q = tnames[q]
+                    if q in dimensions and \
+                       (d in dimensions[q] or (d in tnames and tnames[d] in dimensions[q])):
+                        quantities.append(d)
+                        break
+
+    # load data
+
+    with h5py.File(filename, 'r') as f:
+        if 'all' in quantities:
+            quantities = list(f.keys())
+            quantities.remove('meta')
+        data = {'meta': {'electronic_source': 'boltztrap2',
+                         'units':             {},
+                         'dimensions':        {}}}
+        for q in quantities:
+            assert q in f, '{} unrecognised. Quantity must be in {} or {}.'.format(
+                            q, ', '.join(list(f)[:-1]), list(f)[-1])
+            q2 = tnames[q] if q in tnames else q
+            data[q2] = f[q][()]
             if q2 in units:
                 data['meta']['units'][q2] = units[q2]
             if q2 in dimensions:

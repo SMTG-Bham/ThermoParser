@@ -199,6 +199,28 @@ Default: all.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt id="tp.data.load.boltztrap2">
+<code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">boltztrap2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">quantities</span><span class="o">=</span><span class="default_value">'all'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#boltztrap2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.boltztrap2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads BoltzTraP2 data from the tp tp-btp2.hdf5 file.</p>
+<p>Includes unit conversion and outputs units (see tp.settings).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – tp-btp2.hdf5 filepath.</p></li>
+<li><p><strong>quantites</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – values to extract. Accepts boltztrap.hdf5 keys or all.
+Default: all.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>extracted values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="tp.data.load.get_path">
 <code class="sig-prename descclassname">tp.data.load.</code><code class="sig-name descname">get_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yamldata</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/load.html#get_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.load.get_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts the path from a phonopy yaml.</p>
@@ -435,7 +457,7 @@ temperatures are run in BoltzTraP, only how many are saved
 to hdf5. Default: tstep.</p></li>
 <li><p><strong>doping</strong> (<em>array-like</em><em>, </em><em>optional</em>) – doping concentrations in cm-1.
 Default: np.logspace(18, 21, 17).</p></li>
-<li><p><strong>k_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>method for calculating the electronic thermal conductivity.
+<li><p><strong>ke_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>method for calculating the electronic thermal conductivity.
 Options:</p>
 <blockquote>
 <div><dl class="simple">
@@ -506,6 +528,8 @@ of shape (temperatures, concentrations, 3, 3).</p>
 <dt>meta<span class="classifier">dict</span></dt><dd><p>metadata:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>dimensions<span class="classifier">dict</span></dt><dd><p>dimensions of each property above.</p>
+</dd>
 <dt>interpolation_factor<span class="classifier">int</span></dt><dd><p>lpfac.</p>
 </dd>
 <dt>ke_mode<span class="classifier">str</span></dt><dd><p>as input.</p>
@@ -513,6 +537,89 @@ of shape (temperatures, concentrations, 3, 3).</p>
 <dt>relaxation_time<span class="classifier">float</span></dt><dd><p>as input.</p>
 </dd>
 <dt>soc<span class="classifier">bool</span></dt><dd><p>spin-orbit coupling calculation.</p>
+</dd>
+<dt>units<span class="classifier">dict</span></dt><dd><p>units of each property above.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tp.data.run.boltztrap2">
+<code class="sig-prename descclassname">tp.data.run.</code><code class="sig-name descname">boltztrap2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">1001</span></em>, <em class="sig-param"><span class="n">tstep</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">tmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">doping</span><span class="o">=</span><span class="default_value">array([1e+18, 1.38949549e+18, 1.93069773e+18, 2.6826958e+18, 3.72759372e+18, 5.17947468e+18, 7.19685673e+18, 1e+19, 1.38949549e+19, 1.93069773e+19, 2.6826958e+19, 3.72759372e+19, 5.17947468e+19, 7.19685673e+19, 1e+20, 1.38949549e+20, 1.93069773e+20, 2.6826958e+20, 3.72759372e+20, 5.17947468e+20, 7.19685673e+20, 1e+21])</span></em>, <em class="sig-param"><span class="n">scissor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">relaxation_time</span><span class="o">=</span><span class="default_value">1e-14</span></em>, <em class="sig-param"><span class="n">interpolate</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lpfac</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">emin</span><span class="o">=</span><span class="default_value">- 0.2</span></em>, <em class="sig-param"><span class="n">emax</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">dosbins</span><span class="o">=</span><span class="default_value">4000</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">'tp'</span></em>, <em class="sig-param"><span class="n">dos_dir</span><span class="o">=</span><span class="default_value">'.'</span></em>, <em class="sig-param"><span class="n">run_dir</span><span class="o">=</span><span class="default_value">'.'</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">8</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tp/data/run.html#boltztrap2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tp.data.run.boltztrap2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs BoltzTraP2 from a density of states (DoS).</p>
+<p>Heavily based on the official tutorial and CLI dope function, but
+outputs to a tp hdf5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tmax</strong> (<em>float</em><em>, </em><em>optional</em>) – maximum temperature in K. Default: 1000.</p></li>
+<li><p><strong>tstep</strong> (<em>float</em><em>, </em><em>optional</em>) – temperature step in K. Default: 50.</p></li>
+<li><p><strong>tmin</strong> (<em>float</em><em>, </em><em>optional</em>) – minimum temperature in K. Default: tstep.</p></li>
+<li><p><strong>doping</strong> (<em>array-like</em><em>, </em><em>optional</em>) – doping concentrations in cm-1.
+Default: np.logspace(18, 21, 22).</p></li>
+<li><p><strong>scissor</strong> (<em>float</em><em>, </em><em>optionao</em>) – target band gap in eV. Default: None.</p></li>
+<li><p><strong>relaxation_time</strong> (<em>float</em><em>, </em><em>optional</em>) – charge carrier relaxation time. Default: 1e-14.</p></li>
+<li><p><strong>interpolate</strong> (<em>bool</em><em>, </em><em>optional</em>) – run DoS interpolation. Default: True.</p></li>
+<li><p><strong>lpfac</strong> (<em>int</em><em>, </em><em>optional</em>) – DoS interpolation factor. Default: 10.</p></li>
+<li><p><strong>emin</strong> (<em>float</em><em>, </em><em>optional</em>) – minimum energy from the Fermi level to include bands during
+interpolation. Default: -0.2.</p></li>
+<li><p><strong>emax</strong> (<em>float</em><em>, </em><em>optional</em>) – maximum energy from the Fermi level to include bands during
+interpolation. Default: +0.2.</p></li>
+<li><p><strong>dosbins</strong> (<em>int</em><em>, </em><em>optional</em>) – number of energy bins to sort the DoS into. Default: 4000.</p></li>
+<li><p><strong>run</strong> (<em>bool</em><em>, </em><em>optional</em>) – run BoltzTraP2. Default: True.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em><em>, </em><em>optional</em>) – output filename prefix. Default: tp.</p></li>
+<li><p><strong>dos_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – path to dft DoS output. Default: current directory.</p></li>
+<li><p><strong>run_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – path to run boltztrap in. Default: current directory.</p></li>
+<li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers for paralellised section.
+Default: 8.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>instead prints to hdf5 (see below).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<blockquote>
+<div><dl>
+<dt>conductivity<span class="classifier">array-like</span></dt><dd><p>electric conductivity in S m-1.
+Shape: (temperatures, concentrations, 3, 3).</p>
+</dd>
+<dt>doping<span class="classifier">array-like</span></dt><dd><p>carrier concentration in cm-1. Identical to input.</p>
+</dd>
+<dt>electronic_heat_capacity<span class="classifier">array-like</span></dt><dd><p>electronic contributions to the specific heat capacity in
+J mol-1 K-1. Shape (temperatures, concentrations)</p>
+</dd>
+<dt>electronic_thermal_conductivity<span class="classifier">array-like</span></dt><dd><p>electronic thermal conductivity in W m-1 K-1.
+Shape (temperatures, concentrations, 3, 3).</p>
+</dd>
+<dt>fermi_level<span class="classifier">array-like</span></dt><dd><p>fermi level at different temperatures in eV.
+Shape: (temperatures, concentrations).</p>
+</dd>
+<dt>hall<span class="classifier">array-like</span></dt><dd><p>Hall coefficient in J C-1.
+Shape: (temperatures, concentrations, 3, 3, 3).</p>
+</dd>
+<dt>power_factor<span class="classifier">array-like</span></dt><dd><p>power factor in W m-1 K-2.
+Shape: (temperatures, concentrations, 3, 3).</p>
+</dd>
+<dt>seebeck<span class="classifier">dict</span></dt><dd><p>Seebeck coefficient in muV K-1.
+Shape: (temperatures, concentrations, 3, 3).</p>
+</dd>
+<dt>temperature<span class="classifier">numpy array</span></dt><dd><p>temperatures in K.</p>
+</dd>
+<dt>meta<span class="classifier">dict</span></dt><dd><p>metadata:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>dimensions<span class="classifier">dict</span></dt><dd><p>dimensions of each property above.</p>
+</dd>
+<dt>interpolation_factor<span class="classifier">int</span></dt><dd><p>lpfac.</p>
+</dd>
+<dt>relaxation_time<span class="classifier">float</span></dt><dd><p>as input.</p>
 </dd>
 <dt>units<span class="classifier">dict</span></dt><dd><p>units of each property above.</p>
 </dd>
