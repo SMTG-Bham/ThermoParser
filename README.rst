@@ -1,4 +1,4 @@
-.. image:: figures/tp-logo-header.png
+.. image:: https://raw.githubusercontent.com/SMTG-Bham/ThermoParser/master/figures/tp-logo-header.png
     :alt: The ThermoParser logo, which looks like "TP"
     :target: https://smtg-bham.github.io/ThermoParser/
     :align: center
@@ -45,7 +45,7 @@ data, save derived properties and plot graphs in a single command.
 
 Click on the image to go to the `gallery`_!
 
-.. image:: figures/wideband.png
+.. image:: https://raw.githubusercontent.com/SMTG-Bham/ThermoParser/master/figures/wideband.png
    :alt: A phonon dispersion where widened bands show phonon scattering
    :target: https://smtg-bham.github.io/ThermoParser/gallery.html
 
@@ -54,7 +54,14 @@ Click on the image to go to the `gallery`_!
 Installation
 ------------
 
-ThermoParser can easily be installed with git and pip:
+ThermoParser can be installed from PyPI with pip:
+
+.. code-block:: bash
+
+    pip install thermoparser
+
+Note the package is imported as ``tp``. To install the latest
+development version instead, or to work on ThermoParser itself, use git:
 
 .. code-block:: bash
 
@@ -62,10 +69,15 @@ ThermoParser can easily be installed with git and pip:
     cd ThermoParser
     pip install .
 
-After installing, you may want to copy ``ThermoParser/tprc.yaml`` to
+After installing, you may want to copy ``tp/tprc.yaml`` to
 ``~/.config/tprc.yaml``, if you want to set your own default axis
 labels, unit conversions, default style sheets (two are provided),
-other aesthetic alterations and more!
+other aesthetic alterations and more! Its location in an installed copy
+can be found with:
+
+.. code-block:: bash
+
+    python3 -c "import os, tp; print(os.path.join(os.path.dirname(tp.__file__), 'tprc.yaml'))"
 
 Mac
 ^^^
@@ -178,10 +190,9 @@ from the ThermoParser directory.
 Testing
 -------
 
-Tests use the `unittest`_ package, and can be run from the test directory
-with ``python3 -m unittest``. If you don't already have unittest installed, it
-can be directly with ``pip install unitest`` or, e.g., ``pip install .[tests]``
-from the ThermoParser directory.
+Tests use the `unittest`_ package, which is part of the Python standard
+library and so needs no installation. They can be run from the
+ThermoParser directory with ``python3 -m unittest``.
 
 .. _unittest: https://docs.python.org/3/library/unittest.html
 

@@ -4,8 +4,8 @@ This module sets the default style sheet, tick locators and axis labels;
 as well as providing a means to automatically convert the units
 presented and add abbreviations that can be used when loading data.
 Custom defaults can be set by saving a copy of tprc.yaml (found in the
-main ThermoParser directory) to ``~/.config/tprc.yaml`` and editing
-that.
+tp package directory, alongside this module) to ``~/.config/tprc.yaml``
+and editing that.
 """
 
 #Functions
@@ -71,6 +71,10 @@ import os
 import warnings
 import yaml
 
+# style sheets ship with the package, so they resolve without being
+# registered in matplotlib's stylelib
+style_dir = os.path.join(os.path.dirname(__file__), 'styles')
+
 try:
     filename = '{}/.config/tprc.yaml'.format(os.path.expanduser("~"))
     with open(filename, 'r') as f:
@@ -112,7 +116,7 @@ def style():
     if conf is not None and 'style' in conf and conf['style'] is not None:
         style = conf['style']
     else:
-        style = ['tp']
+        style = [os.path.join(style_dir, 'tp.mplstyle')]
     if isinstance(style, str):
         style = [style]
 
@@ -125,7 +129,7 @@ def large_style():
        conf['large_style'] is not None:
         style = conf['large_style']
     else:
-        style = ['tp-large']
+        style = [os.path.join(style_dir, 'tp-large.mplstyle')]
     if isinstance(style, str):
         style = [style]
 

@@ -9,7 +9,7 @@
 #        default values and metadata
 #"""
 
-__version__ = '3.1.4'
+__version__ = '3.3.0' # Remember to update the main README header too!
 
 def docstring_replace(**kwargs):
     def d(f):

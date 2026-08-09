@@ -1,0 +1,55 @@
+# Build ThermoParser and publish it to PyPI
+
+name: release
+
+on:
+  release:
+    types: [ "published" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install build twine
+    - name: Build sdist and wheel
+      run: |
+        python3 -m build
+    - name: Check metadata
+      run: |
+        python3 -m twine check --strict dist/*
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist
+        path: dist/
+
+  publish:
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    # trusted publishing: no API token, but the pypi environment and a
+    # matching publisher must be configured on pypi.org
+    environment: pypi
+    permissions:
+      id-token: write
+
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: dist
+        path: dist/
+    - uses: pypa/gh-action-pypi-publish@release/v1
