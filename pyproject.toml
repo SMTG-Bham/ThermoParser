@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thermoparser"
+dynamic = ["version"]
+description = "Streamlined analysis of thermoelectric properties"
+readme = {file = "README.rst", content-type = "text/x-rst"}
+requires-python = ">=3.9"
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [{name = "Kieran B. Spooner", email = "k.b.spooner@bham.ac.uk"}]
+maintainers = [{name = "Kieran B. Spooner", email = "k.b.spooner@bham.ac.uk"}]
+keywords = ["chemistry", "materials", "thermoelectric", "dft", "phonopy",
+            "phono3py", "amset", "boltztrap", "matplotlib", "vasp", "transport"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "click",
+    "h5py",
+    "matplotlib",
+    "numpy>=1.14.3",
+    "pymatgen>=2020.1.28",
+    "pyyaml",
+    "scipy",
+]
+
+[project.optional-dependencies]
+docs = ["sphinx", "sphinx_rtd_theme"]
+bradcrack = ["sumo"]
+btp2 = ["BoltzTraP2"]
+
+[project.urls]
+Homepage = "https://smtg-bham.github.io/ThermoParser/"
+Documentation = "https://smtg-bham.github.io/ThermoParser/"
+Source = "https://github.com/SMTG-Bham/ThermoParser"
+Issues = "https://github.com/SMTG-Bham/ThermoParser/issues"
+
+[project.scripts]
+tp = "tp.cli.cli:tp_cli"
+
+[tool.setuptools.dynamic]
+version = {attr = "tp.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["tp*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.rst"]
+tp = ["tprc.yaml", "styles/*.mplstyle"]

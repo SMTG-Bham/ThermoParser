@@ -22,7 +22,7 @@ copyright = '2023, Scanlon Materials Theory Group'
 author = 'Kieran B. Spooner'
 
 # The full version, including alpha/beta/rc tags
-release = '3.0.0'
+release = '3.3.0'
 
 
 # -- General configuration ---------------------------------------------------
