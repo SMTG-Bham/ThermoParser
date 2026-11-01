@@ -178,6 +178,7 @@ class MultiColourTest(unittest.TestCase):
                  (['red', 'blue'],          tp.plot.colour.linear('red',
                                                                   'blue')(x)),
                  ({'cmax': 'red'},          tp.plot.colour.linear('red')(x)),
+                 ('red',                    ['red'] * 3),
                  (['red', 'blue', 'green'], ['red', 'blue', 'green'])]
 
         for colour, expected in cases:
