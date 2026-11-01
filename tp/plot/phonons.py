@@ -299,10 +299,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
     # line appearance
 
     try:
-        try:
-            colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, len(data)))
-        except AttributeError:
-            colours = mpl.colormaps[colour](np.linspace(0, 1, len(data)))
+        colours = plt.get_cmap(colour)(np.linspace(0, 1, len(data)))
         colours = [[c] for c in colours]
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
@@ -317,7 +314,7 @@ def add_multi(ax, data, bandmin=None, bandmax=None, main=True, label=None,
             colour = tp.plot.colour.linear(**colour)
             colours = [[colour(i)] for i in np.linspace(0, 1, len(data))]
         elif isinstance(colour, str):
-            colours = [colour]
+            colours = [colour] * len(data)
         else:
             colours = colour
 
@@ -1275,10 +1272,7 @@ def add_wideband(ax, kdata, pdata, temperature=300, bandmin=None, bandmax=None,
     # the min and max values.
 
     try:
-        try:
-            cmap = mpl.cm.get_cmap(colour)
-        except AttributeError:
-            cmap = mpl.colormaps[colour]
+        cmap = plt.get_cmap(colour)
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = colour

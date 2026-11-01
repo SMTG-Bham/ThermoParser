@@ -59,6 +59,7 @@
 
 import click
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 import tp
 import warnings
@@ -1146,10 +1147,7 @@ def avg_rates(mesh_h5, mfp, total, x, crt, exclude, doping, direction,
         colour = colour[0]
 
     try:
-        try:
-            colours = mpl.cm.get_cmap(colour)(np.linspace(0, 1, nlines))
-        except AttributeError:
-            colours = mpl.colormaps[colour](np.linspace(0, 1, nlines))
+        colours = plt.get_cmap(colour)(np.linspace(0, 1, nlines))
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour, str) and colour == 'skelton':
@@ -1641,10 +1639,7 @@ def kappa(kfile, efile, component, direction, tmin, tmax, dtype, doping,
             legend_title = defleg['title']
 
     try:
-        try:
-            colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
-        except AttributeError:
-            colours = mpl.colormaps[colour[0]](np.linspace(0, 1, len(data)))
+        colours = plt.get_cmap(colour[0])(np.linspace(0, 1, len(data)))
         colours = [c for c in colours]
     except ValueError:
         if isinstance(colour[0], str) and colour[0] == 'skelton':
@@ -1869,7 +1864,7 @@ def converge_phonons(band_yaml, bandmin, bandmax, colour, alpha, linestyle,
 
     if len(band_yaml) == 1:
         try:
-            colour = mpl.cm.get_cmap(colour)([0])
+            colour = plt.get_cmap(colour)([0])
         except ValueError:
             pass
         tp.plot.phonons.add_dispersion(ax, data[0], colour=colour,
@@ -2247,10 +2242,7 @@ def transport(transport_file, kfile, quantity, direction, tmin, tmax, dtype,
                                         q:             edata2[q]})
 
     try:
-        try:
-            colours = mpl.cm.get_cmap(colour[0])(np.linspace(0, 1, lendata))
-        except AttributeError:
-            colours = mpl.colormaps[colour[0]](np.linspace(0, 1, lendata))
+        colours = plt.get_cmap(colour[0])(np.linspace(0, 1, lendata))
 
         colours = [c for c in colours]
     except ValueError:

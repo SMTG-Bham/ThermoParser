@@ -111,10 +111,7 @@ class HeatmapTest(unittest.TestCase):
 
     @patch.object(plt, 'colorbar')
     def test_colourmap(self, mock_colourbar):
-        try:
-            cmap = mpl.cm.get_cmap('viridis')
-        except AttributeError:
-            cmap = mpl.colormaps['viridis']
+        cmap = plt.get_cmap('viridis')
         cbar = heatmap.add_heatmap(self.ax, self.x, self.y, self.c,
                                    xinterp=None, yinterp=None, xscale='linear',
                                    yscale='linear', cscale='linear',
@@ -143,6 +140,25 @@ class HeatmapTest(unittest.TestCase):
         self.ax.set_ylim.assert_called_once_with(2, 8)
         mock_colourbar.assert_called_once()
         cbar.ax.set_yscale.assert_called_once_with('linear')
+
+    @patch.object(plt, 'colorbar')
+    def test_colour_forms(self, mock_colourbar):
+        coolwarm = plt.get_cmap('coolwarm')
+        for colour in ['viridis', coolwarm, tp.plot.colour.skelton(),
+                       '#ff0000', ['#ff0000', 'white', 'black'],
+                       {'cmid': '#ff0000'}]:
+            with self.subTest(colour=colour):
+                self.ax.reset_mock()
+                heatmap.add_heatmap(self.ax, self.x, self.y, self.c,
+                                    xinterp=None, yinterp=None,
+                                    colour=colour, undercolour='green')
+
+                self.ax.pcolormesh.assert_called_once()
+                cmap = self.ax.pcolormesh.call_args.kwargs['cmap']
+                self.assertIsInstance(cmap, mpl.colors.Colormap)
+        # colourmaps passed in are copied, not modified in place
+        self.assertFalse(np.allclose(coolwarm.get_under(),
+                                     mpl.colors.to_rgba('green')))
 
 class ZTMapTest(unittest.TestCase):
     def setUp(self):
