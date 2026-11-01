@@ -66,7 +66,7 @@ class BEOccupationTest(unittest.TestCase):
         t = [300]
         o = 1.5061
         o2 = calculate.be_occupation(f, t, use_tprc=False)
-        self.assertEqual(round(float(o2[0]), 4), o)
+        self.assertEqual(round(float(o2[0][0]), 4), o)
 
 class DFDDETest(unittest.TestCase):
     def test_dfdde(self):
