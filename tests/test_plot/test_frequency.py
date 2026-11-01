@@ -119,6 +119,23 @@ class DosTest(unittest.TestCase):
         self.ax.get_yaxis().get_scale.assert_called_once()
         mock_log10.assert_called_once()
 
+    def test_default_colour(self):
+        frequency.add_dos(self.ax, self.data, total=False, main=False,
+                          fill=False, line=True)
+
+        self.assertEqual(self.ax.plot.call_count, 2)
+
+    def test_projected_colour_forms(self):
+        coolwarm = plt.get_cmap('coolwarm')
+        for colour in ['tab10', coolwarm]:
+            with self.subTest(colour=colour):
+                self.ax.reset_mock()
+                frequency.add_dos(self.ax, self.data, colour=colour,
+                                  total=False, main=False, fill=False,
+                                  line=True)
+
+                self.assertEqual(self.ax.plot.call_count, 2)
+
 class CumKappaTest(unittest.TestCase):
     def setUp(self):
         self.data = {'frequency':   [0, 1],
@@ -281,6 +298,26 @@ class WaterfallTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(11*0.95, 990*1.05)
         self.ax.set_ylim.assert_called_once_with(0, 999*1.05)
         self.assertEqual(mock_resolve.call_count, 2)
+
+    @patch.object(tp.data.utilities, 'resolve')
+    def test_colour_forms(self, mock_resolve):
+        mock_resolve.return_value = self.data
+        coolwarm = plt.get_cmap('coolwarm')
+        for colour in ['viridis', coolwarm, tp.plot.colour.skelton(),
+                       'skelton', ['red', 'blue'], {'cmax': 'red'}]:
+            with self.subTest(colour=colour):
+                self.ax.reset_mock()
+                frequency.add_waterfall(self.ax, self.data, 'mode_kappa',
+                                        direction='x', main=False,
+                                        colour=colour)
+
+                facecolor = self.ax.scatter.call_args.kwargs['facecolor']
+                self.assertEqual(np.shape(facecolor), (1000, 4))
+
+        self.ax.reset_mock()
+        frequency.add_waterfall(self.ax, self.data, 'mode_kappa',
+                                direction='x', main=False, colour='red')
+        self.assertEqual(self.ax.scatter.call_args.kwargs['facecolor'], 'red')
 
 class DensityTest(unittest.TestCase):
     def setUp(self):

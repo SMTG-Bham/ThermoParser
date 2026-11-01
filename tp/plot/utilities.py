@@ -14,6 +14,7 @@
 #"""
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 import tp
 
@@ -141,10 +142,7 @@ def parse_colours(colour):
     from copy import copy
 
     try:
-        try:
-            cmap = copy(mpl.cm.get_cmap(colour))
-        except AttributeError:
-            cmap = copy(mpl.colormaps[colour])
+        cmap = copy(plt.get_cmap(colour))
     except ValueError:
         if isinstance(colour, mpl.colors.ListedColormap):
             cmap = copy(colour)

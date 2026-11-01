@@ -153,6 +153,47 @@ class MultiTest(unittest.TestCase):
         self.ax.set_xlim.assert_called_once_with(0, 1)
         self.ax.set_ylim.assert_not_called()
 
+class MultiColourTest(unittest.TestCase):
+    def setUp(self):
+        line = {'x':             [0, 1],
+                'qpoint':        [[0, 1, 2],
+                                  [3, 1, 2]],
+                'frequency':     [[0, 1, 2],
+                                  [2, 1, 1]],
+                'tick_position': [0, 1],
+                'tick_label':    ['A', 'B'],
+                'meta':          {}}
+        # three lines so a two-colour list is read as a colourmap
+        self.data = [line, line, line]
+        self.ax = MagicMock()
+
+    @patch.object(phonons, 'add_dispersion')
+    def test_colour_forms(self, mock_dispersion):
+        x = np.linspace(0, 1, 3)
+        coolwarm = plt.get_cmap('coolwarm')
+        cases = [('viridis',                plt.get_cmap('viridis')(x)),
+                 (coolwarm,                 coolwarm(x)),
+                 (tp.plot.colour.skelton(), tp.plot.colour.skelton()(x)),
+                 ('skelton',                tp.plot.colour.skelton()(x)),
+                 (['red', 'blue'],          tp.plot.colour.linear('red',
+                                                                  'blue')(x)),
+                 ({'cmax': 'red'},          tp.plot.colour.linear('red')(x)),
+                 (['red', 'blue', 'green'], ['red', 'blue', 'green'])]
+
+        for colour, expected in cases:
+            with self.subTest(colour=colour):
+                mock_dispersion.reset_mock()
+                phonons.add_multi(self.ax, self.data, colour=colour,
+                                  main=False)
+
+                self.assertEqual(mock_dispersion.call_count, 3)
+                for call, e in zip(mock_dispersion.call_args_list, expected):
+                    c = call.kwargs['colour']
+                    if isinstance(c, list): # colourmap colours are wrapped
+                        c = c[0]
+                    np.testing.assert_allclose(mpl.colors.to_rgba(c),
+                                               mpl.colors.to_rgba(e))
+
 class AltDispersionTest(unittest.TestCase):
     def setUp(self):
         # warnings ignored as there are tonnes, likely due to random
@@ -541,6 +582,31 @@ class WidebandTest(unittest.TestCase):
         self.ax.set_xlabel.assert_not_called()
         self.ax.set_ylabel.assert_not_called()
         self.ax.set_xlim.assert_not_called()
+
+    @patch.object(tp.data.utilities, 'resolve')
+    def test_colour_forms(self, mock_resolve):
+        self.ax.spines['bottom'].get_linewidth().return_value = 1
+        mock_resolve.return_value = self.data
+        coolwarm = plt.get_cmap('coolwarm')
+
+        for colour in ['viridis', coolwarm, tp.plot.colour.skelton(),
+                       '#ff0000', ['red', 'blue'], {'cmax': 'red'}]:
+            with self.subTest(colour=colour):
+                self.ax.reset_mock()
+                phonons.add_wideband(self.ax, self.data, self.pdata,
+                                     smoothing=1, main=False,
+                                     poscar=self.poscar, colour=colour)
+
+                self.ax.pcolormesh.assert_called_once()
+                cmap = self.ax.pcolormesh.call_args.kwargs['cmap']
+                self.assertIsInstance(cmap, mpl.colors.Colormap)
+                if not isinstance(colour, str):
+                    continue
+                if colour == 'viridis':
+                    self.assertEqual(cmap.name, 'viridis')
+                else:
+                    np.testing.assert_allclose(cmap(1.),
+                                               mpl.colors.to_rgba(colour))
 
 class GetEquivalentQpointTest(unittest.TestCase):
     @patch.object(np, 'dot')

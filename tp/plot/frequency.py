@@ -209,7 +209,7 @@ def add_dos(ax, data, sigma=None, interpolate=200, kind='linear',
         if not isinstance(colour, dict):
             if not isinstance(colour, list):
                 try:
-                    cmap = plt.cm.get_cmap(colour)(np.linspace(0,1,len(data)))
+                    cmap = plt.get_cmap(colour)(np.linspace(0,1,len(data)))
                 except ValueError:
                     cmap = colour(np.linspace(0,1,len(data)))
             else:
@@ -712,10 +712,7 @@ def add_waterfall(ax, data, quantity, xquantity='frequency', temperature=300,
 
     s = np.shape(data[xquantity])
     try:
-        try:
-            colour = mpl.cm.get_cmap(colour)
-        except AttributeError:
-            colour = mpl.colormaps[colour]
+        colour = plt.get_cmap(colour)
         colours = [colour(i) for i in np.linspace(0, 1, s[1])]
         colours = np.tile(colours, (s[0], 1))
     except ValueError:
